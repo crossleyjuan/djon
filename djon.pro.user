@@ -56,7 +56,8 @@
   <valuemap type="QVariantMap" >
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Debug</value>
    <valuelist key="abstractProcess.Environment" type="QVariantList" >
-    <value type="QString" >DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-6DWZ2T9i24,guid=86f9bd140c7a9c0a07efb38649f84e91</value>
+    <value type="QString" >DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-Ouq3nhekqb,guid=68aec9f904a8903878c1d7ce49fbd01c</value>
+    <value type="QString" >DESKTOP_AUTOSTART_ID=10fbac5e49de305ab5124123958371698200000086250014</value>
     <value type="QString" >DESKTOP_SESSION=default</value>
     <value type="QString" >DESKTOP_STARTUP_ID=</value>
     <value type="QString" >DISPLAY=:0.0</value>
@@ -64,28 +65,28 @@
     <value type="QString" >GDM_LANG=en_US.UTF-8</value>
     <value type="QString" >GDM_XSERVER_LOCATION=local</value>
     <value type="QString" >GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
-    <value type="QString" >GNOME_KEYRING_PID=3128</value>
-    <value type="QString" >GNOME_KEYRING_SOCKET=/tmp/keyring-UYLVwX/socket</value>
-    <value type="QString" >GPG_AGENT_INFO=/tmp/seahorse-jggdSa/S.gpg-agent:3313:1</value>
+    <value type="QString" >GNOME_KEYRING_PID=8610</value>
+    <value type="QString" >GNOME_KEYRING_SOCKET=/tmp/keyring-9B3f2P/socket</value>
+    <value type="QString" >GPG_AGENT_INFO=/tmp/seahorse-VGnQVm/S.gpg-agent:8797:1</value>
     <value type="QString" >GTK_MODULES=canberra-gtk-module</value>
     <value type="QString" >GTK_RC_FILES=/etc/gtk/gtkrc:/home/cross/.gtkrc-1.2-gnome2</value>
     <value type="QString" >HOME=/home/cross</value>
     <value type="QString" >LANG=en_US.UTF-8</value>
     <value type="QString" >LOGNAME=cross</value>
     <value type="QString" >ORBIT_SOCKETDIR=/tmp/orbit-cross</value>
-    <value type="QString" >PATH=/opt/qtsdk-2009.01/qt/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games</value>
+    <value type="QString" >PATH=/opt/qtsdk-2009.01/qt/bin:/home/cross/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games</value>
     <value type="QString" >PWD=/home/cross</value>
     <value type="QString" >QTDIR=/opt/qtsdk-2009.01/qt</value>
-    <value type="QString" >SESSION_MANAGER=local/cross-ubuntu:/tmp/.ICE-unix/3141</value>
+    <value type="QString" >SESSION_MANAGER=local/cross-ubuntu:/tmp/.ICE-unix/8625</value>
     <value type="QString" >SHELL=/bin/bash</value>
-    <value type="QString" >SSH_AGENT_PID=3290</value>
-    <value type="QString" >SSH_AUTH_SOCK=/tmp/keyring-UYLVwX/socket.ssh</value>
+    <value type="QString" >SSH_AGENT_PID=8771</value>
+    <value type="QString" >SSH_AUTH_SOCK=/tmp/keyring-9B3f2P/socket.ssh</value>
     <value type="QString" >USER=cross</value>
     <value type="QString" >USERNAME=cross</value>
     <value type="QString" >WINDOWPATH=7</value>
     <value type="QString" >XAUTHORITY=/home/cross/.Xauthority</value>
     <value type="QString" >XDG_DATA_DIRS=/usr/local/share/:/usr/share/:/usr/share/gdm/</value>
-    <value type="QString" >XDG_SESSION_COOKIE=74eb09877d4689c43d25ede949f6f250-1241009808.788447-684445911</value>
+    <value type="QString" >XDG_SESSION_COOKIE=74eb09877d4689c43d25ede949f6f250-1241239579.668859-1959212961</value>
    </valuelist>
    <valuelist key="abstractProcess.arguments" type="QVariantList" >
     <value type="QString" >/home/cross/workspace/djon/djon/djon.pro</value>
@@ -106,7 +107,8 @@
   <valuemap type="QVariantMap" >
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Debug</value>
    <valuelist key="abstractProcess.Environment" type="QVariantList" >
-    <value type="QString" >DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-6DWZ2T9i24,guid=86f9bd140c7a9c0a07efb38649f84e91</value>
+    <value type="QString" >DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-Ouq3nhekqb,guid=68aec9f904a8903878c1d7ce49fbd01c</value>
+    <value type="QString" >DESKTOP_AUTOSTART_ID=10fbac5e49de305ab5124123958371698200000086250014</value>
     <value type="QString" >DESKTOP_SESSION=default</value>
     <value type="QString" >DESKTOP_STARTUP_ID=</value>
     <value type="QString" >DISPLAY=:0.0</value>
@@ -114,28 +116,28 @@
     <value type="QString" >GDM_LANG=en_US.UTF-8</value>
     <value type="QString" >GDM_XSERVER_LOCATION=local</value>
     <value type="QString" >GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
-    <value type="QString" >GNOME_KEYRING_PID=3128</value>
-    <value type="QString" >GNOME_KEYRING_SOCKET=/tmp/keyring-UYLVwX/socket</value>
-    <value type="QString" >GPG_AGENT_INFO=/tmp/seahorse-jggdSa/S.gpg-agent:3313:1</value>
+    <value type="QString" >GNOME_KEYRING_PID=8610</value>
+    <value type="QString" >GNOME_KEYRING_SOCKET=/tmp/keyring-9B3f2P/socket</value>
+    <value type="QString" >GPG_AGENT_INFO=/tmp/seahorse-VGnQVm/S.gpg-agent:8797:1</value>
     <value type="QString" >GTK_MODULES=canberra-gtk-module</value>
     <value type="QString" >GTK_RC_FILES=/etc/gtk/gtkrc:/home/cross/.gtkrc-1.2-gnome2</value>
     <value type="QString" >HOME=/home/cross</value>
     <value type="QString" >LANG=en_US.UTF-8</value>
     <value type="QString" >LOGNAME=cross</value>
     <value type="QString" >ORBIT_SOCKETDIR=/tmp/orbit-cross</value>
-    <value type="QString" >PATH=/opt/qtsdk-2009.01/qt/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games</value>
+    <value type="QString" >PATH=/opt/qtsdk-2009.01/qt/bin:/home/cross/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games</value>
     <value type="QString" >PWD=/home/cross</value>
     <value type="QString" >QTDIR=/opt/qtsdk-2009.01/qt</value>
-    <value type="QString" >SESSION_MANAGER=local/cross-ubuntu:/tmp/.ICE-unix/3141</value>
+    <value type="QString" >SESSION_MANAGER=local/cross-ubuntu:/tmp/.ICE-unix/8625</value>
     <value type="QString" >SHELL=/bin/bash</value>
-    <value type="QString" >SSH_AGENT_PID=3290</value>
-    <value type="QString" >SSH_AUTH_SOCK=/tmp/keyring-UYLVwX/socket.ssh</value>
+    <value type="QString" >SSH_AGENT_PID=8771</value>
+    <value type="QString" >SSH_AUTH_SOCK=/tmp/keyring-9B3f2P/socket.ssh</value>
     <value type="QString" >USER=cross</value>
     <value type="QString" >USERNAME=cross</value>
     <value type="QString" >WINDOWPATH=7</value>
     <value type="QString" >XAUTHORITY=/home/cross/.Xauthority</value>
     <value type="QString" >XDG_DATA_DIRS=/usr/local/share/:/usr/share/:/usr/share/gdm/</value>
-    <value type="QString" >XDG_SESSION_COOKIE=74eb09877d4689c43d25ede949f6f250-1241009808.788447-684445911</value>
+    <value type="QString" >XDG_SESSION_COOKIE=74eb09877d4689c43d25ede949f6f250-1241239579.668859-1959212961</value>
    </valuelist>
    <valuelist key="abstractProcess.arguments" type="QVariantList" >
     <value type="QString" >debug</value>

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'taskdialog.ui'
 **
-** Created: Wed Apr 29 08:19:52 2009
+** Created: Sat May 2 00:07:48 2009
 **      by: Qt User Interface Compiler version 4.5.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
@@ -139,6 +139,11 @@ public:
         TaskDialog->setWindowTitle(QApplication::translate("TaskDialog", "Dialog", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("TaskDialog", "Name", 0, QApplication::UnicodeUTF8));
         label_2->setText(QApplication::translate("TaskDialog", "Description", 0, QApplication::UnicodeUTF8));
+        description->setHtml(QApplication::translate("TaskDialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">sfdsdf</p></body></html>", 0, QApplication::UnicodeUTF8));
         label_3->setText(QApplication::translate("TaskDialog", "Duration", 0, QApplication::UnicodeUTF8));
         label_4->setText(QApplication::translate("TaskDialog", "Start Date", 0, QApplication::UnicodeUTF8));
         startDate->setDisplayFormat(QApplication::translate("TaskDialog", "M/d/yyyy", 0, QApplication::UnicodeUTF8));

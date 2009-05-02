@@ -30,5 +30,9 @@ void TaskDialog::changeEvent(QEvent *e)
 
 void TaskDialog::on_buttonBox_accepted()
 {
-
+    m_task->name = m_ui->name->text().toStdString();
+    m_task->description = m_ui->description->document()->toHtml(QByteArray("utf-8")).toStdString();
+    m_task->duration = m_ui->duration->text().toInt();
+    m_task->endDate = m_ui->endDate->text().toDouble();
+    m_task->startDate = m_ui->endDate->text().toDouble();
 }

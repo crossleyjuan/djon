@@ -75,3 +75,16 @@ hashmap* readFile(string fileName) {
     return mapValue;
 }
 
+void writeFile(string fileName, hashmap* values) {
+    ofstream ofs;
+    ofs.open(fileName.c_str(), ofstream::out);
+
+    hashmap::iterator it;
+    for (it = values->begin(); it != values->end(); it++) {
+        string name = (*it).first;
+        string value = (*it).second;
+
+        ofs << name << ":" << value << ";" << endl;
+    }
+    ofs.close();
+}
