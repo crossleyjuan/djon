@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include "fileutils.h"
 
 struct Task;
 
@@ -28,6 +29,7 @@ struct Task {
     double endDate;
     Project project;
     std::vector<Job*> jobs;
+    hashmap* hashValues();
 };
 
 Project* readProject(std::string path, std::string projectName);

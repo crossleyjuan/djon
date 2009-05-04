@@ -15,5 +15,5 @@ typedef map<string, string> hashmap;
 
 int getdir (string dir, vector<string> &files, string extension);
 hashmap* readFile(string fileName);
-
+void writeFile(string fileName, hashmap* values);
 #endif // FILEUTILS_H

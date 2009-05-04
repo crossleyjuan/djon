@@ -1,7 +1,7 @@
 #include "project.h"
 #include <map>
-#include "fileutils.h"
 #include <cstdlib>
+#include "utils.h"
 
 using namespace std;
 
@@ -43,6 +43,18 @@ void readTasks(Project* project) {
             project->tasks.push_back(task);
         }
     }
+}
+
+hashmap* Task::hashValues() {
+    hashmap* values = new hashmap();
+
+    values->insert(pair<string, string>("task-name", this->name));
+    values->insert(pair<string, string>("description", this->description));
+    values->insert(pair<string, string>("duration", toString(this->duration)));
+    values->insert(pair<string, string>("enddate", toString(this->endDate)));
+    values->insert(pair<string, string>("startdate", toString(this->startDate)));
+
+    return values;
 }
 
 Project* readProject(string path, string projectName) {

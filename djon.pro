@@ -15,7 +15,8 @@ HEADERS += mainwindow.h \
     fileutils.h \
     taskgrid.h \
     taskelement.h \
-    taskdialog.h
+    taskdialog.h \
+    utils.h
 FORMS += mainwindow.ui \
     taskdialog.ui
 OTHER_FILES += djon.conf

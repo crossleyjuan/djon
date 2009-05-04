@@ -28,6 +28,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionCreate_new_task_triggered()
 {
-    TaskDialog* dialog = new TaskDialog(NULL, this);
+    TaskDialog* dialog = new TaskDialog(m_project, this);
     dialog->show();
 }
