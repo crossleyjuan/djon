@@ -1,5 +1,6 @@
 #include "taskdialog.h"
 #include "ui_taskdialog.h"
+#include "sstream"
 
 TaskDialog::TaskDialog(Project* project, QWidget *parent) :
     QDialog(parent),
@@ -15,10 +16,16 @@ TaskDialog::TaskDialog(Task* task, QWidget *parent) :
     QDialog(parent),
     m_ui(new Ui::TaskDialog)
 {
+    m_ui->setupUi(this);
+
     m_task = task;
+    m_ui->name->setText(QString(task->name.c_str()));
+    m_ui->description->setPlainText(QString(task->description.c_str()));
+    std::stringstream ss;
+    ss << std::stringstream::scientific << task->duration;
+    m_ui->duration->setText(QString(ss.str().c_str()));
     m_project = &task->project;
 
-    m_ui->setupUi(this);
 }
 
 TaskDialog::~TaskDialog()

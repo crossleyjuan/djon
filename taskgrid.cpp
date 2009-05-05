@@ -3,6 +3,7 @@
 #include "taskelement.h"
 #include <QVBoxLayout>
 #include <sstream>
+#include "taskdialog.h"
 
 TaskGrid::TaskGrid(Project* project, QWidget* parent) : QWidget(parent)
 {
@@ -20,10 +21,7 @@ TaskGrid::TaskGrid(Project* project, QWidget* parent) : QWidget(parent)
     }
 }
 
-
-
 void TaskGrid::onDobleClick(TaskElement* element) {
-    std::stringstream ss;
-    ss << "Testing:" << element->getTask()->name;
-    qDebug(ss.str().c_str());
+    TaskDialog* dialog = new TaskDialog(element->getTask(), this);
+    dialog->show();
 }
