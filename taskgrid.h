@@ -3,13 +3,20 @@
 
 #include <QWidget>
 #include "project.h"
+#include "taskelement.h"
 
 class TaskGrid : public QWidget
 {
-private:
-    Project* m_project;
+    Q_OBJECT
+
 public:
     TaskGrid(Project* project, QWidget* parent = 0);
+
+public slots:
+    void onDobleClick(TaskElement* element);
+
+private:
+    Project* m_project;
 };
 
 #endif // TASKGRID_H

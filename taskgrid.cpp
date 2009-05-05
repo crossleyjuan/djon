@@ -2,6 +2,7 @@
 #include <vector>
 #include "taskelement.h"
 #include <QVBoxLayout>
+#include <sstream>
 
 TaskGrid::TaskGrid(Project* project, QWidget* parent) : QWidget(parent)
 {
@@ -15,5 +16,14 @@ TaskGrid::TaskGrid(Project* project, QWidget* parent) : QWidget(parent)
         Task* task = *it;
         TaskElement* element = new TaskElement(task, this);
         layout->addWidget(element);
+        connect(element, SIGNAL(clicked(TaskElement*)), this, SLOT(onDobleClick(TaskElement*)));
     }
+}
+
+
+
+void TaskGrid::onDobleClick(TaskElement* element) {
+    std::stringstream ss;
+    ss << "Testing:" << element->getTask()->name;
+    qDebug(ss.str().c_str());
 }

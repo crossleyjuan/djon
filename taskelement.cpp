@@ -21,4 +21,14 @@ void TaskElement::paintEvent(QPaintEvent*) {
     paint.setFont(QFont("times", 10, QFont::Bold));
     paint.setPen(getTaskColor());
     paint.drawText(20, 20, QString(m_task->name.c_str()));
+
+}
+
+void TaskElement::mousePressEvent(QMouseEvent *event) {
+    clicked(this);
+}
+
+Task* TaskElement::getTask() {
+    return m_task;
+
 }
