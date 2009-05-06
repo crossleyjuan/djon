@@ -14,9 +14,11 @@ public:
 
 public slots:
     void onDobleClick(TaskElement* element);
+    void onTaskChanged();
 
 private:
     Project* m_project;
+    void addTask(Task* task);
 };
 
 #endif // TASKGRID_H

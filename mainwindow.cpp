@@ -3,8 +3,7 @@
 #include <vector>
 #include <QStackedLayout>
 #include <QVBoxLayout>
-#include "taskgrid.h"
-
+#include <sstream>
 #include "taskdialog.h"
 
 using namespace std;
@@ -16,9 +15,9 @@ MainWindow::MainWindow(Project* project, QWidget *parent)
     ui->setupUi(this);
     this->setWindowTitle(m_project->name.c_str());
     QStackedLayout* layout = new QStackedLayout();
-    TaskGrid* grid = new TaskGrid(m_project);
+    m_grid = new TaskGrid(m_project);
     ui->centralWidget->setLayout(layout);
-    layout->addWidget(grid);
+    layout->addWidget(m_grid);
 }
 
 MainWindow::~MainWindow()
@@ -29,5 +28,6 @@ MainWindow::~MainWindow()
 void MainWindow::on_actionCreate_new_task_triggered()
 {
     TaskDialog* dialog = new TaskDialog(m_project, this);
-    dialog->show();
+    connect(dialog, SIGNAL(accepted()), m_grid, SLOT(onTaskChanged()));
+    dialog->exec();
 }
