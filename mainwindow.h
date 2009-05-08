@@ -3,7 +3,6 @@
 
 #include <QtGui/QMainWindow>
 #include "project.h"
-#include "taskgrid.h"
 
 namespace Ui
 {
@@ -21,7 +20,6 @@ public:
 private:
     Ui::MainWindowClass *ui;
     Project* m_project;
-    TaskGrid* m_grid;
 
 private slots:
     void on_actionCreate_new_task_triggered();

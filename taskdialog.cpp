@@ -53,6 +53,4 @@ void TaskDialog::on_buttonBox_accepted()
     m_task->startDate = m_ui->endDate->text().toDouble();
 
     writeFile(m_project->path + "/" + m_task->name + ".tsk", m_task->hashValues());
-
-    setResult(QDialog::Accepted);
 }
