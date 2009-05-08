@@ -25,3 +25,4 @@ SOURCES += fileutils.cpp \
     taskdialog.cpp \
     taskelement.cpp \
     taskgrid.cpp
+OTHER_FILES += djon.conf
