@@ -5,7 +5,9 @@
 
 int main(int argc, char *argv[])
 {
-    hashmap* conf = readFile("djon.conf");
+    char* home = getenv("HOME");
+    std::string confFileName = std::string(home) + "/.djon";
+    hashmap* conf = readFile(confFileName);
 
     Project* project;
     hashmap::iterator it = conf->find("last-project-dir");

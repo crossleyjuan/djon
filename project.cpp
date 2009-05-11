@@ -58,13 +58,18 @@ hashmap* Task::hashValues() {
 }
 
 Project* readProject(string path, string projectName) {
+    logInfo("Reading project");
     Project* project = new Project();
+    if (path[path.length()-1] != '/') {
+        path.append("/");
+    }
     string fileName (path);
     fileName += projectName + string(".djon");
     hashmap* mapValues = readFile(fileName);
 
     hashmap::iterator it = mapValues->find("project-name");
     project->name = (*it).second;
+    project->description = mapValues->find("project-description")->second;
     project->path = path;
 
     readTasks(project);

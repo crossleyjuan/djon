@@ -15,4 +15,8 @@ string toString(int a) {
     return ss.str();
 }
 
+void logInfo(char* text) {
+    cout << text << endl;
+}
+
 #endif // UTILS_H

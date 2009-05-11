@@ -9,6 +9,7 @@ struct Task;
 
 struct Project {
     std::string name;
+    std::string description;
     std::string path;
     std::vector<Task*> tasks;
 };
