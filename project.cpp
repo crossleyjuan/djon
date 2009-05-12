@@ -55,8 +55,8 @@ hashmap* Task::hashValues() {
     values->insert(pair<string, string>("short-description", this->shortDescription));
     values->insert(pair<string, string>("long-description", this->longDescription));
     values->insert(pair<string, string>("duration", toString(this->duration)));
-    values->insert(pair<string, string>("enddate", toString(this->endDate)));
-    values->insert(pair<string, string>("startdate", toString(this->startDate)));
+    values->insert(pair<string, string>("enddate", toString((int)this->endDate)));
+    values->insert(pair<string, string>("startdate", toString((int)this->startDate)));
 
     return values;
 }

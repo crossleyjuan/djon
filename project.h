@@ -27,8 +27,8 @@ struct Task {
     std::string shortDescription;
     std::string longDescription;
     int duration;
-    double startDate;
-    double endDate;
+    uint startDate;
+    uint endDate;
     Project project;
     std::vector<Job*> jobs;
     hashmap* hashValues();
