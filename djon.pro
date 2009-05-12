@@ -24,5 +24,6 @@ SOURCES += fileutils.cpp \
     project.cpp \
     taskdialog.cpp \
     taskelement.cpp \
-    taskgrid.cpp
+    taskgrid.cpp \
+    utils.cpp
 OTHER_FILES += 

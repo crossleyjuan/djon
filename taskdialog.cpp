@@ -1,6 +1,7 @@
 #include "taskdialog.h"
 #include "ui_taskdialog.h"
 #include "sstream"
+#include "utils.h"
 
 TaskDialog::TaskDialog(Project* project, QWidget *parent) :
     QDialog(parent),
@@ -19,11 +20,15 @@ TaskDialog::TaskDialog(Task* task, QWidget *parent) :
     m_ui->setupUi(this);
 
     m_task = task;
-    m_ui->name->setText(QString(task->name.c_str()));
-    m_ui->description->setPlainText(QString(task->description.c_str()));
-    std::stringstream ss;
-    ss << std::stringstream::scientific << task->duration;
-    m_ui->duration->setText(QString(ss.str().c_str()));
+    m_ui->shortDescription->setText(QString(task->shortDescription.c_str()));
+    m_ui->description->setPlainText(QString(task->longDescription.c_str()));
+    m_ui->duration->setText(QString(toString(task->duration).c_str()));
+    QDateTime startDate;
+    startDate.setTime_t(task->startDate);
+    m_ui->startDate->setDateTime(startDate);
+    QDateTime endDate;
+    endDate.setTime_t(task->endDate);
+    m_ui->endDate->setDateTime(endDate);
     m_project = &task->project;
 
 }
@@ -46,11 +51,14 @@ void TaskDialog::changeEvent(QEvent *e)
 
 void TaskDialog::on_buttonBox_accepted()
 {
-    m_task->name = m_ui->name->text().toStdString();
-    m_task->description = m_ui->description->document()->toPlainText().toStdString();
+    if (m_task->id.length() == 0) {
+        m_task->id = toString((int)m_project->tasks.size() + 1);
+    }
+    m_task->shortDescription = m_ui->shortDescription->text().toStdString();
+    m_task->longDescription = m_ui->description->document()->toPlainText().toStdString();
     m_task->duration = m_ui->duration->text().toInt();
-    m_task->endDate = m_ui->endDate->text().toDouble();
-    m_task->startDate = m_ui->endDate->text().toDouble();
+    m_task->endDate = m_ui->startDate->dateTime().toTime_t();
+    m_task->startDate = m_ui->endDate->dateTime().toTime_t();
 
-    writeFile(m_project->path + "/" + m_task->name + ".tsk", m_task->hashValues());
+    writeFile(m_project->path + "/" + m_task->id + ".tsk", m_task->hashValues());
 }

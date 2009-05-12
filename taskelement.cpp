@@ -22,7 +22,7 @@ void TaskElement::paintEvent(QPaintEvent*) {
 */
     paint.setFont(QFont("times", 10, QFont::Bold));
     paint.setPen(getTaskColor());
-    paint.drawText(20, 20, QString(m_task->description.c_str()));
+    paint.drawText(20, 20, QString(m_task->shortDescription.c_str()));
 
 }
 

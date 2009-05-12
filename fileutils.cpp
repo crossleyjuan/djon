@@ -1,6 +1,7 @@
 #include "fileutils.h"
 #include <fstream>
 #include <sstream>
+#include "utils.h"
 
 int getdir (string dir, vector<string> &files, string extension)
 {
@@ -15,7 +16,7 @@ int getdir (string dir, vector<string> &files, string extension)
 
     while ((dirp = readdir(dp)) != NULL) {
         string currentFile (dirp->d_name);
-        if (currentFile.find(fileextension) != string::npos) {
+        if (endsWith(currentFile.c_str(), fileextension.c_str())) {
             files.push_back(currentFile);
         }
     }

@@ -23,8 +23,9 @@ struct Job {
 };
 
 struct Task {
-    std::string name;
-    std::string description;
+    std::string id;
+    std::string shortDescription;
+    std::string longDescription;
     int duration;
     double startDate;
     double endDate;

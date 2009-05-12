@@ -9,7 +9,7 @@ void readJobs(Task* task) {
     string path = task->project.path;
 
     vector<string> files;
-    int res = getdir(path + "/" + task->name, files, "jdj");
+    int res = getdir(path + "/" + task->id, files, "jdj");
     if (res == 0) {
         for (vector<string>::iterator it = files.begin(); it != files.end(); it++) {
             string fileName = path + (*it);
@@ -37,9 +37,12 @@ void readTasks(Project* project) {
 
             hashmap* values = readFile(fileName);
             Task* task = new Task();
-            task->name = values->find("task-name")->second;
-            task->description = values->find("description")->second;
+            task->id = values->find("task-id")->second;
+            task->shortDescription = values->find("short-description")->second;
+            task->longDescription = values->find("long-description")->second;
             task->duration = atoi(values->find("duration")->second.c_str());
+            task->startDate = atoi(values->find("startdate")->second.c_str());
+            task->endDate = atoi(values->find("enddate")->second.c_str());
             project->tasks.push_back(task);
         }
     }
@@ -48,8 +51,9 @@ void readTasks(Project* project) {
 hashmap* Task::hashValues() {
     hashmap* values = new hashmap();
 
-    values->insert(pair<string, string>("task-name", this->name));
-    values->insert(pair<string, string>("description", this->description));
+    values->insert(pair<string, string>("task-id", this->id));
+    values->insert(pair<string, string>("short-description", this->shortDescription));
+    values->insert(pair<string, string>("long-description", this->longDescription));
     values->insert(pair<string, string>("duration", toString(this->duration)));
     values->insert(pair<string, string>("enddate", toString(this->endDate)));
     values->insert(pair<string, string>("startdate", toString(this->startDate)));

@@ -1,22 +1,14 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include <sstream>
+#include <string>
 
-string toString(double a) {
-    std::stringstream ss;
-    ss << scientific << a;
-    return ss.str();
-}
+std::string toString(double a);
 
-string toString(int a) {
-    std::stringstream ss;
-    ss << scientific << a;
-    return ss.str();
-}
+std::string toString(int a);
 
-void logInfo(char* text) {
-    cout << text << endl;
-}
+void logInfo(char* text);
+
+bool endsWith(const char* text, const char* end);
 
 #endif // UTILS_H

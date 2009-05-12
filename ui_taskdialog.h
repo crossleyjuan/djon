@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'taskdialog.ui'
 **
-** Created: Fri May 8 07:52:24 2009
+** Created: Mon May 11 23:22:34 2009
 **      by: Qt User Interface Compiler version 4.5.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
@@ -35,7 +35,7 @@ public:
     QWidget *formLayoutWidget;
     QFormLayout *formLayout;
     QLabel *label;
-    QLineEdit *name;
+    QLineEdit *shortDescription;
     QLabel *label_2;
     QTextEdit *description;
     QLabel *label_3;
@@ -68,10 +68,10 @@ public:
 
         formLayout->setWidget(0, QFormLayout::LabelRole, label);
 
-        name = new QLineEdit(formLayoutWidget);
-        name->setObjectName(QString::fromUtf8("name"));
+        shortDescription = new QLineEdit(formLayoutWidget);
+        shortDescription->setObjectName(QString::fromUtf8("shortDescription"));
 
-        formLayout->setWidget(0, QFormLayout::FieldRole, name);
+        formLayout->setWidget(0, QFormLayout::FieldRole, shortDescription);
 
         label_2 = new QLabel(formLayoutWidget);
         label_2->setObjectName(QString::fromUtf8("label_2"));
@@ -137,7 +137,7 @@ public:
     void retranslateUi(QDialog *TaskDialog)
     {
         TaskDialog->setWindowTitle(QApplication::translate("TaskDialog", "Dialog", 0, QApplication::UnicodeUTF8));
-        label->setText(QApplication::translate("TaskDialog", "Name", 0, QApplication::UnicodeUTF8));
+        label->setText(QApplication::translate("TaskDialog", "Short", 0, QApplication::UnicodeUTF8));
         label_2->setText(QApplication::translate("TaskDialog", "Description", 0, QApplication::UnicodeUTF8));
         description->setHtml(QApplication::translate("TaskDialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
