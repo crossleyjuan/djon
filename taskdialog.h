@@ -16,6 +16,9 @@ public:
     explicit TaskDialog(Project* project, QWidget *parent = 0);
     virtual ~TaskDialog();
 
+signals:
+    void taskChanged(Task* task);
+
 protected:
     virtual void changeEvent(QEvent *e);
 

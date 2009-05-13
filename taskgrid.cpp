@@ -8,10 +8,16 @@
 TaskGrid::TaskGrid(Project* project, QWidget* parent) : QWidget(parent)
 {
     m_project = project;
-    std::vector<Task*> tasks = project->tasks;
-
     QVBoxLayout* layout = new QVBoxLayout();
     setLayout(layout);
+
+    updateGrid();
+}
+
+void TaskGrid::updateGrid() {
+    QVBoxLayout* layout = (QVBoxLayout*)layout();
+
+    std::vector<Task*> tasks = m_project->tasks;
 
     for (std::vector<Task*>::iterator it = tasks.begin(); it != tasks.end(); it++) {
         Task* task = *it;
@@ -23,5 +29,14 @@ TaskGrid::TaskGrid(Project* project, QWidget* parent) : QWidget(parent)
 
 void TaskGrid::onDobleClick(TaskElement* element) {
     TaskDialog* dialog = new TaskDialog(element->getTask(), this);
-    dialog->show();
+    connect(dialog, SIGNAL(taskChanged(Task*)), this, SLOT(onTaskChanged(Task*)));
+    dialog->exec();
+}
+
+void TaskGrid::updateTask(Task* task) {
+    updateGrid();
+}
+
+void TaskGrid::onTaskChanged(Task* task) {
+    updateTask(task);
 }

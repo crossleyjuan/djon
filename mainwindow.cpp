@@ -16,9 +16,9 @@ MainWindow::MainWindow(Project* project, QWidget *parent)
     ui->setupUi(this);
     this->setWindowTitle(m_project->name.c_str());
     QStackedLayout* layout = new QStackedLayout();
-    TaskGrid* grid = new TaskGrid(m_project);
+    m_grid = new TaskGrid(m_project);
     ui->centralWidget->setLayout(layout);
-    layout->addWidget(grid);
+    layout->addWidget(m_grid);
 }
 
 MainWindow::~MainWindow()
@@ -29,5 +29,6 @@ MainWindow::~MainWindow()
 void MainWindow::on_actionCreate_new_task_triggered()
 {
     TaskDialog* dialog = new TaskDialog(m_project, this);
-    dialog->show();
+    connect(dialog, SIGNAL(taskChanged(Task*)), m_grid, SLOT(onTaskChanged(Task*)));
+    dialog->exec();
 }

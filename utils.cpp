@@ -24,7 +24,7 @@ void logInfo(char* text) {
 
 QDateTime toDateTime(int date) {
     int year = date / 10000;
-    int month = (date / 100) - (year * 10000);
+    int month = (date / 100) - (year * 100);
     int day = date - (month * 100) - (year * 10000);
     QDateTime dateTime(QDate(year, month, day));
     return dateTime;
@@ -33,7 +33,7 @@ QDateTime toDateTime(int date) {
 int toInt(QDateTime dt) {
     int year = dt.date().year();
     int month = dt.date().month();
-    int day = dt.date().daysInMonth();
+    int day = dt.date().day();
     int d = year * 10000 + month * 100 + day;
 
     return d;

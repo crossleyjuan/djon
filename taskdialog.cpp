@@ -9,6 +9,7 @@ TaskDialog::TaskDialog(Project* project, QWidget *parent) :
 {
     m_project = project;
     m_task = new Task();
+    m_project->tasks.push_back(m_task);
 
     m_ui->setupUi(this);
     m_ui->startDate->setDate(QDate::currentDate());
@@ -27,7 +28,7 @@ TaskDialog::TaskDialog(Task* task, QWidget *parent) :
     m_ui->duration->setText(QString(toString(task->duration).c_str()));
     m_ui->startDate->setDateTime(toDateTime(m_task->startDate));
     m_ui->endDate->setDateTime(toDateTime(m_task->endDate));
-    m_project = &task->project;
+    m_project = task->project;
 
 }
 
@@ -59,4 +60,6 @@ void TaskDialog::on_buttonBox_accepted()
     m_task->startDate = toInt(m_ui->startDate->dateTime());
 
     writeFile(m_project->path + "/" + m_task->id + ".tsk", m_task->hashValues());
+
+    taskChanged(m_task);
 }

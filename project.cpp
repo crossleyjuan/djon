@@ -6,7 +6,7 @@
 using namespace std;
 
 void readJobs(Task* task) {
-    string path = task->project.path;
+    string path = task->project->path;
 
     vector<string> files;
     int res = getdir(path + "/" + task->id, files, "jdj");
@@ -44,6 +44,7 @@ void readTasks(Project* project) {
             task->startDate = atoi(values->find("startdate")->second.c_str());
             task->endDate = atoi(values->find("enddate")->second.c_str());
             project->tasks.push_back(task);
+            task->project = project;
         }
     }
 }

@@ -6,7 +6,7 @@
 int main(int argc, char *argv[])
 {
     char* home = getenv("HOME");
-    std::string confFileName = std::string(home) + "/.djon";
+    std::string confFileName = std::string(home) + "/.djon/djon.conf";
     hashmap* conf = readFile(confFileName);
 
     Project* project;

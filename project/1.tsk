@@ -1,7 +1,6 @@
-task-id: 1;
-short-description: Create the basic structure of the files.;
-long-description: Definition of the file structure;
-duration: 8;
-startdate: 1;
-enddate: 2;
-
+duration:8;
+enddate:20090420;
+long-description:Definition of the file structure;
+short-description:Create the basic structure of the files.;
+startdate:20090420;
+task-id:1;

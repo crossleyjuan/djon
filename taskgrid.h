@@ -14,10 +14,13 @@ public:
 
 public slots:
     void onDobleClick(TaskElement* element);
+    void onTaskChanged(Task* task);
 
 private:
     Project* m_project;
     void addTask(Task* task);
+    void updateTask(Task* task);
+    void updateGrid();
 
 };
 

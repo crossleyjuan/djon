@@ -1,6 +1,7 @@
 #include "fileutils.h"
 #include <fstream>
 #include <sstream>
+#include <stdio.h>
 #include "utils.h"
 
 int getdir (string dir, vector<string> &files, string extension)
@@ -78,7 +79,16 @@ hashmap* readFile(string fileName) {
 
 void writeFile(string fileName, hashmap* values) {
     ofstream ofs;
+
+    string backupName = fileName + "~";
+    remove(backupName.c_str());
+    rename(fileName.c_str(), backupName.c_str());
+
     ofs.open(fileName.c_str(), ofstream::out);
+    if (ofs.fail() != 0) {
+        qDebug(("Failed to open the file: " + fileName).c_str());
+        return;
+    }
 
     hashmap::iterator it;
     for (it = values->begin(); it != values->end(); it++) {
