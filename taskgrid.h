@@ -21,7 +21,9 @@ private:
     void addTask(Task* task);
     void updateTask(Task* task);
     void updateGrid();
-
+    TaskElement** currentElements;
+    void clearCurrent();
+    int m_size;
 };
 
 #endif // TASKGRID_H
