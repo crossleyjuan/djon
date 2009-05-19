@@ -29,7 +29,7 @@ TaskDialog::TaskDialog(Task* task, QWidget *parent) :
     m_ui->startDate->setDateTime(toDateTime(m_task->startDate));
     m_ui->endDate->setDateTime(toDateTime(m_task->endDate));
     m_project = task->project;
-
+    m_ui->cboTemplate->hide();
 }
 
 TaskDialog::~TaskDialog()

@@ -5,23 +5,19 @@
 TaskElement::TaskElement(Task* task, QWidget* parent) : QWidget(parent)
 {
     m_task = task;
-}
-
-QColor getTaskColor() {
-    return Qt::red;
+    setMaximumHeight(30);
 }
 
 void TaskElement::paintEvent(QPaintEvent*) {
 
     QPainter paint (this);
-    /*
     paint.setPen(Qt::black);
-    paint.setBrush(QColor(Qt::white));
+    paint.setBrush(QColor(230, 230, 230));
     int margin = 5;
     paint.drawRect(margin, margin, this->width()-margin, this->height()-margin);
-*/
+
     paint.setFont(QFont("times", 10, QFont::Bold));
-    paint.setPen(getTaskColor());
+    paint.setPen(QColor(0, 0, 124));
     paint.drawText(20, 20, QString(m_task->shortDescription.c_str()));
 
 }

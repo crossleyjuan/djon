@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'taskdialog.ui'
 **
-** Created: Wed May 13 06:37:37 2009
+** Created: Tue May 19 07:29:17 2009
 **      by: Qt User Interface Compiler version 4.5.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
@@ -46,6 +46,8 @@ public:
     QDateEdit *endDate;
     QLabel *label_6;
     QComboBox *status;
+    QComboBox *cboTemplate;
+    QLabel *label_7;
 
     void setupUi(QDialog *TaskDialog)
     {
@@ -66,65 +68,75 @@ public:
         label = new QLabel(formLayoutWidget);
         label->setObjectName(QString::fromUtf8("label"));
 
-        formLayout->setWidget(0, QFormLayout::LabelRole, label);
+        formLayout->setWidget(1, QFormLayout::LabelRole, label);
 
         shortDescription = new QLineEdit(formLayoutWidget);
         shortDescription->setObjectName(QString::fromUtf8("shortDescription"));
 
-        formLayout->setWidget(0, QFormLayout::FieldRole, shortDescription);
+        formLayout->setWidget(1, QFormLayout::FieldRole, shortDescription);
 
         label_2 = new QLabel(formLayoutWidget);
         label_2->setObjectName(QString::fromUtf8("label_2"));
 
-        formLayout->setWidget(1, QFormLayout::LabelRole, label_2);
+        formLayout->setWidget(2, QFormLayout::LabelRole, label_2);
 
         description = new QTextEdit(formLayoutWidget);
         description->setObjectName(QString::fromUtf8("description"));
 
-        formLayout->setWidget(1, QFormLayout::FieldRole, description);
+        formLayout->setWidget(2, QFormLayout::FieldRole, description);
 
         label_3 = new QLabel(formLayoutWidget);
         label_3->setObjectName(QString::fromUtf8("label_3"));
 
-        formLayout->setWidget(2, QFormLayout::LabelRole, label_3);
+        formLayout->setWidget(3, QFormLayout::LabelRole, label_3);
 
         duration = new QLineEdit(formLayoutWidget);
         duration->setObjectName(QString::fromUtf8("duration"));
 
-        formLayout->setWidget(2, QFormLayout::FieldRole, duration);
+        formLayout->setWidget(3, QFormLayout::FieldRole, duration);
 
         label_4 = new QLabel(formLayoutWidget);
         label_4->setObjectName(QString::fromUtf8("label_4"));
 
-        formLayout->setWidget(3, QFormLayout::LabelRole, label_4);
+        formLayout->setWidget(4, QFormLayout::LabelRole, label_4);
 
         startDate = new QDateEdit(formLayoutWidget);
         startDate->setObjectName(QString::fromUtf8("startDate"));
         startDate->setCalendarPopup(true);
         startDate->setDate(QDate(2009, 4, 20));
 
-        formLayout->setWidget(3, QFormLayout::FieldRole, startDate);
+        formLayout->setWidget(4, QFormLayout::FieldRole, startDate);
 
         label_5 = new QLabel(formLayoutWidget);
         label_5->setObjectName(QString::fromUtf8("label_5"));
 
-        formLayout->setWidget(4, QFormLayout::LabelRole, label_5);
+        formLayout->setWidget(5, QFormLayout::LabelRole, label_5);
 
         endDate = new QDateEdit(formLayoutWidget);
         endDate->setObjectName(QString::fromUtf8("endDate"));
         endDate->setCalendarPopup(true);
 
-        formLayout->setWidget(4, QFormLayout::FieldRole, endDate);
+        formLayout->setWidget(5, QFormLayout::FieldRole, endDate);
 
         label_6 = new QLabel(formLayoutWidget);
         label_6->setObjectName(QString::fromUtf8("label_6"));
 
-        formLayout->setWidget(5, QFormLayout::LabelRole, label_6);
+        formLayout->setWidget(6, QFormLayout::LabelRole, label_6);
 
         status = new QComboBox(formLayoutWidget);
         status->setObjectName(QString::fromUtf8("status"));
 
-        formLayout->setWidget(5, QFormLayout::FieldRole, status);
+        formLayout->setWidget(6, QFormLayout::FieldRole, status);
+
+        cboTemplate = new QComboBox(formLayoutWidget);
+        cboTemplate->setObjectName(QString::fromUtf8("cboTemplate"));
+
+        formLayout->setWidget(0, QFormLayout::FieldRole, cboTemplate);
+
+        label_7 = new QLabel(formLayoutWidget);
+        label_7->setObjectName(QString::fromUtf8("label_7"));
+
+        formLayout->setWidget(0, QFormLayout::LabelRole, label_7);
 
 
         retranslateUi(TaskDialog);
@@ -142,14 +154,15 @@ public:
         description->setHtml(QApplication::translate("TaskDialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Sans'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"></p></body></html>", 0, QApplication::UnicodeUTF8));
+"</style></head><body style=\" font-family:'Bitstream Vera Sans'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans';\"></p></body></html>", 0, QApplication::UnicodeUTF8));
         label_3->setText(QApplication::translate("TaskDialog", "Duration", 0, QApplication::UnicodeUTF8));
         label_4->setText(QApplication::translate("TaskDialog", "Start Date", 0, QApplication::UnicodeUTF8));
         startDate->setDisplayFormat(QApplication::translate("TaskDialog", "M/d/yyyy", 0, QApplication::UnicodeUTF8));
         label_5->setText(QApplication::translate("TaskDialog", "End Date", 0, QApplication::UnicodeUTF8));
         endDate->setDisplayFormat(QApplication::translate("TaskDialog", "M/d/yyyy", 0, QApplication::UnicodeUTF8));
         label_6->setText(QApplication::translate("TaskDialog", "Status", 0, QApplication::UnicodeUTF8));
+        label_7->setText(QApplication::translate("TaskDialog", "Template", 0, QApplication::UnicodeUTF8));
         Q_UNUSED(TaskDialog);
     } // retranslateUi
 

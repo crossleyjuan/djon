@@ -14,6 +14,8 @@ TaskGrid::TaskGrid(Project* project, QWidget* parent) : QWidget(parent)
 
 //    QGridLayout* grid = new QGridLayout();
     QVBoxLayout* box = new QVBoxLayout();
+    box->setDirection(QBoxLayout::TopToBottom);
+
     setLayout(box);
 
     updateGrid();

@@ -2,6 +2,7 @@
 #include "mainwindow.h"
 #include "fileutils.h"
 #include "project.h"
+#include "utils.h"
 
 int main(int argc, char *argv[])
 {
@@ -16,6 +17,7 @@ int main(int argc, char *argv[])
         string lastProjectName = conf->find("last-project-name")->second;
         project = readProject(lastProjectDir, lastProjectName);
     }
+    readTemplates();
     QApplication a(argc, argv);
     MainWindow w(project);
     w.showMaximized();
