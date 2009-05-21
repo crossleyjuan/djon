@@ -57,10 +57,11 @@ bool endsWith(const char* text, const char* end) {
 }
 
 std::vector<string>* split(string str, string token) {
-    char* s = (char*) malloc(str.size());
+//    char* s = (char*) malloc(str.size());
     const char* delim = token.c_str();
 
-    strcpy(s, str.c_str());
+    //strcpy(s, str.c_str());
+    char* s = (char*)str.c_str();
 
     vector<string>* res = new vector<string>();
     char* ptr;
@@ -69,7 +70,7 @@ std::vector<string>* split(string str, string token) {
     while ((ptr = strtok(NULL, delim)) != NULL) {
         res->push_back(string(ptr));
     }
-    delete s;
+
     return res;
 }
 
