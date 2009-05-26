@@ -19,6 +19,7 @@ MainWindow::MainWindow(Project* project, QWidget *parent)
     m_grid = new TaskGrid(m_project);
     ui->centralWidget->setLayout(layout);
     layout->addWidget(m_grid);
+    connect(ui->actionRefresh, SIGNAL(triggered()), m_grid, SLOT(updateGrid()));
 }
 
 MainWindow::~MainWindow()
@@ -32,3 +33,4 @@ void MainWindow::on_actionCreate_new_task_triggered()
     connect(dialog, SIGNAL(taskChanged(Task*)), m_grid, SLOT(onTaskChanged(Task*)));
     dialog->exec();
 }
+

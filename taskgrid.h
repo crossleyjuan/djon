@@ -15,12 +15,12 @@ public:
 public slots:
     void onDobleClick(TaskElement* element);
     void onTaskChanged(Task* task);
+    void updateGrid();
 
 private:
     Project* m_project;
     void addTask(Task* task);
     void updateTask(Task* task);
-    void updateGrid();
     TaskElement** currentElements;
     void clearCurrent();
     int m_size;

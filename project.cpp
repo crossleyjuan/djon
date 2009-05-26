@@ -26,10 +26,11 @@ void readJobs(Task* task) {
     }
 }
 
-void readTasks(Project* project) {
+std::vector<Task*> readTasks(Project* project) {
     string path = project->path;
 
     vector<string> files;
+    std::vector<Task*> tasks;
     int res = getdir(path, files, "tsk");
     if (res == 0) {
         for (vector<string>::iterator it = files.begin(); it != files.end(); it++) {
@@ -43,10 +44,10 @@ void readTasks(Project* project) {
             task->duration = atoi(values->find("duration")->second.c_str());
             task->startDate = atoi(values->find("startdate")->second.c_str());
             task->endDate = atoi(values->find("enddate")->second.c_str());
-            project->tasks.push_back(task);
-            task->project = project;
+            tasks.push_back(task);
         }
     }
+    return tasks;
 }
 
 hashmap* Task::hashValues() {
@@ -77,6 +78,5 @@ Project* readProject(string path, string projectName) {
     project->description = mapValues->find("project-description")->second;
     project->path = path;
 
-    readTasks(project);
     return project;
 }

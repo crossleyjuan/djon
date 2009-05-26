@@ -51,13 +51,13 @@ void TaskGrid::clearCurrent() {
 }
 
 void TaskGrid::updateGrid() {
+    std::vector<Task*> tasks = readTasks(m_project);
+
     clearCurrent();
 
     QVBoxLayout* lay = (QVBoxLayout*)layout();
 
     //box->addLayout(lay);
-
-    std::vector<Task*> tasks = m_project->tasks;
 
     currentElements = (TaskElement**)malloc(sizeof(TaskElement) * tasks.size());
     m_size = tasks.size();
@@ -74,7 +74,7 @@ void TaskGrid::updateGrid() {
 }
 
 void TaskGrid::onDobleClick(TaskElement* element) {
-    TaskDialog* dialog = new TaskDialog(element->getTask(), this);
+    TaskDialog* dialog = new TaskDialog(m_project, element->getTask(), this);
     connect(dialog, SIGNAL(taskChanged(Task*)), this, SLOT(onTaskChanged(Task*)));
     dialog->exec();
 }

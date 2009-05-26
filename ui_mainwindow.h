@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'mainwindow.ui'
 **
-** Created: Tue May 19 07:29:17 2009
+** Created: Tue May 26 18:20:52 2009
 **      by: Qt User Interface Compiler version 4.5.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
@@ -28,6 +28,7 @@ class Ui_MainWindowClass
 {
 public:
     QAction *actionCreate_new_task;
+    QAction *actionRefresh;
     QWidget *centralWidget;
     QMenuBar *menuBar;
     QMenu *menuTasks;
@@ -41,12 +42,14 @@ public:
         MainWindowClass->resize(419, 415);
         actionCreate_new_task = new QAction(MainWindowClass);
         actionCreate_new_task->setObjectName(QString::fromUtf8("actionCreate_new_task"));
+        actionRefresh = new QAction(MainWindowClass);
+        actionRefresh->setObjectName(QString::fromUtf8("actionRefresh"));
         centralWidget = new QWidget(MainWindowClass);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         MainWindowClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindowClass);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 419, 25));
+        menuBar->setGeometry(QRect(0, 0, 419, 23));
         menuTasks = new QMenu(menuBar);
         menuTasks->setObjectName(QString::fromUtf8("menuTasks"));
         MainWindowClass->setMenuBar(menuBar);
@@ -59,6 +62,7 @@ public:
 
         menuBar->addAction(menuTasks->menuAction());
         menuTasks->addAction(actionCreate_new_task);
+        menuTasks->addAction(actionRefresh);
 
         retranslateUi(MainWindowClass);
 
@@ -69,6 +73,7 @@ public:
     {
         MainWindowClass->setWindowTitle(QApplication::translate("MainWindowClass", "MainWindow", 0, QApplication::UnicodeUTF8));
         actionCreate_new_task->setText(QApplication::translate("MainWindowClass", "Create new task", 0, QApplication::UnicodeUTF8));
+        actionRefresh->setText(QApplication::translate("MainWindowClass", "Refresh", 0, QApplication::UnicodeUTF8));
         menuTasks->setTitle(QApplication::translate("MainWindowClass", "Tasks", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 

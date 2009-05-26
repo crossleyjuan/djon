@@ -11,7 +11,6 @@ struct Project {
     std::string name;
     std::string description;
     std::string path;
-    std::vector<Task*> tasks;
 };
 
 struct Job {
@@ -35,5 +34,6 @@ struct Task {
 };
 
 Project* readProject(std::string path, std::string projectName);
+std::vector<Task*> readTasks(Project* project);
 
 #endif // PROJECT_H

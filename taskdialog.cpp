@@ -9,14 +9,13 @@ TaskDialog::TaskDialog(Project* project, QWidget *parent) :
 {
     m_project = project;
     m_task = new Task();
-    m_project->tasks.push_back(m_task);
 
     m_ui->setupUi(this);
     m_ui->startDate->setDate(QDate::currentDate());
     m_ui->endDate->setDate(QDate::currentDate());
 }
 
-TaskDialog::TaskDialog(Task* task, QWidget *parent) :
+TaskDialog::TaskDialog(Project* project, Task* task, QWidget *parent) :
     QDialog(parent),
     m_ui(new Ui::TaskDialog)
 {
@@ -28,7 +27,7 @@ TaskDialog::TaskDialog(Task* task, QWidget *parent) :
     m_ui->duration->setText(QString(toString(task->duration).c_str()));
     m_ui->startDate->setDateTime(toDateTime(m_task->startDate));
     m_ui->endDate->setDateTime(toDateTime(m_task->endDate));
-    m_project = task->project;
+    m_project = project;
     m_ui->cboTemplate->hide();
 }
 
@@ -51,7 +50,7 @@ void TaskDialog::changeEvent(QEvent *e)
 void TaskDialog::on_buttonBox_accepted()
 {
     if (m_task->id.length() == 0) {
-        m_task->id = toString((int)m_project->tasks.size() + 1);
+        m_task->id = toString((int)readTasks(m_project).size() + 1);
     }
     m_task->shortDescription = m_ui->shortDescription->text().toStdString();
     m_task->longDescription = m_ui->description->document()->toPlainText().toStdString();
