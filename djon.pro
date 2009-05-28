@@ -12,22 +12,23 @@ HEADERS += fileutils.h \
     mainwindow.h \
     project.h \
     taskdialog.h \
-    taskelement.h \
     taskgrid.h \
     ui_task.h \
     utils.h \
     template.h \
-    flowlayout.h
+    flowlayout.h \
+    taskelement.h
 FORMS += mainwindow.ui \
-    taskdialog.ui
+    taskdialog.ui \
+    taskelement.ui
 SOURCES += fileutils.cpp \
     main.cpp \
     mainwindow.cpp \
     project.cpp \
     taskdialog.cpp \
-    taskelement.cpp \
     taskgrid.cpp \
     utils.cpp \
     template.cpp \
-    flowlayout.cpp
+    flowlayout.cpp \
+    taskelement.cpp
 OTHER_FILES += 

@@ -1,42 +1,31 @@
 #include "taskelement.h"
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QGridLayout>
+#include "ui_taskelement.h"
 #include "utils.h"
 
-TaskElement::TaskElement(Task* task, QWidget* parent) : QWidget(parent)
+TaskElement::TaskElement(Task* task, QWidget *parent) :
+    QWidget(parent),
+    m_ui(new Ui::TaskElement)
 {
-    m_task = task;
-    setMaximumHeight(30);
-    QGridLayout* lay = new QGridLayout();
-    m_txtName = new QLineEdit(QString(task->shortDescription.c_str()));
-    lay->addWidget(m_txtName, 0, 0);
-    m_txtDuration = new QLineEdit(QString(toString(task->duration).c_str()));
-    m_txtDuration->setMaximumWidth(40);
-    m_txtDuration->setFocusPolicy(Qt::ClickFocus);
-    lay->addWidget(m_txtDuration, 0, 1);
-    setLayout(lay);
+    m_ui->setupUi(this);
+    m_ui->txtShort->setText(QString(task->shortDescription.c_str()));
+    m_ui->txtDuration->setText(QString(toString(task->duration).c_str()));
 }
 
-void TaskElement::paintEvent(QPaintEvent*) {
-/*
-    QPainter paint (this);
-    paint.setPen(Qt::black);
-    paint.setBrush(QColor(230, 230, 230));
-    int margin = 5;
-    paint.drawRect(margin, margin, this->width()-margin, this->height()-margin);
-
-    paint.setFont(QFont("times", 10, QFont::Bold));
-    paint.setPen(QColor(0, 0, 124));
-    paint.drawText(20, 20, QString(m_task->shortDescription.c_str()));
-*/
+Task* TaskElement::task() {
 }
 
-void TaskElement::mousePressEvent(QMouseEvent *event) {
-    clicked(this);
+TaskElement::~TaskElement()
+{
+    delete m_ui;
 }
 
-Task* TaskElement::getTask() {
-    return m_task;
-
+void TaskElement::changeEvent(QEvent *e)
+{
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        m_ui->retranslateUi(this);
+        break;
+    default:
+        break;
+    }
 }

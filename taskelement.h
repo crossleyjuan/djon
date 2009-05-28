@@ -1,30 +1,26 @@
 #ifndef TASKELEMENT_H
 #define TASKELEMENT_H
 
-#include <QWidget>
+#include <QtGui/QWidget>
 #include "project.h"
-#include <qpainter.h>
-#include <QLineEdit>
 
-class TaskElement : public QWidget
-{
+namespace Ui {
+    class TaskElement;
+}
+
+class TaskElement : public QWidget {
     Q_OBJECT
+    Q_DISABLE_COPY(TaskElement)
+public:
+    explicit TaskElement(Task* task, QWidget *parent = 0);
+    virtual ~TaskElement();
+    Task* task();
 
 protected:
-    void paintEvent(QPaintEvent*);
-    void mousePressEvent(QMouseEvent *event);
-
-public:
-    TaskElement(Task* task, QWidget* parent = 0);
-    Task* getTask();
-
-signals:
-    void gotFocus(TaskElement* element);
+    virtual void changeEvent(QEvent *e);
 
 private:
-    Task* m_task;
-    QLineEdit *m_txtName;
-    QLineEdit *m_txtDuration;
+    Ui::TaskElement *m_ui;
 };
 
 #endif // TASKELEMENT_H

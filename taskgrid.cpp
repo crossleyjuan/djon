@@ -55,7 +55,7 @@ void TaskGrid::updateGrid() {
 }
 
 void TaskGrid::onDobleClick(TaskElement* element) {
-    TaskDialog* dialog = new TaskDialog(m_project, element->getTask(), this);
+    TaskDialog* dialog = new TaskDialog(m_project, element->task(), this);
     connect(dialog, SIGNAL(taskChanged(Task*)), this, SLOT(onTaskChanged(Task*)));
     dialog->exec();
 }
