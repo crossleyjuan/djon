@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "project.h"
 #include <qpainter.h>
+#include <QLineEdit>
 
 class TaskElement : public QWidget
 {
@@ -18,10 +19,12 @@ public:
     Task* getTask();
 
 signals:
-    void clicked(TaskElement* element);
+    void gotFocus(TaskElement* element);
 
 private:
     Task* m_task;
+    QLineEdit *m_txtName;
+    QLineEdit *m_txtDuration;
 };
 
 #endif // TASKELEMENT_H

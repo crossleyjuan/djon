@@ -16,7 +16,8 @@ HEADERS += fileutils.h \
     taskgrid.h \
     ui_task.h \
     utils.h \
-    template.h
+    template.h \
+    flowlayout.h
 FORMS += mainwindow.ui \
     taskdialog.ui
 SOURCES += fileutils.cpp \
@@ -27,5 +28,6 @@ SOURCES += fileutils.cpp \
     taskelement.cpp \
     taskgrid.cpp \
     utils.cpp \
-    template.cpp
+    template.cpp \
+    flowlayout.cpp
 OTHER_FILES += 

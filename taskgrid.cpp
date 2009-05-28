@@ -6,47 +6,31 @@
 #include "taskdialog.h"
 #include <QLabel>
 #include <QGridLayout>
+#include "flowlayout.h"
 
 TaskGrid::TaskGrid(Project* project, QWidget* parent) : QWidget(parent)
 {
     m_project = project;
     m_size = 0;
 
-//    QGridLayout* grid = new QGridLayout();
-    QVBoxLayout* box = new QVBoxLayout();
-    box->setDirection(QBoxLayout::TopToBottom);
+    FlowLayout* lay = new FlowLayout(5);
+//    QVBoxLayout* box = new QVBoxLayout();
+//    box->setDirection(QBoxLayout::TopToBottom);
 
-    setLayout(box);
+    setLayout(lay);
 
     updateGrid();
 }
 
 void TaskGrid::clearCurrent() {
-//    QGridLayout* box = (QGridLayout*)layout();
-    QVBoxLayout* box = (QVBoxLayout*)layout();
+    FlowLayout* lay = (FlowLayout*)layout();
 
-    QLayoutItem* item;
-    while ((item = box->takeAt(0)) != 0) {
-        box->removeWidget(item->widget());
-        delete item->widget();
-/*        delete item;
-        */
-    }
-
-    /*
     QLayoutItem* item;
     while ((item = lay->takeAt(0)) != 0) {
-        delete item;
+        lay->removeWidget(item->widget());
+        delete item->widget();
     }
 
-    for (int x = 0; x < m_size; x++) {
-        TaskElement* element = currentElements[x];
-        lay->removeWidget(element);
-    }
-    if (m_size > 0) {
-        free(currentElements);
-    }
-    */
     m_size = 0;
 }
 
@@ -55,16 +39,13 @@ void TaskGrid::updateGrid() {
 
     clearCurrent();
 
-    QVBoxLayout* lay = (QVBoxLayout*)layout();
-
-    //box->addLayout(lay);
+    FlowLayout* lay = (FlowLayout*)layout();
 
     currentElements = (TaskElement**)malloc(sizeof(TaskElement) * tasks.size());
     m_size = tasks.size();
     int x = 0;
     for (std::vector<Task*>::iterator it = tasks.begin(); it != tasks.end(); it++) {
         Task* task = *it;
-        //QLabel* element = new QLabel(QString(task->shortDescription.c_str()));
         TaskElement* element = new TaskElement(task, this);
         currentElements[++x] = element;
         lay->addWidget(element);
