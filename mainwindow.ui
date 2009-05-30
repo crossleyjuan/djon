@@ -20,7 +20,7 @@
      <x>0</x>
      <y>0</y>
      <width>419</width>
-     <height>23</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuTasks">
@@ -28,6 +28,7 @@
      <string>Tasks</string>
     </property>
     <addaction name="actionCreate_new_task"/>
+    <addaction name="actionEdit_Task"/>
     <addaction name="actionRefresh"/>
    </widget>
    <addaction name="menuTasks"/>
@@ -49,6 +50,11 @@
   <action name="actionRefresh">
    <property name="text">
     <string>Refresh</string>
+   </property>
+  </action>
+  <action name="actionEdit_Task">
+   <property name="text">
+    <string>Edit Task</string>
    </property>
   </action>
  </widget>

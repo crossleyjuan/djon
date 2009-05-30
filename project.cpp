@@ -38,12 +38,14 @@ std::vector<Task*> readTasks(Project* project) {
 
             hashmap* values = readFile(fileName);
             Task* task = new Task();
-            task->id = values->find("task-id")->second;
-            task->shortDescription = values->find("short-description")->second;
-            task->longDescription = values->find("long-description")->second;
-            task->duration = atoi(values->find("duration")->second.c_str());
-            task->startDate = atoi(values->find("startdate")->second.c_str());
-            task->endDate = atoi(values->find("enddate")->second.c_str());
+            task->id = READ_ELEMENT(values, "task-id");
+//            task->shortDescription = ((values->find("short-description") != values->end())? values->find("short-description")->second : "");
+            task->shortDescription =  READ_ELEMENT(values, "short-description");
+            task->longDescription = READ_ELEMENT(values, "long-description");
+            task->duration = atoi(READ_ELEMENT(values, "duration").c_str());
+            task->startDate = atoi(READ_ELEMENT(values, "startdate").c_str());
+            task->endDate = atoi(READ_ELEMENT(values, "enddate").c_str());
+            task->templateName = READ_ELEMENT(values, "template-name");
             tasks.push_back(task);
         }
     }
@@ -59,6 +61,7 @@ hashmap* Task::hashValues() {
     values->insert(pair<string, string>("duration", toString(this->duration)));
     values->insert(pair<string, string>("enddate", toString((int)this->endDate)));
     values->insert(pair<string, string>("startdate", toString((int)this->startDate)));
+    values->insert(pair<string, string>("template-name", this->templateName));
 
     return values;
 }

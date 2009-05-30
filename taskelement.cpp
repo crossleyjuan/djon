@@ -9,6 +9,7 @@ TaskElement::TaskElement(Task* task, QWidget *parent) :
     m_ui->setupUi(this);
     m_ui->txtShort->setText(QString(task->shortDescription.c_str()));
     m_ui->txtDuration->setText(QString(toString(task->duration).c_str()));
+
 }
 
 Task* TaskElement::task() {

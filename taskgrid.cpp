@@ -7,9 +7,13 @@
 #include <QLabel>
 #include <QGridLayout>
 #include "flowlayout.h"
+#include "ui_taskgrid.h"
 
-TaskGrid::TaskGrid(Project* project, QWidget* parent) : QWidget(parent)
+TaskGrid::TaskGrid(Project* project, QWidget* parent) :
+        QWidget(parent),
+        m_ui(new Ui::TaskGrid)
 {
+    m_ui->setupUi(this);
     m_project = project;
     m_size = 0;
 
@@ -17,13 +21,12 @@ TaskGrid::TaskGrid(Project* project, QWidget* parent) : QWidget(parent)
 //    QVBoxLayout* box = new QVBoxLayout();
 //    box->setDirection(QBoxLayout::TopToBottom);
 
-    setLayout(lay);
-
+    m_ui->groupBox->setLayout(lay);
     updateGrid();
 }
 
 void TaskGrid::clearCurrent() {
-    FlowLayout* lay = (FlowLayout*)layout();
+    FlowLayout* lay = (FlowLayout*)m_ui->groupBox->layout();
 
     QLayoutItem* item;
     while ((item = lay->takeAt(0)) != 0) {
@@ -39,7 +42,7 @@ void TaskGrid::updateGrid() {
 
     clearCurrent();
 
-    FlowLayout* lay = (FlowLayout*)layout();
+    FlowLayout* lay = (FlowLayout*)m_ui->groupBox->layout();
 
     currentElements = (TaskElement**)malloc(sizeof(TaskElement) * tasks.size());
     m_size = tasks.size();

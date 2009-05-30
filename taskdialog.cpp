@@ -2,6 +2,7 @@
 #include "ui_taskdialog.h"
 #include "sstream"
 #include "utils.h"
+#include "template.h"
 
 TaskDialog::TaskDialog(Project* project, QWidget *parent) :
     QDialog(parent),
@@ -13,6 +14,7 @@ TaskDialog::TaskDialog(Project* project, QWidget *parent) :
     m_ui->setupUi(this);
     m_ui->startDate->setDate(QDate::currentDate());
     m_ui->endDate->setDate(QDate::currentDate());
+    populateTemplate();
 }
 
 TaskDialog::TaskDialog(Project* project, Task* task, QWidget *parent) :
@@ -20,6 +22,7 @@ TaskDialog::TaskDialog(Project* project, Task* task, QWidget *parent) :
     m_ui(new Ui::TaskDialog)
 {
     m_ui->setupUi(this);
+    populateTemplate();
 
     m_task = task;
     m_ui->shortDescription->setText(QString(task->shortDescription.c_str()));
@@ -28,12 +31,22 @@ TaskDialog::TaskDialog(Project* project, Task* task, QWidget *parent) :
     m_ui->startDate->setDateTime(toDateTime(m_task->startDate));
     m_ui->endDate->setDateTime(toDateTime(m_task->endDate));
     m_project = project;
-    m_ui->cboTemplate->hide();
 }
 
 TaskDialog::~TaskDialog()
 {
     delete m_ui;
+}
+
+void TaskDialog::populateTemplate() {
+    vector<Template*>* templates = readTemplates();
+    for (vector<Template*>::iterator iter = templates->begin(); iter != templates->end(); iter++) {
+        Template* temp = *iter;
+        m_ui->cboTemplate->addItem(QString(temp->name().c_str()));
+    }
+}
+
+void TaskDialog::populateStatus() {
 }
 
 void TaskDialog::changeEvent(QEvent *e)
@@ -57,6 +70,7 @@ void TaskDialog::on_buttonBox_accepted()
     m_task->duration = m_ui->duration->text().toInt();
     m_task->endDate = toInt(m_ui->endDate->dateTime());
     m_task->startDate = toInt(m_ui->startDate->dateTime());
+    m_task->templateName = m_ui->cboTemplate->currentText().toStdString();
 
     writeFile(m_project->path + "/" + m_task->id + ".tsk", m_task->hashValues());
 

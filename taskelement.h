@@ -16,6 +16,9 @@ public:
     virtual ~TaskElement();
     Task* task();
 
+signals:
+    void taskFocus(Task* task);
+
 protected:
     virtual void changeEvent(QEvent *e);
 

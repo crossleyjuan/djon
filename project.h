@@ -30,6 +30,7 @@ struct Task {
     uint endDate;
     Project* project;
     std::vector<Job*> jobs;
+    std::string templateName;
     hashmap* hashValues();
 };
 

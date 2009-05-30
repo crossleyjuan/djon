@@ -5,6 +5,10 @@
 #include "project.h"
 #include "taskelement.h"
 
+namespace Ui {
+    class TaskGrid;
+}
+
 class TaskGrid : public QWidget
 {
     Q_OBJECT
@@ -24,6 +28,7 @@ private:
     TaskElement** currentElements;
     void clearCurrent();
     int m_size;
+    Ui::TaskGrid *m_ui;
 };
 
 #endif // TASKGRID_H

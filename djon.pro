@@ -20,7 +20,8 @@ HEADERS += fileutils.h \
     taskelement.h
 FORMS += mainwindow.ui \
     taskdialog.ui \
-    taskelement.ui
+    taskelement.ui \
+    taskgrid.ui
 SOURCES += fileutils.cpp \
     main.cpp \
     mainwindow.cpp \

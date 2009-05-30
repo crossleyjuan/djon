@@ -19,6 +19,7 @@ public:
 signals:
     void taskChanged(Task* task);
 
+
 protected:
     virtual void changeEvent(QEvent *e);
 
@@ -26,9 +27,11 @@ private:
     Ui::TaskDialog *m_ui;
     Task* m_task;
     Project* m_project;
+    void populateTemplate();
 
 private slots:
     void on_buttonBox_accepted();
+    void populateStatus();
 };
 
 #endif // TASKDIALOG_H

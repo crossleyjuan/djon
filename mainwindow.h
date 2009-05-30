@@ -24,6 +24,7 @@ private:
     TaskGrid* m_grid;
 
 private slots:
+    void on_actionEdit_Task_triggered();
     void on_actionCreate_new_task_triggered();
 };
 
