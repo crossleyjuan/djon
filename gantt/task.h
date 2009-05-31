@@ -11,13 +11,15 @@ public:
 
 public:
     void setName(std::string name);
-    void setStartDate(QDate startDate);
-    void setEndDate(QDate endDate);
+    void setStartDate(QDate* startDate);
+    void setEndDate(QDate* endDate);
+    QDate* startDate();
+    QDate* endDate();
 
 private:
     std::string m_name;
-    QDate m_startDate;
-    QDate m_endDate;
+    QDate* m_startDate;
+    QDate* m_endDate;
 };
 
 #endif // TASK_H

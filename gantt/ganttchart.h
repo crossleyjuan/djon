@@ -5,10 +5,15 @@
 #include <vector>
 #include "task.h"
 #include <QPaintEvent>
+#include <QDate>
 
 namespace Ui {
     class GanttChart;
 }
+
+enum SCALE {
+    DAY, WEEK, HALF_MONTH, MONTH
+};
 
 class GanttChart : public QWidget {
     Q_OBJECT
@@ -17,14 +22,33 @@ public:
     explicit GanttChart(QWidget *parent = 0);
     virtual ~GanttChart();
     void addTask(Task* task);
+    void setTaskHeight(int height);
 
 protected:
     virtual void changeEvent(QEvent *e);
-    void paintEvent(QPaintEvent*);
+    void paintEvent(QPaintEvent* evt);
 
 private:
     Ui::GanttChart *m_ui;
     std::vector<Task*> m_tasks;
+    void drawBackground(QPaintEvent* evt);
+    void drawHeader(QPaintEvent* evt);
+    void drawTasks(QPaintEvent* evt);
+    void calcZoom();
+    bool hasTasks();
+
+// properties
+    int m_taskHeight;
+
+// calculated values
+    QDate* m_startDate;
+    QDate* m_endDate;
+    SCALE m_scale;
+    int m_totalDays;
+
+// CONST
+    static const int HEADER_HEIGHT = 30;
+    static const int NUM_COLS = 10;
 };
 
 #endif // GANTTCHART_H
