@@ -3,7 +3,7 @@
 
 #include <QtGui/QWidget>
 #include <vector>
-#include "task.h"
+#include "gantttask.h"
 #include <QPaintEvent>
 #include <QDate>
 
@@ -21,8 +21,9 @@ class GanttChart : public QWidget {
 public:
     explicit GanttChart(QWidget *parent = 0);
     virtual ~GanttChart();
-    void addTask(Task* task);
+    void addTask(GanttTask* task);
     void setTaskHeight(int height);
+    void clear();
 
 protected:
     virtual void changeEvent(QEvent *e);
@@ -30,7 +31,7 @@ protected:
 
 private:
     Ui::GanttChart *m_ui;
-    std::vector<Task*> m_tasks;
+    std::vector<GanttTask*> m_tasks;
     void drawBackground(QPaintEvent* evt);
     void drawHeader(QPaintEvent* evt);
     void drawTasks(QPaintEvent* evt);

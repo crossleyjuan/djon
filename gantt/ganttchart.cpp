@@ -28,7 +28,7 @@ void GanttChart::changeEvent(QEvent *e)
     }
 }
 
-void GanttChart::addTask(Task* task) {
+void GanttChart::addTask(GanttTask* task) {
     m_tasks.push_back(task);
 }
 
@@ -71,8 +71,8 @@ void GanttChart::calcZoom() {
     if (!hasTasks()) {
         return;
     }
-    for (std::vector<Task*>::iterator it = m_tasks.begin(); it != m_tasks.end(); it++) {
-        Task* tsk = *it;
+    for (std::vector<GanttTask*>::iterator it = m_tasks.begin(); it != m_tasks.end(); it++) {
+        GanttTask* tsk = *it;
         if ((m_startDate == NULL) || (*m_startDate > *(tsk->startDate()))) {
             m_startDate = tsk->startDate();
         }
@@ -97,25 +97,29 @@ void GanttChart::setTaskHeight(int height) {
     m_taskHeight = height;
 }
 
+void GanttChart::clear() {
+    m_tasks.clear();
+}
+
 void GanttChart::drawTasks(QPaintEvent* evt) {
     QPainter* p = new QPainter(this);
 
     int dayWidth = evt->rect().width() / m_totalDays;
     int row = 0;
-    int margin = (m_taskHeight * .3) / 2;
+    int bordermargin = (m_taskHeight * .7) / 2;
 
-    for (std::vector<Task*>::iterator iter = m_tasks.begin(); iter != m_tasks.end(); iter++) {
-        Task* task = *iter;
+    for (std::vector<GanttTask*>::iterator iter = m_tasks.begin(); iter != m_tasks.end(); iter++) {
+        GanttTask* task = *iter;
         int days = task->startDate()->daysTo(*task->endDate()) + 1;
         p->setPen(QPen(QColor("red")));
         p->setBrush(QBrush(QColor("red")));
 
         int daysToStart = m_startDate->daysTo(*task->startDate());
         int x1 = daysToStart*dayWidth;
-        int y1 = (row * m_taskHeight) + HEADER_HEIGHT + margin;
+        int y1 = (row * m_taskHeight) + HEADER_HEIGHT + bordermargin;
 
         int x2 = x1 + (days*dayWidth);
-        int y2 = ((row+1) * m_taskHeight) + HEADER_HEIGHT - margin;
+        int y2 = ((row+1) * m_taskHeight) + HEADER_HEIGHT - bordermargin;
 
         p->drawRect(x1, y1, (x2 - x1), (y2 - y1));
         row++;

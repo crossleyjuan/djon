@@ -8,6 +8,7 @@
 #include <QGridLayout>
 #include "flowlayout.h"
 #include "ui_taskgrid.h"
+#include "utils.h"
 
 TaskGrid::TaskGrid(Project* project, QWidget* parent) :
         QWidget(parent),
@@ -22,6 +23,8 @@ TaskGrid::TaskGrid(Project* project, QWidget* parent) :
 //    box->setDirection(QBoxLayout::TopToBottom);
 
     m_ui->groupBox->setLayout(lay);
+    m_chart = new GanttChart();
+    m_ui->horizontalLayout->addWidget(m_chart);
     updateGrid();
 }
 
@@ -35,6 +38,7 @@ void TaskGrid::clearCurrent() {
     }
 
     m_size = 0;
+    m_chart->clear();
 }
 
 void TaskGrid::updateGrid() {
@@ -51,8 +55,17 @@ void TaskGrid::updateGrid() {
         Task* task = *it;
         TaskElement* element = new TaskElement(task, this);
         currentElements[++x] = element;
+
         lay->addWidget(element);
         connect(element, SIGNAL(clicked(TaskElement*)), this, SLOT(onDobleClick(TaskElement*)));
+
+        // Create the chart elements
+        GanttTask* gTask = new GanttTask();
+        gTask->setName(task->shortDescription);
+        gTask->setStartDate(&toDateTime(task->startDate).date());
+        gTask->setEndDate(&toDateTime(task->endDate).date());
+
+        m_chart->addTask(gTask);
     }
     lay->activate();
 }

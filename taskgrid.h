@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "project.h"
 #include "taskelement.h"
+#include "gantt/ganttchart.h"
 
 namespace Ui {
     class TaskGrid;
@@ -28,6 +29,7 @@ private:
     TaskElement** currentElements;
     void clearCurrent();
     int m_size;
+    GanttChart* m_chart;
     Ui::TaskGrid *m_ui;
 };
 

@@ -9,24 +9,25 @@ MainWindow::MainWindow(QWidget *parent) :
     m_ui->setupUi(this);
     GanttChart* chart = new GanttChart();
 
-    Task* task = new Task();
+    GanttTask* task = new GanttTask();
     task->setName("test1");
     task->setStartDate(new QDate(2009, 3, 1));
     task->setEndDate(new QDate(2009, 3, 3));
     chart->addTask(task);
-    task = new Task();
+
+    task = new GanttTask();
     task->setName("test2");
     task->setStartDate(new QDate(2009, 3, 3));
     task->setEndDate(new QDate(2009, 3, 5));
     chart->addTask(task);
 
-    task = new Task();
+    task = new GanttTask();
     task->setName("test3");
     task->setStartDate(new QDate(2009, 3, 7));
     task->setEndDate(new QDate(2009, 3, 8));
     chart->addTask(task);
 
-    chart->setTaskHeight(20);
+    chart->setTaskHeight(40);
     m_ui->centralwidget->layout()->addWidget(chart);
 }
 

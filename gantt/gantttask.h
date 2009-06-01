@@ -4,10 +4,10 @@
 #include <string>
 #include <QDate>
 
-class Task
+class GanttTask
 {
 public:
-    Task();
+    GanttTask();
 
 public:
     void setName(std::string name);
