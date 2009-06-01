@@ -33,7 +33,6 @@ private:
     Ui::GanttChart *m_ui;
     std::vector<GanttTask*> m_tasks;
     void drawBackground();
-    void drawHeader();
     void drawTasks();
     void calcZoom();
     bool hasTasks();
@@ -49,7 +48,7 @@ private:
 
 // CONST
     static const int HEADER_HEIGHT = 30;
-    static const int NUM_COLS = 10;
+    static const int NUM_COLS = 20;
 };
 
 #endif // GANTTCHART_H

@@ -39,9 +39,17 @@ void GanttChart::drawBackground() {
     p.setPen(QPen(QColor("white")));
     p.drawRect(0, 0, width(), height());
 
-    int columnSize = geometry().width() / NUM_COLS;
+//    int columnSize = geometry().width() / NUM_COLS;
+    int textSize = 30;
+    int margin = 15;
+    int cols = (geometry().width() / (textSize + margin));
+    int columnSize = textSize + margin;
 
-    for (int x = 0; x < NUM_COLS; x++) {
+    QDate startDate = QDate(m_startDate->year(), m_startDate->month(), m_startDate->day());
+    int days = startDate.daysTo(*m_endDate) / cols;
+
+    p.setFont(QFont("Arial", 9));
+    for (int x = 0; x < (cols + 1); x++) {
         QColor barcolor;
         if ((x % 2) > 0) {
             barcolor = QColor("white");
@@ -56,6 +64,10 @@ void GanttChart::drawBackground() {
         pen.setStyle(Qt::DashLine);
         p.setPen(pen);
         p.drawLine(x*columnSize, HEADER_HEIGHT, x*columnSize, this->rect().height());
+
+        p.setPen(QColor("black"));
+        p.drawText(x*(textSize + margin), 20, startDate.toString("dd-MMM"));
+        startDate = startDate.addDays(days);
     }
 }
 
@@ -90,9 +102,6 @@ void GanttChart::calcZoom() {
     }
 }
 
-void GanttChart::drawHeader() {
-}
-
 void GanttChart::setTaskHeight(int height) {
     m_taskHeight = height;
 }
@@ -110,7 +119,7 @@ void GanttChart::drawTasks() {
 
     for (std::vector<GanttTask*>::iterator iter = m_tasks.begin(); iter != m_tasks.end(); iter++) {
         GanttTask* task = *iter;
-        int days = task->startDate()->daysTo(*task->endDate()) + 1;
+        int days = task->startDate()->daysTo(*task->endDate());
         p.setPen(QPen(QColor("red")));
         p.setBrush(QBrush(QColor("red")));
 
@@ -122,6 +131,8 @@ void GanttChart::drawTasks() {
         int y2 = ((row+1) * m_taskHeight) + HEADER_HEIGHT - bordermargin;
 
         p.drawRect(x1, y1, (x2 - x1), (y2 - y1));
+//        p.setPen(QColor("black"));
+//        p.drawText(x1, y1, task->startDate()->toString("dd"));
         row++;
     }
 }
@@ -133,8 +144,6 @@ void GanttChart::paintEvent(QPaintEvent* evt) {
         m_taskHeight = 30;
     }
     drawBackground();
-
-    drawHeader();
 
     drawTasks();
 }
