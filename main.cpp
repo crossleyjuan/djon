@@ -19,7 +19,6 @@ int main(int argc, char *argv[])
     }
     QApplication a(argc, argv);
     MainWindow w(project);
-    w.showMaximized();
     w.show();
     return a.exec();
 }

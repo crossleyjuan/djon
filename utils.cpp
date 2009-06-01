@@ -25,11 +25,11 @@ void logInfo(char* text) {
     cout << text << endl;
 }
 
-QDateTime toDateTime(int date) {
+QDateTime* toDateTime(int date) {
     int year = date / 10000;
     int month = (date / 100) - (year * 100);
     int day = date - (month * 100) - (year * 10000);
-    QDateTime dateTime(QDate(year, month, day));
+    QDateTime* dateTime = new QDateTime(QDate(year, month, day));
     return dateTime;
 }
 

@@ -28,8 +28,8 @@ TaskDialog::TaskDialog(Project* project, Task* task, QWidget *parent) :
     m_ui->shortDescription->setText(QString(task->shortDescription.c_str()));
     m_ui->description->setPlainText(QString(task->longDescription.c_str()));
     m_ui->duration->setText(QString(toString(task->duration).c_str()));
-    m_ui->startDate->setDateTime(toDateTime(m_task->startDate));
-    m_ui->endDate->setDateTime(toDateTime(m_task->endDate));
+    m_ui->startDate->setDateTime(*toDateTime(m_task->startDate));
+    m_ui->endDate->setDateTime(*toDateTime(m_task->endDate));
     m_project = project;
 }
 

@@ -32,9 +32,9 @@ protected:
 private:
     Ui::GanttChart *m_ui;
     std::vector<GanttTask*> m_tasks;
-    void drawBackground(QPaintEvent* evt);
-    void drawHeader(QPaintEvent* evt);
-    void drawTasks(QPaintEvent* evt);
+    void drawBackground();
+    void drawHeader();
+    void drawTasks();
     void calcZoom();
     bool hasTasks();
 

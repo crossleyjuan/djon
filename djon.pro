@@ -17,11 +17,14 @@ HEADERS += fileutils.h \
     utils.h \
     template.h \
     flowlayout.h \
-    taskelement.h
+    taskelement.h \
+    gantt/ganttchart.h \
+    gantt/gantttask.h
 FORMS += mainwindow.ui \
     taskdialog.ui \
     taskelement.ui \
-    taskgrid.ui
+    taskgrid.ui \
+    gantt/ganttchart.ui
 SOURCES += fileutils.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -31,5 +34,7 @@ SOURCES += fileutils.cpp \
     utils.cpp \
     template.cpp \
     flowlayout.cpp \
-    taskelement.cpp
+    taskelement.cpp \
+    gantt/ganttchart.cpp \
+    gantt/gantttask.cpp
 OTHER_FILES += 

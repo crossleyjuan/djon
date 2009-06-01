@@ -14,6 +14,7 @@ MainWindow::MainWindow(Project* project, QWidget *parent)
 {
     m_project = project;
     ui->setupUi(this);
+    showMaximized();
     this->setWindowTitle(m_project->name.c_str());
     QStackedLayout* layout = new QStackedLayout();
     m_grid = new TaskGrid(m_project);

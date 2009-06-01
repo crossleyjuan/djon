@@ -32,14 +32,14 @@ void GanttChart::addTask(GanttTask* task) {
     m_tasks.push_back(task);
 }
 
-void GanttChart::drawBackground(QPaintEvent* evt) {
-    QPainter* p = new QPainter(this);
+void GanttChart::drawBackground() {
+    QPainter p(this);
 
-    p->setBrush(QBrush(QColor("white")));
-    p->setPen(QPen(QColor("white")));
-    p->drawRect(evt->rect());
+    p.setBrush(QBrush(QColor("white")));
+    p.setPen(QPen(QColor("white")));
+    p.drawRect(0, 0, width(), height());
 
-    int columnSize = rect().width() / NUM_COLS;
+    int columnSize = geometry().width() / NUM_COLS;
 
     for (int x = 0; x < NUM_COLS; x++) {
         QColor barcolor;
@@ -48,14 +48,14 @@ void GanttChart::drawBackground(QPaintEvent* evt) {
         } else {
             barcolor = QColor(235, 235, 235);
         }
-        p->setBrush(QBrush(barcolor));
-        p->setPen(QPen(barcolor));
-        p->drawRect(x*columnSize, HEADER_HEIGHT, (x+1)*columnSize, evt->rect().height());
+        p.setBrush(QBrush(barcolor));
+        p.setPen(QPen(barcolor));
+        p.drawRect(x*columnSize, HEADER_HEIGHT, (x+1)*columnSize, this->rect().height());
 
         QPen pen(QColor(200, 200, 200));
         pen.setStyle(Qt::DashLine);
-        p->setPen(pen);
-        p->drawLine(x*columnSize, HEADER_HEIGHT, x*columnSize, evt->rect().height());
+        p.setPen(pen);
+        p.drawLine(x*columnSize, HEADER_HEIGHT, x*columnSize, this->rect().height());
     }
 }
 
@@ -90,7 +90,7 @@ void GanttChart::calcZoom() {
     }
 }
 
-void GanttChart::drawHeader(QPaintEvent* evt) {
+void GanttChart::drawHeader() {
 }
 
 void GanttChart::setTaskHeight(int height) {
@@ -101,18 +101,18 @@ void GanttChart::clear() {
     m_tasks.clear();
 }
 
-void GanttChart::drawTasks(QPaintEvent* evt) {
-    QPainter* p = new QPainter(this);
+void GanttChart::drawTasks() {
+    QPainter p(this);
 
-    int dayWidth = evt->rect().width() / m_totalDays;
+    int dayWidth = this->rect().width() / m_totalDays;
     int row = 0;
-    int bordermargin = (m_taskHeight * .7) / 2;
+    int bordermargin = (m_taskHeight * .5) / 2;
 
     for (std::vector<GanttTask*>::iterator iter = m_tasks.begin(); iter != m_tasks.end(); iter++) {
         GanttTask* task = *iter;
         int days = task->startDate()->daysTo(*task->endDate()) + 1;
-        p->setPen(QPen(QColor("red")));
-        p->setBrush(QBrush(QColor("red")));
+        p.setPen(QPen(QColor("red")));
+        p.setBrush(QBrush(QColor("red")));
 
         int daysToStart = m_startDate->daysTo(*task->startDate());
         int x1 = daysToStart*dayWidth;
@@ -121,7 +121,7 @@ void GanttChart::drawTasks(QPaintEvent* evt) {
         int x2 = x1 + (days*dayWidth);
         int y2 = ((row+1) * m_taskHeight) + HEADER_HEIGHT - bordermargin;
 
-        p->drawRect(x1, y1, (x2 - x1), (y2 - y1));
+        p.drawRect(x1, y1, (x2 - x1), (y2 - y1));
         row++;
     }
 }
@@ -132,9 +132,9 @@ void GanttChart::paintEvent(QPaintEvent* evt) {
     if (m_taskHeight == 0) {
         m_taskHeight = 30;
     }
-    drawBackground(evt);
+    drawBackground();
 
-    drawHeader(evt);
+    drawHeader();
 
-    drawTasks(evt);
+    drawTasks();
 }

@@ -14,7 +14,7 @@ std::string toString(int a);
 std::vector<string>* split(string str, string token);
 /*****************************************************************/
 
-QDateTime toDateTime(int date);
+QDateTime* toDateTime(int date);
 int toInt(QDateTime date);
 
 void logInfo(char* text);

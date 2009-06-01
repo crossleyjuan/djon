@@ -54,6 +54,7 @@ void TaskGrid::updateGrid() {
     for (std::vector<Task*>::iterator it = tasks.begin(); it != tasks.end(); it++) {
         Task* task = *it;
         TaskElement* element = new TaskElement(task, this);
+        m_chart->setTaskHeight(element->height());
         currentElements[++x] = element;
 
         lay->addWidget(element);
@@ -62,12 +63,15 @@ void TaskGrid::updateGrid() {
         // Create the chart elements
         GanttTask* gTask = new GanttTask();
         gTask->setName(task->shortDescription);
-        gTask->setStartDate(&toDateTime(task->startDate).date());
-        gTask->setEndDate(&toDateTime(task->endDate).date());
+        QDate startDate = toDateTime(task->startDate)->date();
+        gTask->setStartDate(new QDate(startDate.year(), startDate.month(), startDate.day()));
+        QDate endDate = toDateTime(task->endDate)->date();
+        gTask->setEndDate(new QDate(endDate.year(), endDate.month(), endDate.day()));
 
         m_chart->addTask(gTask);
     }
     lay->activate();
+    m_chart->update();
 }
 
 void TaskGrid::onDobleClick(TaskElement* element) {
