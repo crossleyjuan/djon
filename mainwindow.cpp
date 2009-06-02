@@ -38,4 +38,8 @@ void MainWindow::on_actionCreate_new_task_triggered()
 
 void MainWindow::on_actionEdit_Task_triggered()
 {
+    TaskDialog* dialog = new TaskDialog(m_project, m_grid->currentTask(), this);
+    if (dialog->exec() == QDialog::Accepted) {
+        m_grid->updateGrid();
+    }
 }

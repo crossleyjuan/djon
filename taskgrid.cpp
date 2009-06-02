@@ -23,7 +23,9 @@ TaskGrid::TaskGrid(Project* project, QWidget* parent) :
 //    box->setDirection(QBoxLayout::TopToBottom);
 
     m_ui->groupBox->setLayout(lay);
+    int headerHeight = m_ui->groupBox->height() - m_ui->groupBox->contentsRect().height();
     m_chart = new GanttChart();
+    m_chart->setHeaderHeight(headerHeight);
     m_ui->horizontalLayout->addWidget(m_chart);
     updateGrid();
 }
@@ -58,7 +60,7 @@ void TaskGrid::updateGrid() {
         currentElements[++x] = element;
 
         lay->addWidget(element);
-        connect(element, SIGNAL(clicked(TaskElement*)), this, SLOT(onDobleClick(TaskElement*)));
+        connect(element, SIGNAL(taskFocus(Task*)), this, SLOT(taskFocus(Task*)));
 
         // Create the chart elements
         GanttTask* gTask = new GanttTask();
@@ -74,16 +76,14 @@ void TaskGrid::updateGrid() {
     m_chart->update();
 }
 
-void TaskGrid::onDobleClick(TaskElement* element) {
-    TaskDialog* dialog = new TaskDialog(m_project, element->task(), this);
-    connect(dialog, SIGNAL(taskChanged(Task*)), this, SLOT(onTaskChanged(Task*)));
-    dialog->exec();
-}
-
 void TaskGrid::updateTask(Task* task) {
     updateGrid();
 }
 
-void TaskGrid::onTaskChanged(Task* task) {
-    updateTask(task);
+void TaskGrid::taskFocus(Task* task) {
+    m_selectedTask = task;
+}
+
+Task* TaskGrid::currentTask() {
+    return m_selectedTask;
 }

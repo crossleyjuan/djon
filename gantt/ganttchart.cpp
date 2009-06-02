@@ -10,6 +10,7 @@ GanttChart::GanttChart(QWidget *parent) :
     m_taskHeight = 0;
     m_startDate = NULL;
     m_endDate = NULL;
+    m_headerHeight = HEADER_HEIGHT;
 }
 
 GanttChart::~GanttChart()
@@ -26,6 +27,10 @@ void GanttChart::changeEvent(QEvent *e)
     default:
         break;
     }
+}
+
+void GanttChart::setHeaderHeight(int height) {
+    m_headerHeight = height;
 }
 
 void GanttChart::addTask(GanttTask* task) {
@@ -58,15 +63,15 @@ void GanttChart::drawBackground() {
         }
         p.setBrush(QBrush(barcolor));
         p.setPen(QPen(barcolor));
-        p.drawRect(x*columnSize, HEADER_HEIGHT, (x+1)*columnSize, this->rect().height());
+        p.drawRect(x*columnSize, m_headerHeight, (x+1)*columnSize, this->rect().height());
 
         QPen pen(QColor(200, 200, 200));
         pen.setStyle(Qt::DashLine);
         p.setPen(pen);
-        p.drawLine(x*columnSize, HEADER_HEIGHT, x*columnSize, this->rect().height());
+        p.drawLine(x*columnSize, m_headerHeight, x*columnSize, this->rect().height());
 
         p.setPen(QColor("black"));
-        p.drawText(x*(textSize + margin), 20, startDate.toString("dd-MMM"));
+        p.drawText(x*(textSize + margin), 10, startDate.toString("dd-MMM"));
         startDate = startDate.addDays(days);
     }
 }
@@ -125,10 +130,10 @@ void GanttChart::drawTasks() {
 
         int daysToStart = m_startDate->daysTo(*task->startDate());
         int x1 = daysToStart*dayWidth;
-        int y1 = (row * m_taskHeight) + HEADER_HEIGHT + bordermargin;
+        int y1 = (row * m_taskHeight) + m_headerHeight + bordermargin;
 
         int x2 = x1 + (days*dayWidth);
-        int y2 = ((row+1) * m_taskHeight) + HEADER_HEIGHT - bordermargin;
+        int y2 = ((row+1) * m_taskHeight) + m_headerHeight - bordermargin;
 
         p.drawRect(x1, y1, (x2 - x1), (y2 - y1));
 //        p.setPen(QColor("black"));

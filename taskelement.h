@@ -2,6 +2,7 @@
 #define TASKELEMENT_H
 
 #include <QtGui/QWidget>
+#include <QFocusEvent>
 #include "project.h"
 
 namespace Ui {
@@ -21,9 +22,15 @@ signals:
 
 protected:
     virtual void changeEvent(QEvent *e);
+    bool eventFilter( QObject *obj, QEvent *ev );
+
 
 private:
     Ui::TaskElement *m_ui;
+    Task* m_task;
+
+
+
 };
 
 #endif // TASKELEMENT_H

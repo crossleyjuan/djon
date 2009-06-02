@@ -23,6 +23,7 @@ public:
     virtual ~GanttChart();
     void addTask(GanttTask* task);
     void setTaskHeight(int height);
+    void setHeaderHeight(int height);
     void clear();
 
 protected:
@@ -39,6 +40,7 @@ private:
 
 // properties
     int m_taskHeight;
+    int m_headerHeight;
 
 // calculated values
     QDate* m_startDate;

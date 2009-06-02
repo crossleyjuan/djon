@@ -1,6 +1,7 @@
 duration:8;
-enddate:20090421;
+enddate:20090430;
 long-description:Definition of the file structure;
 short-description:Create the basic structure of the files.;
 startdate:20090420;
 task-id:1;
+template-name:Development Task;
