@@ -30,6 +30,22 @@ TaskDialog::TaskDialog(Project* project, Task* task, QWidget *parent) :
     m_ui->duration->setText(QString(toString(task->duration).c_str()));
     m_ui->startDate->setDateTime(*toDateTime(m_task->startDate));
     m_ui->endDate->setDateTime(*toDateTime(m_task->endDate));
+
+    for (int x = 0; x < m_ui->cboTemplate->count(); x++) {
+        if (m_task->templateName.compare(m_ui->cboTemplate->itemText(x).toStdString()) == 0) {
+            m_ui->cboTemplate->setCurrentIndex(x);
+            break;
+        }
+    }
+    populateStatus();
+    for (int x = 0; x < m_ui->status->count(); x++) {
+        if (m_task->status.compare(m_ui->status->itemText(x).toStdString()) == 0) {
+            m_ui->status->setCurrentIndex(x);
+            break;
+        }
+    }
+
+    m_ui->cboTemplate->setEditable(false);
     m_project = project;
 }
 
@@ -39,14 +55,24 @@ TaskDialog::~TaskDialog()
 }
 
 void TaskDialog::populateTemplate() {
-    vector<Template*>* templates = readTemplates();
-    for (vector<Template*>::iterator iter = templates->begin(); iter != templates->end(); iter++) {
+    m_templates = readTemplates();
+    for (vector<Template*>::iterator iter = m_templates->begin(); iter != m_templates->end(); iter++) {
         Template* temp = *iter;
         m_ui->cboTemplate->addItem(QString(temp->name().c_str()));
     }
+
+    connect(m_ui->cboTemplate, SIGNAL(currentIndexChanged(int)), this, SLOT(populateStatus()));
 }
 
 void TaskDialog::populateStatus() {
+    m_ui->status->clear();
+    Template* tpl = (Template*)m_templates->at(m_ui->cboTemplate->currentIndex());
+    vector<string>* statusList = tpl->statusList();
+    for (vector<string>::iterator iter = statusList->begin(); iter != statusList->end(); iter++) {
+        string status = *iter;
+        m_ui->status->addItem(QString(status.c_str()).trimmed());
+    }
+
 }
 
 void TaskDialog::changeEvent(QEvent *e)
@@ -62,17 +88,19 @@ void TaskDialog::changeEvent(QEvent *e)
 
 void TaskDialog::on_buttonBox_accepted()
 {
-    if (m_task->id.length() == 0) {
-        m_task->id = toString((int)readTasks(m_project).size() + 1);
-    }
     m_task->shortDescription = m_ui->shortDescription->text().toStdString();
     m_task->longDescription = m_ui->description->document()->toPlainText().toStdString();
     m_task->duration = m_ui->duration->text().toInt();
     m_task->endDate = toInt(m_ui->endDate->dateTime());
     m_task->startDate = toInt(m_ui->startDate->dateTime());
     m_task->templateName = m_ui->cboTemplate->currentText().toStdString();
+    m_task->status = m_ui->status->currentText().toStdString();
 
-    writeFile(m_project->path + "/" + m_task->id + ".tsk", m_task->hashValues());
+    if (m_task->id.length() == 0) {
+        m_task = createTask(m_project, m_task);
+    } else {
+        updateTask(m_project, m_task);
+    }
 
     taskChanged(m_task);
 }

@@ -3,6 +3,7 @@
 
 #include <QtGui/QDialog>
 #include "project.h"
+#include "template.h"
 
 namespace Ui {
     class TaskDialog;
@@ -28,6 +29,7 @@ private:
     Task* m_task;
     Project* m_project;
     void populateTemplate();
+    vector<Template*>* m_templates;
 
 private slots:
     void on_buttonBox_accepted();

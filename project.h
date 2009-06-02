@@ -31,10 +31,13 @@ struct Task {
     Project* project;
     std::vector<Job*> jobs;
     std::string templateName;
+    std::string status;
     hashmap* hashValues();
 };
 
 Project* readProject(std::string path, std::string projectName);
 std::vector<Task*> readTasks(Project* project);
+Task* createTask(Project* project, Task* task);
+void updateTask(Project* project, Task* task);
 
 #endif // PROJECT_H

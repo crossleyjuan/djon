@@ -1,7 +1,8 @@
-duration:8;
-enddate:20090430;
-long-description:Definition of the file structure;
-short-description:Create the basic structure of the files.;
-startdate:20090420;
+duration:1;
+enddate:20090702;
+long-description:Problema con backspace;
+short-description:Backspace;
+startdate:20090527;
+status:CONFIRMED;
 task-id:1;
-template-name:Development Task;
+template-name:Bug;

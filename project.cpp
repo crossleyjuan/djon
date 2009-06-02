@@ -46,6 +46,7 @@ std::vector<Task*> readTasks(Project* project) {
             task->startDate = atoi(READ_ELEMENT(values, "startdate").c_str());
             task->endDate = atoi(READ_ELEMENT(values, "enddate").c_str());
             task->templateName = READ_ELEMENT(values, "template-name");
+            task->status = READ_ELEMENT(values, "status");
             tasks.push_back(task);
         }
     }
@@ -62,6 +63,7 @@ hashmap* Task::hashValues() {
     values->insert(pair<string, string>("enddate", toString((int)this->endDate)));
     values->insert(pair<string, string>("startdate", toString((int)this->startDate)));
     values->insert(pair<string, string>("template-name", this->templateName));
+    values->insert(pair<string, string>("status", this->status));
 
     return values;
 }
@@ -82,4 +84,14 @@ Project* readProject(string path, string projectName) {
     project->path = path;
 
     return project;
+}
+
+Task* createTask(Project* project, Task* task) {
+    task->id = toString((int)readTasks(task->project).size() + 1);
+    writeFile(project->path + "/" + task->id + ".tsk", task->hashValues());
+    return task;
+}
+
+void updateTask(Project* project, Task* task) {
+    writeFile(project->path + "/" + task->id + ".tsk", task->hashValues());
 }

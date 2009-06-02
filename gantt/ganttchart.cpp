@@ -50,8 +50,12 @@ void GanttChart::drawBackground() {
     int cols = (geometry().width() / (textSize + margin));
     int columnSize = textSize + margin;
 
-    QDate startDate = QDate(m_startDate->year(), m_startDate->month(), m_startDate->day());
-    int days = startDate.daysTo(*m_endDate) / cols;
+    QDate startDate;
+    int days = 0;
+    if (m_startDate != NULL) {
+        startDate = QDate(m_startDate->year(), m_startDate->month(), m_startDate->day());
+        days = startDate.daysTo(*m_endDate) / cols;
+    }
 
     p.setFont(QFont("Arial", 9));
     for (int x = 0; x < (cols + 1); x++) {
@@ -70,9 +74,11 @@ void GanttChart::drawBackground() {
         p.setPen(pen);
         p.drawLine(x*columnSize, m_headerHeight, x*columnSize, this->rect().height());
 
-        p.setPen(QColor("black"));
-        p.drawText(x*(textSize + margin), 10, startDate.toString("dd-MMM"));
-        startDate = startDate.addDays(days);
+        if (m_startDate != NULL) {
+            p.setPen(QColor("black"));
+            p.drawText(x*(textSize + margin), 10, startDate.toString("dd-MMM"));
+            startDate = startDate.addDays(days);
+        }
     }
 }
 
