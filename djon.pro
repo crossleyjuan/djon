@@ -19,7 +19,8 @@ HEADERS += fileutils.h \
     flowlayout.h \
     taskelement.h \
     gantt/ganttchart.h \
-    gantt/gantttask.h
+    gantt/gantttask.h \
+    logtime.h
 FORMS += mainwindow.ui \
     taskdialog.ui \
     taskelement.ui \
@@ -36,5 +37,7 @@ SOURCES += fileutils.cpp \
     flowlayout.cpp \
     taskelement.cpp \
     gantt/ganttchart.cpp \
-    gantt/gantttask.cpp
+    gantt/gantttask.cpp \
+    logtime.cpp
 OTHER_FILES += 
+RESOURCES += test.qrc

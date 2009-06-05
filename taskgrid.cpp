@@ -55,12 +55,12 @@ void TaskGrid::updateGrid() {
     int x = 0;
     for (std::vector<Task*>::iterator it = tasks.begin(); it != tasks.end(); it++) {
         Task* task = *it;
-        TaskElement* element = new TaskElement(task, this);
+        TaskElement* element = new TaskElement(m_project, task, this);
         m_chart->setTaskHeight(element->height());
         currentElements[++x] = element;
 
         lay->addWidget(element);
-        connect(element, SIGNAL(taskFocus(Task*)), this, SLOT(taskFocus(Task*)));
+        connect(element, SIGNAL(taskFocus(TaskElement*)), this, SLOT(taskFocus(TaskElement*)));
 
         // Create the chart elements
         GanttTask* gTask = new GanttTask();
@@ -80,10 +80,10 @@ void TaskGrid::updateTask(Task* task) {
     updateGrid();
 }
 
-void TaskGrid::taskFocus(Task* task) {
-    m_selectedTask = task;
+void TaskGrid::taskFocus(TaskElement* task) {
+    m_selectedTaskElement = task;
 }
 
-Task* TaskGrid::currentTask() {
-    return m_selectedTask;
+TaskElement* TaskGrid::currentTaskElement() {
+    return m_selectedTaskElement;
 }

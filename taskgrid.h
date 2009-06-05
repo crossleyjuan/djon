@@ -16,10 +16,10 @@ class TaskGrid : public QWidget
 
 public:
     TaskGrid(Project* project, QWidget* parent = 0);
-    Task* currentTask();
+    TaskElement* currentTaskElement();
 
 public slots:
-    void taskFocus(Task* task);
+    void taskFocus(TaskElement* task);
     void updateGrid();
 
 private:
@@ -31,7 +31,7 @@ private:
     int m_size;
     GanttChart* m_chart;
     Ui::TaskGrid *m_ui;
-    Task* m_selectedTask;
+    TaskElement* m_selectedTaskElement;
 };
 
 #endif // TASKGRID_H

@@ -14,11 +14,13 @@ struct Project {
 };
 
 struct Job {
+    int id;
     std::string name;
     std::string description;
     int estimated;
     int status;
     int usedtime;
+    Task* task;
 };
 
 struct Task {
@@ -39,5 +41,4 @@ Project* readProject(std::string path, std::string projectName);
 std::vector<Task*> readTasks(Project* project);
 Task* createTask(Project* project, Task* task);
 void updateTask(Project* project, Task* task);
-
 #endif // PROJECT_H

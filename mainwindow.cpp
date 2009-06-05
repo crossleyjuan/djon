@@ -38,8 +38,18 @@ void MainWindow::on_actionCreate_new_task_triggered()
 
 void MainWindow::on_actionEdit_Task_triggered()
 {
-    TaskDialog* dialog = new TaskDialog(m_project, m_grid->currentTask(), this);
+    TaskDialog* dialog = new TaskDialog(m_project, m_grid->currentTaskElement()->task(), this);
     if (dialog->exec() == QDialog::Accepted) {
         m_grid->updateGrid();
     }
+}
+
+void MainWindow::on_actionStart_Time_triggered()
+{
+    m_grid->currentTaskElement()->startTimeRecord();
+}
+
+void MainWindow::on_actionStop_Time_triggered()
+{
+    m_grid->currentTaskElement()->stopTimeRecord();
 }
