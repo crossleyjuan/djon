@@ -15,6 +15,8 @@ std::vector<string>* split(string str, string token);
 /*****************************************************************/
 
 QDateTime* toDateTime(int date);
+QTime* toTime(int seconds);
+
 int toInt(QDateTime date);
 
 void logInfo(char* text);
@@ -22,5 +24,7 @@ void logInfo(char* text);
 bool endsWith(const char* text, const char* end);
 
 vector<Template*>* readTemplates();
+
+std::string* uuid();
 
 #endif // UTILS_H

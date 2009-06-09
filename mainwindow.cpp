@@ -20,6 +20,8 @@ MainWindow::MainWindow(Project* project, QWidget *parent)
     m_grid = new TaskGrid(m_project);
     ui->centralWidget->setLayout(layout);
     layout->addWidget(m_grid);
+    ui->actionStart_Time->setEnabled(true);
+    ui->actionStop_Time->setEnabled(false);
     connect(ui->actionRefresh, SIGNAL(triggered()), m_grid, SLOT(updateGrid()));
 }
 
@@ -47,9 +49,14 @@ void MainWindow::on_actionEdit_Task_triggered()
 void MainWindow::on_actionStart_Time_triggered()
 {
     m_grid->currentTaskElement()->startTimeRecord();
+    ui->actionStart_Time->setEnabled(false);
+    ui->actionStop_Time->setEnabled(true);
 }
 
 void MainWindow::on_actionStop_Time_triggered()
 {
     m_grid->currentTaskElement()->stopTimeRecord();
+    m_grid->updateGrid();
+    ui->actionStart_Time->setEnabled(true);
+    ui->actionStop_Time->setEnabled(false);
 }

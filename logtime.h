@@ -7,29 +7,44 @@
 #include "utils.h"
 #include <string>
 
+enum LOGTYPE {
+    TASK,
+    JOB
+};
+
 class LogTime
 {
 public:
-    LogTime(Task* task);
-    LogTime(Job* job);
+    LogTime(Project* project, Task* task);
+    LogTime(Project* project, Job* job);
     void startTimer();
     void stopTimer();
     QTime* time();
+    int seconds();
+    string* id();
+    QDateTime* initTime();
+    QDateTime* endTime();
+    LOGTYPE type();
+    Project* project();
+    Task* task();
+    Job* job();
 
 private:
+    Project* m_project;
     Task* m_task;
     Job* m_job;
     QDateTime* m_start;
     QDateTime* m_stop;
+    string* m_id;
 };
 
 
-map<string*, LogTime*>* m_LogTimers;
+LogTime* createTimer(Project* project, Task* task);
+LogTime* createTimer(Project* project, Job* job);
 
-LogTime* createTimer(Task* task);
-LogTime* createTimer(Job* job);
+LogTime* getTimer(Project* project, Task* task);
+LogTime* getTimer(Project* project, Job* job);
 
-LogTime* getTimer(Task* task);
-LogTime* getTimer(Job* job);
+void saveTimer(LogTime* log);
 
 #endif // LOGTIME_H

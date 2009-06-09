@@ -5,6 +5,7 @@
 #include <QFocusEvent>
 #include "project.h"
 #include <QDateTime>
+#include "logtime.h"
 
 namespace Ui {
     class TaskElement;
@@ -32,11 +33,15 @@ private:
     Ui::TaskElement *m_ui;
     Project* m_project;
     Task* m_task;
+    LogTime* m_logTime;
+    QTimer* m_timer;
+    void refreshTime();
 
 
 private slots:
     void on_txtDuration_editingFinished();
     void on_txtShort_editingFinished();
+    void timeout();
 };
 
 #endif // TASKELEMENT_H

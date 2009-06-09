@@ -35,10 +35,12 @@ struct Task {
     std::string templateName;
     std::string status;
     hashmap* hashValues();
+    uint totalTime;// Time in secs
 };
 
 Project* readProject(std::string path, std::string projectName);
 std::vector<Task*> readTasks(Project* project);
+Task* readTask(Project* project, string taskId);
 Task* createTask(Project* project, Task* task);
 void updateTask(Project* project, Task* task);
 #endif // PROJECT_H

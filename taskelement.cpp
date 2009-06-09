@@ -1,7 +1,7 @@
 #include "taskelement.h"
 #include "ui_taskelement.h"
 #include "utils.h"
-#include "logtime.h"
+#include <QTimer>
 
 TaskElement::TaskElement(Project* project, Task* task, QWidget *parent) :
     QWidget(parent),
@@ -10,11 +10,15 @@ TaskElement::TaskElement(Project* project, Task* task, QWidget *parent) :
     m_ui->setupUi(this);
     m_ui->txtShort->setText(QString(task->shortDescription.c_str()));
     m_ui->txtDuration->setText(QString(toString(task->duration).c_str()));
+
     m_ui->txtShort->installEventFilter(this);
     m_ui->txtDuration->installEventFilter(this);
 
     m_task = task;
     m_project = project;
+    m_logTime = NULL;
+
+    refreshTime();
 }
 
 Task* TaskElement::task() {
@@ -24,6 +28,18 @@ Task* TaskElement::task() {
 TaskElement::~TaskElement()
 {
     delete m_ui;
+}
+
+void TaskElement::refreshTime() {
+    int seconds = 0;
+    if (m_logTime != NULL) {
+        seconds = m_logTime->seconds();
+    }
+    int currentTaskTime = m_task->totalTime;
+    currentTaskTime += seconds;
+    QTime* totaltime = toTime(currentTaskTime);
+
+    m_ui->txtCurrentTime->setText(totaltime->toString("hh:mm:ss"));
 }
 
 bool TaskElement::eventFilter( QObject *obj, QEvent *ev ) {
@@ -58,13 +74,22 @@ void TaskElement::on_txtDuration_editingFinished()
     updateTask(m_project, m_task);
 }
 
+void TaskElement::timeout() {
+    refreshTime();
+}
+
 void TaskElement::startTimeRecord() {
-    createTimer(m_task);
+    m_logTime = createTimer(m_project, m_task);
+    m_timer = new QTimer(this);
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(timeout()));
+    m_timer->start(1000);
 }
 
 void TaskElement::stopTimeRecord() {
-    LogTime* timer = getTimer(m_task);
-    timer->stopTimer();
-    QTime* time = timer->time();
+    m_logTime->stopTimer();
+    m_timer->stop();
+    QTime* time = m_logTime->time();
     qDebug(time->toString(QString("hh:mm:ss")).toStdString().c_str());
+    saveTimer(m_logTime);
+    m_logTime = NULL;
 }

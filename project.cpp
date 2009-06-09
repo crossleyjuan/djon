@@ -26,6 +26,26 @@ void readJobs(Task* task) {
     }
 }
 
+Task* readTask(Project* project, string taskId) {
+    string path = project->path;
+    string fileName = path + taskId + ".tsk";
+
+    hashmap* values = readFile(fileName);
+
+    Task* task = new Task();
+    task->id = READ_ELEMENT(values, "task-id");
+    task->shortDescription =  READ_ELEMENT(values, "short-description");
+    task->longDescription = READ_ELEMENT(values, "long-description");
+    task->duration = atoi(READ_ELEMENT(values, "duration").c_str());
+    task->startDate = atoi(READ_ELEMENT(values, "startdate").c_str());
+    task->endDate = atoi(READ_ELEMENT(values, "enddate").c_str());
+    task->templateName = READ_ELEMENT(values, "template-name");
+    task->status = READ_ELEMENT(values, "status");
+    task->totalTime = atoi(READ_ELEMENT(values, "total-time").c_str());
+
+    return task;
+}
+
 std::vector<Task*> readTasks(Project* project) {
     string path = project->path;
 
@@ -34,19 +54,10 @@ std::vector<Task*> readTasks(Project* project) {
     int res = getdir(path, files, "tsk");
     if (res == 0) {
         for (vector<string>::iterator it = files.begin(); it != files.end(); it++) {
-            string fileName = path + (*it);
+            string fileName = (*it);
 
-            hashmap* values = readFile(fileName);
-            Task* task = new Task();
-            task->id = READ_ELEMENT(values, "task-id");
-//            task->shortDescription = ((values->find("short-description") != values->end())? values->find("short-description")->second : "");
-            task->shortDescription =  READ_ELEMENT(values, "short-description");
-            task->longDescription = READ_ELEMENT(values, "long-description");
-            task->duration = atoi(READ_ELEMENT(values, "duration").c_str());
-            task->startDate = atoi(READ_ELEMENT(values, "startdate").c_str());
-            task->endDate = atoi(READ_ELEMENT(values, "enddate").c_str());
-            task->templateName = READ_ELEMENT(values, "template-name");
-            task->status = READ_ELEMENT(values, "status");
+            Task* task = readTask(project, fileName.substr(0, fileName.length() - 4));
+
             tasks.push_back(task);
         }
     }
@@ -64,6 +75,7 @@ hashmap* Task::hashValues() {
     values->insert(pair<string, string>("startdate", toString((int)this->startDate)));
     values->insert(pair<string, string>("template-name", this->templateName));
     values->insert(pair<string, string>("status", this->status));
+    values->insert(pair<string, string>("total-time", toString((int)this->totalTime)));
 
     return values;
 }

@@ -5,6 +5,7 @@
 #include "template.h"
 #include "fileutils.h"
 #include <stdlib.h>
+#include <uuid/uuid.h>
 
 using namespace std;
 
@@ -106,4 +107,27 @@ vector<Template*>* readTemplates() {
     }
 
     return m_templates;
+}
+
+QTime* toTime(int seconds) {
+    int hour = seconds / 3600;
+    seconds -= (hour * 3600);
+    int min = (seconds / 60);
+    seconds -= (min * 60);
+    int secs = seconds;
+
+    QTime* time = new QTime(hour, min, secs, 0);
+    return time;
+}
+
+std::string* uuid() {
+    uuid_t t;
+    uuid_generate(t);
+
+    char ch[36];
+    memset(ch, 0, 36);
+    uuid_unparse(t, ch);
+    string* res = new string(ch);
+    qDebug(ch);
+    return res;
 }
