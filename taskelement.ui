@@ -23,6 +23,9 @@
    <property name="margin">
     <number>0</number>
    </property>
+   <property name="spacing">
+    <number>0</number>
+   </property>
    <item row="0" column="0">
     <widget class="QLineEdit" name="txtShort"/>
    </item>
@@ -30,12 +33,21 @@
     <widget class="QLineEdit" name="txtDuration">
      <property name="maximumSize">
       <size>
-       <width>40</width>
+       <width>45</width>
        <height>300</height>
       </size>
      </property>
+     <property name="font">
+      <font>
+       <family>Courier New</family>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
      <property name="focusPolicy">
       <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
@@ -43,9 +55,18 @@
     <widget class="QLineEdit" name="txtCurrentTime">
      <property name="maximumSize">
       <size>
-       <width>55</width>
+       <width>80</width>
        <height>16777215</height>
       </size>
+     </property>
+     <property name="font">
+      <font>
+       <family>Courier New</family>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>

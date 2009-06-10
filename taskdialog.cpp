@@ -15,6 +15,7 @@ TaskDialog::TaskDialog(Project* project, QWidget *parent) :
     m_ui->startDate->setDate(QDate::currentDate());
     m_ui->endDate->setDate(QDate::currentDate());
     populateTemplate();
+    populateStatus();
 }
 
 TaskDialog::TaskDialog(Project* project, Task* task, QWidget *parent) :
@@ -95,6 +96,8 @@ void TaskDialog::on_buttonBox_accepted()
     m_task->startDate = toInt(m_ui->startDate->dateTime());
     m_task->templateName = m_ui->cboTemplate->currentText().toStdString();
     m_task->status = m_ui->status->currentText().toStdString();
+    m_task->project = m_project;
+    m_task->totalTime = 0;
 
     if (m_task->id.length() == 0) {
         m_task = createTask(m_project, m_task);
@@ -103,4 +106,9 @@ void TaskDialog::on_buttonBox_accepted()
     }
 
     taskChanged(m_task);
+}
+
+void TaskDialog::on_buttonBox_rejected()
+{
+
 }

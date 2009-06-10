@@ -33,8 +33,9 @@ MainWindow::~MainWindow()
 void MainWindow::on_actionCreate_new_task_triggered()
 {
     TaskDialog* dialog = new TaskDialog(m_project, this);
-    connect(dialog, SIGNAL(taskChanged(Task*)), m_grid, SLOT(onTaskChanged(Task*)));
-    dialog->exec();
+    if (dialog->exec() == QDialog::Accepted) {
+        m_grid->updateGrid();
+    }
 }
 
 
