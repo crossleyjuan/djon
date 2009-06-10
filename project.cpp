@@ -107,3 +107,12 @@ Task* createTask(Project* project, Task* task) {
 void updateTask(Project* project, Task* task) {
     writeFile(project->path + "/" + task->id + ".tsk", task->hashValues());
 }
+
+void resetTimes(Project* project) {
+    vector<Task*> tasks = readTasks(project);
+    for (vector<Task*>::iterator it = tasks.begin(); it != tasks.end(); it++) {
+        Task* task = *it;
+        task->totalTime = 0;
+        updateTask(project,task);
+    }
+}

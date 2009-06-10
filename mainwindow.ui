@@ -33,6 +33,7 @@
     <addaction name="separator"/>
     <addaction name="actionStart_Time"/>
     <addaction name="actionStop_Time"/>
+    <addaction name="actionReset_All_Timers"/>
    </widget>
    <addaction name="menuTasks"/>
   </widget>
@@ -68,6 +69,11 @@
   <action name="actionStop_Time">
    <property name="text">
     <string>Stop Time</string>
+   </property>
+  </action>
+  <action name="actionReset_All_Timers">
+   <property name="text">
+    <string>Reset All Timers</string>
    </property>
   </action>
  </widget>

@@ -120,6 +120,11 @@ QTime* toTime(int seconds) {
     return time;
 }
 
+int toSeconds(QTime time) {
+    int seconds = time.second() + (time.minute() * 60) + (time.hour() * 3600);
+    return seconds;
+}
+
 std::string* uuid() {
     uuid_t t;
     uuid_generate(t);

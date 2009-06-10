@@ -16,6 +16,7 @@ std::vector<string>* split(string str, string token);
 
 QDateTime* toDateTime(int date);
 QTime* toTime(int seconds);
+int toSeconds(QTime time);
 
 int toInt(QDateTime date);
 

@@ -24,6 +24,7 @@ private:
     TaskGrid* m_grid;
 
 private slots:
+    void on_actionReset_All_Timers_triggered();
     void on_actionStop_Time_triggered();
     void on_actionStart_Time_triggered();
     void on_actionEdit_Task_triggered();

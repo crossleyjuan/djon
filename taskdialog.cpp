@@ -31,6 +31,7 @@ TaskDialog::TaskDialog(Project* project, Task* task, QWidget *parent) :
     m_ui->duration->setText(QString(toString(task->duration).c_str()));
     m_ui->startDate->setDateTime(*toDateTime(m_task->startDate));
     m_ui->endDate->setDateTime(*toDateTime(m_task->endDate));
+    m_ui->totalTime->setTime(*toTime(m_task->totalTime));
 
     for (int x = 0; x < m_ui->cboTemplate->count(); x++) {
         if (m_task->templateName.compare(m_ui->cboTemplate->itemText(x).toStdString()) == 0) {
@@ -97,7 +98,7 @@ void TaskDialog::on_buttonBox_accepted()
     m_task->templateName = m_ui->cboTemplate->currentText().toStdString();
     m_task->status = m_ui->status->currentText().toStdString();
     m_task->project = m_project;
-    m_task->totalTime = 0;
+    m_task->totalTime = toSeconds(m_ui->totalTime->time());
 
     if (m_task->id.length() == 0) {
         m_task = createTask(m_project, m_task);

@@ -3,6 +3,7 @@
 #include <vector>
 #include <QStackedLayout>
 #include <QVBoxLayout>
+#include <QMessageBox>
 #include "taskgrid.h"
 
 #include "taskdialog.h"
@@ -60,4 +61,18 @@ void MainWindow::on_actionStop_Time_triggered()
     m_grid->updateGrid();
     ui->actionStart_Time->setEnabled(true);
     ui->actionStop_Time->setEnabled(false);
+}
+
+void MainWindow::on_actionReset_All_Timers_triggered()
+{
+    QMessageBox box;
+    box.setText("This will reset all the timers, are you sure?");
+    box.setInformativeText("After this action you'll not be able to recover your times. The log times will not be removed.");
+    box.setStandardButtons(QMessageBox::Yes | QMessageBox::Cancel);
+    box.setDefaultButton(QMessageBox::No);
+    int res = box.exec();
+    if (res == QMessageBox::Yes) {
+        resetTimes(m_project);
+    }
+    m_grid->updateGrid();
 }
