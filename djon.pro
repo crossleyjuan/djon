@@ -40,4 +40,4 @@ SOURCES += fileutils.cpp \
     gantt/gantttask.cpp \
     logtime.cpp
 OTHER_FILES += 
-RESOURCES += test.qrc
+RESOURCES += djonResources.qrc

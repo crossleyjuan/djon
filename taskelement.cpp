@@ -2,6 +2,7 @@
 #include "ui_taskelement.h"
 #include "utils.h"
 #include <QTimer>
+#include <QPicture>
 
 TaskElement::TaskElement(Project* project, Task* task, QWidget *parent) :
     QWidget(parent),
@@ -17,6 +18,7 @@ TaskElement::TaskElement(Project* project, Task* task, QWidget *parent) :
     m_task = task;
     m_project = project;
     m_logTime = NULL;
+    m_timeRunning = false;
 
     refreshTime();
 }
@@ -74,6 +76,21 @@ void TaskElement::on_txtDuration_editingFinished()
     updateTask(m_project, m_task);
 }
 
+void TaskElement::paintEvent(QPaintEvent *pEvent) {
+    if (m_timeRunning) {
+/*
+        QPicture pic;
+        pic.load(QString("images/xclock.png"));
+        QPainter p(this);
+        p.begin(this);
+        p.drawPicture(QPoint(0, 0), pic);
+        p.end();
+*/
+    } else {
+
+    }
+}
+
 void TaskElement::timeout() {
     refreshTime();
 }
@@ -83,6 +100,7 @@ void TaskElement::startTimeRecord() {
     m_timer = new QTimer(this);
     connect(m_timer, SIGNAL(timeout()), this, SLOT(timeout()));
     m_timer->start(1000);
+    m_timeRunning = true;
 }
 
 void TaskElement::stopTimeRecord() {
@@ -92,4 +110,5 @@ void TaskElement::stopTimeRecord() {
     qDebug(time->toString(QString("hh:mm:ss")).toStdString().c_str());
     saveTimer(m_logTime);
     m_logTime = NULL;
+    m_timeRunning = false;
 }

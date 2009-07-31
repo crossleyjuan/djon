@@ -23,6 +23,8 @@ MainWindow::MainWindow(Project* project, QWidget *parent)
     layout->addWidget(m_grid);
     ui->actionStart_Time->setEnabled(true);
     ui->actionStop_Time->setEnabled(false);
+    createTrayIcon();
+
     connect(ui->actionRefresh, SIGNAL(triggered()), m_grid, SLOT(updateGrid()));
 }
 
@@ -53,6 +55,9 @@ void MainWindow::on_actionStart_Time_triggered()
     m_grid->currentTaskElement()->startTimeRecord();
     ui->actionStart_Time->setEnabled(false);
     ui->actionStop_Time->setEnabled(true);
+
+    QIcon icon(":/clock-on.png"); // clock-off.svg
+    m_sysTray->setIcon(icon);
 }
 
 void MainWindow::on_actionStop_Time_triggered()
@@ -61,6 +66,8 @@ void MainWindow::on_actionStop_Time_triggered()
     m_grid->updateGrid();
     ui->actionStart_Time->setEnabled(true);
     ui->actionStop_Time->setEnabled(false);
+    QIcon icon(":/clock-off.svg");
+    m_sysTray->setIcon(icon);
 }
 
 void MainWindow::on_actionReset_All_Timers_triggered()
@@ -76,3 +83,16 @@ void MainWindow::on_actionReset_All_Timers_triggered()
     }
     m_grid->updateGrid();
 }
+
+void MainWindow::createTrayIcon() {
+    m_sysTray = new QSystemTrayIcon(this);
+    QIcon icon(":/clock-off.svg");
+    m_sysTray->setIcon(icon);
+    connect(m_sysTray, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(on_trayClicked()));
+    m_sysTray->show();
+}
+
+void MainWindow::on_trayClicked() {
+    this->showMaximized();
+}
+

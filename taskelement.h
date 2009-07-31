@@ -5,6 +5,7 @@
 #include <QFocusEvent>
 #include "project.h"
 #include <QDateTime>
+#include <QPainter>
 #include "logtime.h"
 
 namespace Ui {
@@ -27,6 +28,7 @@ signals:
 protected:
     virtual void changeEvent(QEvent *e);
     bool eventFilter( QObject *obj, QEvent *ev );
+    void paintEvent(QPaintEvent *p);
 
 
 private:
@@ -36,6 +38,7 @@ private:
     LogTime* m_logTime;
     QTimer* m_timer;
     void refreshTime();
+    bool m_timeRunning;
 
 
 private slots:
