@@ -20,7 +20,8 @@ HEADERS += fileutils.h \
     taskelement.h \
     gantt/ganttchart.h \
     gantt/gantttask.h \
-    logtime.h
+    logtime.h \
+    idledetector.h
 FORMS += mainwindow.ui \
     taskdialog.ui \
     taskelement.ui \
@@ -38,6 +39,9 @@ SOURCES += fileutils.cpp \
     taskelement.cpp \
     gantt/ganttchart.cpp \
     gantt/gantttask.cpp \
-    logtime.cpp
+    logtime.cpp \
+    idledetector.cpp
 OTHER_FILES += 
 RESOURCES += djonResources.qrc
+
+LIBS += -lXss -lX11

@@ -17,6 +17,7 @@ TaskGrid::TaskGrid(Project* project, QWidget* parent) :
     m_ui->setupUi(this);
     m_project = project;
     m_size = 0;
+    m_selectedTaskElement = NULL;
 
     FlowLayout* lay = new FlowLayout(5);
 //    QVBoxLayout* box = new QVBoxLayout();
@@ -41,10 +42,17 @@ void TaskGrid::clearCurrent() {
 
     m_size = 0;
     m_chart->clear();
+    m_selectedTaskElement = NULL;
 }
 
 void TaskGrid::updateGrid() {
     std::vector<Task*> tasks = readTasks(m_project);
+
+    std::string currentId = "";
+
+    if (m_selectedTaskElement != NULL) {
+        currentId = m_selectedTaskElement->task()->id;
+    }
 
     clearCurrent();
 
@@ -56,6 +64,10 @@ void TaskGrid::updateGrid() {
     for (std::vector<Task*>::iterator it = tasks.begin(); it != tasks.end(); it++) {
         Task* task = *it;
         TaskElement* element = new TaskElement(m_project, task, this);
+
+        if (task->id.compare(currentId) == 0) {
+            m_selectedTaskElement = element;
+        }
         m_chart->setTaskHeight(element->height());
         currentElements[++x] = element;
 

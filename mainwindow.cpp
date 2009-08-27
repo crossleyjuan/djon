@@ -21,9 +21,9 @@ MainWindow::MainWindow(Project* project, QWidget *parent)
     m_grid = new TaskGrid(m_project);
     ui->centralWidget->setLayout(layout);
     layout->addWidget(m_grid);
-    ui->actionStart_Time->setEnabled(true);
-    ui->actionStop_Time->setEnabled(false);
     createTrayIcon();
+
+    updateState(false);
 
     connect(ui->actionRefresh, SIGNAL(triggered()), m_grid, SLOT(updateGrid()));
 }
@@ -53,21 +53,56 @@ void MainWindow::on_actionEdit_Task_triggered()
 void MainWindow::on_actionStart_Time_triggered()
 {
     m_grid->currentTaskElement()->startTimeRecord();
-    ui->actionStart_Time->setEnabled(false);
-    ui->actionStop_Time->setEnabled(true);
 
-    QIcon icon(":/clock-on.png"); // clock-off.svg
-    m_sysTray->setIcon(icon);
+    updateState(true);
+
+    idleDetector = new IdleDetector(5*60);// 5*60
+    connect(idleDetector, SIGNAL(idleTimeOut()), this, SLOT(on_idleTimeOut()));
+    idleDetector->start();
 }
 
 void MainWindow::on_actionStop_Time_triggered()
 {
     m_grid->currentTaskElement()->stopTimeRecord();
     m_grid->updateGrid();
-    ui->actionStart_Time->setEnabled(true);
-    ui->actionStop_Time->setEnabled(false);
-    QIcon icon(":/clock-off.svg");
-    m_sysTray->setIcon(icon);
+
+    updateState(false);
+}
+
+void MainWindow::on_idleTimeOut() {
+    idleDetector->stop();
+    m_grid->currentTaskElement()->stopTimeRecord();
+    m_grid->updateGrid();
+    m_grid->currentTaskElement()->startTimeRecord();
+
+    QMessageBox box;
+    box.setText("You've been idle more than 5 minutes, do you want to count that time?");
+    box.setInformativeText("Don't be lazy!!!!");
+    box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    box.setDefaultButton(QMessageBox::Yes);
+    int res = box.exec();
+    if (res == QMessageBox::No) {
+        m_grid->currentTaskElement()->resetCurrentTimer();
+        m_grid->updateGrid();
+        updateState(false);
+    } else {
+        idleDetector->start();
+        updateState(true);
+    }
+}
+
+void MainWindow::updateState(bool timeRunning) {
+    m_timeRunning = timeRunning;
+    if (m_timeRunning) {
+        QIcon icon(":/clock-on.png"); // clock-off.svg
+        m_sysTray->setIcon(icon);
+    } else {
+        QIcon icon(":/clock-off.png"); // clock-off.svg
+        m_sysTray->setIcon(icon);
+    }
+    ui->actionStart_Time->setEnabled(!m_timeRunning);
+    ui->actionStop_Time->setEnabled(m_timeRunning);
+    ui->actionReset_Time->setEnabled(m_timeRunning);
 }
 
 void MainWindow::on_actionReset_All_Timers_triggered()
@@ -76,7 +111,7 @@ void MainWindow::on_actionReset_All_Timers_triggered()
     box.setText("This will reset all the timers, are you sure?");
     box.setInformativeText("After this action you'll not be able to recover your times. The log times will not be removed.");
     box.setStandardButtons(QMessageBox::Yes | QMessageBox::Cancel);
-    box.setDefaultButton(QMessageBox::No);
+    box.setDefaultButton(QMessageBox::Cancel);
     int res = box.exec();
     if (res == QMessageBox::Yes) {
         resetTimes(m_project);
@@ -96,3 +131,21 @@ void MainWindow::on_trayClicked() {
     this->showMaximized();
 }
 
+
+void MainWindow::on_actionReset_Time_triggered()
+{
+    QMessageBox box;
+    box.setText("The current recorded time will be lost, are you sure?");
+    box.setInformativeText("Don't be lazy!!!!");
+    box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    box.setDefaultButton(QMessageBox::No);
+    int res = box.exec();
+    if (res == QMessageBox::Yes) {
+        idleDetector->stop();
+
+        m_grid->currentTaskElement()->resetCurrentTimer();
+        m_grid->updateGrid();
+
+        updateState(false);
+    }
+}

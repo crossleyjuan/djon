@@ -21,6 +21,7 @@ public:
     Task* task();
     void startTimeRecord();
     void stopTimeRecord();
+    void resetCurrentTimer();
 
 signals:
     void taskFocus(TaskElement* task);

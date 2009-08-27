@@ -103,6 +103,13 @@ void TaskElement::startTimeRecord() {
     m_timeRunning = true;
 }
 
+void TaskElement::resetCurrentTimer() {
+    m_logTime->stopTimer();
+    m_timer->stop();
+    m_logTime = NULL;
+    m_timeRunning = false;
+}
+
 void TaskElement::stopTimeRecord() {
     m_logTime->stopTimer();
     m_timer->stop();

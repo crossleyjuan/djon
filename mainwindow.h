@@ -5,6 +5,7 @@
 #include "project.h"
 #include "taskgrid.h"
 #include <QSystemTrayIcon>
+#include "idledetector.h"
 
 namespace Ui
 {
@@ -25,14 +26,20 @@ private:
     TaskGrid* m_grid;
     void createTrayIcon();
     QSystemTrayIcon* m_sysTray;
+    IdleDetector* idleDetector;
+    void updateState(bool timeRunning);
+    bool m_timeRunning;
+
 
 private slots:
+    void on_actionReset_Time_triggered();
     void on_actionReset_All_Timers_triggered();
     void on_actionStop_Time_triggered();
     void on_actionStart_Time_triggered();
     void on_actionEdit_Task_triggered();
     void on_actionCreate_new_task_triggered();
     void on_trayClicked();
+    void on_idleTimeOut();
 };
 
 #endif // MAINWINDOW_H
