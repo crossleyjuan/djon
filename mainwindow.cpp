@@ -23,13 +23,18 @@ MainWindow::MainWindow(Project* project, QWidget *parent)
     layout->addWidget(m_grid);
     createTrayIcon();
 
-    updateState(false);
+    updateState(true);
 
     connect(ui->actionRefresh, SIGNAL(triggered()), m_grid, SLOT(updateGrid()));
+
+    idleDetector = new IdleDetector(5*60);// 5*60
+    connect(idleDetector, SIGNAL(idleTimeOut()), this, SLOT(on_idleTimeOut()));
+    idleDetector->start();
 }
 
 MainWindow::~MainWindow()
 {
+    idleDetector->stop();
     delete ui;
 }
 
@@ -52,17 +57,18 @@ void MainWindow::on_actionEdit_Task_triggered()
 
 void MainWindow::on_actionStart_Time_triggered()
 {
+    idleDetector->start();
+
     m_grid->currentTaskElement()->startTimeRecord();
 
     updateState(true);
 
-    idleDetector = new IdleDetector(5*60);// 5*60
-    connect(idleDetector, SIGNAL(idleTimeOut()), this, SLOT(on_idleTimeOut()));
-    idleDetector->start();
 }
 
 void MainWindow::on_actionStop_Time_triggered()
 {
+    idleDetector->stop();
+
     m_grid->currentTaskElement()->stopTimeRecord();
     m_grid->updateGrid();
 
@@ -84,11 +90,11 @@ void MainWindow::on_idleTimeOut() {
     if (res == QMessageBox::No) {
         m_grid->currentTaskElement()->resetCurrentTimer();
         m_grid->updateGrid();
-        updateState(false);
-    } else {
-        idleDetector->start();
-        updateState(true);
+//        updateState(false);
+//    } else {
+//        updateState(true);
     }
+    idleDetector->start();
 }
 
 void MainWindow::updateState(bool timeRunning) {
@@ -129,8 +135,8 @@ void MainWindow::createTrayIcon() {
 
 void MainWindow::on_trayClicked() {
     this->showMaximized();
+    this->activateWindow();
 }
-
 
 void MainWindow::on_actionReset_Time_triggered()
 {
@@ -141,7 +147,7 @@ void MainWindow::on_actionReset_Time_triggered()
     box.setDefaultButton(QMessageBox::No);
     int res = box.exec();
     if (res == QMessageBox::Yes) {
-        idleDetector->stop();
+//        idleDetector->stop();
 
         m_grid->currentTaskElement()->resetCurrentTimer();
         m_grid->updateGrid();

@@ -22,6 +22,7 @@ public:
     void startTimeRecord();
     void stopTimeRecord();
     void resetCurrentTimer();
+    void setActive(bool active);
 
 signals:
     void taskFocus(TaskElement* task);
@@ -40,9 +41,10 @@ private:
     QTimer* m_timer;
     void refreshTime();
     bool m_timeRunning;
-
+    bool m_active;
 
 private slots:
+    void on_selectButton_toggled(bool checked);
     void on_txtDuration_editingFinished();
     void on_txtShort_editingFinished();
     void timeout();

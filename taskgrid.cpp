@@ -31,6 +31,12 @@ TaskGrid::TaskGrid(Project* project, QWidget* parent) :
     updateGrid();
 }
 
+TaskGrid::~TaskGrid() {
+    if (m_selectedTaskElement != NULL) {
+        m_selectedTaskElement->stopTimeRecord();
+    }
+}
+
 void TaskGrid::clearCurrent() {
     FlowLayout* lay = (FlowLayout*)m_ui->groupBox->layout();
 
@@ -69,7 +75,7 @@ void TaskGrid::updateGrid() {
             m_selectedTaskElement = element;
         }
         m_chart->setTaskHeight(element->height());
-        currentElements[++x] = element;
+        currentElements[x] = element;
 
         lay->addWidget(element);
         connect(element, SIGNAL(taskFocus(TaskElement*)), this, SLOT(taskFocus(TaskElement*)));
@@ -83,6 +89,7 @@ void TaskGrid::updateGrid() {
         gTask->setEndDate(new QDate(endDate.year(), endDate.month(), endDate.day()));
 
         m_chart->addTask(gTask);
+        x++;
     }
     lay->activate();
     m_chart->update();
@@ -94,6 +101,13 @@ void TaskGrid::updateTask(Task* task) {
 
 void TaskGrid::taskFocus(TaskElement* task) {
     m_selectedTaskElement = task;
+    for (int x = 0; x < m_size; x++) {
+        if (currentElements[x]->task()->id.compare(m_selectedTaskElement->task()->id) == 0) {
+            currentElements[x]->setActive(true);
+        } else {
+            currentElements[x]->setActive(false);
+        }
+    }
 }
 
 TaskElement* TaskGrid::currentTaskElement() {

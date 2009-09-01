@@ -16,6 +16,7 @@ class TaskGrid : public QWidget
 
 public:
     TaskGrid(Project* project, QWidget* parent = 0);
+    ~TaskGrid();
     TaskElement* currentTaskElement();
 
 public slots:

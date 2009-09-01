@@ -82,10 +82,16 @@
    <property name="text">
     <string>Start Time</string>
    </property>
+   <property name="visible">
+    <bool>false</bool>
+   </property>
   </action>
   <action name="actionStop_Time">
    <property name="text">
     <string>Stop Time</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
    </property>
   </action>
   <action name="actionReset_All_Timers">
@@ -96,6 +102,14 @@
   <action name="actionReset_Time">
    <property name="text">
     <string>Reset Time</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionS">
+   <property name="text">
+    <string>s</string>
    </property>
   </action>
  </widget>

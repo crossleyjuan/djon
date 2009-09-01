@@ -3,6 +3,7 @@
 #include "utils.h"
 #include <QTimer>
 #include <QPicture>
+#include <QRadioButton>
 
 TaskElement::TaskElement(Project* project, Task* task, QWidget *parent) :
     QWidget(parent),
@@ -19,6 +20,7 @@ TaskElement::TaskElement(Project* project, Task* task, QWidget *parent) :
     m_project = project;
     m_logTime = NULL;
     m_timeRunning = false;
+    m_active = false;
 
     refreshTime();
 }
@@ -118,4 +120,23 @@ void TaskElement::stopTimeRecord() {
     saveTimer(m_logTime);
     m_logTime = NULL;
     m_timeRunning = false;
+}
+
+void TaskElement::setActive(bool _active) {
+    m_active = _active;
+    m_ui->selectButton->setChecked(m_active);
+}
+
+void TaskElement::on_selectButton_toggled(bool checked)
+{
+    if (checked) {
+        taskFocus(this);
+        if (!m_timeRunning) {
+            startTimeRecord();
+        }
+    } else {
+        if (m_timeRunning) {
+            stopTimeRecord();
+        }
+    }
 }
