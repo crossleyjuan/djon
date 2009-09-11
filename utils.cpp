@@ -109,6 +109,17 @@ vector<Template*>* readTemplates() {
     return m_templates;
 }
 
+Template* readTemplate(string* name) {
+    vector<Template*>* templates = readTemplates();
+    for (vector<Template*>::iterator it = templates->begin(); it != templates->end(); it++) {
+        Template* t = *it;
+        if (t->name().compare(*name) == 0) {
+            return t;
+        }
+    }
+    return NULL;
+}
+
 QTime* toTime(int seconds) {
     int hour = seconds / 3600;
     seconds -= (hour * 3600);

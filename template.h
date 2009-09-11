@@ -10,12 +10,14 @@ class Template
 private:
     std::string m_name;
     std::vector<string>* m_statusList;
+    std::string m_closedStatus;
     std::vector<string>* m_jobList;
 
 public:
     Template(std::string name, std::vector<string>* statusList, std::vector<string>* jobList);
 
     std::string name();
+    std::string closedStatus();
     std::vector<string>* statusList();
     std::vector<string>* jobList();
 };

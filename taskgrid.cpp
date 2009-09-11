@@ -66,12 +66,16 @@ void TaskGrid::updateGrid() {
     FlowLayout* lay = (FlowLayout*)m_ui->groupBox->layout();
 
     currentElements = (TaskElement**)malloc(sizeof(TaskElement) * tasks.size());
-    m_size = tasks.size();
+    m_size = 0;
     int x = 0;
     for (std::vector<Task*>::iterator it = tasks.begin(); it != tasks.end(); it++) {
         Task* task = *it;
-        TaskElement* element = new TaskElement(m_project, task, this);
 
+        Template* temp = readTemplate(&task->templateName);
+        if ((temp != NULL) && (task->status.compare(temp->closedStatus()) == 0)) {
+            continue;
+        }
+        TaskElement* element = new TaskElement(m_project, task, this);
         if (task->id.compare(currentId) == 0) {
             m_selectedTaskElement = element;
         }
@@ -91,6 +95,7 @@ void TaskGrid::updateGrid() {
 
         m_chart->addTask(gTask);
         x++;
+        m_size++;
     }
     lay->activate();
     m_chart->update();

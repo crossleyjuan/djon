@@ -25,6 +25,7 @@ void logInfo(char* text);
 bool endsWith(const char* text, const char* end);
 
 vector<Template*>* readTemplates();
+Template* readTemplate(string* templateName);
 
 std::string* uuid();
 
