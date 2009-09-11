@@ -23,6 +23,7 @@ public:
     void stopTimeRecord();
     void resetCurrentTimer();
     void setActive(bool active);
+    bool isTimeRunning();
 
 signals:
     void taskFocus(TaskElement* task);
@@ -42,6 +43,7 @@ private:
     void refreshTime();
     bool m_timeRunning;
     bool m_active;
+    void refreshTask();
 
 private slots:
     void on_selectButton_toggled(bool checked);

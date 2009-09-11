@@ -18,6 +18,7 @@ TaskGrid::TaskGrid(Project* project, QWidget* parent) :
     m_project = project;
     m_size = 0;
     m_selectedTaskElement = NULL;
+    m_timerEnabled = false;
 
     FlowLayout* lay = new FlowLayout(5);
 //    QVBoxLayout* box = new QVBoxLayout();
@@ -104,12 +105,30 @@ void TaskGrid::taskFocus(TaskElement* task) {
     for (int x = 0; x < m_size; x++) {
         if (currentElements[x]->task()->id.compare(m_selectedTaskElement->task()->id) == 0) {
             currentElements[x]->setActive(true);
+            if (m_timerEnabled) {
+                currentElements[x]->startTimeRecord();
+            }
         } else {
             currentElements[x]->setActive(false);
+            if (m_timerEnabled && currentElements[x]->isTimeRunning()) {
+                currentElements[x]->stopTimeRecord();
+            }
         }
     }
 }
 
 TaskElement* TaskGrid::currentTaskElement() {
     return m_selectedTaskElement;
+}
+
+void TaskGrid::setTimerEnabled(bool timerEnabled) {
+    m_timerEnabled = timerEnabled;
+
+    if (timerEnabled) {
+        m_selectedTaskElement->startTimeRecord();
+    } else {
+        for (int x = 0; x < m_size; x++) {
+            currentElements[x]->stopTimeRecord();
+        }
+    }
 }

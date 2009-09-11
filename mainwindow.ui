@@ -24,7 +24,7 @@
      <x>0</x>
      <y>0</y>
      <width>419</width>
-     <height>20</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuTasks">
@@ -40,6 +40,8 @@
     <addaction name="actionReset_Time"/>
     <addaction name="separator"/>
     <addaction name="actionReset_All_Timers"/>
+    <addaction name="separator"/>
+    <addaction name="actionFilter_Tasks"/>
    </widget>
    <addaction name="menuTasks"/>
   </widget>
@@ -82,16 +84,10 @@
    <property name="text">
     <string>Start Time</string>
    </property>
-   <property name="visible">
-    <bool>false</bool>
-   </property>
   </action>
   <action name="actionStop_Time">
    <property name="text">
     <string>Stop Time</string>
-   </property>
-   <property name="visible">
-    <bool>false</bool>
    </property>
   </action>
   <action name="actionReset_All_Timers">
@@ -103,13 +99,15 @@
    <property name="text">
     <string>Reset Time</string>
    </property>
-   <property name="visible">
-    <bool>false</bool>
-   </property>
   </action>
   <action name="actionS">
    <property name="text">
     <string>s</string>
+   </property>
+  </action>
+  <action name="actionFilter_Tasks">
+   <property name="text">
+    <string>Filter Tasks</string>
    </property>
   </action>
  </widget>

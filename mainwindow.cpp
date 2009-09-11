@@ -5,6 +5,7 @@
 #include <QVBoxLayout>
 #include <QMessageBox>
 #include "taskgrid.h"
+#include "taskfilter.h"
 
 #include "taskdialog.h"
 
@@ -19,17 +20,17 @@ MainWindow::MainWindow(Project* project, QWidget *parent)
     this->setWindowTitle(m_project->name.c_str());
     QStackedLayout* layout = new QStackedLayout();
     m_grid = new TaskGrid(m_project);
+    m_grid->setTimerEnabled(false);
     ui->centralWidget->setLayout(layout);
     layout->addWidget(m_grid);
     createTrayIcon();
 
-    updateState(true);
+    updateState(false);
 
     connect(ui->actionRefresh, SIGNAL(triggered()), m_grid, SLOT(updateGrid()));
 
-    idleDetector = new IdleDetector(5*60);// 5*60
+    idleDetector = new IdleDetector(10*60);// 5*60
     connect(idleDetector, SIGNAL(idleTimeOut()), this, SLOT(on_idleTimeOut()));
-    idleDetector->start();
 }
 
 MainWindow::~MainWindow()
@@ -59,18 +60,16 @@ void MainWindow::on_actionStart_Time_triggered()
 {
     idleDetector->start();
 
-    m_grid->currentTaskElement()->startTimeRecord();
+    m_grid->setTimerEnabled(true);
 
     updateState(true);
-
 }
 
 void MainWindow::on_actionStop_Time_triggered()
 {
     idleDetector->stop();
 
-    m_grid->currentTaskElement()->stopTimeRecord();
-    m_grid->updateGrid();
+    m_grid->setTimerEnabled(false);
 
     updateState(false);
 }
@@ -78,7 +77,7 @@ void MainWindow::on_actionStop_Time_triggered()
 void MainWindow::on_idleTimeOut() {
     idleDetector->stop();
     m_grid->currentTaskElement()->stopTimeRecord();
-    m_grid->updateGrid();
+    //m_grid->updateGrid();
     m_grid->currentTaskElement()->startTimeRecord();
 
     QMessageBox box;
@@ -89,7 +88,6 @@ void MainWindow::on_idleTimeOut() {
     int res = box.exec();
     if (res == QMessageBox::No) {
         m_grid->currentTaskElement()->resetCurrentTimer();
-        m_grid->updateGrid();
 //        updateState(false);
 //    } else {
 //        updateState(true);
@@ -103,7 +101,7 @@ void MainWindow::updateState(bool timeRunning) {
         QIcon icon(":/clock-on.png"); // clock-off.svg
         m_sysTray->setIcon(icon);
     } else {
-        QIcon icon(":/clock-off.png"); // clock-off.svg
+        QIcon icon(":/clock-off.svg"); // clock-off.svg
         m_sysTray->setIcon(icon);
     }
     ui->actionStart_Time->setEnabled(!m_timeRunning);
@@ -153,5 +151,14 @@ void MainWindow::on_actionReset_Time_triggered()
         m_grid->updateGrid();
 
         updateState(false);
+    }
+}
+
+void MainWindow::on_actionFilter_Tasks_triggered()
+{
+    TaskFilter* filter = new TaskFilter(this);
+    int res = filter->exec();
+    if (res == QDialog::Accepted) {
+
     }
 }

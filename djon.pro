@@ -24,12 +24,14 @@ HEADERS += fileutils.h \
     utils.h \
     gantt/ganttchart.h \
     gantt/gantttask.h \
-    gantt/main.h
+    gantt/main.h \
+    taskfilter.h
 FORMS += mainwindow.ui \
     taskdialog.ui \
     taskelement.ui \
     taskgrid.ui \
-    gantt/ganttchart.ui
+    gantt/ganttchart.ui \
+    taskfilter.ui
 SOURCES += fileutils.cpp \
     flowlayout.cpp \
     idledetector.cpp \
@@ -43,7 +45,8 @@ SOURCES += fileutils.cpp \
     utils.cpp \
     gantt/ganttchart.cpp \
     gantt/gantttask.cpp \
-    template.cpp
+    template.cpp \
+    taskfilter.cpp
 RESOURCES += djonResources.qrc \
     test.qrc
 LIBS += -lXss \

@@ -10,8 +10,6 @@ TaskElement::TaskElement(Project* project, Task* task, QWidget *parent) :
     m_ui(new Ui::TaskElement)
 {
     m_ui->setupUi(this);
-    m_ui->txtShort->setText(QString(task->shortDescription.c_str()));
-    m_ui->txtDuration->setText(QString(toString(task->duration).c_str()));
 
     m_ui->txtShort->installEventFilter(this);
     m_ui->txtDuration->installEventFilter(this);
@@ -22,7 +20,7 @@ TaskElement::TaskElement(Project* project, Task* task, QWidget *parent) :
     m_timeRunning = false;
     m_active = false;
 
-    refreshTime();
+    refreshTask();
 }
 
 Task* TaskElement::task() {
@@ -97,29 +95,48 @@ void TaskElement::timeout() {
     refreshTime();
 }
 
+void TaskElement::refreshTask() {
+    m_task = readTask(m_project, m_task->id);
+    m_ui->txtShort->setText(QString(m_task->shortDescription.c_str()));
+    m_ui->txtDuration->setText(QString(toString(m_task->duration).c_str()));
+    refreshTime();
+}
+
 void TaskElement::startTimeRecord() {
-    m_logTime = createTimer(m_project, m_task);
-    m_timer = new QTimer(this);
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(timeout()));
-    m_timer->start(1000);
-    m_timeRunning = true;
+    if (!m_timeRunning) {
+        m_logTime = createTimer(m_project, m_task);
+        m_timer = new QTimer(this);
+        connect(m_timer, SIGNAL(timeout()), this, SLOT(timeout()));
+        m_timer->start(1000);
+        m_timeRunning = true;
+    }
 }
 
 void TaskElement::resetCurrentTimer() {
-    m_logTime->stopTimer();
-    m_timer->stop();
-    m_logTime = NULL;
-    m_timeRunning = false;
+    if (m_timeRunning) {
+        m_logTime->stopTimer();
+        m_timer->stop();
+        m_logTime = NULL;
+        m_timeRunning = false;
+        refreshTask();
+    }
 }
 
 void TaskElement::stopTimeRecord() {
-    m_logTime->stopTimer();
-    m_timer->stop();
-    QTime* time = m_logTime->time();
-    qDebug(time->toString(QString("hh:mm:ss")).toStdString().c_str());
-    saveTimer(m_logTime);
-    m_logTime = NULL;
-    m_timeRunning = false;
+    if (m_timeRunning) {
+        m_logTime->stopTimer();
+        m_timer->stop();
+        QTime* time = m_logTime->time();
+        qDebug(time->toString(QString("hh:mm:ss")).toStdString().c_str());
+        saveTimer(m_logTime);
+        m_logTime = NULL;
+        m_timeRunning = false;
+        refreshTask();
+    }
+}
+
+bool TaskElement::isTimeRunning() {
+    return m_timeRunning;
 }
 
 void TaskElement::setActive(bool _active) {
@@ -131,12 +148,5 @@ void TaskElement::on_selectButton_toggled(bool checked)
 {
     if (checked) {
         taskFocus(this);
-        if (!m_timeRunning) {
-            startTimeRecord();
-        }
-    } else {
-        if (m_timeRunning) {
-            stopTimeRecord();
-        }
     }
 }

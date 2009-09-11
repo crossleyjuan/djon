@@ -32,6 +32,7 @@ private:
 
 
 private slots:
+    void on_actionFilter_Tasks_triggered();
     void on_actionReset_Time_triggered();
     void on_actionReset_All_Timers_triggered();
     void on_actionStop_Time_triggered();
