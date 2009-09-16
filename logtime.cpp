@@ -139,7 +139,10 @@ void saveTimer(LogTime* log) {
     values->insert(pair<string, string>("log-start-time", toString(toInt(*log->initTime()))));
     values->insert(pair<string, string>("log-end-time", toString(toInt(*log->endTime()))));
 
-    writeFile(log->project()->path + *log->id() + ".log", values);
+    string destPath = log->project()->path + "task" + log->task()->id + "/";
+    makedir(destPath.c_str());
+
+    writeFile(destPath + *log->id() + ".log", values);
 
     if (log->type() == TASK) {
         Task* task = readTask(log->project(), log->task()->id);

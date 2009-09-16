@@ -6,6 +6,8 @@
 #include "fileutils.h"
 #include <stdlib.h>
 #include <uuid/uuid.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 using namespace std;
 
@@ -146,4 +148,13 @@ std::string* uuid() {
     string* res = new string(ch);
     qDebug(ch);
     return res;
+}
+
+bool makedir(const char* path) {
+    int status = mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+    if (status != 0) {
+        return false;
+    } else {
+        return true;
+    }
 }

@@ -29,4 +29,7 @@ Template* readTemplate(string* templateName);
 
 std::string* uuid();
 
+
+bool makedir(const char* path);
+
 #endif // UTILS_H
