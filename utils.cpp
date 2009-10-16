@@ -13,8 +13,21 @@ using namespace std;
 
 std::string toString(double a) {
     std::stringstream ss;
+
     ss << a;
-    return ss.str();
+    string res = ss.str();
+    return res;
+}
+
+std::string toString(double a, int fixedPrecision) {
+    std::stringstream ss;
+
+    ss.precision(fixedPrecision);
+    ss.setf(ios::fixed,ios::floatfield);
+
+    ss << a;
+    string res = ss.str();
+    return res;
 }
 
 std::string toString(int a) {
@@ -42,6 +55,19 @@ int toInt(QDateTime dt) {
     int day = dt.date().day();
     int d = year * 10000 + month * 100 + day;
 
+    return d;
+}
+
+double toDouble(QDateTime dt) {
+    int year = dt.date().year();
+    int month = dt.date().month();
+    int day = dt.date().day();
+    double d = year * 10000 + month * 100 + day;
+
+    double time = (double)dt.time().hour()/(double)100
+                  + ((double)dt.time().minute() / (double)10000)
+                  + ((double)dt.time().second() / (double)1000000);
+    d = d + time;
     return d;
 }
 

@@ -136,8 +136,8 @@ void saveTimer(LogTime* log) {
     string logid;
 
     values->insert(pair<string, string>("log-id", *log->id()));
-    values->insert(pair<string, string>("log-start-time", toString(toInt(*log->initTime()))));
-    values->insert(pair<string, string>("log-end-time", toString(toInt(*log->endTime()))));
+    values->insert(pair<string, string>("log-start-time", toString(toDouble(*log->initTime()), 6)));
+    values->insert(pair<string, string>("log-end-time", toString(toDouble(*log->endTime()), 6)));
 
     string destPath = log->project()->path + "task" + log->task()->id + "/";
     makedir(destPath.c_str());

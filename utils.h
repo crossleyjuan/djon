@@ -10,6 +10,7 @@
 String functions
 */
 std::string toString(double a);
+std::string toString(double a, int fixedPrecision);
 std::string toString(int a);
 std::vector<string>* split(string str, string token);
 /*****************************************************************/
@@ -19,6 +20,7 @@ QTime* toTime(int seconds);
 int toSeconds(QTime time);
 
 int toInt(QDateTime date);
+double toDouble(QDateTime dt);
 
 void logInfo(char* text);
 
