@@ -11,6 +11,8 @@ struct Project {
     std::string name;
     std::string description;
     std::string path;
+    int lastTaskId;
+    hashmap* hashValues();
 };
 
 struct Job {
@@ -36,9 +38,12 @@ struct Task {
     std::string status;
     hashmap* hashValues();
     uint totalTime;// Time in secs
+    int childCount;
 };
 
+void updateProject(Project* project);
 Project* readProject(std::string path, std::string projectName);
+void refreshProject(Project* project);
 std::vector<Task*> readTasks(Project* project);
 Task* readTask(Project* project, string taskId);
 Task* createTask(Project* project, Task* task);

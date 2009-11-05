@@ -80,6 +80,11 @@ hashmap* Task::hashValues() {
     return values;
 }
 
+void refreshProject(Project* project) {
+    Project* prjReaded = readProject(project->path, project->name);
+    *project = *prjReaded;
+}
+
 Project* readProject(string path, string projectName) {
     logInfo("Reading project");
     Project* project = new Project();
@@ -94,14 +99,34 @@ Project* readProject(string path, string projectName) {
     project->name = (*it).second;
     project->description = mapValues->find("project-description")->second;
     project->path = path;
+    string lastTaskId = READ_ELEMENT(mapValues, "last-taskid");
+    if (lastTaskId.length() > 0) {
+        project->lastTaskId = atoi(lastTaskId.c_str());
+    }
 
-    return project;
+     return project;
 }
 
+hashmap* Project::hashValues() {
+    hashmap* values = new hashmap();
+
+    values->insert(pair<string, string>("project-name", this->name));
+    values->insert(pair<string, string>("project-description", this->description));
+    values->insert(pair<string, string>("last-taskid", toString(this->lastTaskId)));
+
+    return values;
+}
 Task* createTask(Project* project, Task* task) {
-    task->id = toString((int)readTasks(task->project).size() + 1);
+    refreshProject(project);
+    project->lastTaskId++;
+    updateProject(project);
+    task->id = toString(project->lastTaskId);
     writeFile(project->path + "/" + task->id + ".tsk", task->hashValues());
     return task;
+}
+
+void updateProject(Project* project) {
+    writeFile(project->path + "/" + project->name + ".djon", project->hashValues());
 }
 
 void updateTask(Project* project, Task* task) {
