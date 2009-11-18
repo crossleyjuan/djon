@@ -1,8 +1,10 @@
+#include <QTableView>
 #include "taskdialog.h"
 #include "ui_taskdialog.h"
 #include "sstream"
 #include "utils.h"
 #include "template.h"
+#include "logitemmodel.h"
 
 TaskDialog::TaskDialog(Project* project, QWidget *parent) :
     QDialog(parent),
@@ -16,6 +18,8 @@ TaskDialog::TaskDialog(Project* project, QWidget *parent) :
     m_ui->endDate->setDate(QDate::currentDate());
     populateTemplate();
     populateStatus();
+    populateTableLog();
+    m_ui->tabWidget->setCurrentIndex(0);
 }
 
 TaskDialog::TaskDialog(Project* project, Task* task, QWidget *parent) :
@@ -29,8 +33,8 @@ TaskDialog::TaskDialog(Project* project, Task* task, QWidget *parent) :
     m_ui->shortDescription->setText(QString(task->shortDescription.c_str()));
     m_ui->description->setPlainText(QString(task->longDescription.c_str()));
     m_ui->duration->setText(QString(toString(task->duration).c_str()));
-    m_ui->startDate->setDateTime(*toDateTime(m_task->startDate));
-    m_ui->endDate->setDateTime(*toDateTime(m_task->endDate));
+    m_ui->startDate->setDateTime(*toDateTime((int)m_task->startDate));
+    m_ui->endDate->setDateTime(*toDateTime((int)m_task->endDate));
     m_ui->totalTime->setTime(*toTime(m_task->totalTime));
 
     for (int x = 0; x < m_ui->cboTemplate->count(); x++) {
@@ -49,6 +53,8 @@ TaskDialog::TaskDialog(Project* project, Task* task, QWidget *parent) :
 
     m_ui->cboTemplate->setEditable(false);
     m_project = project;
+    populateTableLog();
+    m_ui->tabWidget->setCurrentIndex(0);
 }
 
 TaskDialog::~TaskDialog()
@@ -112,4 +118,10 @@ void TaskDialog::on_buttonBox_accepted()
 void TaskDialog::on_buttonBox_rejected()
 {
 
+}
+
+void TaskDialog::populateTableLog() {
+    LogItemModel* model = new LogItemModel(m_project, m_task);
+    QTableView* table = m_ui->logView;
+    table->setModel(model);
 }

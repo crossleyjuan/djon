@@ -17,6 +17,7 @@ class LogTime
 public:
     LogTime(Project* project, Task* task);
     LogTime(Project* project, Job* job);
+    LogTime(Project* project, Task* task, QDateTime* initTime, QDateTime* endTime);
     void startTimer();
     void stopTimer();
     QTime* time();
@@ -46,5 +47,7 @@ LogTime* getTimer(Project* project, Task* task);
 LogTime* getTimer(Project* project, Job* job);
 
 void saveTimer(LogTime* log);
+LogTime* readLogTime(Project* project, Task* task, string fileName);
+std::vector<LogTime*> readLogTimes(Project* project, Task* task);
 
 #endif // LOGTIME_H

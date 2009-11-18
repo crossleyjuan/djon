@@ -88,9 +88,9 @@ void TaskGrid::updateGrid() {
         // Create the chart elements
         GanttTask* gTask = new GanttTask();
         gTask->setName(task->shortDescription);
-        QDate startDate = toDateTime(task->startDate)->date();
+        QDate startDate = toDateTime((int)task->startDate)->date();
         gTask->setStartDate(new QDate(startDate.year(), startDate.month(), startDate.day()));
-        QDate endDate = toDateTime(task->endDate)->date();
+        QDate endDate = toDateTime((int)task->endDate)->date();
         gTask->setEndDate(new QDate(endDate.year(), endDate.month(), endDate.day()));
 
         m_chart->addTask(gTask);

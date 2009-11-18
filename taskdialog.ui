@@ -177,7 +177,7 @@ p, li { white-space: pre-wrap; }
         <widget class="QComboBox" name="filtro"/>
        </item>
        <item row="2" column="0" colspan="2">
-        <widget class="QTableView" name="tableView"/>
+        <widget class="QTableView" name="logView"/>
        </item>
        <item row="3" column="0">
         <widget class="QLabel" name="label_10">

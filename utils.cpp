@@ -49,6 +49,24 @@ QDateTime* toDateTime(int date) {
     return dateTime;
 }
 
+QDateTime* toDateTime(double date) {
+    int year = date / 10000;
+    int month = (date / 100) - (year * 100);
+    int day = date - (month * 100) - (year * 10000);
+
+    int datepart = (int)date;
+    double time = date - datepart;
+    int hour = time*100;
+    time = (time * 100) - hour;
+    int minute = time * 100;
+    time = (time * 100) - minute;
+    int secs = time*100;
+
+    QDateTime* dateTime = new QDateTime(QDate(year, month, day), QTime(hour, minute, secs, 0));
+
+    return dateTime;
+}
+
 int toInt(QDateTime dt) {
     int year = dt.date().year();
     int month = dt.date().month();

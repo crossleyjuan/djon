@@ -13,6 +13,14 @@ LogTime::LogTime(Project* project, Task* task) {
     m_stop = NULL;
 }
 
+LogTime::LogTime(Project* project, Task* task, QDateTime* initTime, QDateTime* endTime) {
+    m_project = project;
+    m_task = task;
+    m_id = uuid();
+    m_start = initTime;
+    m_stop = endTime;
+}
+
 LogTime::LogTime(Project* project, Job* job) {
     m_project = project;
     m_job = job;
@@ -151,4 +159,42 @@ void saveTimer(LogTime* log) {
         updateTask(log->project(), task);
     }
 }
+
+LogTime* readLogTime(Project* project, Task* task, string fileName) {
+    string path = project->path;
+    string srcPath = project->path + "task" + task->id + "/";
+    fileName = srcPath + fileName + ".log";
+
+    hashmap* values = readFile(fileName);
+
+    string id = READ_ELEMENT(values, "log-id");
+    QString logStartTime(READ_ELEMENT(values, "log-start-time").c_str());
+    double startTime = logStartTime.toDouble();
+    QString logEndTime(READ_ELEMENT(values, "log-end-time").c_str());
+    double endTime = logEndTime.toDouble();
+
+    LogTime* timer = new LogTime(project, task, toDateTime(startTime), toDateTime(endTime));
+
+    return timer;
+}
+
+std::vector<LogTime*> readLogTimes(Project* project, Task* task) {
+    string path = project->path;
+
+    vector<string> files;
+    std::vector<LogTime*> logs;
+    string srcPath = project->path + "task" + task->id + "/";
+    int res = getdir(srcPath, files, "log");
+    if (res == 0) {
+        for (vector<string>::iterator it = files.begin(); it != files.end(); it++) {
+            string fileName = (*it);
+
+            LogTime* logtime = readLogTime(project, task, fileName.substr(0, fileName.length() - 4));
+
+            logs.push_back(logtime);
+        }
+    }
+    return logs;
+}
+
 

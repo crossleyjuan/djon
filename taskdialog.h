@@ -29,6 +29,7 @@ private:
     Task* m_task;
     Project* m_project;
     void populateTemplate();
+    void populateTableLog();
     vector<Template*>* m_templates;
 
 private slots:

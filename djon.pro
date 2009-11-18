@@ -25,7 +25,8 @@ HEADERS += fileutils.h \
     gantt/ganttchart.h \
     gantt/gantttask.h \
     gantt/main.h \
-    taskfilter.h
+    taskfilter.h \
+    logitemmodel.h
 FORMS += mainwindow.ui \
     taskdialog.ui \
     taskelement.ui \
@@ -46,7 +47,8 @@ SOURCES += fileutils.cpp \
     gantt/ganttchart.cpp \
     gantt/gantttask.cpp \
     template.cpp \
-    taskfilter.cpp
+    taskfilter.cpp \
+    logitemmodel.cpp
 RESOURCES += djonResources.qrc \
     test.qrc
 LIBS += -lXss \
