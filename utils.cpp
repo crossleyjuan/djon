@@ -155,11 +155,11 @@ vector<Template*>* readTemplates() {
     return m_templates;
 }
 
-Template* readTemplate(string* name) {
+Template* readTemplate(string name) {
     vector<Template*>* templates = readTemplates();
     for (vector<Template*>::iterator it = templates->begin(); it != templates->end(); it++) {
         Template* t = *it;
-        if (t->name().compare(*name) == 0) {
+        if (t->name().compare(name) == 0) {
             return t;
         }
     }

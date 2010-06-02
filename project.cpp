@@ -133,6 +133,13 @@ void updateTask(Project* project, Task* task) {
     writeFile(project->path + "/" + task->id + ".tsk", task->hashValues());
 }
 
+void closeTask(Project* project, Task* task) {
+    Template* temp = readTemplate(task->templateName);
+    string closedStatus = temp->closedStatus();
+    task->status = closedStatus;
+    updateTask(project, task);
+}
+
 void resetTimes(Project* project) {
     vector<Task*> tasks = readTasks(project);
     for (vector<Task*>::iterator it = tasks.begin(); it != tasks.end(); it++) {

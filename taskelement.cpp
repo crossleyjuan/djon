@@ -20,6 +20,9 @@ TaskElement::TaskElement(Project* project, Task* task, QWidget *parent) :
     m_timeRunning = false;
     m_active = false;
 
+    m_ui->txtShort->installEventFilter(this);
+    m_ui->txtDuration->installEventFilter(this);
+
     refreshTask();
 }
 
@@ -47,11 +50,10 @@ void TaskElement::refreshTime() {
 bool TaskElement::eventFilter( QObject *obj, QEvent *ev ) {
     if ((obj == m_ui->txtShort) || (obj == m_ui->txtDuration)) {
         if (ev->type() == QEvent::FocusIn) {
-            taskFocus(this);
+            taskSelected(this);
         }
     }
     return QWidget::eventFilter(obj, ev);
-
 }
 
 void TaskElement::changeEvent(QEvent *e)
@@ -141,12 +143,24 @@ bool TaskElement::isTimeRunning() {
 
 void TaskElement::setActive(bool _active) {
     m_active = _active;
-    m_ui->selectButton->setChecked(m_active);
+    Qt::CheckState state;
+    if (_active) {
+        state = Qt::Checked;
+    } else {
+        state = Qt::Unchecked;
+    }
+    m_ui->checkBox->setCheckState(state);
 }
 
-void TaskElement::on_selectButton_toggled(bool checked)
+void TaskElement::selectTask() {
+    taskActive(this);
+    setActive(true);
+}
+
+void TaskElement::on_checkBox_stateChanged(int )
 {
-    if (checked) {
-        taskFocus(this);
+    if (m_ui->checkBox->checkState() == Qt::Checked) {
+        taskActive(this);
     }
 }
+

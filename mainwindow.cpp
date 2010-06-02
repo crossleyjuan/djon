@@ -50,7 +50,7 @@ void MainWindow::on_actionCreate_new_task_triggered()
 
 void MainWindow::on_actionEdit_Task_triggered()
 {
-    TaskDialog* dialog = new TaskDialog(m_project, m_grid->currentTaskElement()->task(), this);
+    TaskDialog* dialog = new TaskDialog(m_project, m_grid->activeTaskElement()->task(), this);
     if (dialog->exec() == QDialog::Accepted) {
         m_grid->updateGrid();
     }
@@ -76,9 +76,9 @@ void MainWindow::on_actionStop_Time_triggered()
 
 void MainWindow::on_idleTimeOut() {
     idleDetector->stop();
-    m_grid->currentTaskElement()->stopTimeRecord();
+    m_grid->activeTaskElement()->stopTimeRecord();
     //m_grid->updateGrid();
-    m_grid->currentTaskElement()->startTimeRecord();
+    m_grid->activeTaskElement()->startTimeRecord();
 
     QMessageBox box;
     box.setText("You've been idle more than 5 minutes, do you want to count that time?");
@@ -87,7 +87,7 @@ void MainWindow::on_idleTimeOut() {
     box.setDefaultButton(QMessageBox::Yes);
     int res = box.exec();
     if (res == QMessageBox::No) {
-        m_grid->currentTaskElement()->resetCurrentTimer();
+        m_grid->activeTaskElement()->resetCurrentTimer();
 //        updateState(false);
 //    } else {
 //        updateState(true);
@@ -147,7 +147,7 @@ void MainWindow::on_actionReset_Time_triggered()
     if (res == QMessageBox::Yes) {
 //        idleDetector->stop();
 
-        m_grid->currentTaskElement()->resetCurrentTimer();
+        m_grid->activeTaskElement()->resetCurrentTimer();
         m_grid->updateGrid();
 
         updateState(false);
@@ -160,5 +160,21 @@ void MainWindow::on_actionFilter_Tasks_triggered()
     int res = filter->exec();
     if (res == QDialog::Accepted) {
 
+    }
+}
+
+void MainWindow::on_actionClose_Current_Task_triggered()
+{
+    QMessageBox box;
+    string infoText = "The task: \"" + m_grid->selectedTask()->shortDescription + "\" will be closed, are you sure?";
+    box.setText(infoText.c_str());
+    box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    box.setDefaultButton(QMessageBox::No);
+    int res = box.exec();
+    if (res == QMessageBox::Yes) {
+        closeTask(m_project, m_grid->selectedTask());
+        m_grid->updateGrid();
+
+        updateState(false);
     }
 }

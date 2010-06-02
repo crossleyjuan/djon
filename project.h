@@ -48,6 +48,7 @@ std::vector<Task*> readTasks(Project* project);
 Task* readTask(Project* project, string taskId);
 Task* createTask(Project* project, Task* task);
 void updateTask(Project* project, Task* task);
+void closeTask(Project* project, Task* task);
 void resetTimes(Project* project);
 
 #endif // PROJECT_H

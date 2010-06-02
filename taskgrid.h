@@ -17,11 +17,13 @@ class TaskGrid : public QWidget
 public:
     TaskGrid(Project* project, QWidget* parent = 0);
     ~TaskGrid();
-    TaskElement* currentTaskElement();
+    TaskElement* activeTaskElement();
     void setTimerEnabled(bool timerEnabled);
+    Task* selectedTask();
 
 public slots:
-    void taskFocus(TaskElement* task);
+    void taskActive(TaskElement* task);
+    void taskSelected(TaskElement* task);
     void updateGrid();
 
 private:
@@ -33,6 +35,7 @@ private:
     int m_size;
     GanttChart* m_chart;
     Ui::TaskGrid *m_ui;
+    TaskElement* m_activeTaskElement;
     TaskElement* m_selectedTaskElement;
     bool m_timerEnabled;
 };

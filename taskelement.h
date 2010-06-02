@@ -24,9 +24,11 @@ public:
     void resetCurrentTimer();
     void setActive(bool active);
     bool isTimeRunning();
+    void selectTask();
 
 signals:
-    void taskFocus(TaskElement* task);
+    void taskActive(TaskElement* task);
+    void taskSelected(TaskElement* task);
 
 protected:
     virtual void changeEvent(QEvent *e);
@@ -46,7 +48,7 @@ private:
     void refreshTask();
 
 private slots:
-    void on_selectButton_toggled(bool checked);
+    void on_checkBox_stateChanged(int );
     void on_txtDuration_editingFinished();
     void on_txtShort_editingFinished();
     void timeout();

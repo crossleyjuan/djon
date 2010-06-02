@@ -17,7 +17,7 @@ TaskGrid::TaskGrid(Project* project, QWidget* parent) :
     m_ui->setupUi(this);
     m_project = project;
     m_size = 0;
-    m_selectedTaskElement = NULL;
+    m_activeTaskElement = NULL;
     m_timerEnabled = false;
 
     FlowLayout* lay = new FlowLayout(5);
@@ -33,8 +33,8 @@ TaskGrid::TaskGrid(Project* project, QWidget* parent) :
 }
 
 TaskGrid::~TaskGrid() {
-    if (m_selectedTaskElement != NULL) {
-        m_selectedTaskElement->stopTimeRecord();
+    if (m_activeTaskElement != NULL) {
+        m_activeTaskElement->stopTimeRecord();
     }
 }
 
@@ -49,7 +49,7 @@ void TaskGrid::clearCurrent() {
 
     m_size = 0;
     m_chart->clear();
-    m_selectedTaskElement = NULL;
+    m_activeTaskElement = NULL;
 }
 
 void TaskGrid::updateGrid() {
@@ -57,8 +57,8 @@ void TaskGrid::updateGrid() {
 
     std::string currentId = "";
 
-    if (m_selectedTaskElement != NULL) {
-        currentId = m_selectedTaskElement->task()->id;
+    if (m_activeTaskElement != NULL) {
+        currentId = m_activeTaskElement->task()->id;
     }
 
     clearCurrent();
@@ -71,19 +71,20 @@ void TaskGrid::updateGrid() {
     for (std::vector<Task*>::iterator it = tasks.begin(); it != tasks.end(); it++) {
         Task* task = *it;
 
-        Template* temp = readTemplate(&task->templateName);
+        Template* temp = readTemplate(task->templateName);
         if ((temp != NULL) && (task->status.compare(temp->closedStatus()) == 0)) {
             continue;
         }
         TaskElement* element = new TaskElement(m_project, task, this);
         if (task->id.compare(currentId) == 0) {
-            m_selectedTaskElement = element;
+            m_activeTaskElement = element;
         }
         m_chart->setTaskHeight(element->height());
         currentElements[x] = element;
 
         lay->addWidget(element);
-        connect(element, SIGNAL(taskFocus(TaskElement*)), this, SLOT(taskFocus(TaskElement*)));
+        connect(element, SIGNAL(taskActive(TaskElement*)), this, SLOT(taskActive(TaskElement*)));
+        connect(element, SIGNAL(taskSelected(TaskElement*)), this, SLOT(taskSelected(TaskElement*)));
 
         // Create the chart elements
         GanttTask* gTask = new GanttTask();
@@ -94,6 +95,9 @@ void TaskGrid::updateGrid() {
         gTask->setEndDate(new QDate(endDate.year(), endDate.month(), endDate.day()));
 
         m_chart->addTask(gTask);
+        if (x == 0) { // First element
+            element->selectTask();
+        }
         x++;
         m_size++;
     }
@@ -105,10 +109,10 @@ void TaskGrid::updateTask(Task* task) {
     updateGrid();
 }
 
-void TaskGrid::taskFocus(TaskElement* task) {
-    m_selectedTaskElement = task;
+void TaskGrid::taskActive(TaskElement* task) {
+    m_activeTaskElement = task;
     for (int x = 0; x < m_size; x++) {
-        if (currentElements[x]->task()->id.compare(m_selectedTaskElement->task()->id) == 0) {
+        if (currentElements[x]->task()->id.compare(m_activeTaskElement->task()->id) == 0) {
             currentElements[x]->setActive(true);
             if (m_timerEnabled) {
                 currentElements[x]->startTimeRecord();
@@ -122,15 +126,23 @@ void TaskGrid::taskFocus(TaskElement* task) {
     }
 }
 
-TaskElement* TaskGrid::currentTaskElement() {
-    return m_selectedTaskElement;
+void TaskGrid::taskSelected(TaskElement* task) {
+    m_selectedTaskElement = task;
+}
+
+Task* TaskGrid::selectedTask() {
+    return m_selectedTaskElement->task();
+}
+
+TaskElement* TaskGrid::activeTaskElement() {
+    return m_activeTaskElement;
 }
 
 void TaskGrid::setTimerEnabled(bool timerEnabled) {
     m_timerEnabled = timerEnabled;
 
     if (timerEnabled) {
-        m_selectedTaskElement->startTimeRecord();
+        m_activeTaskElement->startTimeRecord();
     } else {
         for (int x = 0; x < m_size; x++) {
             currentElements[x]->stopTimeRecord();

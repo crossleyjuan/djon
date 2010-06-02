@@ -24,7 +24,7 @@
      <x>0</x>
      <y>0</y>
      <width>419</width>
-     <height>23</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuTasks">
@@ -33,6 +33,7 @@
     </property>
     <addaction name="actionCreate_new_task"/>
     <addaction name="actionEdit_Task"/>
+    <addaction name="actionClose_Current_Task"/>
     <addaction name="actionRefresh"/>
     <addaction name="separator"/>
     <addaction name="actionStart_Time"/>
@@ -108,6 +109,11 @@
   <action name="actionFilter_Tasks">
    <property name="text">
     <string>Filter Tasks</string>
+   </property>
+  </action>
+  <action name="actionClose_Current_Task">
+   <property name="text">
+    <string>Current Task As Closed</string>
    </property>
   </action>
  </widget>
