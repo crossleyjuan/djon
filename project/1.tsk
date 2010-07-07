@@ -1,9 +1,0 @@
-duration:2;
-enddate:20090702;
-long-description:Problema con backspace;
-short-description:Backspace;
-startdate:20090702;
-status:CONFIRMED;
-task-id:1;
-template-name:Bug;
-total-time:527;
