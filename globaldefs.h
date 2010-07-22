@@ -1,0 +1,8 @@
+#ifndef GLOBALDEFS_H
+#define GLOBALDEFS_H
+
+enum SCALE {
+    DAY, WEEK, HALF_MONTH, MONTH
+};
+
+#endif // GLOBALDEFS_H

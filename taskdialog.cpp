@@ -2,16 +2,18 @@
 #include "taskdialog.h"
 #include "ui_taskdialog.h"
 #include "sstream"
-#include "utils.h"
+#include "util.h"
 #include "template.h"
-#include "logitemmodel.h"
+#include "tasklogmodel.h"
 
-TaskDialog::TaskDialog(Project* project, QWidget *parent) :
+TaskDialog::TaskDialog(Project* project, string* id, QWidget *parent) :
     QDialog(parent),
     m_ui(new Ui::TaskDialog)
 {
     m_project = project;
-    m_task = new Task();
+    m_task = new Task(project);
+    _update = false;
+    _id = id;
 
     m_ui->setupUi(this);
     m_ui->startDate->setDate(QDate::currentDate());
@@ -30,22 +32,24 @@ TaskDialog::TaskDialog(Project* project, Task* task, QWidget *parent) :
     populateTemplate();
 
     m_task = task;
-    m_ui->shortDescription->setText(QString(task->shortDescription.c_str()));
-    m_ui->description->setPlainText(QString(task->longDescription.c_str()));
-    m_ui->duration->setText(QString(toString(task->duration).c_str()));
-    m_ui->startDate->setDateTime(*toDateTime((int)m_task->startDate));
-    m_ui->endDate->setDateTime(*toDateTime((int)m_task->endDate));
-    m_ui->totalTime->setTime(*toTime(m_task->totalTime));
+    _update = true;
+    _id = task->id();
+    m_ui->shortDescription->setText(QString(task->shortDescription()->c_str()));
+    m_ui->description->setPlainText(QString(task->longDescription()->c_str()));
+    m_ui->duration->setText(QString(toString(task->duration()).c_str()));
+    m_ui->startDate->setDateTime(*m_task->startDate()->toQDateTime());
+    m_ui->endDate->setDateTime(*m_task->endDate()->toQDateTime());
+    m_ui->totalTime->setTime(*m_task->totalTime()->toQTime());
 
     for (int x = 0; x < m_ui->cboTemplate->count(); x++) {
-        if (m_task->templateName.compare(m_ui->cboTemplate->itemText(x).toStdString()) == 0) {
+        if (m_task->templateName()->compare(m_ui->cboTemplate->itemText(x).toStdString()) == 0) {
             m_ui->cboTemplate->setCurrentIndex(x);
             break;
         }
     }
     populateStatus();
     for (int x = 0; x < m_ui->status->count(); x++) {
-        if (m_task->status.compare(m_ui->status->itemText(x).toStdString()) == 0) {
+        if (m_task->status()->compare(m_ui->status->itemText(x).toStdString()) == 0) {
             m_ui->status->setCurrentIndex(x);
             break;
         }
@@ -96,23 +100,20 @@ void TaskDialog::changeEvent(QEvent *e)
 
 void TaskDialog::on_buttonBox_accepted()
 {
-    m_task->shortDescription = m_ui->shortDescription->text().toStdString();
-    m_task->longDescription = m_ui->description->document()->toPlainText().toStdString();
-    m_task->duration = m_ui->duration->text().toInt();
-    m_task->endDate = toInt(m_ui->endDate->dateTime());
-    m_task->startDate = toInt(m_ui->startDate->dateTime());
-    m_task->templateName = m_ui->cboTemplate->currentText().toStdString();
-    m_task->status = m_ui->status->currentText().toStdString();
-    m_task->project = m_project;
-    m_task->totalTime = toSeconds(m_ui->totalTime->time());
+    m_task->setId(_id);
+    m_task->setShortDescription(new string(m_ui->shortDescription->text().toStdString()));
+    m_task->setLongDescription(new string(m_ui->description->document()->toPlainText().toStdString()));
+    m_task->setDuration(m_ui->duration->text().toInt());
+    m_task->setEndDate(new DateTime(m_ui->endDate->dateTime()));
+    m_task->setStartDate(new DateTime(m_ui->startDate->dateTime()));
+    m_task->setTemplateName(new string(m_ui->cboTemplate->currentText().toStdString()));
+    m_task->setStatus(new string(m_ui->status->currentText().toStdString()));
+    m_task->setProject(m_project);
+    m_task->setTotalTime(new DTime( toSeconds(m_ui->totalTime->time())));
 
-    if (m_task->id.length() == 0) {
-        m_task = createTask(m_project, m_task);
-    } else {
-        updateTask(m_project, m_task);
+    if (!_update) {
+        m_project->addTask(m_task);
     }
-
-    taskChanged(m_task);
 }
 
 void TaskDialog::on_buttonBox_rejected()
@@ -121,7 +122,11 @@ void TaskDialog::on_buttonBox_rejected()
 }
 
 void TaskDialog::populateTableLog() {
-    LogItemModel* model = new LogItemModel(m_project, m_task);
+    TaskLogModel* model = new TaskLogModel(m_task);
     QTableView* table = m_ui->logView;
     table->setModel(model);
+}
+
+Task* TaskDialog::task() {
+    return m_task;
 }

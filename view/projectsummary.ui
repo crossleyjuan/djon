@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ProjectSummary</class>
+ <widget class="QWizardPage" name="ProjectSummary">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>WizardPage</string>
+  </property>
+  <property name="title">
+   <string>Project Summary</string>
+  </property>
+  <property name="subTitle">
+   <string>The following project will be created, please check the options you selected and the click finished, if you want to change any of these settings you should go back and change them.</string>
+  </property>
+  <attribute name="pageId">
+   <string notr="true">PROJ_SUMMARY</string>
+  </attribute>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="QTextEdit" name="summary">
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

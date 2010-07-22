@@ -1,24 +1,24 @@
+/*
+ * File:   main.cpp
+ * Author: cross
+ *
+ * Created on July 9, 2010, 8:46 AM
+ */
+
 #include <QtGui/QApplication>
-#include "mainwindow.h"
-#include "fileutils.h"
-#include "project.h"
-#include "utils.h"
+#include <QtGui>
+#include "MainWindow.h"
+#include "data.h"
+#include "TaskModel.h"
 
-int main(int argc, char *argv[])
-{
-    char* home = getenv("HOME");
-    std::string confFileName = std::string(home) + "/.djon/djon.conf";
-    hashmap* conf = readFile(confFileName);
+int main(int argc, char *argv[]) {
+    // initialize resources, if needed
+    // Q_INIT_RESOURCE(resfile);
 
-    Project* project;
-    hashmap::iterator it = conf->find("last-project-dir");
-    if (it != conf->end()) {
-        string lastProjectDir = it->second;
-        string lastProjectName = conf->find("last-project-name")->second;
-        project = readProject(lastProjectDir, lastProjectName);
-    }
-    QApplication a(argc, argv);
-    MainWindow w(project);
-    w.show();
-    return a.exec();
+    QApplication app(argc, argv);
+    MainWindow mainWindow;
+
+    mainWindow.show();
+
+    return app.exec();
 }

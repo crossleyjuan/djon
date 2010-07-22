@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/" >
-        <file alias="clock-off.svg" >images/gnome-panel-clock.svg</file>
-        <file alias="clock-on.png" >images/gnome-panel-clock_on.png</file>
-    </qresource>
-</RCC>

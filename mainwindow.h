@@ -1,47 +1,59 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+/* 
+ * File:   MainWindow.h
+ * Author: cross
+ *
+ * Created on July 9, 2010, 8:50 AM
+ */
 
-#include <QtGui/QMainWindow>
-#include "project.h"
-#include "taskgrid.h"
-#include <QSystemTrayIcon>
+#ifndef _MAINWINDOW_H
+#define	_MAINWINDOW_H
+
+#include "ui_MainWindow.h"
+#include "data.h"
+#include <vector>
+#include "taskdelegate.h"
 #include "idledetector.h"
 
-namespace Ui
-{
-    class MainWindowClass;
-}
+class TaskLogWindow;
+class TimeTracker;
+class CurrentTime;
+class TaskModel;
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
-
 public:
-    MainWindow(Project* project, QWidget *parent = 0);
-    ~MainWindow();
-
+    MainWindow();
+    virtual ~MainWindow();
 private:
-    Ui::MainWindowClass *ui;
-    Project* m_project;
-    TaskGrid* m_grid;
-    void createTrayIcon();
-    QSystemTrayIcon* m_sysTray;
-    IdleDetector* idleDetector;
-    void updateState(bool timeRunning);
-    bool m_timeRunning;
+    void createTaskDelegate();
+    void createTaskLog();
+    void createCurrentTimeWindow();
+    void setupActions();
+    void reloadProjects();
+    void reloadTasks();
 
+    Ui::MainWindow widget;
+    TaskLogWindow* _logWindow;
+    std::vector<Project*>* _projects;
+    IdleDetector* _idleDetector;
+    TimeTracker* _timeTracker;
+    TaskLog* _activeLog;
+    Project* _activeProject;
+    Task* _activeTask;
+    CurrentTime* _timeWindow;
+    TaskModel* _taskModel;
 
-private slots:
-    void on_actionClose_Current_Task_triggered();
-    void on_actionFilter_Tasks_triggered();
-    void on_actionReset_Time_triggered();
-    void on_actionReset_All_Timers_triggered();
-    void on_actionStop_Time_triggered();
-    void on_actionStart_Time_triggered();
-    void on_actionEdit_Task_triggered();
-    void on_actionCreate_new_task_triggered();
-    void on_trayClicked();
-    void on_idleTimeOut();
+public slots:
+    void selectTaskChanged(QModelIndex current, QModelIndex previous);
+    void idleTimeOut();
+    void startRecord();
+    void stopRecord();
+    void createNewTask();
+    void editNewTask();
+    int createNewProject();
+
+    void setActiveTask(Task* task);
+    void setActiveTaskLog(Task* task, TaskLog* taskLog);
 };
 
-#endif // MAINWINDOW_H
+#endif	/* _MAINWINDOW_H */

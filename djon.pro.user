@@ -1,0 +1,318 @@
+<!DOCTYPE QtCreatorProject>
+<qtcreator>
+ <data>
+  <variable>RunConfiguration0-CommandLineArguments</variable>
+  <valuelist type="QVariantList" />
+ </data>
+ <data>
+  <variable>RunConfiguration0-ProFile</variable>
+  <value type="QString" >djon.pro</value>
+ </data>
+ <data>
+  <variable>RunConfiguration0-RunConfiguration.name</variable>
+  <value type="QString" >djon</value>
+ </data>
+ <data>
+  <variable>RunConfiguration0-UserSetName</variable>
+  <value type="bool" >false</value>
+ </data>
+ <data>
+  <variable>RunConfiguration0-type</variable>
+  <value type="QString" >Qt4ProjectManager.Qt4RunConfiguration</value>
+ </data>
+ <data>
+  <variable>RunConfiguration1-Arguments</variable>
+  <valuelist type="QVariantList" />
+ </data>
+ <data>
+  <variable>RunConfiguration1-Executable</variable>
+  <value type="QString" >E:\workspace\djon2\djon\debug\djon.exe</value>
+ </data>
+ <data>
+  <variable>RunConfiguration1-RunConfiguration.name</variable>
+  <value type="QString" >Run E:\workspace\djon2\djon\debug\djon.exe</value>
+ </data>
+ <data>
+  <variable>RunConfiguration1-WorkingDirectory</variable>
+  <value type="QString" >$BUILDDIR</value>
+ </data>
+ <data>
+  <variable>RunConfiguration1-type</variable>
+  <value type="QString" >ProjectExplorer.CustomExecutableRunConfiguration</value>
+ </data>
+ <data>
+  <variable>activeRunConfiguration</variable>
+  <value type="int" >1</value>
+ </data>
+ <data>
+  <variable>activebuildconfiguration</variable>
+  <value type="QString" >Debug</value>
+ </data>
+ <data>
+  <variable>buildConfiguration-Debug</variable>
+  <valuemap type="QVariantMap" >
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Debug</value>
+   <value key="QtVersionId" type="int" >2</value>
+   <value key="ToolChain" type="int" >0</value>
+   <value key="addQDumper" type="" ></value>
+   <value key="buildConfiguration" type="int" >2</value>
+   <value key="buildDirectory" type="QString" >E:\workspace\djon2\djon</value>
+   <value key="useShadowBuild" type="bool" >false</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildConfiguration-Release</variable>
+  <valuemap type="QVariantMap" >
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Release</value>
+   <value key="QtVersionId" type="int" >0</value>
+   <value key="addQDumper" type="" ></value>
+   <value key="buildConfiguration" type="int" >0</value>
+   <value key="buildDirectory" type="QString" >E:\workspace\djon2\djon</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildconfiguration-Debug-buildstep0</variable>
+  <valuemap type="QVariantMap" >
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Debug</value>
+   <valuelist key="abstractProcess.Environment" type="QVariantList" >
+    <value type="QString" >ALLUSERSPROFILE=D:\Documents and Settings\All Users.WINDOWS</value>
+    <value type="QString" >APPDATA=D:\Documents and Settings\JuanC.VIS_BOG_HQ.000\Application Data</value>
+    <value type="QString" >CLASSPATH=.;D:\Program Files\Java\jre1.6.0_07\lib\ext\QTJava.zip</value>
+    <value type="QString" >CLUSTERLOG=D:\WINDOWS\Cluster\cluster.log</value>
+    <value type="QString" >COMMONPROGRAMFILES=D:\Program Files\Common Files</value>
+    <value type="QString" >COMPUTERNAME=DEV-JUANC</value>
+    <value type="QString" >COMSPEC=D:\WINDOWS\system32\cmd.exe</value>
+    <value type="QString" >FP_NO_HOST_CHECK=NO</value>
+    <value type="QString" >GIT_SSH=E:\Program Files\Putty\plink.exe</value>
+    <value type="QString" >HOMEDRIVE=D:</value>
+    <value type="QString" >HOMEPATH=\Documents and Settings\JuanC.VIS_BOG_HQ.000</value>
+    <value type="QString" >INCLUDE=D:\Program Files\Microsoft Visual Studio .NET 2003\SDK\v1.1\include\</value>
+    <value type="QString" >LIB=D:\Program Files\Microsoft Visual Studio .NET 2003\SDK\v1.1\Lib\</value>
+    <value type="QString" >LOGONSERVER=\\MONROE</value>
+    <value type="QString" >NUMBER_OF_PROCESSORS=2</value>
+    <value type="QString" >OS=Windows_NT</value>
+    <value type="QString" >PALMSOURCE_PODS_1_1=e:\Development\Garnet OS Development Suite\</value>
+    <value type="QString" >PATH=e:\development\Qt\2009.01\mingw\bin;e:\development\Qt\2009.01\qt\bin;E:\app\JuanC\product\11.1.0\client_1;E:\app\JuanC\product\11.1.0\client_1\bin;e:\development\OracleAS_1\jdk\bin;e:\development\OracleAS_1\ant\bin;D:\WINDOWS\system32;D:\WINDOWS;D:\WINDOWS\System32\Wbem;D:\Program Files\Microsoft SQL Server\80\Tools\BINN;D:\Program Files\TortoiseSVN\bin;D:\development\cygwin\bin;d:\Program Files\Microsoft SQL Server\90\Tools\binn\;D:\PROGRA~1\cvsnt;D:\Program Files\Common Files\Roxio Shared\DLLShared\;D:\Program Files\Microsoft SQL Server\90\DTS\Binn\;D:\Program Files\Microsoft SQL Server\90\Tools\Binn\VSShell\Common7\IDE\;D:\Program Files\Microsoft Visual Studio 8\Common7\IDE\PrivateAssemblies\;D:\Program Files\QuickTime\QTSystem\;c:\Program Files\OpenVPN\bin</value>
+    <value type="QString" >PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH</value>
+    <value type="QString" >PROCESSOR_ARCHITECTURE=x86</value>
+    <value type="QString" >PROCESSOR_IDENTIFIER=x86 Family 6 Model 15 Stepping 6, GenuineIntel</value>
+    <value type="QString" >PROCESSOR_LEVEL=6</value>
+    <value type="QString" >PROCESSOR_REVISION=0f06</value>
+    <value type="QString" >PROGRAMFILES=D:\Program Files</value>
+    <value type="QString" >QTDIR=e:/development/Qt/2009.01/qt</value>
+    <value type="QString" >QTJAVA=D:\Program Files\Java\jre1.6.0_07\lib\ext\QTJava.zip</value>
+    <value type="QString" >ROXIOCENTRAL=D:\Program Files\Common Files\Roxio Shared\9.0\Roxio Central33\</value>
+    <value type="QString" >SESSIONNAME=Console</value>
+    <value type="QString" >SYSTEMDRIVE=D:</value>
+    <value type="QString" >SYSTEMROOT=D:\WINDOWS</value>
+    <value type="QString" >TEMP=e:\temp</value>
+    <value type="QString" >TMP=e:\temp</value>
+    <value type="QString" >USERDNSDOMAIN=VISIONSOFTWARE.LOC</value>
+    <value type="QString" >USERDOMAIN=VIS_BOG_HQ</value>
+    <value type="QString" >USERNAME=JuanC</value>
+    <value type="QString" >USERPROFILE=D:\Documents and Settings\JuanC.VIS_BOG_HQ.000</value>
+    <value type="QString" >VS71COMNTOOLS=D:\Program Files\Microsoft Visual Studio .NET 2003\Common7\Tools\</value>
+    <value type="QString" >VS80COMNTOOLS=D:\Program Files\Microsoft Visual Studio 8\Common7\Tools\</value>
+    <value type="QString" >WINDIR=D:\WINDOWS</value>
+    <value type="QString" >__COMPAT_LAYER=EnableNXShowUI </value>
+   </valuelist>
+   <valuelist key="abstractProcess.arguments" type="QVariantList" >
+    <value type="QString" >E:/workspace/djon2/djon/djon.pro</value>
+    <value type="QString" >-spec</value>
+    <value type="QString" >win32-g++</value>
+    <value type="QString" >-r</value>
+    <value type="QString" >CONFIG+=debug_and_release</value>
+   </valuelist>
+   <value key="abstractProcess.command" type="QString" >E:/development/Qt/2009.01/qt/bin/qmake.exe</value>
+   <value key="abstractProcess.enabled" type="bool" >false</value>
+   <value key="abstractProcess.workingDirectory" type="QString" >E:/workspace/djon2/djon</value>
+   <value key="buildConfiguration" type="int" >10</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildconfiguration-Debug-buildstep1</variable>
+  <valuemap type="QVariantMap" >
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Debug</value>
+   <valuelist key="abstractProcess.Environment" type="QVariantList" >
+    <value type="QString" >ALLUSERSPROFILE=D:\Documents and Settings\All Users.WINDOWS</value>
+    <value type="QString" >APPDATA=D:\Documents and Settings\JuanC.VIS_BOG_HQ.000\Application Data</value>
+    <value type="QString" >CLASSPATH=.;D:\Program Files\Java\jre1.6.0_07\lib\ext\QTJava.zip</value>
+    <value type="QString" >CLUSTERLOG=D:\WINDOWS\Cluster\cluster.log</value>
+    <value type="QString" >COMMONPROGRAMFILES=D:\Program Files\Common Files</value>
+    <value type="QString" >COMPUTERNAME=DEV-JUANC</value>
+    <value type="QString" >COMSPEC=D:\WINDOWS\system32\cmd.exe</value>
+    <value type="QString" >FP_NO_HOST_CHECK=NO</value>
+    <value type="QString" >GIT_SSH=E:\Program Files\Putty\plink.exe</value>
+    <value type="QString" >HOMEDRIVE=D:</value>
+    <value type="QString" >HOMEPATH=\Documents and Settings\JuanC.VIS_BOG_HQ.000</value>
+    <value type="QString" >INCLUDE=D:\Program Files\Microsoft Visual Studio .NET 2003\SDK\v1.1\include\</value>
+    <value type="QString" >LIB=D:\Program Files\Microsoft Visual Studio .NET 2003\SDK\v1.1\Lib\</value>
+    <value type="QString" >LOGONSERVER=\\MONROE</value>
+    <value type="QString" >NUMBER_OF_PROCESSORS=2</value>
+    <value type="QString" >OS=Windows_NT</value>
+    <value type="QString" >PALMSOURCE_PODS_1_1=e:\Development\Garnet OS Development Suite\</value>
+    <value type="QString" >PATH=e:\development\Qt\2009.01\mingw\bin;e:\development\Qt\2009.01\qt\bin;E:\app\JuanC\product\11.1.0\client_1;E:\app\JuanC\product\11.1.0\client_1\bin;e:\development\OracleAS_1\jdk\bin;e:\development\OracleAS_1\ant\bin;D:\WINDOWS\system32;D:\WINDOWS;D:\WINDOWS\System32\Wbem;D:\Program Files\Microsoft SQL Server\80\Tools\BINN;D:\Program Files\TortoiseSVN\bin;D:\development\cygwin\bin;d:\Program Files\Microsoft SQL Server\90\Tools\binn\;D:\PROGRA~1\cvsnt;D:\Program Files\Common Files\Roxio Shared\DLLShared\;D:\Program Files\Microsoft SQL Server\90\DTS\Binn\;D:\Program Files\Microsoft SQL Server\90\Tools\Binn\VSShell\Common7\IDE\;D:\Program Files\Microsoft Visual Studio 8\Common7\IDE\PrivateAssemblies\;D:\Program Files\QuickTime\QTSystem\;c:\Program Files\OpenVPN\bin</value>
+    <value type="QString" >PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH</value>
+    <value type="QString" >PROCESSOR_ARCHITECTURE=x86</value>
+    <value type="QString" >PROCESSOR_IDENTIFIER=x86 Family 6 Model 15 Stepping 6, GenuineIntel</value>
+    <value type="QString" >PROCESSOR_LEVEL=6</value>
+    <value type="QString" >PROCESSOR_REVISION=0f06</value>
+    <value type="QString" >PROGRAMFILES=D:\Program Files</value>
+    <value type="QString" >QTDIR=e:/development/Qt/2009.01/qt</value>
+    <value type="QString" >QTJAVA=D:\Program Files\Java\jre1.6.0_07\lib\ext\QTJava.zip</value>
+    <value type="QString" >ROXIOCENTRAL=D:\Program Files\Common Files\Roxio Shared\9.0\Roxio Central33\</value>
+    <value type="QString" >SESSIONNAME=Console</value>
+    <value type="QString" >SYSTEMDRIVE=D:</value>
+    <value type="QString" >SYSTEMROOT=D:\WINDOWS</value>
+    <value type="QString" >TEMP=e:\temp</value>
+    <value type="QString" >TMP=e:\temp</value>
+    <value type="QString" >USERDNSDOMAIN=VISIONSOFTWARE.LOC</value>
+    <value type="QString" >USERDOMAIN=VIS_BOG_HQ</value>
+    <value type="QString" >USERNAME=JuanC</value>
+    <value type="QString" >USERPROFILE=D:\Documents and Settings\JuanC.VIS_BOG_HQ.000</value>
+    <value type="QString" >VS71COMNTOOLS=D:\Program Files\Microsoft Visual Studio .NET 2003\Common7\Tools\</value>
+    <value type="QString" >VS80COMNTOOLS=D:\Program Files\Microsoft Visual Studio 8\Common7\Tools\</value>
+    <value type="QString" >WINDIR=D:\WINDOWS</value>
+    <value type="QString" >__COMPAT_LAYER=EnableNXShowUI </value>
+   </valuelist>
+   <value key="abstractProcess.IgnoreReturnValue" type="bool" >false</value>
+   <valuelist key="abstractProcess.arguments" type="QVariantList" >
+    <value type="QString" >debug</value>
+    <value type="QString" >-w</value>
+   </valuelist>
+   <value key="abstractProcess.command" type="QString" >E:/development/Qt/2009.01/mingw/bin/mingw32-make.exe</value>
+   <value key="abstractProcess.enabled" type="bool" >true</value>
+   <value key="abstractProcess.workingDirectory" type="QString" >E:/workspace/djon2/djon</value>
+   <valuelist key="makeargs" type="QVariantList" >
+    <value type="QString" >debug</value>
+   </valuelist>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildconfiguration-Debug-cleanstep0</variable>
+  <valuemap type="QVariantMap" >
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Debug</value>
+   <valuelist key="abstractProcess.Environment" type="QVariantList" >
+    <value type="QString" >ALLUSERSPROFILE=D:\Documents and Settings\All Users.WINDOWS</value>
+    <value type="QString" >APPDATA=D:\Documents and Settings\JuanC.VIS_BOG_HQ.000\Application Data</value>
+    <value type="QString" >CLASSPATH=.;D:\Program Files\Java\jre1.6.0_07\lib\ext\QTJava.zip</value>
+    <value type="QString" >CLUSTERLOG=D:\WINDOWS\Cluster\cluster.log</value>
+    <value type="QString" >COMMONPROGRAMFILES=D:\Program Files\Common Files</value>
+    <value type="QString" >COMPUTERNAME=DEV-JUANC</value>
+    <value type="QString" >COMSPEC=D:\WINDOWS\system32\cmd.exe</value>
+    <value type="QString" >FP_NO_HOST_CHECK=NO</value>
+    <value type="QString" >GIT_SSH=E:\Program Files\Putty\plink.exe</value>
+    <value type="QString" >HOMEDRIVE=D:</value>
+    <value type="QString" >HOMEPATH=\Documents and Settings\JuanC.VIS_BOG_HQ.000</value>
+    <value type="QString" >INCLUDE=D:\Program Files\Microsoft Visual Studio .NET 2003\SDK\v1.1\include\</value>
+    <value type="QString" >LIB=D:\Program Files\Microsoft Visual Studio .NET 2003\SDK\v1.1\Lib\</value>
+    <value type="QString" >LOGONSERVER=\\MONROE</value>
+    <value type="QString" >NUMBER_OF_PROCESSORS=2</value>
+    <value type="QString" >OS=Windows_NT</value>
+    <value type="QString" >PALMSOURCE_PODS_1_1=e:\Development\Garnet OS Development Suite\</value>
+    <value type="QString" >PATH=e:\development\Qt\2009.01\mingw\bin;e:\development\Qt\2009.01\qt\bin;E:\app\JuanC\product\11.1.0\client_1;E:\app\JuanC\product\11.1.0\client_1\bin;e:\development\OracleAS_1\jdk\bin;e:\development\OracleAS_1\ant\bin;D:\WINDOWS\system32;D:\WINDOWS;D:\WINDOWS\System32\Wbem;D:\Program Files\Microsoft SQL Server\80\Tools\BINN;D:\Program Files\TortoiseSVN\bin;D:\development\cygwin\bin;d:\Program Files\Microsoft SQL Server\90\Tools\binn\;D:\PROGRA~1\cvsnt;D:\Program Files\Common Files\Roxio Shared\DLLShared\;D:\Program Files\Microsoft SQL Server\90\DTS\Binn\;D:\Program Files\Microsoft SQL Server\90\Tools\Binn\VSShell\Common7\IDE\;D:\Program Files\Microsoft Visual Studio 8\Common7\IDE\PrivateAssemblies\;D:\Program Files\QuickTime\QTSystem\;c:\Program Files\OpenVPN\bin</value>
+    <value type="QString" >PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH</value>
+    <value type="QString" >PROCESSOR_ARCHITECTURE=x86</value>
+    <value type="QString" >PROCESSOR_IDENTIFIER=x86 Family 6 Model 15 Stepping 6, GenuineIntel</value>
+    <value type="QString" >PROCESSOR_LEVEL=6</value>
+    <value type="QString" >PROCESSOR_REVISION=0f06</value>
+    <value type="QString" >PROGRAMFILES=D:\Program Files</value>
+    <value type="QString" >QTDIR=e:/development/Qt/2009.01/qt</value>
+    <value type="QString" >QTJAVA=D:\Program Files\Java\jre1.6.0_07\lib\ext\QTJava.zip</value>
+    <value type="QString" >ROXIOCENTRAL=D:\Program Files\Common Files\Roxio Shared\9.0\Roxio Central33\</value>
+    <value type="QString" >SESSIONNAME=Console</value>
+    <value type="QString" >SYSTEMDRIVE=D:</value>
+    <value type="QString" >SYSTEMROOT=D:\WINDOWS</value>
+    <value type="QString" >TEMP=e:\temp</value>
+    <value type="QString" >TMP=e:\temp</value>
+    <value type="QString" >USERDNSDOMAIN=VISIONSOFTWARE.LOC</value>
+    <value type="QString" >USERDOMAIN=VIS_BOG_HQ</value>
+    <value type="QString" >USERNAME=JuanC</value>
+    <value type="QString" >USERPROFILE=D:\Documents and Settings\JuanC.VIS_BOG_HQ.000</value>
+    <value type="QString" >VS71COMNTOOLS=D:\Program Files\Microsoft Visual Studio .NET 2003\Common7\Tools\</value>
+    <value type="QString" >VS80COMNTOOLS=D:\Program Files\Microsoft Visual Studio 8\Common7\Tools\</value>
+    <value type="QString" >WINDIR=D:\WINDOWS</value>
+    <value type="QString" >__COMPAT_LAYER=EnableNXShowUI </value>
+   </valuelist>
+   <value key="abstractProcess.IgnoreReturnValue" type="bool" >true</value>
+   <valuelist key="abstractProcess.arguments" type="QVariantList" >
+    <value type="QString" >clean</value>
+    <value type="QString" >-w</value>
+   </valuelist>
+   <value key="abstractProcess.command" type="QString" >E:/development/Qt/2009.01/mingw/bin/mingw32-make.exe</value>
+   <value key="abstractProcess.enabled" type="bool" >true</value>
+   <value key="abstractProcess.workingDirectory" type="QString" >E:/workspace/djon2/djon</value>
+   <value key="cleanConfig" type="bool" >true</value>
+   <valuelist key="makeargs" type="QVariantList" >
+    <value type="QString" >clean</value>
+   </valuelist>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildconfiguration-Release-buildstep0</variable>
+  <valuemap type="QVariantMap" >
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Release</value>
+   <value key="buildConfiguration" type="int" >0</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildconfiguration-Release-buildstep1</variable>
+  <valuemap type="QVariantMap" >
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Release</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildconfiguration-Release-cleanstep0</variable>
+  <valuemap type="QVariantMap" >
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Release</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildconfigurations</variable>
+  <valuelist type="QVariantList" >
+   <value type="QString" >Debug</value>
+   <value type="QString" >Release</value>
+  </valuelist>
+ </data>
+ <data>
+  <variable>buildstep0</variable>
+  <valuemap type="QVariantMap" >
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" ></value>
+   <value key="mkspec" type="QString" ></value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildstep1</variable>
+  <valuemap type="QVariantMap" >
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" ></value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildsteps</variable>
+  <valuelist type="QVariantList" >
+   <value type="QString" >trolltech.qt4projectmanager.qmake</value>
+   <value type="QString" >trolltech.qt4projectmanager.make</value>
+  </valuelist>
+ </data>
+ <data>
+  <variable>cleanstep0</variable>
+  <valuemap type="QVariantMap" >
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" ></value>
+   <value key="clean" type="bool" >true</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>cleansteps</variable>
+  <valuelist type="QVariantList" >
+   <value type="QString" >trolltech.qt4projectmanager.make</value>
+  </valuelist>
+ </data>
+ <data>
+  <variable>defaultFileEncoding</variable>
+  <value type="QByteArray" >System</value>
+ </data>
+ <data>
+  <variable>project</variable>
+  <valuemap type="QVariantMap" />
+ </data>
+</qtcreator>

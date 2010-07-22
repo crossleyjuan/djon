@@ -2,7 +2,7 @@
 #define TASKDIALOG_H
 
 #include <QtGui/QDialog>
-#include "project.h"
+#include "data.h"
 #include "template.h"
 
 namespace Ui {
@@ -14,12 +14,10 @@ class TaskDialog : public QDialog {
     Q_DISABLE_COPY(TaskDialog)
 public:
     explicit TaskDialog(Project* project, Task* task = 0, QWidget *parent = 0);
-    explicit TaskDialog(Project* project, QWidget *parent = 0);
+    explicit TaskDialog(Project* project, string* id, QWidget *parent = 0);
     virtual ~TaskDialog();
 
-signals:
-    void taskChanged(Task* task);
-
+    Task* task();
 
 protected:
     virtual void changeEvent(QEvent *e);
@@ -31,6 +29,8 @@ private:
     void populateTemplate();
     void populateTableLog();
     vector<Template*>* m_templates;
+    string* _id;
+    bool _update; // true if it's updating, false if it's creating
 
 private slots:
     void on_buttonBox_rejected();

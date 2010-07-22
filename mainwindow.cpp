@@ -1,180 +1,280 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
-#include <vector>
-#include <QStackedLayout>
-#include <QVBoxLayout>
-#include <QMessageBox>
-#include "taskgrid.h"
-#include "taskfilter.h"
+/*
+ * File:   MainWindow.cpp
+ * Author: cross
+ *
+ * Created on July 9, 2010, 8:50 AM
+ */
 
+#include <QtGui>
+#include "MainWindow.h"
+#include "view/TaskModel.h"
+#include "globaldefs.h"
+#include "tasklogwindow.h"
+#include "taskheaderview.h"
+#include "timetracker.h"
+#include "currenttime.h"
 #include "taskdialog.h"
+#include "util.h"
+#include "view/projectwizard.h"
+#include <sstream>
 
-using namespace std;
+MainWindow::MainWindow() {
+    widget.setupUi(this);
+    _activeProject = NULL;
+    _activeTask = NULL;
+    _activeLog = NULL;
 
-MainWindow::MainWindow(Project* project, QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindowClass)
-{
-    m_project = project;
-    ui->setupUi(this);
-    showMaximized();
-    this->setWindowTitle(m_project->name.c_str());
-    QStackedLayout* layout = new QStackedLayout();
-    m_grid = new TaskGrid(m_project);
-    m_grid->setTimerEnabled(false);
-    ui->centralWidget->setLayout(layout);
-    layout->addWidget(m_grid);
-    createTrayIcon();
+    _projects = loadProjects();
+    if (_projects->size() == 0) {
+        ProjectWizard* wizard = new ProjectWizard();
+        int res = 1;
+        if (wizard->exec() == QWizard::Accepted) {
+            res = createProject(wizard->project());
+            if (res != 0) {
+                exit(0);
+            }
+            _projects = loadProjects();
+        } else {
+            exit(0);
+        }
+    }
+    reloadProjects();
+    createTaskLog();
+    createCurrentTimeWindow();
 
-    updateState(false);
+    setupActions();
+    setWindowState(Qt::WindowMaximized);
 
-    connect(ui->actionRefresh, SIGNAL(triggered()), m_grid, SLOT(updateGrid()));
+    _idleDetector = new IdleDetector(5*60);// 5*60
+    connect(_idleDetector, SIGNAL(idleTimeOut()), this, SLOT(idleTimeOut()));
 
-    idleDetector = new IdleDetector(10*60);// 5*60
-    connect(idleDetector, SIGNAL(idleTimeOut()), this, SLOT(on_idleTimeOut()));
+    _timeTracker = new TimeTracker();
+    connect(_timeTracker, SIGNAL(timeChanged(DTime&)), _timeWindow, SLOT(updateTime(DTime&)));
+
 }
 
-MainWindow::~MainWindow()
-{
-    idleDetector->stop();
-    delete ui;
+void MainWindow::createTaskLog() {
+    _logWindow = new TaskLogWindow();
+    _logWindow->setAllowedAreas(Qt::BottomDockWidgetArea);
+
+    addDockWidget(Qt::BottomDockWidgetArea, _logWindow);
 }
 
-void MainWindow::on_actionCreate_new_task_triggered()
-{
-    TaskDialog* dialog = new TaskDialog(m_project, this);
-    if (dialog->exec() == QDialog::Accepted) {
-        m_grid->updateGrid();
+void MainWindow::createTaskDelegate() {
+    QDate* startDate = NULL;
+    QDate* endDate = NULL;
+    SCALE scale;
+    int totalDays = 0;
+    for (std::vector<Project*>::iterator itProj = _projects->begin(); itProj != _projects->end(); itProj++) {
+        Project* proj = *itProj;
+        std::vector<Task*>* tasks = proj->tasks();
+        for (std::vector<Task*>::iterator itTask = tasks->begin(); itTask != tasks->end(); itTask++) {
+            Task* tsk = *itTask;
+            QDate* tskStartDate = new QDate(tsk->startDate()->getYear(), tsk->startDate()->getMonth(), tsk->startDate()->getDay());
+            if ((startDate == NULL) || (*startDate > *tskStartDate)) {
+                startDate = tskStartDate;
+            } else {
+                delete(tskStartDate);
+            }
+            QDate* tskEndDate = new QDate(tsk->endDate()->getYear(), tsk->endDate()->getMonth(), tsk->endDate()->getDay());
+            if ((endDate == NULL) || (*endDate < *tskEndDate)) {
+                endDate = tskEndDate;
+            } else {
+                delete(tskEndDate);
+            }
+        }
+    }
+    if (startDate != NULL) {
+        totalDays = startDate->daysTo(*endDate) + 1;
+        if ((totalDays > 1) && (totalDays < 8)) {
+            scale = DAY;
+        } else if ((totalDays > 7) && (totalDays < 16)) {
+            scale = HALF_MONTH;
+        } else if (totalDays > 15) {
+            scale = MONTH;
+        }
+        TaskDelegate* delegate = new TaskDelegate(startDate, endDate, totalDays, scale);
+        widget.taskView->setItemDelegateForColumn(2, delegate);
     }
 }
 
+MainWindow::~MainWindow() {
+}
 
-void MainWindow::on_actionEdit_Task_triggered()
-{
-    TaskDialog* dialog = new TaskDialog(m_project, m_grid->activeTaskElement()->task(), this);
-    if (dialog->exec() == QDialog::Accepted) {
-        m_grid->updateGrid();
+void MainWindow::selectTaskChanged(QModelIndex current, QModelIndex previous) {
+    TaskModel* model = (TaskModel*)current.model();
+    _activeTask = model->task(current);
+    _activeProject = model->project(current);
+    if (_activeTask != NULL) {
+        _logWindow->refresh(_activeTask);
     }
 }
 
-void MainWindow::on_actionStart_Time_triggered()
-{
-    idleDetector->start();
+void MainWindow::setupActions() {
+    QToolBar* bar = new QToolBar("Options");
+    addToolBar(bar);
 
-    m_grid->setTimerEnabled(true);
+    QMenuBar* menuBar = new QMenuBar();
+    setMenuBar(menuBar);
 
-    updateState(true);
+    QMenu* prjMenu = menuBar->addMenu(tr("Project"));
+    QMenu* trcMenu = menuBar->addMenu(tr("Tracker"));
+
+    QAction* newProject = bar->addAction(QIcon(":/img/new-project.png"), tr("Create Project"));
+    bar->addSeparator();
+    QAction* newTask = bar->addAction(QIcon(":/img/new-task.png"), tr("Create SubTask"));
+    QAction* editTask = bar->addAction(QIcon(":/img/edit-task.png"), tr("Edit Task"));
+    bar->addSeparator();
+    QAction* record = bar->addAction(QIcon(":/img/start.png"), tr("Start Record"));
+    QAction* stop = bar->addAction(QIcon(":/img/stop.png"), tr("Stop Record"));
+
+    trcMenu->addAction(record);
+    trcMenu->addAction(stop);
+    prjMenu->addAction(newProject);
+    prjMenu->addSeparator();
+    prjMenu->addAction(newTask);
+    prjMenu->addAction(editTask);
+
+    connect(newProject, SIGNAL(triggered()), this, SLOT(createNewProject()));
+    connect(newTask, SIGNAL(triggered()), this, SLOT(createNewTask()));
+    connect(editTask, SIGNAL(triggered()), this, SLOT(editNewTask()));
+    connect(record, SIGNAL(triggered()), this, SLOT(startRecord()));
+    connect(stop, SIGNAL(triggered()), this, SLOT(stopRecord()));
+
 }
 
-void MainWindow::on_actionStop_Time_triggered()
-{
-    idleDetector->stop();
+void MainWindow::idleTimeOut() {
 
-    m_grid->setTimerEnabled(false);
-
-    updateState(false);
 }
 
-void MainWindow::on_idleTimeOut() {
-    idleDetector->stop();
-    m_grid->activeTaskElement()->stopTimeRecord();
-    //m_grid->updateGrid();
-    m_grid->activeTaskElement()->startTimeRecord();
-
-    QMessageBox box;
-    box.setText("You've been idle more than 5 minutes, do you want to count that time?");
-    box.setInformativeText("Don't be lazy!!!!");
-    box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-    box.setDefaultButton(QMessageBox::Yes);
-    int res = box.exec();
-    if (res == QMessageBox::No) {
-        m_grid->activeTaskElement()->resetCurrentTimer();
-//        updateState(false);
-//    } else {
-//        updateState(true);
+void MainWindow::startRecord() {
+    if (_activeTask != NULL) {
+        if (_timeTracker->status() == RUNNING) {
+            _timeTracker->stopRecord();
+        }
+        _timeWindow->setActiveTask(_activeTask);
+        _timeTracker->startRecord(_activeTask);
     }
-    idleDetector->start();
 }
 
-void MainWindow::updateState(bool timeRunning) {
-    m_timeRunning = timeRunning;
-    if (m_timeRunning) {
-        QIcon icon(":/clock-on.png"); // clock-off.svg
-        m_sysTray->setIcon(icon);
+void MainWindow::stopRecord() {
+    _timeTracker->stopRecord();
+    _logWindow->refresh(_timeTracker->task());
+}
+
+void MainWindow::setActiveTask(Task* task) {
+
+}
+
+void MainWindow::setActiveTaskLog(Task* task, TaskLog* taskLog) {
+
+}
+
+void MainWindow::createCurrentTimeWindow() {
+    _timeWindow = new CurrentTime(_projects);
+//    _timeWindow->setAllowedAreas(Qt::BottomDockWidgetArea | Qt::BottomRightCorner);
+
+    addDockWidget(Qt::BottomDockWidgetArea, _timeWindow);
+}
+
+void MainWindow::createNewTask() {
+    if (_activeProject == NULL) {
+        QMessageBox box;
+        box.setText("You don't have an active project, you should create a project first.");
+        box.setWindowTitle("d-Jon");
+        box.exec();
+        return;
+    }
+    string id;
+    QString taskId;
+    if (_activeTask != NULL) {
+        taskId = QString(_activeTask->nextChildId()->c_str());
     } else {
-        QIcon icon(":/clock-off.svg"); // clock-off.svg
-        m_sysTray->setIcon(icon);
+        taskId = QString(_activeProject->nextChildId()->c_str());
     }
-    ui->actionStart_Time->setEnabled(!m_timeRunning);
-    ui->actionStop_Time->setEnabled(m_timeRunning);
-    ui->actionReset_Time->setEnabled(m_timeRunning);
-}
-
-void MainWindow::on_actionReset_All_Timers_triggered()
-{
-    QMessageBox box;
-    box.setText("This will reset all the timers, are you sure?");
-    box.setInformativeText("After this action you'll not be able to recover your times. The log times will not be removed.");
-    box.setStandardButtons(QMessageBox::Yes | QMessageBox::Cancel);
-    box.setDefaultButton(QMessageBox::Cancel);
-    int res = box.exec();
-    if (res == QMessageBox::Yes) {
-        resetTimes(m_project);
-    }
-    m_grid->updateGrid();
-}
-
-void MainWindow::createTrayIcon() {
-    m_sysTray = new QSystemTrayIcon(this);
-    QIcon icon(":/clock-off.svg");
-    m_sysTray->setIcon(icon);
-    connect(m_sysTray, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(on_trayClicked()));
-    m_sysTray->show();
-}
-
-void MainWindow::on_trayClicked() {
-    this->showMaximized();
-    this->activateWindow();
-}
-
-void MainWindow::on_actionReset_Time_triggered()
-{
-    QMessageBox box;
-    box.setText("The current recorded time will be lost, are you sure?");
-    box.setInformativeText("Don't be lazy!!!!");
-    box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-    box.setDefaultButton(QMessageBox::No);
-    int res = box.exec();
-    if (res == QMessageBox::Yes) {
-//        idleDetector->stop();
-
-        m_grid->activeTaskElement()->resetCurrentTimer();
-        m_grid->updateGrid();
-
-        updateState(false);
+    TaskDialog* dialog = new TaskDialog(_activeProject, new std::string(taskId.toStdString()), this);
+    if (dialog->exec() == QDialog::Accepted) {
+        int res = createTask(dialog->task());
+        if (res != 0) {
+            QMessageBox box;
+            box.setWindowTitle(tr("d-Jon"));
+            string errorDescription = string("An error ocurred creating the task file. Error: ");
+            errorDescription += getLastErrorDescription();
+            box.setText(tr(errorDescription.c_str()));
+            box.exec();
+        } else {
+            reloadTasks();
+        }
     }
 }
 
-void MainWindow::on_actionFilter_Tasks_triggered()
-{
-    TaskFilter* filter = new TaskFilter(this);
-    int res = filter->exec();
-    if (res == QDialog::Accepted) {
-
+void MainWindow::editNewTask() {
+    if (_activeTask == NULL) {
+        QMessageBox box;
+        box.setText("You don't have an active task, select one task and then use edit option.");
+        box.setWindowTitle("d-Jon");
+        box.exec();
+        return;
+    }
+    TaskDialog* dialog = new TaskDialog(_activeProject, _activeTask, this);
+    if (dialog->exec() == QDialog::Accepted) {
+        int res = updateTask(dialog->task());
+        if (res != 0) {
+            QMessageBox box;
+            box.setWindowTitle(tr("d-Jon"));
+            string errorDescription = string("An error ocurred creating the task file. Error: ");
+            errorDescription += getLastErrorDescription();
+            box.setText(tr(errorDescription.c_str()));
+            box.exec();
+        } else {
+            reloadTasks();
+        }
     }
 }
 
-void MainWindow::on_actionClose_Current_Task_triggered()
-{
-    QMessageBox box;
-    string infoText = "The task: \"" + m_grid->selectedTask()->shortDescription + "\" will be closed, are you sure?";
-    box.setText(infoText.c_str());
-    box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-    box.setDefaultButton(QMessageBox::No);
-    int res = box.exec();
-    if (res == QMessageBox::Yes) {
-        closeTask(m_project, m_grid->selectedTask());
-        m_grid->updateGrid();
-
-        updateState(false);
+int MainWindow::createNewProject() {
+    ProjectWizard* wizard = new ProjectWizard();
+    int res = 1;
+    if (wizard->exec() == QWizard::Accepted) {
+        res = createProject(wizard->project());
+        if (res != 0) {
+            QMessageBox box;
+            box.setWindowTitle(tr("d-Jon"));
+            string errorDescription = string("An error ocurred creating the project file. Error: ");
+            errorDescription += getLastErrorDescription();
+            box.setText(tr(errorDescription.c_str()));
+            box.exec();
+        } else {
+            _projects = loadProjects();
+            if (_projects->size() == 1) {
+                _activeProject = _projects->at(0);
+            }
+            _taskModel = new TaskModel(*_projects);
+            widget.taskView->setModel(_taskModel);
+            widget.taskView->expandAll();
+            connect(widget.taskView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(selectTaskChanged(QModelIndex,QModelIndex)));
+        }
     }
+    delete(wizard);
+    return res;
+}
+
+void MainWindow::reloadProjects() {
+    if (_projects->size() == 1) {
+        _activeProject = _projects->at(0);
+    }
+    reloadTasks();
+}
+
+void MainWindow::reloadTasks() {
+    _taskModel = new TaskModel(*_projects);
+    widget.taskView->setModel(_taskModel);
+    widget.taskView->setColumnWidth(0, 300);
+    createTaskDelegate();
+//    TaskHeaderView *tashHeader = new TaskHeaderView(Qt::Horizontal);
+//    widget.taskView->setHeader(tashHeader);
+    widget.taskView->setAlternatingRowColors(true);
+    widget.taskView->expandAll();
+    widget.taskView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    connect(widget.taskView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(selectTaskChanged(QModelIndex,QModelIndex)));
 }

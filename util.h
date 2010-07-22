@@ -1,0 +1,50 @@
+/* 
+ * File:   util.h
+ * Author: cross
+ *
+ * Created on July 7, 2010, 1:33 PM
+ */
+
+#ifndef _UTIL_H
+#define	_UTIL_H
+
+#include "util/DateTime.h"
+#include "util/dtime.h"
+#include "util/fileutil.h"
+#include "util/stringfunctions.h"
+#include "util/errorHandle.h"
+
+#include <string>
+#include <QtCore/QDate>
+#include <vector>
+
+/*****************************************************************
+String functions
+*/
+std::string toString(double a);
+std::string toString(double a, int fixedPrecision);
+std::string toString(int a);
+std::vector<string>* split(string str, string token);
+/*****************************************************************/
+
+QDateTime* toDateTime(int date);
+QDateTime* toDateTime(double date);
+QTime* toTime(int seconds);
+int toSeconds(QTime time);
+
+int toInt(QDateTime date);
+double toDouble(QDateTime dt);
+
+void logInfo(char* text);
+
+bool endsWith(const char* text, const char* end);
+
+std::string* uuid();
+
+
+bool makedir(const char* path);
+std::string* getHomeDir();
+
+
+#endif	/* _UTIL_H */
+
