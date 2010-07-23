@@ -86,3 +86,15 @@ Task* TimeTracker::task() {
 TaskLog* TimeTracker::taskLog() {
     return _taskLog;
 }
+
+void TimeTracker::moveCurrentRecordToTask(Task* newTask) {
+    _task->removeLog(_taskLog);
+    _task = newTask;
+    _task->addLog(_taskLog);
+}
+
+void TimeTracker::destroyCurrentRecord() {
+    stopRecord();
+    _task->removeLog(_taskLog);
+    deleteTaskLog(_task, _taskLog);
+}

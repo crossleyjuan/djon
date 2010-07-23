@@ -49,6 +49,7 @@ void IdleDetector::timeout() {
 
     LASTINPUTINFO lif;
     lif.cbSize = sizeof(LASTINPUTINFO);
+    GetLastInputInfo(&lif);
     DWORD tickCount = GetTickCount();
     idlesecs = (tickCount - lif.dwTime) / 1000;
 

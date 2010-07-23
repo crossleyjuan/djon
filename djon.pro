@@ -11,8 +11,8 @@ INCLUDEPATH += . \
     data \
     util \
     view
-LIBS += -lXss
 
+# LIBS += -lXss
 # LIBS += -lRpcrt4
 # Input
 HEADERS += config.h \
@@ -44,14 +44,16 @@ HEADERS += config.h \
     view/projectinfo.h \
     view/projectsummary.h \
     view/taskcombobox.h \
-    treecombobox.h
+    treecombobox.h \
+    idletaskwindow.h
 FORMS += MainWindow.ui \
     taskdialog.ui \
     tasklogwindow.ui \
     currenttime.ui \
     view/projectwizard.ui \
     view/projectinfo.ui \
-    view/projectsummary.ui
+    view/projectsummary.ui \
+    idletaskwindow.ui
 SOURCES += data.cpp \
     main.cpp \
     MainWindow.cpp \
@@ -80,6 +82,7 @@ SOURCES += data.cpp \
     view/projectinfo.cpp \
     view/projectsummary.cpp \
     view/taskcombobox.cpp \
-    treecombobox.cpp
+    treecombobox.cpp \
+    idletaskwindow.cpp
 OTHER_FILES += 
 RESOURCES += djon_rs.qrc

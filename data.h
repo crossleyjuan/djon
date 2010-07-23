@@ -23,7 +23,7 @@ int createTask(Task* task);
 int updateTask(Task* task);
 int createTaskLog(Task* task, TaskLog* taskLog);
 int updateTaskLog(Task* task, TaskLog* taskLog);
-
+int deleteTaskLog(Task* task, TaskLog* taskLog);
 
 #endif	/* _DATA_H */
 

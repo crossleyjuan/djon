@@ -269,3 +269,21 @@ int updateTaskLog(Task* task, TaskLog* taskLog) {
     return res;
 }
 
+int deleteTaskLog(Task* task, TaskLog* taskLog) {
+    string* projName = task->project()->name();
+    char* lastDir = getLastDir();
+    stringstream fileName;
+    fileName << lastDir << "/" << *projName << ".log";
+    string* current = new string(readFile(const_cast<char*>(fileName.str().c_str())));
+
+    int posStart = current->find(string("{{\nlog-id:") + *taskLog->id + ";");
+    int posEnd = current->find(string("}}\n"), posStart) + 4;
+
+    int size = posEnd - posStart;
+    string newFile = current->replace(posStart, size, string(""));
+
+    int res = writeFile(fileName.str(), newFile, false);
+
+    return res;
+}
+

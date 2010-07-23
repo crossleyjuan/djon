@@ -58,6 +58,7 @@ public:
     string* id() const;
 
     void addLog(TaskLog* log);
+    bool removeLog(TaskLog* log);
     std::vector<TaskLog*>* logs();
     std::vector<Task*>* subTasks();
     std::string* nextChildId();

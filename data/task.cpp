@@ -243,3 +243,16 @@ string* Task::nextChildId() {
 
     return new string(ss.str());
 }
+
+bool Task::removeLog(TaskLog* log) {
+    bool removed = false;
+    for (std::vector<TaskLog*>::iterator iter = _logs->begin(); iter != _logs->end(); iter++) {
+        TaskLog* taskLog = *iter;
+        if (taskLog->id->compare(*log->id) == 0) {
+            _logs->erase(iter);
+            removed = true;
+            break;
+        }
+    }
+    return removed;
+}

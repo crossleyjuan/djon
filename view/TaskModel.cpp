@@ -147,6 +147,7 @@ TaskModel::TaskModel(const vector<Project*> projects, QObject *parent)
 
          return item->task();
      }
+     return NULL;
 }
 
  Project* TaskModel::project(const QModelIndex &index) const {
@@ -155,6 +156,7 @@ TaskModel::TaskModel(const vector<Project*> projects, QObject *parent)
 
          return item->project();
      }
+     return NULL;
 }
 
  bool TaskModel::setData(const QModelIndex &index, const QVariant &value, int role) {
@@ -165,4 +167,5 @@ TaskModel::TaskModel(const vector<Project*> projects, QObject *parent)
              item->task()->setShortDescription(new string(s.toStdString()));
          }
      }
+     return false;
  }

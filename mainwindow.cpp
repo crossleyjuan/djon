@@ -16,6 +16,7 @@
 #include "taskdialog.h"
 #include "util.h"
 #include "view/projectwizard.h"
+#include "idletaskwindow.h"
 #include <sstream>
 
 MainWindow::MainWindow() {
@@ -45,11 +46,12 @@ MainWindow::MainWindow() {
     setupActions();
     setWindowState(Qt::WindowMaximized);
 
-    _idleDetector = new IdleDetector(5*60);// 5*60
+    _idleDetector = new IdleDetector(3*60);// 5*60
     connect(_idleDetector, SIGNAL(idleTimeOut()), this, SLOT(idleTimeOut()));
 
     _timeTracker = new TimeTracker();
     connect(_timeTracker, SIGNAL(timeChanged(DTime&)), _timeWindow, SLOT(updateTime(DTime&)));
+    connect(_timeTracker, SIGNAL(timeStopped(Task*,TaskLog*)), this, SLOT(timeStopped(Task*, TaskLog*)));
 
 }
 
@@ -128,6 +130,9 @@ void MainWindow::setupActions() {
     QAction* record = bar->addAction(QIcon(":/img/start.png"), tr("Start Record"));
     QAction* stop = bar->addAction(QIcon(":/img/stop.png"), tr("Stop Record"));
 
+//    QAction* tt = bar->addAction(QIcon(":/img/new-project.png"), tr("Test Window"));
+//
+//    connect(tt, SIGNAL(triggered()), this, SLOT(idleTimeOut()));
     trcMenu->addAction(record);
     trcMenu->addAction(stop);
     prjMenu->addAction(newProject);
@@ -144,7 +149,10 @@ void MainWindow::setupActions() {
 }
 
 void MainWindow::idleTimeOut() {
-
+    // This will enforce the new TaskLog
+    startRecord();
+    IdleTaskWindow* w = new IdleTaskWindow(_projects, _timeTracker);
+    w->show();
 }
 
 void MainWindow::startRecord() {
@@ -154,12 +162,14 @@ void MainWindow::startRecord() {
         }
         _timeWindow->setActiveTask(_activeTask);
         _timeTracker->startRecord(_activeTask);
+        _idleDetector->start();
     }
 }
 
 void MainWindow::stopRecord() {
     _timeTracker->stopRecord();
     _logWindow->refresh(_timeTracker->task());
+    _idleDetector->stop();
 }
 
 void MainWindow::setActiveTask(Task* task) {
@@ -277,4 +287,8 @@ void MainWindow::reloadTasks() {
     widget.taskView->expandAll();
     widget.taskView->setSelectionBehavior(QAbstractItemView::SelectRows);
     connect(widget.taskView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(selectTaskChanged(QModelIndex,QModelIndex)));
+}
+
+void MainWindow::timeStopped(Task* task, TaskLog* taskLog) {
+    _idleDetector->stop();
 }

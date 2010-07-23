@@ -25,6 +25,8 @@ public:
     TIMERSTATUS status();
     Task* task();
     TaskLog* taskLog();
+    void moveCurrentRecordToTask(Task* newTask);
+    void destroyCurrentRecord();
 
 signals:
     void timeStopped(Task* task, TaskLog* taskLog);

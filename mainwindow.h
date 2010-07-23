@@ -45,6 +45,7 @@ private:
 
 public slots:
     void selectTaskChanged(QModelIndex current, QModelIndex previous);
+    void timeStopped(Task* task, TaskLog* taskLog);
     void idleTimeOut();
     void startRecord();
     void stopRecord();

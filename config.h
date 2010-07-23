@@ -1,6 +1,6 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define LINUX
+#define WINDOWS
 
 #endif // CONFIG_H
