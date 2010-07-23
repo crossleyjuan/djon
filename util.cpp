@@ -5,12 +5,13 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include "config.h"
+#include <stdlib.h>
 
 #ifndef WINDOWS
 #include <uuid/uuid.h>
 #else
-#include <direct.h>
 #include <QUuid>
+#include <direct.h>
 #endif
 
 std::string toString(double a) {

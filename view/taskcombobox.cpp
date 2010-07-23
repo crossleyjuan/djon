@@ -33,15 +33,22 @@ void TaskComboBox::initialize() {
     }
 }
 
-void TaskComboBox::insertTask(Task* task, int id, int indent) {
-    this->addItem(QString(task->longDescription()->c_str()), ++id);
+void TaskComboBox::insertTask(Task* task, int id, int& indent) {
+    QString description = "+";
+    for (int x = 0; x < indent; x++) {
+        description.append(QString("--"));
+    }
+    description.append(QString(task->longDescription()->c_str()));
+    this->addItem(description, ++id);
     _pointers.insert(pair<int, ComboItem*>(id, new ComboItem(id, true, task)));
     vector<Task*>* subTasks = task->subTasks();
     if (subTasks->size() > 0) {
+        indent++;
         for (std::vector<Task*>::iterator iterTask = subTasks->begin(); iterTask != subTasks->end(); iterTask++) {
             Task* task = *iterTask;
             insertTask(task, id, indent);
         }
+        indent--;
     }
 
 }

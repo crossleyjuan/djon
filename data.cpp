@@ -19,11 +19,12 @@ char* getLastDir() {
     char* conf = readFile(const_cast<char*> (confFileName.c_str()));
 
     hashmap* mapConf = parseTextFormat(conf);
-//    char* lastDir = READ_ELEMENT(mapConf, "last-project-dir");
-    char* lastDir = strcpy("D:/Documents and Settings/JuanC.VIS_BOG_HQ.000/.djon/Test");
+    std::string lastDir = READ_ELEMENT(mapConf, "last-project-dir");
 
+    char* res = (char*)malloc(lastDir.size());
+    strcpy(res, lastDir.c_str());
     delete (homeDir);
-    return lastDir;
+    return res;
 }
 
 void loadTasks(Project* project) {

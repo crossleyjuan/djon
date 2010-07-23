@@ -42,7 +42,7 @@ public:
 
 private:
     void initialize();
-    void insertTask(Task* task, int id, int indent);
+    void insertTask(Task* task, int id, int &indent);
 
     std::vector<Project*>* _projects;
     std::map<int, ComboItem*> _pointers;
