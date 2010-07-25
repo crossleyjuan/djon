@@ -23,11 +23,10 @@ protected:
     virtual void changeEvent(QEvent *e);
 
 private:
+    void populateTemplate();
     Ui::TaskDialog *m_ui;
     Task* m_task;
     Project* m_project;
-    void populateTemplate();
-    void populateTableLog();
     vector<Template*>* m_templates;
     string* _id;
     bool _update; // true if it's updating, false if it's creating

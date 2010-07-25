@@ -66,6 +66,7 @@ std::vector<Task*>* Project::tasks() {
 }
 
 void Project::addTask(Task* task) {
+    task->setProject(this);
     _tasks->push_back(task);
     _tasksMap->insert(pair<string, Task*>(*task->id(), task));
 }
@@ -81,16 +82,13 @@ std::vector<Task*>* Project::subTasks(string* prefix) {
     for (std::vector<Task*>::iterator iterTask = _tasks->begin(); iterTask != _tasks->end(); iterTask++) {
         Task* task = *iterTask;
         string* id = task->id();
-        if (prefix->size() == 0) {
-            if (id->find(".") == -1) {
+        int dotsInPrefix = countChar(prefix->c_str(), '.');
+        int dotsInId = countChar(id->c_str(), '.');
+        if ((dotsInId -1) == dotsInPrefix) {
+            if ((id->compare(0, prefix->length(), *prefix) == 0) &&
+                (id->compare(*prefix) != 0)) {
                 res->push_back(task);
             }
-            // starts with but it's not equal
-            // if prefix is "1" and the id is "1.1" it will return true,
-            // if the id is "1" then it'll return false
-        } else if ((id->compare(0, prefix->length(), *prefix) == 0) &&
-            (id->compare(*prefix) != 0)) {
-            res->push_back(task);
         }
     }
     return res;
@@ -172,4 +170,24 @@ std::string* Project::nextChildId() {
     std::string* res = new std::string(ss.str());
 
     return res;
+}
+
+void Project::removeTask(Task* task) {
+    qDebug("removeTask: %s", task->id()->c_str());
+    vector<Task*>* subTasks = task->subTasks();
+    for (vector<Task*>::iterator iterSub = subTasks->begin(); iterSub != subTasks->end(); iterSub++) {
+        Task* tsk = *iterSub;
+        removeTask(tsk);
+    }
+
+    vector<Task*>* tasks = _tasks;
+    for (vector<Task*>::iterator iter = tasks->begin(); iter != tasks->end(); iter++) {
+        Task* tsk = *iter;
+        if (*tsk == *task) {
+            tasks->erase(iter);
+            break;
+        }
+    }
+
+    deleteTask(task);
 }

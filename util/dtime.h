@@ -20,6 +20,7 @@ public:
 
 private:
     long _secs;
+    void time(int& hour, int& min, int& secs) const;
 };
 
 #endif // DTIME_H

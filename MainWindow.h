@@ -51,7 +51,10 @@ public slots:
     void stopRecord();
     void createNewTask();
     void editNewTask();
+    void deleteTask();
+    void completeTask();
     int createNewProject();
+    void exportProjects();
 
     void setActiveTask(Task* task);
     void setActiveTaskLog(Task* task, TaskLog* taskLog);

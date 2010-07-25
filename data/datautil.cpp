@@ -39,9 +39,9 @@ hashmap* parseTextFormat(std::string text) {
         if (element.length() > 0) {
             string name = element.substr(0, element.find_first_of(":"));
             string value = element.substr(element.find_first_of(":") + 1, element.length() - element.find_first_of(":"));
-            while (value.find_first_not_of(" ") > 0) {
-                value = value.erase(0, 1);
-            }
+            QString qValue = QString(value.c_str());
+            qValue = qValue.trimmed();
+            value = qValue.toStdString();
             mapValue->insert(pair<string, string > (name, value));
         }
     }

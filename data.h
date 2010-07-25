@@ -13,14 +13,13 @@
 #include "data/task.h"
 #include "template.h"
 
-class Template;
-
 std::vector<Project*>* loadProjects();
 vector<Template*>* readTemplates();
-Template* readTemplate(string templateName);
+Template* readTemplate(const string& templateName);
 int createProject(Project* project);
 int createTask(Task* task);
 int updateTask(Task* task);
+int deleteTask(Task* task);
 int createTaskLog(Task* task, TaskLog* taskLog);
 int updateTaskLog(Task* task, TaskLog* taskLog);
 int deleteTaskLog(Task* task, TaskLog* taskLog);

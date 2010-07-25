@@ -8,18 +8,20 @@ using namespace std;
 class Template
 {
 private:
-    std::string m_name;
-    std::vector<string>* m_statusList;
-    std::string m_closedStatus;
-    std::vector<string>* m_jobList;
+    std::string* _name;
+    std::string* _description;
+    std::vector<string*>* _statusList;
+    std::string* _closedStatus;
+    std::vector<string*>* _subTaskList;
 
 public:
-    Template(std::string name, std::vector<string>* statusList, std::vector<string>* jobList);
+    Template(std::string* name, std::string* description, std::vector<string*>* statusList, std::vector<string*>* subTaskList);
 
-    std::string name();
-    std::string closedStatus();
-    std::vector<string>* statusList();
-    std::vector<string>* jobList();
+    std::string* name();
+    std::string* description();
+    std::string* closedStatus();
+    std::vector<string*>* statusList();
+    std::vector<string*>* subTaskList();
 };
 
 #endif // TEMPLATE_H

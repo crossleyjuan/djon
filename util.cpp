@@ -106,24 +106,34 @@ bool endsWith(const char* text, const char* end) {
     return true;
 }
 
-std::vector<string>* split(string str, string token) {
+std::vector<string*>* split(string str, string token) {
 //    char* s = (char*) malloc(str.size());
     const char* delim = token.c_str();
 
     //strcpy(s, str.c_str());
     char* s = (char*)str.c_str();
 
-    vector<string>* res = new vector<string>();
+    vector<string*>* res = new vector<string*>();
     char* ptr;
     ptr = strtok(s, delim);
-    res->push_back(string(ptr));
-    while ((ptr = strtok(NULL, delim)) != NULL) {
-        res->push_back(string(ptr));
+    while (ptr != NULL) {
+        res->push_back(new string(ptr));
+        ptr = strtok(NULL, delim);
     }
 
     return res;
 }
 
+
+long countChar(const char* s, const char c) {
+    long num = 0;
+    for (int x = 0; x < strlen(s); x++) {
+        if (s[x] == c) {
+            num++;
+        }
+    }
+    return num;
+}
 
 QTime* toTime(int seconds) {
     int hour = seconds / 3600;

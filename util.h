@@ -24,7 +24,8 @@ String functions
 std::string toString(double a);
 std::string toString(double a, int fixedPrecision);
 std::string toString(int a);
-std::vector<string>* split(string str, string token);
+std::vector<string*>* split(string str, string token);
+long countChar(const char* s, const char c);
 /*****************************************************************/
 
 QDateTime* toDateTime(int date);

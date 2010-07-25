@@ -95,7 +95,7 @@ void CurrentTime::changeEvent(QEvent *e)
 }
 
 void CurrentTime::updateTime(DTime& tm) {
-    ui->timeEdit->setTime(*tm.toQTime());
+    ui->currentTime->setText(QString(tm.toChar()));
 }
 
 void CurrentTime::setActiveTask(Task* activeTask) {

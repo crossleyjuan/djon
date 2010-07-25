@@ -7,5 +7,8 @@
         <file alias="new-task.png">img/insert-object.png</file>
         <file alias="edit-task.png">img/accessories-text-editor.png</file>
         <file alias="new-project.png">img/project.png</file>
+        <file alias="delete-task.png">img/edit-delete.png</file>
+        <file alias="complete-task.png">img/emblem-default.png</file>
+        <file alias="exportar.png">img/x-office-document.png</file>
     </qresource>
 </RCC>

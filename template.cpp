@@ -1,30 +1,35 @@
 #include "template.h"
 
-Template::Template(std::string name, std::vector<string>* statusList, std::vector<string>* jobList) {
-    m_name = name;
-    m_statusList = statusList;
+Template::Template(std::string* name, std::string* description, std::vector<string*>* statusList, std::vector<string*>* subTaskList) {
+    _name = name;
+    _description = description;
+    _statusList = statusList;
 
-    for (std::vector<string>::iterator it = statusList->begin(); it != statusList->end(); it++) {
-        string status = *it;
+    for (std::vector<string*>::iterator it = statusList->begin(); it != statusList->end(); it++) {
+        string status = **it;
         if (status[status.length()-1] == '*') {
-            m_closedStatus = status;
+            _closedStatus = new string(status);
         }
     }
-    m_jobList = jobList;
+    _subTaskList = subTaskList;
 }
 
-std::string Template::name() {
-    return m_name;
+std::string* Template::name() {
+    return _name;
 }
 
-std::string Template::closedStatus() {
-    return m_closedStatus;
+std::string* Template::description() {
+    return _description;
 }
 
-std::vector<string>* Template::statusList() {
-    return m_statusList;
+std::string* Template::closedStatus() {
+    return _closedStatus;
 }
 
-std::vector<string>* Template::jobList() {
-    return m_jobList;
+std::vector<string*>* Template::statusList() {
+    return _statusList;
+}
+
+std::vector<string*>* Template::subTaskList() {
+    return _subTaskList;
 }

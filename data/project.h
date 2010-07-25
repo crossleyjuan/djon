@@ -35,6 +35,8 @@ public:
     void addTask(Task* task);
     std::vector<Task*>* subTasks(string* prefix); // prefix should be 1, 2.1, etc.
     std::vector<Task*>* subTasks(); // return the direct sub tasks
+    void removeTask(Task* task);
+
     DateTime* startDate();
     DateTime* endDate();
     DTime* totalTime();

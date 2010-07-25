@@ -12,7 +12,13 @@ IdleTaskWindow::IdleTaskWindow(std::vector<Project*>* projects, TimeTracker* tim
     m_ui->setupUi(this);
     this->_projects = projects;
     m_ui->comboBox->setModel(new TaskModel(*projects));
-    setWindowFlags(Qt::Dialog | Qt::WindowStaysOnTopHint | Qt::CustomizeWindowHint);
+
+    /*
+    setWindowFlags(Qt::Dialog |
+                   Qt::WindowStaysOnTopHint |
+                   Qt::CustomizeWindowHint |
+                   Qt::WindowTitleHint);
+                   */
     _timeTracker = timeTracker;
     connect(this, SIGNAL(accepted()), this, SLOT(on_accepted()));
 }

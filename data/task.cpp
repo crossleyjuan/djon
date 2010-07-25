@@ -26,7 +26,6 @@ Task::Task(Project* project) {
     _endDate = NULL;
     _templateName = NULL;
     _status = NULL;
-    _totalTime = 0;
     _childCount = 0;
 
     _logs = new std::vector<TaskLog*>();
@@ -38,10 +37,6 @@ Task::~Task() {
 
 int Task::childCount() {
     return subTasks()->size();
-}
-
-void Task::setTotalTime(DTime* _totalTime) {
-    this->_totalTime = _totalTime;
 }
 
 DTime* Task::totalTime() {
@@ -191,7 +186,6 @@ Task::Task(Project* project, std::string* taskDef) {
     _endDate = new DateTime(READ_ELEMENT(values, "enddate"));
     _templateName = new string(READ_ELEMENT(values, "template-name"));
     _status = new string(READ_ELEMENT(values, "status"));
-    _totalTime = new DTime(atoi(READ_ELEMENT(values, "total-time").c_str()));
 
     delete(values);
 }
@@ -201,13 +195,14 @@ char* Task::toChar() {
 
     ss << "task-id:" << *_id << ";\n";
     ss << "short-description:" << *_shortDescription << ";\n";
-    ss << "long-description:" << *_longDescription << ";\n";
+    if (_longDescription != NULL) {
+        ss << "long-description:" << *_longDescription << ";\n";
+    }
     ss << "enddate:" << _endDate->toChar() << ";\n";
     ss << "startdate:" << _startDate->toChar() << ";\n";
     ss << "duration:" << _duration << ";\n";
     ss << "status:" << *_status << ";\n";
     ss << "template-name:" << *_templateName << ";\n";
-    ss << "total-time:" << _totalTime->secs() << ";\n";
 
     string ssOut = ss.str();
     char* res = (char*)malloc(ssOut.size() + 1);
@@ -255,4 +250,45 @@ bool Task::removeLog(TaskLog* log) {
         }
     }
     return removed;
+}
+
+bool Task::operator==(const Task& task) const {
+    if (task.id()->compare(*_id) == 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+void Task::processTemplate() {
+    Template* temp = readTemplate(*_templateName);
+    std::vector<string*>* subtasks = temp->subTaskList();
+    int subId = 1;
+    for (std::vector<string*>::iterator iterSub = subtasks->begin(); iterSub != subtasks->end(); iterSub++) {
+        string subtask = **iterSub;
+        int posPar = subtask.find('(');
+        int posFin = subtask.find(')');
+
+        string tempSub = subtask.substr(posPar + 1, posFin - posPar - 1);
+        string subTaskName = subtask.substr(0, posPar);
+
+        Task* sub = new Task(_project);
+        std::stringstream ssId;
+        ssId << *id() << "." << subId++;
+        sub->setId(new string(ssId.str()));
+        sub->setDuration(1);
+        sub->setEndDate(endDate());
+        sub->setShortDescription(new string(subTaskName));
+        sub->setStartDate(startDate());
+        sub->setStatus(status());
+        sub->setTemplateName(new string(tempSub));
+
+        _project->addTask(sub);
+        createTask(sub);
+        sub->processTemplate();
+    }
+}
+
+DTime* TaskLog::totalTime() {
+    return new DTime(*end - *start);
 }

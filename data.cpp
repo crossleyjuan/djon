@@ -139,14 +139,15 @@ vector<Template*>* readTemplates() {
 
             hashmap* conf = parseTextFormat(string(readFile(const_cast<char*>(fileName.c_str()))));
 
-            string templateName = conf->find("template-name")->second;
-            string statusList = conf->find("status")->second;
-            string jobList = conf->find("job")->second;
+            string* templateName = new std::string(READ_ELEMENT(conf, "template-name"));
+            string* templateDescription = new std::string(READ_ELEMENT(conf, "template-description"));
+            string statusList = READ_ELEMENT(conf, "status");
+            string subTaskList = READ_ELEMENT(conf, "subtasks");
 
-            vector<string>* vecStatus = split(statusList, ",");
-            vector<string>* vecJobList = split(jobList, ",");
+            vector<string*>* vecStatus = split(statusList, ",");
+            vector<string*>* vecSubTaskList = split(subTaskList, ",");
 
-            Template* tpl = new Template(templateName, vecStatus, vecJobList);
+            Template* tpl = new Template(templateName, templateDescription, vecStatus, vecSubTaskList);
             m_templates->push_back(tpl);
         }
     }
@@ -155,11 +156,11 @@ vector<Template*>* readTemplates() {
     return m_templates;
 }
 
-Template* readTemplate(string name) {
+Template* readTemplate(const string& name) {
     vector<Template*>* templates = readTemplates();
     for (vector<Template*>::iterator it = templates->begin(); it != templates->end(); it++) {
         Template* t = *it;
-        if (t->name().compare(name) == 0) {
+        if (t->name()->compare(name) == 0) {
             return t;
         }
     }
@@ -287,3 +288,38 @@ int deleteTaskLog(Task* task, TaskLog* taskLog) {
     return res;
 }
 
+int deleteTask(Task* task) {
+    int res = 0;
+    std::vector<TaskLog*>* logs = task->logs();
+    for (std::vector<TaskLog*>::iterator iterLog = logs->begin(); iterLog != logs->end(); iterLog++) {
+        TaskLog* log = *iterLog;
+        int resLog = deleteTaskLog(task, log);
+        res += resLog;
+    }
+
+    std::stringstream ssTaskDef;
+    const char* taskDef = task->toChar();
+    ssTaskDef << "{{\n";
+    ssTaskDef << taskDef;
+    ssTaskDef << "}}\n";
+
+    string* projName = task->project()->name();
+    char* lastDir = getLastDir();
+    stringstream fileName;
+    fileName << lastDir << "/" << *projName << ".tsk";
+    string* current = new string(readFile(const_cast<char*>(fileName.str().c_str())));
+
+    int posStart = current->find(string("{{\ntask-id:") + *task->id() + ";");
+    int posEnd = current->find(string("}}\n"), posStart) + 3;
+
+    qDebug("Borrando %s", task->id()->c_str());
+    if (posStart <= 0) {
+        qDebug("task no encontrado: %s", task->id()->c_str());
+    }
+    int size = posEnd - posStart;
+    string newFile = current->replace(posStart, size, string(""));
+
+    res += writeFile(fileName.str(), newFile, false);
+
+    return res;
+}

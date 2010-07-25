@@ -16,11 +16,11 @@
 IdleDetector::IdleDetector(int idleMaxSecs)
 {
     m_idleMaxSecs = idleMaxSecs;
+    timer = new QTimer();
+    connect(timer, SIGNAL(timeout()), this, SLOT(timeout()));
 }
 
 void IdleDetector::start() {
-    timer = new QTimer();
-    connect(timer, SIGNAL(timeout()), this, SLOT(timeout()));
     timer->start(1000);
 }
 

@@ -63,10 +63,10 @@
          }
      case 1:
          if (_type == PROJECT) {
-             return *_project->totalTime()->toQTime();
+             return QString(_project->totalTime()->toChar());
          }
          if (_type == TASK) {
-             return *_task->totalTime()->toQTime();
+             return QString(_task->totalTime()->toChar());
          }
          if (_type == NONE) {
              return itemData.at(column);

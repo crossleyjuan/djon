@@ -21,6 +21,8 @@ public:
     DateTime* start; //YYYYMMDD.HHMMSS
     DateTime* end; //YYYYMMDD.HHMMSS
     std::string* logDescription;
+
+    DTime* totalTime();
 };
 
 class Task {
@@ -57,11 +59,15 @@ public:
     void setId(string* _id);
     string* id() const;
 
+    void processTemplate();
+
     void addLog(TaskLog* log);
     bool removeLog(TaskLog* log);
     std::vector<TaskLog*>* logs();
     std::vector<Task*>* subTasks();
     std::string* nextChildId();
+
+    bool operator==(const Task& task) const;
 
 private:
     string* _id;
