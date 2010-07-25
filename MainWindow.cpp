@@ -47,7 +47,7 @@ MainWindow::MainWindow() {
     setupActions();
     setWindowState(Qt::WindowMaximized);
 
-    _idleDetector = new IdleDetector(20);// 5*60
+    _idleDetector = new IdleDetector(5*60);// 5*60
     connect(_idleDetector, SIGNAL(idleTimeOut()), this, SLOT(idleTimeOut()));
 
     _timeTracker = new TimeTracker();
@@ -129,7 +129,7 @@ void MainWindow::setupActions() {
     QAction* newTask = bar->addAction(QIcon(":/img/new-task.png"), tr("Create SubTask"));
     QAction* editTask = bar->addAction(QIcon(":/img/edit-task.png"), tr("Edit Task"));
     QAction* deleteTask = bar->addAction(QIcon(":/img/delete-task.png"), tr("Delete Task"));
-    QAction* completeTask = bar->addAction(QIcon(":/img/complete-task.png"), tr("Complete Task"));
+//    QAction* completeTask = bar->addAction(QIcon(":/img/complete-task.png"), tr("Complete Task"));
     bar->addSeparator();
     QAction* record = bar->addAction(QIcon(":/img/start.png"), tr("Start Record"));
     QAction* stop = bar->addAction(QIcon(":/img/stop.png"), tr("Stop Record"));
@@ -144,7 +144,7 @@ void MainWindow::setupActions() {
     prjMenu->addAction(newTask);
     prjMenu->addAction(editTask);
     prjMenu->addAction(deleteTask);
-    prjMenu->addAction(completeTask);
+//    prjMenu->addAction(completeTask);
     prjMenu->addSeparator();
     QAction* expAction = prjMenu->addAction(QIcon(":/img/exportar.png"), tr("Export project information"));
 
@@ -152,7 +152,7 @@ void MainWindow::setupActions() {
     connect(newTask, SIGNAL(triggered()), this, SLOT(createNewTask()));
     connect(editTask, SIGNAL(triggered()), this, SLOT(editNewTask()));
     connect(deleteTask, SIGNAL(triggered()), this, SLOT(deleteTask()));
-    connect(completeTask, SIGNAL(triggered()), this, SLOT(completeTask()));
+//    connect(completeTask, SIGNAL(triggered()), this, SLOT(completeTask()));
     connect(record, SIGNAL(triggered()), this, SLOT(startRecord()));
     connect(stop, SIGNAL(triggered()), this, SLOT(stopRecord()));
     connect(expAction, SIGNAL(triggered()), this, SLOT(exportProjects()));
