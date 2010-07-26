@@ -309,6 +309,9 @@ void MainWindow::completeTask() {
 }
 
 void MainWindow::exportProjects() {
-    ExportUtility util(*_projects);
-    util.executeExport();
+    QString selectedFileName = QFileDialog::getSaveFileName(this, tr("Export Project As"), tr(""), tr("XML Files (*.xml)"));
+    if (selectedFileName.size() > 0){
+        ExportUtility util(*_projects);
+        util.executeExport(selectedFileName.toStdString());
+    }
 }

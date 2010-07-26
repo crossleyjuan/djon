@@ -14,8 +14,8 @@ ExportUtility::ExportUtility(const ExportUtility& utility) {
     _projects = utility._projects;
 }
 
-void ExportUtility::executeExport() {
-    ofstream result("/tmp/exp.xml");
+void ExportUtility::executeExport(std::string fileName) {
+    ofstream result(fileName.c_str());
 
     result << "<?xml version=\"1.0\" encoding=\"windows-1252\"?>\n";
     result << "<projects>\n";

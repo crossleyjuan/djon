@@ -277,8 +277,9 @@ int deleteTaskLog(Task* task, TaskLog* taskLog) {
     fileName << lastDir << "/" << *projName << ".log";
     string* current = new string(readFile(const_cast<char*>(fileName.str().c_str())));
 
-    int posStart = current->find(string("{{\nlog-id:") + *taskLog->id + ";");
-    int posEnd = current->find(string("}}\n"), posStart) + 4;
+    string lookingFor = string("{{\nlog-id:") + *taskLog->id + ";";
+    int posStart = current->find(lookingFor);
+    int posEnd = current->find(string("}}\n"), posStart) + 3;
 
     int size = posEnd - posStart;
     string newFile = current->replace(posStart, size, string(""));

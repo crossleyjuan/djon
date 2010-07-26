@@ -3,6 +3,7 @@
 
 class Project;
 #include <vector>
+#include <string>
 
 using namespace std;
 
@@ -13,7 +14,7 @@ public:
     ~ExportUtility();
     ExportUtility(const ExportUtility& utility);
 
-    void executeExport();
+    void executeExport(std::string fileName);
 private:
     vector<Project*> _projects;
 };

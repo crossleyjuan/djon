@@ -58,6 +58,7 @@ public:
     std::string* shortDescription() const;
     void setId(string* _id);
     string* id() const;
+    Task* parent() const;
 
     void processTemplate();
 

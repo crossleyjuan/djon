@@ -73,8 +73,8 @@ CurrentTime::CurrentTime(std::vector<Project*>* projects, QWidget *parent) :
     ui->setupUi(this);
     _projects = projects;
 
-    TaskModel* model = new TaskModel(*_projects, this);
-    ui->comboBox->setModel(model);
+//    TaskModel* model = new TaskModel(*_projects, this);
+//    ui->comboBox->setModel(model);
 }
 
 CurrentTime::~CurrentTime()
@@ -100,5 +100,12 @@ void CurrentTime::updateTime(DTime& tm) {
 
 void CurrentTime::setActiveTask(Task* activeTask) {
     _activeTask = activeTask;
-//    ui->taskt->setText(activeTask->shortDescription());
+//    ui->comboBox->setCurrentIndex(3);
+    string description = *activeTask->shortDescription();
+    Task* tsk = activeTask->parent();
+    while (tsk != NULL) {
+        description.insert(0, *tsk->shortDescription() + " / ");
+        tsk = tsk->parent();
+    }
+    ui->currentTask->setText(QString(description.c_str()));
 }

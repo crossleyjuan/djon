@@ -55,10 +55,10 @@ TaskDialog::TaskDialog(Project* project, Task* task, QWidget *parent) :
         }
     }
 
-    m_ui->cboTemplate->setEditable(false);
     m_project = project;
     m_ui->tabWidget->setCurrentIndex(0);
-    m_ui->cboTemplate->setEditable(false);
+    m_ui->cboTemplate->setVisible(false);
+    m_ui->lblTemplate->setVisible(false);
 }
 
 TaskDialog::~TaskDialog()

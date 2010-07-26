@@ -292,3 +292,13 @@ void Task::processTemplate() {
 DTime* TaskLog::totalTime() {
     return new DTime(*end - *start);
 }
+
+Task* Task::parent() const {
+    string id = *_id;
+    if (countChar(id.c_str(), '.') > 0) {
+        id = id.substr(0, id.rfind('.'));
+        return _project->task(id);
+    } else {
+        return NULL;
+    }
+}
