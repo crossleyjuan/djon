@@ -19,13 +19,13 @@ class CurrentTime : public QDockWidget {
 public:
     CurrentTime(std::vector<Project*>* projects, QWidget *parent = 0);
     ~CurrentTime();
-    void setActiveTask(Task* task);
 
 protected:
     void changeEvent(QEvent *e);
 
 public slots:
     void updateTime(DTime& tm);
+    void setActiveTask(Task* task);
 
 private:
     void setupCombo();

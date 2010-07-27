@@ -47,3 +47,6 @@ TreeComboBox::~TreeComboBox()
 {
 }
 
+QModelIndex TreeComboBox::currentModelIndex() {
+    return view()->currentIndex();
+}

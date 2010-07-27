@@ -28,6 +28,7 @@ private:
     void createTaskDelegate();
     void createTaskLog();
     void createCurrentTimeWindow();
+    void createTray();
     void setupActions();
     void reloadProjects();
     void reloadTasks();
@@ -42,6 +43,10 @@ private:
     Task* _activeTask;
     CurrentTime* _timeWindow;
     TaskModel* _taskModel;
+    QSystemTrayIcon* _trayIcon;
+
+public:
+    void closeEvent(QCloseEvent *event);
 
 public slots:
     void selectTaskChanged(QModelIndex current, QModelIndex previous);
@@ -58,6 +63,7 @@ public slots:
 
     void setActiveTask(Task* task);
     void setActiveTaskLog(Task* task, TaskLog* taskLog);
+
 };
 
 #endif	/* _MAINWINDOW_H */

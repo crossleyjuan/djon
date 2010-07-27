@@ -43,5 +43,6 @@ void TaskLogWindow::refresh(Task* task) {
     TaskLogModel* model = new TaskLogModel(task);
     m_ui->tableView->setModel(model);
     m_ui->tableView->setItemDelegate(new TaskLogDelegate());
+    m_ui->tableView->setColumnWidth(0, 200);
 }
 

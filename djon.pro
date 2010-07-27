@@ -11,8 +11,8 @@ INCLUDEPATH += . \
     data \
     util \
     view
-LIBS += -lXss
 
+# LIBS += -lXss
 # LIBS += -lRpcrt4
 # Input
 HEADERS += config.h \
@@ -26,7 +26,6 @@ HEADERS += config.h \
     tasklogwindow.h \
     template.h \
     util.h \
-    data/datautil.h \
     data/project.h \
     data/task.h \
     util/DateTime.h \
@@ -67,7 +66,6 @@ SOURCES += data.cpp \
     tasklogwindow.cpp \
     template.cpp \
     util.cpp \
-    data/datautil.cpp \
     data/project.cpp \
     data/task.cpp \
     util/DateTime.cpp \
@@ -89,5 +87,6 @@ SOURCES += data.cpp \
     idletaskwindow.cpp \
     view/exportdialog.cpp \
     data/exportutility.cpp
-OTHER_FILES += 
+OTHER_FILES += djon.rc
 RESOURCES += djon_rs.qrc
+RC_FILE = djon.rc

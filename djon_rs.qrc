@@ -1,14 +1,12 @@
 <RCC>
-    <qresource prefix="/img">
-        <file alias="pause.png">img/media-playback-pause.png</file>
-        <file alias="start.png">img/media-playback-start.png</file>
-        <file alias="stop.png">img/media-playback-stop.png</file>
-        <file alias="record.png">img/media-record.png</file>
-        <file alias="new-task.png">img/insert-object.png</file>
-        <file alias="edit-task.png">img/accessories-text-editor.png</file>
-        <file alias="new-project.png">img/project.png</file>
-        <file alias="delete-task.png">img/edit-delete.png</file>
-        <file alias="complete-task.png">img/emblem-default.png</file>
-        <file alias="exportar.png">img/x-office-document.png</file>
+    <qresource prefix="/img" >
+        <file alias="pause.png" >img/media-playback-pause.png</file>
+        <file alias="start.png" >img/media-playback-start.png</file>
+        <file alias="stop.png" >img/media-playback-stop.png</file>
+        <file alias="record.png" >img/media-record.png</file>
+        <file alias="new-task.png" >img/insert-object.png</file>
+        <file alias="edit-task.png" >img/accessories-text-editor.png</file>
+        <file alias="new-project.png" >img/project.png</file>
+        <file alias="djon.png" >img/djon.png</file>
     </qresource>
 </RCC>

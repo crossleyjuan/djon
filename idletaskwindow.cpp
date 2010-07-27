@@ -13,6 +13,7 @@ IdleTaskWindow::IdleTaskWindow(std::vector<Project*>* projects, TimeTracker* tim
     this->_projects = projects;
     m_ui->comboBox->setModel(new TaskModel(*projects));
 
+    setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
     /*
     setWindowFlags(Qt::Dialog |
                    Qt::WindowStaysOnTopHint |
@@ -44,5 +45,12 @@ void IdleTaskWindow::on_accepted()
     if (m_ui->dontCount->isChecked()) {
         _timeTracker->destroyCurrentRecord();
     } else if (m_ui->countToTask->isChecked()) {
+        TreeComboBox* box = m_ui->comboBox;
+        TaskModel* model = (TaskModel*)box->model();
+        QModelIndex index = box->currentModelIndex();
+        Task* task = model->task(index);
+        _timeTracker->moveCurrentRecordToTask(task);
+        emit currentTaskChanged(task);
     }
 }
+

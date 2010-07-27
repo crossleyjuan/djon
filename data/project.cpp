@@ -6,7 +6,6 @@
  */
 
 #include "project.h"
-#include "datautil.h"
 #include "util.h"
 #include "data.h"
 #include <string.h>

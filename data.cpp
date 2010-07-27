@@ -1,7 +1,6 @@
 #include "data.h"
 #include "util.h"
 #include "config.h"
-#include "data/datautil.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string>
@@ -14,17 +13,7 @@
 using namespace std;
 
 char* getLastDir() {
-    std::string* homeDir = getHomeDir();
-    std::string confFileName = *homeDir + "/.djon/djon.conf";
-    char* conf = readFile(const_cast<char*> (confFileName.c_str()));
-
-    hashmap* mapConf = parseTextFormat(conf);
-    std::string lastDir = READ_ELEMENT(mapConf, "last-project-dir");
-
-    char* res = (char*)malloc(lastDir.size());
-    strcpy(res, lastDir.c_str());
-    delete (homeDir);
-    return res;
+    return readConfValue("last-project-dir", "");
 }
 
 void loadTasks(Project* project) {
@@ -63,6 +52,9 @@ void processTaskLog(Project* project, string* logDef) {
     log->end = endDate;
     log->logDescription = logDescription;
 
+    if (taskLogId->compare("be4e3097-edd7-462e-928b-3f20e67d0e55") == 0) {
+        qDebug("aqui");
+    }
     Task* task = project->task(*taskId);
     task->addLog(log);
 
@@ -230,7 +222,7 @@ int createTaskLog(Task* task, TaskLog* taskLog) {
     if (taskLog->logDescription != NULL) {
         ssTaskLogDef << "log-description:" << *taskLog->logDescription << "\n";
     }
-    ssTaskLogDef << "}}\n";
+    ssTaskLogDef << "}}";
 
     string* projName = task->project()->name();
     char* lastDir = getLastDir();
@@ -260,7 +252,7 @@ int updateTaskLog(Task* task, TaskLog* taskLog) {
     string* current = new string(readFile(const_cast<char*>(fileName.str().c_str())));
 
     int posStart = current->find(string("{{\nlog-id:") + *taskLog->id + ";");
-    int posEnd = current->find(string("}}\n"), posStart) + 4;
+    int posEnd = current->find(string("}}\n"), posStart) + 3;
 
     int size = posEnd - posStart;
     string newFile = current->replace(posStart, size, ssTaskLogDef.str());

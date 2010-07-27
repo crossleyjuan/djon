@@ -198,3 +198,78 @@ std::string* getHomeDir() {
     return home;
 }
 
+char* readConfValue(const string& name, char* def) {
+    std::string* homeDir = getHomeDir();
+    std::string confFileName = *homeDir + "/.djon/djon.conf";
+    char* conf = readFile(const_cast<char*> (confFileName.c_str()));
+
+    hashmap* mapConf = parseTextFormat(conf);
+    std::string lastDir = READ_ELEMENT(mapConf, name);
+
+    if (lastDir.size() == 0) {
+        return def;
+    }
+    char* res = (char*)malloc(lastDir.size());
+    strcpy(res, lastDir.c_str());
+    delete (homeDir);
+    return res;
+}
+
+int writeConfValue(const string& name, const string& value) {
+    std::string* homeDir = getHomeDir();
+    std::string confFileName = *homeDir + "/.djon/djon.conf";
+    std::string conf = std::string(readFile(const_cast<char*> (confFileName.c_str())));
+
+    int pos = conf.find(name + ":");
+    string newValue = name + ":" + value + ";";
+    if (pos > 0) {
+        int end = conf.find(";", pos) + 1;
+        conf = conf.replace(pos, end - pos, newValue);
+    } else {
+        conf.append(newValue);
+    }
+    int res = writeFile(confFileName, conf, false);
+    delete(homeDir);
+    return res;
+}
+
+void readElement(string& readed, stringstream &str) {
+
+    int c;
+    do {
+        c = str.get();
+        if (c != ';') {
+            if ((readed.length() != 0) || ((c != 13) && (c != 10))) {
+                if (str.good()) {
+                    char str[2];
+                    str[0] = c;
+                    str[1] = '\0';
+                    readed += str;
+                } else {
+                    break;
+                }
+            }
+        }
+    } while (c != ';');
+}
+
+hashmap* parseTextFormat(std::string text) {
+    hashmap* mapValue = new hashmap();
+    string name;
+    string value;
+    stringstream in(text);
+    char* test = NULL;
+    while (in.good()) {
+        string element;
+        readElement(element, in);
+        if (element.length() > 0) {
+            string name = element.substr(0, element.find_first_of(":"));
+            string value = element.substr(element.find_first_of(":") + 1, element.length() - element.find_first_of(":"));
+            QString qValue = QString(value.c_str());
+            qValue = qValue.trimmed();
+            value = qValue.toStdString();
+            mapValue->insert(pair<string, string > (name, value));
+        }
+    }
+    return mapValue;
+}

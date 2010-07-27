@@ -17,6 +17,7 @@
 #include "util.h"
 #include "view/projectwizard.h"
 #include "idletaskwindow.h"
+#include "exportutility.h"
 #include <sstream>
 
 MainWindow::MainWindow() {
@@ -46,13 +47,17 @@ MainWindow::MainWindow() {
     setupActions();
     setWindowState(Qt::WindowMaximized);
 
-    _idleDetector = new IdleDetector(3*60);// 5*60
+//    _idleDetector = new IdleDetector(5*60);// 5*60
+    int idleTimeOut = atoi(readConfValue("idle-timeout", "5"));
+    _idleDetector = new IdleDetector(idleTimeOut*60);// 5*60
     connect(_idleDetector, SIGNAL(idleTimeOut()), this, SLOT(idleTimeOut()));
 
     _timeTracker = new TimeTracker();
     connect(_timeTracker, SIGNAL(timeChanged(DTime&)), _timeWindow, SLOT(updateTime(DTime&)));
     connect(_timeTracker, SIGNAL(timeStopped(Task*,TaskLog*)), this, SLOT(timeStopped(Task*, TaskLog*)));
+    connect(qApp, SIGNAL(aboutToQuit()), _timeTracker, SLOT(stopRecord()));
 
+    createTray();
 }
 
 void MainWindow::createTaskLog() {
@@ -117,6 +122,7 @@ void MainWindow::setupActions() {
     addToolBar(bar);
 
     QMenuBar* menuBar = new QMenuBar();
+
     setMenuBar(menuBar);
 
     QMenu* prjMenu = menuBar->addMenu(tr("Project"));
@@ -126,32 +132,41 @@ void MainWindow::setupActions() {
     bar->addSeparator();
     QAction* newTask = bar->addAction(QIcon(":/img/new-task.png"), tr("Create SubTask"));
     QAction* editTask = bar->addAction(QIcon(":/img/edit-task.png"), tr("Edit Task"));
+    QAction* deleteTask = bar->addAction(QIcon(":/img/delete-task.png"), tr("Delete Task"));
+    //    QAction* completeTask = bar->addAction(QIcon(":/img/complete-task.png"), tr("Complete Task"));
     bar->addSeparator();
     QAction* record = bar->addAction(QIcon(":/img/start.png"), tr("Start Record"));
     QAction* stop = bar->addAction(QIcon(":/img/stop.png"), tr("Stop Record"));
 
-//    QAction* tt = bar->addAction(QIcon(":/img/new-project.png"), tr("Test Window"));
-//
-//    connect(tt, SIGNAL(triggered()), this, SLOT(idleTimeOut()));
     trcMenu->addAction(record);
     trcMenu->addAction(stop);
     prjMenu->addAction(newProject);
     prjMenu->addSeparator();
     prjMenu->addAction(newTask);
     prjMenu->addAction(editTask);
+    prjMenu->addAction(deleteTask);
+    //    prjMenu->addAction(completeTask);
+    prjMenu->addSeparator();
+    QAction* expAction = prjMenu->addAction(QIcon(":/img/exportar.png"), tr("Export project information"));
+    prjMenu->addSeparator();
+    QAction* quit = prjMenu->addAction(QIcon(":/img/quit.png"), tr("Quit"));
 
     connect(newProject, SIGNAL(triggered()), this, SLOT(createNewProject()));
     connect(newTask, SIGNAL(triggered()), this, SLOT(createNewTask()));
     connect(editTask, SIGNAL(triggered()), this, SLOT(editNewTask()));
+    connect(deleteTask, SIGNAL(triggered()), this, SLOT(deleteTask()));
+    connect(quit, SIGNAL(triggered()), qApp, SLOT(quit()));
+    //    connect(completeTask, SIGNAL(triggered()), this, SLOT(completeTask()));
     connect(record, SIGNAL(triggered()), this, SLOT(startRecord()));
     connect(stop, SIGNAL(triggered()), this, SLOT(stopRecord()));
-
+    connect(expAction, SIGNAL(triggered()), this, SLOT(exportProjects()));
 }
 
 void MainWindow::idleTimeOut() {
     // This will enforce the new TaskLog
-    startRecord();
+    _timeTracker->startRecord(_activeTask);
     IdleTaskWindow* w = new IdleTaskWindow(_projects, _timeTracker);
+    connect(w, SIGNAL(currentTaskChanged(Task*)), _timeWindow, SLOT(setActiveTask(Task*)));
     w->show();
 }
 
@@ -163,6 +178,7 @@ void MainWindow::startRecord() {
         _timeWindow->setActiveTask(_activeTask);
         _timeTracker->startRecord(_activeTask);
         _idleDetector->start();
+        _logWindow->refresh(_activeTask);
     }
 }
 
@@ -182,7 +198,7 @@ void MainWindow::setActiveTaskLog(Task* task, TaskLog* taskLog) {
 
 void MainWindow::createCurrentTimeWindow() {
     _timeWindow = new CurrentTime(_projects);
-//    _timeWindow->setAllowedAreas(Qt::BottomDockWidgetArea | Qt::BottomRightCorner);
+    //    _timeWindow->setAllowedAreas(Qt::BottomDockWidgetArea | Qt::BottomRightCorner);
 
     addDockWidget(Qt::BottomDockWidgetArea, _timeWindow);
 }
@@ -204,17 +220,7 @@ void MainWindow::createNewTask() {
     }
     TaskDialog* dialog = new TaskDialog(_activeProject, new std::string(taskId.toStdString()), this);
     if (dialog->exec() == QDialog::Accepted) {
-        int res = createTask(dialog->task());
-        if (res != 0) {
-            QMessageBox box;
-            box.setWindowTitle(tr("d-Jon"));
-            string errorDescription = string("An error ocurred creating the task file. Error: ");
-            errorDescription += getLastErrorDescription();
-            box.setText(tr(errorDescription.c_str()));
-            box.exec();
-        } else {
-            reloadTasks();
-        }
+        reloadTasks();
     }
 }
 
@@ -228,17 +234,7 @@ void MainWindow::editNewTask() {
     }
     TaskDialog* dialog = new TaskDialog(_activeProject, _activeTask, this);
     if (dialog->exec() == QDialog::Accepted) {
-        int res = updateTask(dialog->task());
-        if (res != 0) {
-            QMessageBox box;
-            box.setWindowTitle(tr("d-Jon"));
-            string errorDescription = string("An error ocurred creating the task file. Error: ");
-            errorDescription += getLastErrorDescription();
-            box.setText(tr(errorDescription.c_str()));
-            box.exec();
-        } else {
-            reloadTasks();
-        }
+        reloadTasks();
     }
 }
 
@@ -280,9 +276,10 @@ void MainWindow::reloadTasks() {
     _taskModel = new TaskModel(*_projects);
     widget.taskView->setModel(_taskModel);
     widget.taskView->setColumnWidth(0, 300);
+//    widget.taskView->setHeader(new TaskHeaderView(Qt::Horizontal, widget.taskView));
     createTaskDelegate();
-//    TaskHeaderView *tashHeader = new TaskHeaderView(Qt::Horizontal);
-//    widget.taskView->setHeader(tashHeader);
+    //    TaskHeaderView *tashHeader = new TaskHeaderView(Qt::Horizontal);
+    //    widget.taskView->setHeader(tashHeader);
     widget.taskView->setAlternatingRowColors(true);
     widget.taskView->expandAll();
     widget.taskView->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -292,3 +289,63 @@ void MainWindow::reloadTasks() {
 void MainWindow::timeStopped(Task* task, TaskLog* taskLog) {
     _idleDetector->stop();
 }
+
+void MainWindow::deleteTask() {
+    if (_activeTask != NULL) {
+        // Check if the selected task is being tracked
+        if (_timeTracker->status() == RUNNING) {
+            Task* trackedTask = _timeTracker->task();
+            if (trackedTask == _activeTask) {
+                _timeTracker->stopRecord();
+            }
+        }
+
+        Project* project = _activeTask->project();
+        project->removeTask(_activeTask);
+        //_taskModel->reset();
+
+        _activeTask = NULL;
+
+        reloadTasks();
+    }
+}
+
+void MainWindow::completeTask() {
+
+}
+
+void MainWindow::exportProjects() {
+    QString selectedFileName = QFileDialog::getSaveFileName(this, tr("Export Project As"), tr(""), tr("XML Files (*.xml)"));
+    if (selectedFileName.size() > 0){
+        ExportUtility util(*_projects);
+        util.executeExport(selectedFileName.toStdString());
+    }
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    if (_trayIcon->isVisible()) {
+        int warning = atoi(readConfValue("show-systray-warning", "1"));
+        if (warning) {
+            QMessageBox::information(this, tr("d-jon"),
+                                     tr("The program will keep running in the "
+                                        "system tray. To terminate the program, "
+                                        "choose <b>Quit</b> in the context menu "
+                                        "of the system tray entry."));
+            writeConfValue("show-systray-warning", "0");
+        }
+        hide();
+        event->ignore();
+    }
+}
+
+void MainWindow::createTray() {
+    _trayIcon = new QSystemTrayIcon(QIcon(":/img/djon.png"), this);
+    connect(_trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(showMaximized()));
+    QMenu* mnu = new QMenu(this);
+    QAction* quit = mnu->addAction(QIcon(":/img/quit.png"), tr("Quit"));
+    connect(quit, SIGNAL(triggered()), qApp, SLOT(quit()));
+    _trayIcon->setContextMenu(mnu);
+    _trayIcon->show();
+}
+

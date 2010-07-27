@@ -6,6 +6,8 @@ TaskHeaderView::TaskHeaderView(Qt::Orientation orientation, QWidget *parent) :
 }
 
 void TaskHeaderView::paintSection ( QPainter * painter, const QRect & rect, int logicalIndex ) const {
+    QHeaderView::paintSection(painter, rect, logicalIndex);
+    /*
     QRect secRect = rect;
     secRect.adjust(10, 0, 0, 0);
     switch (logicalIndex) {
@@ -17,5 +19,5 @@ void TaskHeaderView::paintSection ( QPainter * painter, const QRect & rect, int 
         painter->drawText(secRect, QString("otro"));
         break;
     }
-
+*/
 }

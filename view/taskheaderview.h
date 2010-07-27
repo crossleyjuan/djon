@@ -9,7 +9,6 @@ Q_OBJECT
 public:
     explicit TaskHeaderView(Qt::Orientation orientation, QWidget *parent = 0);
 
-
 protected:
     void paintSection ( QPainter * painter, const QRect & rect, int logicalIndex ) const;
 

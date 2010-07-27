@@ -17,6 +17,15 @@
 #include <string>
 #include <QtCore/QDate>
 #include <vector>
+#include <map>
+
+/*****************************************************************
+  Type Definitions and macros
+*/
+typedef std::map<std::string, std::string> hashmap;
+
+#define READ_ELEMENT(col,name) \
+    ((col->find(name) != col->end())? col->find(name)->second : (char*)"")
 
 /*****************************************************************
 String functions
@@ -45,7 +54,10 @@ std::string* uuid();
 
 bool makedir(const char* path);
 std::string* getHomeDir();
+hashmap* parseTextFormat(std::string text);
 
+char* readConfValue(const string& name, char* def);
+int writeConfValue(const string& name, const string& value);
 
 #endif	/* _UTIL_H */
 

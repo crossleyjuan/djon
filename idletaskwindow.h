@@ -5,6 +5,7 @@
 #include <vector>
 
 class Project;
+class Task;
 class TimeTracker;
 
 namespace Ui {
@@ -28,6 +29,10 @@ private:
 
 public slots:
     void on_accepted();
+
+signals:
+    void currentTaskChanged(Task* task);
+
 };
 
 #endif // IDLETASKWINDOW_H
