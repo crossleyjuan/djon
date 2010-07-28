@@ -44,6 +44,7 @@ private:
     CurrentTime* _timeWindow;
     TaskModel* _taskModel;
     QSystemTrayIcon* _trayIcon;
+    QMenu* _taskPopUpMenu;
 
 public:
     void closeEvent(QCloseEvent *event);
@@ -60,6 +61,7 @@ public slots:
     void completeTask();
     int createNewProject();
     void exportProjects();
+    void taskContextMenuRequested(QPoint pos);
 
     void setActiveTask(Task* task);
     void setActiveTaskLog(Task* task, TaskLog* taskLog);

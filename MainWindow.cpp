@@ -122,6 +122,7 @@ void MainWindow::setupActions() {
     addToolBar(bar);
 
     QMenuBar* menuBar = new QMenuBar();
+    _taskPopUpMenu = new QMenu(widget.taskView);
 
     setMenuBar(menuBar);
 
@@ -145,6 +146,9 @@ void MainWindow::setupActions() {
     prjMenu->addAction(newTask);
     prjMenu->addAction(editTask);
     prjMenu->addAction(deleteTask);
+    _taskPopUpMenu->addAction(newTask);
+    _taskPopUpMenu->addAction(editTask);
+    _taskPopUpMenu->addAction(deleteTask);
     //    prjMenu->addAction(completeTask);
     prjMenu->addSeparator();
     QAction* expAction = prjMenu->addAction(QIcon(":/img/exportar.png"), tr("Export project information"));
@@ -160,6 +164,9 @@ void MainWindow::setupActions() {
     connect(record, SIGNAL(triggered()), this, SLOT(startRecord()));
     connect(stop, SIGNAL(triggered()), this, SLOT(stopRecord()));
     connect(expAction, SIGNAL(triggered()), this, SLOT(exportProjects()));
+
+    connect(widget.taskView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(taskContextMenuRequested(QPoint)));
+    widget.taskView->setContextMenuPolicy(Qt::CustomContextMenu);
 }
 
 void MainWindow::idleTimeOut() {
@@ -350,3 +357,7 @@ void MainWindow::createTray() {
     qApp->setQuitOnLastWindowClosed(false);
 }
 
+
+void MainWindow::taskContextMenuRequested(QPoint pos) {
+    _taskPopUpMenu->popup(QCursor::pos());
+}
