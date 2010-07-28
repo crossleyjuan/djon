@@ -75,7 +75,7 @@ Section "djon (required)"
   
   ; if the conf file exists, remove it and replace with the new one
   Delete $PROFILE\.djon\djon.conf
-  Push "last-project-dir:$PROFILE\.djon\Projects;$\r$\nidle-timeout:5;$\r$\n"
+  Push "last-project-dir:$PROFILE\.djon\Projects;$\r$\nidle-timeout:300;$\r$\n"
   Push "$PROFILE\.djon\djon.conf"
   Call WriteToFile
   

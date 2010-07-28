@@ -48,8 +48,8 @@ MainWindow::MainWindow() {
     setWindowState(Qt::WindowMaximized);
 
 //    _idleDetector = new IdleDetector(5*60);// 5*60
-    int idleTimeOut = atoi(readConfValue("idle-timeout", "5"));
-    _idleDetector = new IdleDetector(idleTimeOut*60);// 5*60
+    int idleTimeOut = atoi(readConfValue("idle-timeout", "300"));
+    _idleDetector = new IdleDetector(idleTimeOut);// 5*60
     connect(_idleDetector, SIGNAL(idleTimeOut()), this, SLOT(idleTimeOut()));
 
     _timeTracker = new TimeTracker();
@@ -135,8 +135,8 @@ void MainWindow::setupActions() {
     QAction* deleteTask = bar->addAction(QIcon(":/img/delete-task.png"), tr("Delete Task"));
     //    QAction* completeTask = bar->addAction(QIcon(":/img/complete-task.png"), tr("Complete Task"));
     bar->addSeparator();
-    QAction* record = bar->addAction(QIcon(":/img/start.png"), tr("Start Record"));
-    QAction* stop = bar->addAction(QIcon(":/img/stop.png"), tr("Stop Record"));
+    QAction* record = bar->addAction(QIcon(":/img/start.png"), tr("Start New Record"));
+    QAction* stop = bar->addAction(QIcon(":/img/stop.png"), tr("Stop Current Record"));
 
     trcMenu->addAction(record);
     trcMenu->addAction(stop);
@@ -167,7 +167,7 @@ void MainWindow::idleTimeOut() {
     _timeTracker->startRecord(_activeTask);
     IdleTaskWindow* w = new IdleTaskWindow(_projects, _timeTracker);
     connect(w, SIGNAL(currentTaskChanged(Task*)), _timeWindow, SLOT(setActiveTask(Task*)));
-    w->show();
+    w->exec();
 }
 
 void MainWindow::startRecord() {
@@ -347,5 +347,6 @@ void MainWindow::createTray() {
     connect(quit, SIGNAL(triggered()), qApp, SLOT(quit()));
     _trayIcon->setContextMenu(mnu);
     _trayIcon->show();
+    qApp->setQuitOnLastWindowClosed(false);
 }
 

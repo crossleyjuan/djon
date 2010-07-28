@@ -63,26 +63,14 @@ void DateTime::loadDate(string dateTime) {
     memset(min, 0, 3);
     char secs[3];
     memset(secs, 0, 3);
-    for (int x = 0; x < dateTime.length(); x++) {
-        if ((x >= 0) && (x <= 3)) {
-            year[x] = dateTime[x];
-        }
-        if ((x >= 4) && (x <= 5)) {
-            month[x-4] = dateTime[x];
-        }
-        if ((x >= 6) && (x <= 7)) {
-            day[x-6] = dateTime[x];
-        }
-        if ((x >= 9) && (x <= 10)) {
-            hour[x-9] = dateTime[x];
-        }
-        if ((x >= 11) && (x <= 12)) {
-            min[x-11] = dateTime[x];
-        }
-        if ((x >= 13) && (x <= 14)) {
-            secs[x-11] = dateTime[x];
-        }
-    }
+
+    const char* cdate = dateTime.c_str();
+    memcpy(year, cdate, 4);
+    memcpy(month, cdate + 4, 2);
+    memcpy(day, cdate + 6, 2);
+    memcpy(hour, cdate + 9, 2);
+    memcpy(min, cdate + 11, 2);
+    memcpy(secs, cdate + 13, 2);
     toInt(year, &_year);
     toInt(month, &_month);
     toInt(day, &_day);
