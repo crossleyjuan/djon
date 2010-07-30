@@ -2,6 +2,7 @@
 #define EXPORTUTILITY_H
 
 class Project;
+class DateTime;
 #include <vector>
 #include <string>
 
@@ -14,7 +15,8 @@ public:
     ~ExportUtility();
     ExportUtility(const ExportUtility& utility);
 
-    void executeExport(std::string fileName);
+    void executeExport(std::string fileName, DateTime* logsFrom = 0, DateTime* logsTo = 0);
+
 private:
     vector<Project*> _projects;
 };

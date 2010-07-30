@@ -168,6 +168,18 @@ bool DateTime::operator >(const DateTime& dateTime) const {
     return toDouble() > dateTime.toDouble();
 }
 
+bool DateTime::operator <(const DateTime& dateTime) const {
+    return toDouble() < dateTime.toDouble();
+}
+
+bool DateTime::operator >=(const DateTime& dateTime) const {
+    return toDouble() >= dateTime.toDouble();
+}
+
+bool DateTime::operator <=(const DateTime& dateTime) const {
+    return toDouble() <= dateTime.toDouble();
+}
+
 long DateTime::operator -(const DateTime& dateTimeRight) const {
     DateTime left = *this; // Copy this
     DateTime right = dateTimeRight; // copy the argument
@@ -175,3 +187,4 @@ long DateTime::operator -(const DateTime& dateTimeRight) const {
 
     return secs;
 }
+

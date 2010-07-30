@@ -3,6 +3,7 @@
 TaskHeaderView::TaskHeaderView(Qt::Orientation orientation, QWidget *parent) :
     QHeaderView(orientation, parent)
 {
+//    setDefaultSectionSize(200);
 }
 
 void TaskHeaderView::paintSection ( QPainter * painter, const QRect & rect, int logicalIndex ) const {
@@ -20,4 +21,13 @@ void TaskHeaderView::paintSection ( QPainter * painter, const QRect & rect, int 
         break;
     }
 */
+}
+
+
+int TaskHeaderView::sectionSizeHint(int logicalIndex) const {
+    return 30;
+}
+int TaskHeaderView::sectionSize(int logicalIndex) const {
+    return 30;
+
 }

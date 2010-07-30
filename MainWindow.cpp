@@ -18,7 +18,7 @@
 #include "view/projectwizard.h"
 #include "idletaskwindow.h"
 #include "view/dialogsettings.h"
-#include "exportutility.h"
+#include "exportdialog.h"
 #include <sstream>
 
 MainWindow::MainWindow() {
@@ -48,6 +48,7 @@ MainWindow::MainWindow() {
     setupActions();
     setWindowState(Qt::WindowMaximized);
 
+    widget.taskView->setColumnWidth(0, 300);
 //    _idleDetector = new IdleDetector(5*60);// 5*60
     _idleDetector = new IdleDetector();// 5*60
     connect(_idleDetector, SIGNAL(idleTimeOut()), this, SLOT(idleTimeOut()));
@@ -287,11 +288,8 @@ void MainWindow::reloadProjects() {
 void MainWindow::reloadTasks() {
     _taskModel = new TaskModel(*_projects);
     widget.taskView->setModel(_taskModel);
-    widget.taskView->setColumnWidth(0, 300);
-//    widget.taskView->setHeader(new TaskHeaderView(Qt::Horizontal, widget.taskView));
     createTaskDelegate();
-    //    TaskHeaderView *tashHeader = new TaskHeaderView(Qt::Horizontal);
-    //    widget.taskView->setHeader(tashHeader);
+  //  widget.taskView->header()->setItemDelegateForColumn(2, new TaskHeaderView(widget.taskView));
     widget.taskView->setAlternatingRowColors(true);
     widget.taskView->expandAll();
     widget.taskView->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -326,11 +324,8 @@ void MainWindow::completeTask() {
 }
 
 void MainWindow::exportProjects() {
-    QString selectedFileName = QFileDialog::getSaveFileName(this, tr("Export Project As"), tr(""), tr("XML Files (*.xml)"));
-    if (selectedFileName.size() > 0){
-        ExportUtility util(*_projects);
-        util.executeExport(selectedFileName.toStdString());
-    }
+    ExportDialog dialog(*_projects, this);
+    dialog.exec();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)

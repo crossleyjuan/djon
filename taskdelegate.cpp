@@ -70,8 +70,8 @@ void TaskDelegate::drawTaskBar(QPainter *p, DateTime* barStartDate, DateTime* ba
     QDate* endDate = new QDate(barEndDate->getYear(), barEndDate->getMonth(), barEndDate->getDay());
     int days = startDate->daysTo(*endDate) + 1;
 
-    p->setPen(QPen(QColor("red")));
-    p->setBrush(QBrush(QColor("red")));
+    p->setPen(QPen(QColor("blue")));
+    p->setBrush(QBrush(QColor("blue")));
     int bordermargin = (option.rect.height() * .5) / 2;
 
     int daysToStart = _startDate->daysTo(*startDate);

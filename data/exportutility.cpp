@@ -14,7 +14,7 @@ ExportUtility::ExportUtility(const ExportUtility& utility) {
     _projects = utility._projects;
 }
 
-void ExportUtility::executeExport(std::string fileName) {
+void ExportUtility::executeExport(std::string fileName, DateTime* logsFrom, DateTime* logsTo) {
     ofstream result(fileName.c_str());
 
     result << "<?xml version=\"1.0\" encoding=\"windows-1252\"?>\n";
@@ -40,11 +40,24 @@ void ExportUtility::executeExport(std::string fileName) {
             result << "<periods>\n";
             for (vector<TaskLog*>::iterator iterLog = logs->begin(); iterLog != logs->end(); iterLog++) {
                 TaskLog* log = *iterLog;
-                result << "<period ";
-                result << "id=\"" << *log->id << "\" ";
-                result << "start=\"" << log->start->toQDateTime()->toString(Qt::ISODate).toStdString() << "\" ";
-                result << "finish=\"" << log->end->toQDateTime()->toString(Qt::ISODate).toStdString() << "\" ";
-                result << "timelength=\"" << log->totalTime()->toChar() << "\" />\n";
+                bool print = true;
+                if (logsFrom) {
+                    if (*log->start < *logsFrom) {
+                        print = false;
+                    }
+                }
+                if (logsTo) {
+                    if (*log->end > *logsTo) {
+                        print = false;
+                    }
+                }
+                if (print) {
+                    result << "<period ";
+                    result << "id=\"" << *log->id << "\" ";
+                    result << "start=\"" << log->start->toQDateTime()->toString(Qt::ISODate).toStdString() << "\" ";
+                    result << "finish=\"" << log->end->toQDateTime()->toString(Qt::ISODate).toStdString() << "\" ";
+                    result << "timelength=\"" << log->totalTime()->toChar() << "\" />\n";
+                }
             }
             result << "</periods>\n";
             result << "</task>\n";

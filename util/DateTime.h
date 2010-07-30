@@ -38,6 +38,9 @@ public:
     void setYear(int _year);
     int getYear() const;
     bool operator >(const DateTime& dateTime) const;
+    bool operator <(const DateTime& dateTime) const;
+    bool operator >=(const DateTime& dateTime) const;
+    bool operator <=(const DateTime& dateTime) const;
     long operator -(const DateTime& dateTimeRight) const;
 
 private:
