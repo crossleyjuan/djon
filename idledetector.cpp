@@ -1,5 +1,6 @@
 #include "idledetector.h"
 #include "config.h"
+#include "util.h"
 
 #ifndef WINDOWS
 
@@ -13,9 +14,9 @@
 #include <Winuser.h>
 #endif
 
-IdleDetector::IdleDetector(int idleMaxSecs)
+IdleDetector::IdleDetector()
 {
-    m_idleMaxSecs = idleMaxSecs;
+    refreshIdleMaxSecs();
     timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(timeout()));
 }
@@ -60,3 +61,6 @@ void IdleDetector::timeout() {
     }
 }
 
+void IdleDetector::refreshIdleMaxSecs() {
+    m_idleMaxSecs = atoi(readConfValue("idle-timeout", "300"));
+}

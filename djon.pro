@@ -46,7 +46,8 @@ HEADERS += config.h \
     treecombobox.h \
     idletaskwindow.h \
     view/exportdialog.h \
-    data/exportutility.h
+    data/exportutility.h \
+    view/dialogsettings.h
 FORMS += MainWindow.ui \
     taskdialog.ui \
     tasklogwindow.ui \
@@ -55,7 +56,8 @@ FORMS += MainWindow.ui \
     view/projectinfo.ui \
     view/projectsummary.ui \
     idletaskwindow.ui \
-    view/exportdialog.ui
+    view/exportdialog.ui \
+    view/dialogsettings.ui
 SOURCES += data.cpp \
     main.cpp \
     MainWindow.cpp \
@@ -86,7 +88,8 @@ SOURCES += data.cpp \
     treecombobox.cpp \
     idletaskwindow.cpp \
     view/exportdialog.cpp \
-    data/exportutility.cpp
+    data/exportutility.cpp \
+    view/dialogsettings.cpp
 OTHER_FILES += djon.rc
 RESOURCES += djon_rs.qrc
 RC_FILE = djon.rc

@@ -17,6 +17,7 @@
 #include "util.h"
 #include "view/projectwizard.h"
 #include "idletaskwindow.h"
+#include "view/dialogsettings.h"
 #include "exportutility.h"
 #include <sstream>
 
@@ -48,8 +49,7 @@ MainWindow::MainWindow() {
     setWindowState(Qt::WindowMaximized);
 
 //    _idleDetector = new IdleDetector(5*60);// 5*60
-    int idleTimeOut = atoi(readConfValue("idle-timeout", "300"));
-    _idleDetector = new IdleDetector(idleTimeOut);// 5*60
+    _idleDetector = new IdleDetector();// 5*60
     connect(_idleDetector, SIGNAL(idleTimeOut()), this, SLOT(idleTimeOut()));
 
     _timeTracker = new TimeTracker();
@@ -128,6 +128,7 @@ void MainWindow::setupActions() {
 
     QMenu* prjMenu = menuBar->addMenu(tr("Project"));
     QMenu* trcMenu = menuBar->addMenu(tr("Tracker"));
+    QMenu* optMenu = menuBar->addMenu(tr("Options"));
 
     QAction* newProject = bar->addAction(QIcon(":/img/new-project.png"), tr("Create Project"));
     bar->addSeparator();
@@ -155,6 +156,8 @@ void MainWindow::setupActions() {
     prjMenu->addSeparator();
     QAction* quit = prjMenu->addAction(QIcon(":/img/quit.png"), tr("Quit"));
 
+    QAction* settings = optMenu->addAction(QIcon(":/img/settings.png"), tr("Settings"));
+
     connect(newProject, SIGNAL(triggered()), this, SLOT(createNewProject()));
     connect(newTask, SIGNAL(triggered()), this, SLOT(createNewTask()));
     connect(editTask, SIGNAL(triggered()), this, SLOT(editNewTask()));
@@ -164,6 +167,8 @@ void MainWindow::setupActions() {
     connect(record, SIGNAL(triggered()), this, SLOT(startRecord()));
     connect(stop, SIGNAL(triggered()), this, SLOT(stopRecord()));
     connect(expAction, SIGNAL(triggered()), this, SLOT(exportProjects()));
+
+    connect(settings, SIGNAL(triggered()), this, SLOT(settings()));
 
     connect(widget.taskView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(taskContextMenuRequested(QPoint)));
     widget.taskView->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -318,7 +323,6 @@ void MainWindow::deleteTask() {
 }
 
 void MainWindow::completeTask() {
-
 }
 
 void MainWindow::exportProjects() {
@@ -332,17 +336,22 @@ void MainWindow::exportProjects() {
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     if (_trayIcon->isVisible()) {
-        int warning = atoi(readConfValue("show-systray-warning", "1"));
-        if (warning) {
-            QMessageBox::information(this, tr("d-jon"),
-                                     tr("The program will keep running in the "
-                                        "system tray. To terminate the program, "
-                                        "choose <b>Quit</b> in the context menu "
-                                        "of the system tray entry."));
-            writeConfValue("show-systray-warning", "0");
+        int closeToSysTray = atoi(readConfValue("close-to-systray", "1"));
+        if (closeToSysTray) {
+            int warning = atoi(readConfValue("show-systray-warning", "1"));
+            if (warning) {
+                QMessageBox::information(this, tr("d-jon"),
+                                         tr("The program will keep running in the "
+                                            "system tray. To terminate the program, "
+                                            "choose <b>Quit</b> in the context menu "
+                                            "of the system tray entry."));
+                writeConfValue("show-systray-warning", "0");
+            }
+            hide();
+            event->ignore();
+        } else {
+            qApp->quit();
         }
-        hide();
-        event->ignore();
     }
 }
 
@@ -360,4 +369,12 @@ void MainWindow::createTray() {
 
 void MainWindow::taskContextMenuRequested(QPoint pos) {
     _taskPopUpMenu->popup(QCursor::pos());
+}
+
+void MainWindow::settings() {
+    DialogSettings settings;
+    int res = settings.exec();
+    if (res == QDialog::Accepted) {
+        _idleDetector->refreshIdleMaxSecs();
+    }
 }

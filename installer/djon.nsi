@@ -61,6 +61,7 @@ Section "djon (required)"
   ; Put file there
   File "djon.exe"
   ; File "djon.nsi"
+  File "libgcc_s_dw2-1.dll"
   File "mingwm10.dll"
   File "QtCored4.dll"
   File "QtGuid4.dll"
@@ -72,6 +73,7 @@ Section "djon (required)"
   File /oname=$PROFILE\.djon\templates\Bugs.tpl Bugs.tpl
   File /oname=$PROFILE\.djon\templates\ciclos.tpl ciclos.tpl
   File /oname=$PROFILE\.djon\templates\Tasks.tpl Tasks.tpl
+  File /oname=$PROFILE\.djon\templates\CommonTask.tpl CommonTask.tpl
   
   ; if the conf file exists, remove it and replace with the new one
   Delete $PROFILE\.djon\djon.conf
@@ -112,6 +114,7 @@ Section "Uninstall"
 
   ; Remove files and uninstaller
   Delete $INSTDIR\djon.exe
+  Delete $INSTDIR\libgcc_s_dw2-1.dll
   Delete $INSTDIR\uninstall.exe
   Delete $INSTDIR\mingwm10.dll
   Delete $INSTDIR\QtCored4.dll

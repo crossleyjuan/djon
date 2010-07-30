@@ -9,7 +9,7 @@ class IdleDetector : public QObject
    Q_OBJECT
 
 public:
-    IdleDetector(int idleMax);
+    IdleDetector();
     void start();
     void stop();
 
@@ -19,6 +19,9 @@ signals:
 private:
     int m_idleMaxSecs;
     QTimer* timer;
+
+public slots:
+    void refreshIdleMaxSecs();
 
 private slots:
     void timeout();
