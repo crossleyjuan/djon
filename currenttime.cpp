@@ -73,8 +73,6 @@ CurrentTime::CurrentTime(std::vector<Project*>* projects, QWidget *parent) :
     ui->setupUi(this);
     _projects = projects;
 
-//    TaskModel* model = new TaskModel(*_projects, this);
-//    ui->comboBox->setModel(model);
 }
 
 CurrentTime::~CurrentTime()

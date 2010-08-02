@@ -16,9 +16,11 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
     QModelIndex index(int row, int column, const QModelIndex &parent) const;
     Qt::ItemFlags flags(const QModelIndex &index) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
 private:
     Task* _task;
+    QList<QVariant> _headerData;
 };
 
 #endif // TASKLOGMODEL_H

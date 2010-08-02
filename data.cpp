@@ -140,7 +140,11 @@ vector<Template*>* readTemplates() {
             vector<string*>* vecSubTaskList = split(subTaskList, ",");
 
             Template* tpl = new Template(templateName, templateDescription, vecStatus, vecSubTaskList);
-            m_templates->push_back(tpl);
+            if ((*templateName)[templateName->length() - 1] == '*') {
+                m_templates->insert(m_templates->begin(), tpl);
+            } else {
+                m_templates->push_back(tpl);
+            }
         }
     }
 

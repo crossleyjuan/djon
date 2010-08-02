@@ -5,9 +5,10 @@
 TaskLogModel::TaskLogModel(Task* task)
 {
     _task = task;
-    setHeaderData(0, Qt::Horizontal, QObject::tr("Description"));
-    setHeaderData(1, Qt::Horizontal, QObject::tr("Start Date"));
-    setHeaderData(2, Qt::Horizontal, QObject::tr("End Date"));
+    _headerData << "Description" << "Start Date" << "End Date";
+//    QAbstractItemModel::setHeaderData(0, Qt::Horizontal, QObject::tr("Description"));
+//    QAbstractItemModel::setHeaderData(1, Qt::Horizontal, QObject::tr("Start Date"));
+//    QAbstractItemModel::setHeaderData(2, Qt::Horizontal, QObject::tr("End Date"));
 }
 
 int TaskLogModel::rowCount(const QModelIndex &parent) const {
@@ -94,5 +95,12 @@ QModelIndex TaskLogModel::index(int row, int column, const QModelIndex &parent) 
 }
 
 Qt::ItemFlags TaskLogModel::flags(const QModelIndex &index) const {
-    return Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable;
+    return QAbstractItemModel::flags(index) | Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable;
+}
+
+QVariant TaskLogModel::headerData(int section, Qt::Orientation orientation, int role) const {
+    if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
+        return _headerData.at(section);
+
+    return QVariant();
 }

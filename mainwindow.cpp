@@ -268,7 +268,7 @@ int MainWindow::createNewProject() {
             if (_projects->size() == 1) {
                 _activeProject = _projects->at(0);
             }
-            _taskModel = new TaskModel(*_projects);
+            _taskModel = new TaskModel(WITH_TIMES, *_projects);
             widget.taskView->setModel(_taskModel);
             widget.taskView->expandAll();
             connect(widget.taskView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(selectTaskChanged(QModelIndex,QModelIndex)));
@@ -286,7 +286,7 @@ void MainWindow::reloadProjects() {
 }
 
 void MainWindow::reloadTasks() {
-    _taskModel = new TaskModel(*_projects);
+    _taskModel = new TaskModel(WITH_TIMES, *_projects);
     widget.taskView->setModel(_taskModel);
     createTaskDelegate();
   //  widget.taskView->header()->setItemDelegateForColumn(2, new TaskHeaderView(widget.taskView));
@@ -352,7 +352,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::createTray() {
     _trayIcon = new QSystemTrayIcon(QIcon(":/img/djon.png"), this);
-    connect(_trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(showMaximized()));
+    connect(_trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(restoreWindowState()));
     QMenu* mnu = new QMenu(this);
     QAction* quit = mnu->addAction(QIcon(":/img/quit.png"), tr("Quit"));
     connect(quit, SIGNAL(triggered()), qApp, SLOT(quit()));
@@ -371,5 +371,13 @@ void MainWindow::settings() {
     int res = settings.exec();
     if (res == QDialog::Accepted) {
         _idleDetector->refreshIdleMaxSecs();
+    }
+}
+
+void MainWindow::restoreWindowState() {
+    if (isHidden()) {
+        showMaximized();
+    } else {
+        show();
     }
 }

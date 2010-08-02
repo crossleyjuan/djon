@@ -11,7 +11,7 @@ IdleTaskWindow::IdleTaskWindow(std::vector<Project*>* projects, TimeTracker* tim
 {
     m_ui->setupUi(this);
     this->_projects = projects;
-    m_ui->comboBox->setModel(new TaskModel(*projects));
+    m_ui->comboBox->setModel(new TaskModel(ONLY_TASKS, *projects));
 
     setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
     /*

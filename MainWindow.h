@@ -65,6 +65,7 @@ public slots:
 
     void setActiveTask(Task* task);
     void setActiveTaskLog(Task* task, TaskLog* taskLog);
+    void restoreWindowState();
 
     void settings();
 };

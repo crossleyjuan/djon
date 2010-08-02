@@ -13,34 +13,40 @@
 #include <QAbstractTableModel>
 #include <vector>
 
+enum MODELTYPE {
+    WITH_TIMES,
+    ONLY_TASKS
+};
+
 class TaskModel : public QAbstractItemModel
- {
-     Q_OBJECT
+{
+    Q_OBJECT
 
- public:
-     TaskModel(const vector<Project*> projects, QObject *parent = 0);
-     ~TaskModel();
+public:
+    TaskModel(MODELTYPE type, const vector<Project*> projects, QObject *parent = 0);
+    ~TaskModel();
 
-     QVariant data(const QModelIndex &index, int role) const;
-     Qt::ItemFlags flags(const QModelIndex &index) const;
-     QVariant headerData(int section, Qt::Orientation orientation,
-                         int role = Qt::DisplayRole) const;
-     QModelIndex index(int row, int column,
-                       const QModelIndex &parent = QModelIndex()) const;
-     QModelIndex parent(const QModelIndex &index) const;
-     int rowCount(const QModelIndex &parent = QModelIndex()) const;
-     int columnCount(const QModelIndex &parent = QModelIndex()) const;
-     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+    QVariant data(const QModelIndex &index, int role) const;
+    Qt::ItemFlags flags(const QModelIndex &index) const;
+    QVariant headerData(int section, Qt::Orientation orientation,
+                        int role = Qt::DisplayRole) const;
+    QModelIndex index(int row, int column,
+                      const QModelIndex &parent = QModelIndex()) const;
+    QModelIndex parent(const QModelIndex &index) const;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
 
-     Task* task(const QModelIndex &index) const;
-     Project* project(const QModelIndex &index) const;
+    Task* task(const QModelIndex &index) const;
+    Project* project(const QModelIndex &index) const;
 
- private:
-     void setupModelData(TaskItem *parent);
+private:
+    void setupModelData(TaskItem *parent);
 
-     TaskItem *rootItem;
-     std::vector<Project*> _projects;
- };
+    TaskItem *rootItem;
+    std::vector<Project*> _projects;
+    MODELTYPE _type;
+};
 
- #endif
+#endif

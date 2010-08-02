@@ -27,5 +27,5 @@ void ProjectInfo::changeEvent(QEvent *e)
 
 void ProjectInfo::initializePage() {
     registerField("projectName*", ui->projectName);
-    registerField("projectDescription*", ui->projectDescription, "plainText", SIGNAL(textChanged()));
+    registerField("projectDescription", ui->projectDescription, "plainText", SIGNAL(textChanged()));
 }

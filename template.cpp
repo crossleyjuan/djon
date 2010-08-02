@@ -1,6 +1,10 @@
 #include "template.h"
 
 Template::Template(std::string* name, std::string* description, std::vector<string*>* statusList, std::vector<string*>* subTaskList) {
+    if (name->at(name->length() - 1) == '*') {
+        _default = true;
+        name = new string(name->substr(0, name->length() - 1));
+    }
     _name = name;
     _description = description;
     _statusList = statusList;
@@ -32,4 +36,8 @@ std::vector<string*>* Template::statusList() {
 
 std::vector<string*>* Template::subTaskList() {
     return _subTaskList;
+}
+
+bool Template::isDefault() {
+    return _default;
 }

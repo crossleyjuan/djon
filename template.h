@@ -13,6 +13,7 @@ private:
     std::vector<string*>* _statusList;
     std::string* _closedStatus;
     std::vector<string*>* _subTaskList;
+    bool _default;
 
 public:
     Template(std::string* name, std::string* description, std::vector<string*>* statusList, std::vector<string*>* subTaskList);
@@ -22,6 +23,7 @@ public:
     std::string* closedStatus();
     std::vector<string*>* statusList();
     std::vector<string*>* subTaskList();
+    bool isDefault();
 };
 
 #endif // TEMPLATE_H
