@@ -29,6 +29,8 @@ public:
     void setName(string* name);
     string* description();
     void setDescription(string* description);
+    string* projectFileName();
+    void setProjectFileName(string* projectFileName);
 //    int getLastTaskId();
 
     std::vector<Task*>* tasks();
@@ -47,6 +49,7 @@ public:
 private:
     string* _name;
     string* _description;
+    string* _projectFileName;
 //    int _lastTaskId;
 
     std::vector<Task*>* _tasks;

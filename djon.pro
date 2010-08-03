@@ -11,8 +11,8 @@ INCLUDEPATH += . \
     data \
     util \
     view
+LIBS += -lXss
 
-# LIBS += -lXss
 # LIBS += -lRpcrt4
 # Input
 HEADERS += config.h \
@@ -47,7 +47,8 @@ HEADERS += config.h \
     idletaskwindow.h \
     view/exportdialog.h \
     data/exportutility.h \
-    view/dialogsettings.h
+    view/dialogsettings.h \
+    view/projectdialog.h
 FORMS += MainWindow.ui \
     taskdialog.ui \
     tasklogwindow.ui \
@@ -57,7 +58,8 @@ FORMS += MainWindow.ui \
     view/projectsummary.ui \
     idletaskwindow.ui \
     view/exportdialog.ui \
-    view/dialogsettings.ui
+    view/dialogsettings.ui \
+    view/projectdialog.ui
 SOURCES += data.cpp \
     main.cpp \
     MainWindow.cpp \
@@ -89,7 +91,8 @@ SOURCES += data.cpp \
     idletaskwindow.cpp \
     view/exportdialog.cpp \
     data/exportutility.cpp \
-    view/dialogsettings.cpp
+    view/dialogsettings.cpp \
+    view/projectdialog.cpp
 OTHER_FILES += djon.rc
 RESOURCES += djon_rs.qrc
 RC_FILE = djon.rc

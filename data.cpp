@@ -19,7 +19,7 @@ char* getLastDir() {
 void loadTasks(Project* project) {
     char* lastDir = getLastDir();
 
-    string fileName = string(lastDir) + "/" + *project->name() + ".tsk";
+    string fileName = string(lastDir) + "/" + *project->projectFileName() + ".tsk";
 
     char* taskDefs = readFile(const_cast<char*>(fileName.c_str()));
 
@@ -65,7 +65,7 @@ void loadTaskLogs(Project* project) {
     char* lastDir = getLastDir();
     std::vector<char*> files;
 
-    string fileName = string(lastDir) + "/" + *project->name() + ".log";
+    string fileName = string(lastDir) + "/" + *project->projectFileName() + ".log";
 
     char* logDefs = readFile(const_cast<char*>(fileName.c_str()));
 
@@ -99,13 +99,16 @@ std::vector<Project*>* loadProjects() {
             ss << fileName;
             char* projectDef = readFile(const_cast<char*>(ss.str().c_str()));
 
+            string projectFileName(fileName);
+            int dot = projectFileName.find_last_of('.');
+            if (dot != projectFileName.npos) {
+                projectFileName = projectFileName.substr(0, dot);
+            }
             Project* project = new Project(projectDef);
-            qDebug("Reading: %s", fileName);
-            qDebug("Readed: %s", projectDef);
+            project->setProjectFileName(new string(projectFileName));
             projects->push_back(project);
             loadTasks(project);
             loadTaskLogs(project);
-            free(fileName);
         }
     }
     return projects;
@@ -170,7 +173,7 @@ int createTask(Task* task) {
     ssTaskDef << taskDef;
     ssTaskDef << "}}\n";
 
-    string* projName = task->project()->name();
+    string* projName = task->project()->projectFileName();
     char* lastDir = getLastDir();
     stringstream fileName;
     fileName << lastDir << "/" << *projName << ".tsk";
@@ -185,7 +188,7 @@ int updateTask(Task* task) {
     ssTaskDef << taskDef;
     ssTaskDef << "}}\n";
 
-    string* projName = task->project()->name();
+    string* projName = task->project()->projectFileName();
     char* lastDir = getLastDir();
     stringstream fileName;
     fileName << lastDir << "/" << *projName << ".tsk";
@@ -206,6 +209,20 @@ int createProject(Project* project) {
     std::string projDef(project->toChar());
 
     string* projName = project->name();
+
+    char* lastDir = getLastDir();
+    stringstream fileName;
+    fileName << lastDir << "/" << *projName << ".djon";
+
+    int res = writeFile(fileName.str(), projDef, false);
+
+    return res;
+}
+
+int updateProject(Project* project) {
+    std::string projDef(project->toChar());
+
+    string* projName = project->projectFileName();
     char* lastDir = getLastDir();
     stringstream fileName;
     fileName << lastDir << "/" << *projName << ".djon";
@@ -228,7 +245,7 @@ int createTaskLog(Task* task, TaskLog* taskLog) {
     }
     ssTaskLogDef << "}}";
 
-    string* projName = task->project()->name();
+    string* projName = task->project()->projectFileName();
     char* lastDir = getLastDir();
     stringstream fileName;
     fileName << lastDir << "/" << *projName << ".log";
@@ -249,7 +266,7 @@ int updateTaskLog(Task* task, TaskLog* taskLog) {
     }
     ssTaskLogDef << "}}\n";
 
-    string* projName = task->project()->name();
+    string* projName = task->project()->projectFileName();
     char* lastDir = getLastDir();
     stringstream fileName;
     fileName << lastDir << "/" << *projName << ".log";
@@ -267,7 +284,7 @@ int updateTaskLog(Task* task, TaskLog* taskLog) {
 }
 
 int deleteTaskLog(Task* task, TaskLog* taskLog) {
-    string* projName = task->project()->name();
+    string* projName = task->project()->projectFileName();
     char* lastDir = getLastDir();
     stringstream fileName;
     fileName << lastDir << "/" << *projName << ".log";
@@ -300,7 +317,7 @@ int deleteTask(Task* task) {
     ssTaskDef << taskDef;
     ssTaskDef << "}}\n";
 
-    string* projName = task->project()->name();
+    string* projName = task->project()->projectFileName();
     char* lastDir = getLastDir();
     stringstream fileName;
     fileName << lastDir << "/" << *projName << ".tsk";
@@ -309,7 +326,6 @@ int deleteTask(Task* task) {
     int posStart = current->find(string("{{\ntask-id:") + *task->id() + ";");
     int posEnd = current->find(string("}}\n"), posStart) + 3;
 
-    qDebug("Borrando %s", task->id()->c_str());
     if (posStart <= 0) {
         qDebug("task no encontrado: %s", task->id()->c_str());
     }

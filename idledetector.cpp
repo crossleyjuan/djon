@@ -1,6 +1,7 @@
 #include "idledetector.h"
 #include "config.h"
 #include "util.h"
+#include <stdlib.h>
 
 #ifndef WINDOWS
 

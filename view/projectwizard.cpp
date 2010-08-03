@@ -45,4 +45,5 @@ void ProjectWizard::on_ProjectWizard_finished(int result)
     QString projectDescription = field("projectDescription").toString();
     _project->setName(new string(projectName.toStdString()));
     _project->setDescription(new string(projectDescription.toStdString()));
+    _project->setProjectFileName(new string(projectName.toStdString()));
 }

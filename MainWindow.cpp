@@ -19,6 +19,7 @@
 #include "idletaskwindow.h"
 #include "view/dialogsettings.h"
 #include "exportdialog.h"
+#include "view/projectdialog.h"
 #include <sstream>
 
 MainWindow::MainWindow() {
@@ -144,6 +145,7 @@ void MainWindow::setupActions() {
     trcMenu->addAction(record);
     trcMenu->addAction(stop);
     prjMenu->addAction(newProject);
+    QAction* editProject = prjMenu->addAction(QIcon(":/img/edit-project.png"), tr("Edit Project Information"));
     prjMenu->addSeparator();
     prjMenu->addAction(newTask);
     prjMenu->addAction(editTask);
@@ -160,6 +162,7 @@ void MainWindow::setupActions() {
     QAction* settings = optMenu->addAction(QIcon(":/img/settings.png"), tr("Settings"));
 
     connect(newProject, SIGNAL(triggered()), this, SLOT(createNewProject()));
+    connect(editProject, SIGNAL(triggered()), this, SLOT(editProject()));
     connect(newTask, SIGNAL(triggered()), this, SLOT(createNewTask()));
     connect(editTask, SIGNAL(triggered()), this, SLOT(editNewTask()));
     connect(deleteTask, SIGNAL(triggered()), this, SLOT(deleteTask()));
@@ -379,5 +382,13 @@ void MainWindow::restoreWindowState() {
         showMaximized();
     } else {
         show();
+    }
+}
+
+void MainWindow::editProject() {
+    ProjectDialog* dialog = new ProjectDialog(_activeProject, this);
+    int res = dialog->exec();
+    if (res == QDialog::Accepted) {
+        updateProject(dialog->project());
     }
 }

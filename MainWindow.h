@@ -60,6 +60,7 @@ public slots:
     void deleteTask();
     void completeTask();
     int createNewProject();
+    void editProject();
     void exportProjects();
     void taskContextMenuRequested(QPoint pos);
 

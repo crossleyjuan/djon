@@ -190,3 +190,11 @@ void Project::removeTask(Task* task) {
 
     deleteTask(task);
 }
+
+string* Project::projectFileName() {
+    return _projectFileName;
+}
+
+void Project::setProjectFileName(string* projectFileName) {
+    _projectFileName = projectFileName;
+}
