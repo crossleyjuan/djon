@@ -4,11 +4,13 @@
 #include <QtGui>
 #include "globaldefs.h"
 #include "util.h"
+class Project;
+#include <vector>
 
 class TaskDelegate : public QItemDelegate
 {
 public:
-    TaskDelegate(QDate* startDate, QDate* endDate, int totalDays, SCALE scale);
+    TaskDelegate(vector<Project*>* projects);
     void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
     QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 
@@ -18,6 +20,7 @@ private:
     void drawTaskBar(QPainter *p, DateTime* startDate, DateTime* endDate, int dayWidth, const QStyleOptionViewItem & option) const;
     void drawGroupBar(QPainter *p, DateTime* barStartDate, DateTime* barEndDate, int dayWidth, const QStyleOptionViewItem & option) const;
 
+    vector<Project*>* _projects;
     QDate* _startDate;
     QDate* _endDate;
     SCALE _scale;
