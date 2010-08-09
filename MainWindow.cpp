@@ -69,42 +69,9 @@ void MainWindow::createTaskLog() {
     addDockWidget(Qt::BottomDockWidgetArea, _logWindow);
 }
 
-void MainWindow::createTaskDelegate() {
-    QDate* startDate = NULL;
-    QDate* endDate = NULL;
-    SCALE scale;
-    int totalDays = 0;
-    for (std::vector<Project*>::iterator itProj = _projects->begin(); itProj != _projects->end(); itProj++) {
-        Project* proj = *itProj;
-        std::vector<Task*>* tasks = proj->tasks();
-        for (std::vector<Task*>::iterator itTask = tasks->begin(); itTask != tasks->end(); itTask++) {
-            Task* tsk = *itTask;
-            QDate* tskStartDate = new QDate(tsk->startDate()->getYear(), tsk->startDate()->getMonth(), tsk->startDate()->getDay());
-            if ((startDate == NULL) || (*startDate > *tskStartDate)) {
-                startDate = tskStartDate;
-            } else {
-                delete(tskStartDate);
-            }
-            QDate* tskEndDate = new QDate(tsk->endDate()->getYear(), tsk->endDate()->getMonth(), tsk->endDate()->getDay());
-            if ((endDate == NULL) || (*endDate < *tskEndDate)) {
-                endDate = tskEndDate;
-            } else {
-                delete(tskEndDate);
-            }
-        }
-    }
-    if (startDate != NULL) {
-        totalDays = startDate->daysTo(*endDate) + 1;
-        if ((totalDays > 1) && (totalDays < 8)) {
-            scale = DAY;
-        } else if ((totalDays > 7) && (totalDays < 16)) {
-            scale = HALF_MONTH;
-        } else if (totalDays > 15) {
-            scale = MONTH;
-        }
-        TaskDelegate* delegate = new TaskDelegate(startDate, endDate, totalDays, scale);
-        widget.taskView->setItemDelegateForColumn(2, delegate);
-    }
+TaskDelegate* MainWindow::createTaskDelegate() {
+    TaskDelegate* delegate = new TaskDelegate(_projects);
+    return delegate;
 }
 
 MainWindow::~MainWindow() {
@@ -291,10 +258,23 @@ void MainWindow::reloadProjects() {
 void MainWindow::reloadTasks() {
     _taskModel = new TaskModel(WITH_TIMES, *_projects);
     widget.taskView->setModel(_taskModel);
-    createTaskDelegate();
-  //  widget.taskView->header()->setItemDelegateForColumn(2, new TaskHeaderView(widget.taskView));
+//    TaskModel* model2 = new TaskModel(ONLY_TASKS, *_projects);
+    widget.ganttView->setModel(_taskModel);
+    widget.ganttView->setIndentation(0);
+    widget.ganttView->setHeader(new TaskHeaderView(_projects, Qt::Horizontal, widget.ganttView));
+//    widget.ganttView->setItemsExpandable(false);;
+    TaskDelegate* delegate = createTaskDelegate();
+    widget.ganttView->setItemDelegate(delegate);
+    widget.ganttView->setColumnHidden(1, true);
+
+    connect(widget.taskView, SIGNAL(collapsed(QModelIndex)), widget.ganttView, SLOT(collapse(QModelIndex)));
+    connect(widget.taskView, SIGNAL(expanded(QModelIndex)), widget.ganttView, SLOT(expand(QModelIndex)));
+    connect(widget.taskView->verticalScrollBar(), SIGNAL(valueChanged(int)), widget.ganttView->verticalScrollBar(), SLOT(setValue(int)));
+    connect(widget.ganttView->verticalScrollBar(), SIGNAL(valueChanged(int)), widget.taskView->verticalScrollBar(), SLOT(setValue(int)));
+
     widget.taskView->setAlternatingRowColors(true);
     widget.taskView->expandAll();
+    widget.ganttView->expandAll();
     widget.taskView->setSelectionBehavior(QAbstractItemView::SelectRows);
     connect(widget.taskView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(selectTaskChanged(QModelIndex,QModelIndex)));
 }

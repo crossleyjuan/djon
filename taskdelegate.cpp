@@ -2,8 +2,43 @@
 #include "TaskModel.h"
 #include "data.h"
 
-TaskDelegate::TaskDelegate(QDate* startDate, QDate* endDate, int totalDays, SCALE scale)
+TaskDelegate::TaskDelegate(vector<Project*>* projects)
 {
+    QDate* startDate = NULL;
+    QDate* endDate = NULL;
+    SCALE scale;
+    int totalDays = 0;
+    _projects = projects;
+
+    for (std::vector<Project*>::iterator itProj = _projects->begin(); itProj != _projects->end(); itProj++) {
+        Project* proj = *itProj;
+        std::vector<Task*>* tasks = proj->tasks();
+        for (std::vector<Task*>::iterator itTask = tasks->begin(); itTask != tasks->end(); itTask++) {
+            Task* tsk = *itTask;
+            QDate* tskStartDate = new QDate(tsk->startDate()->getYear(), tsk->startDate()->getMonth(), tsk->startDate()->getDay());
+            if ((startDate == NULL) || (*startDate > *tskStartDate)) {
+                startDate = tskStartDate;
+            } else {
+                delete(tskStartDate);
+            }
+            QDate* tskEndDate = new QDate(tsk->endDate()->getYear(), tsk->endDate()->getMonth(), tsk->endDate()->getDay());
+            if ((endDate == NULL) || (*endDate < *tskEndDate)) {
+                endDate = tskEndDate;
+            } else {
+                delete(tskEndDate);
+            }
+        }
+    }
+    if (startDate != NULL) {
+        totalDays = startDate->daysTo(*endDate) + 1;
+        if ((totalDays > 1) && (totalDays < 8)) {
+            scale = DAY;
+        } else if ((totalDays > 7) && (totalDays < 16)) {
+            scale = HALF_MONTH;
+        } else if (totalDays > 15) {
+            scale = MONTH;
+        }
+    }
     _startDate = startDate;
     _endDate = endDate;
     _totalDays = totalDays;
@@ -19,7 +54,7 @@ void TaskDelegate::paint ( QPainter * painter, const QStyleOptionViewItem & opti
 }
 
 QSize TaskDelegate::sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const {
-    return QSize(10, 17);
+    return QSize(500, 15);
 }
 
 void TaskDelegate::drawBackground(QPainter* p, const QStyleOptionViewItem & option, const QModelIndex & index ) const {
@@ -102,6 +137,22 @@ void TaskDelegate::drawGroupBar(QPainter *p, DateTime* barStartDate, DateTime* b
     int y2 = option.rect.height() - 5;
 
     p->drawRect(x1 + option.rect.left(), y1 + option.rect.top(), (x2 - x1), (y2 - y1));
+    QPoint triang1[3];
+    triang1[0].setX(x1 + option.rect.left());
+    triang1[0].setY(y1 + option.rect.top());
+    triang1[1].setX(x1 + option.rect.left() + 5);
+    triang1[1].setY(y1 + option.rect.top());
+    triang1[2].setX(x1 + option.rect.left());
+    triang1[2].setY(y1 + option.rect.top() + 10);
+    p->drawPolygon(triang1, 3);
+    QPoint triang2[3];
+    triang2[0].setX(x2);
+    triang2[0].setY(y1 + option.rect.top());
+    triang2[1].setX(x2 - 5);
+    triang2[1].setY(y1 + option.rect.top());
+    triang2[2].setX(x2);
+    triang2[2].setY(y1 + option.rect.top() + 10);
+    p->drawPolygon(triang2, 3);
 }
 
 void TaskDelegate::drawTasks(QPainter* p, const QStyleOptionViewItem & option, const QModelIndex & index ) const {

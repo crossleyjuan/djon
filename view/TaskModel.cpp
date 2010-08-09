@@ -34,7 +34,7 @@ int TaskModel::columnCount(const QModelIndex &parent) const
         case ONLY_TASKS:
             return 1;
         case WITH_TIMES:
-            return 3;
+            return 2;
     default:
             return 0;
     }
