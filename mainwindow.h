@@ -25,7 +25,7 @@ public:
     MainWindow();
     virtual ~MainWindow();
 private:
-    void createTaskDelegate();
+    TaskDelegate* createTaskDelegate();
     void createTaskLog();
     void createCurrentTimeWindow();
     void createTray();

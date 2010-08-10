@@ -5,9 +5,9 @@
   <property name="geometry">
    <rect>
     <x>0</x>
-    <y>176</y>
-    <width>274</width>
-    <height>248</height>
+    <y>0</y>
+    <width>396</width>
+    <height>309</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -24,21 +24,46 @@
     <normaloff>:/img/djon.png</normaloff>:/img/djon.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QTreeView" name="taskView">
-      <property name="alternatingRowColors">
-       <bool>true</bool>
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
       </property>
-      <property name="autoExpandDelay">
-       <number>-1</number>
-      </property>
-      <property name="indentation">
-       <number>10</number>
-      </property>
-      <property name="animated">
-       <bool>true</bool>
-      </property>
+      <widget class="QTreeView" name="taskView">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>1</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="alternatingRowColors">
+        <bool>true</bool>
+       </property>
+       <property name="autoExpandDelay">
+        <number>-1</number>
+       </property>
+       <property name="indentation">
+        <number>10</number>
+       </property>
+       <property name="animated">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QTreeView" name="ganttView">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>2</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="verticalScrollBarPolicy">
+        <enum>Qt::ScrollBarAsNeeded</enum>
+       </property>
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAsNeeded</enum>
+       </property>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -48,8 +73,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>274</width>
-     <height>19</height>
+     <width>396</width>
+     <height>23</height>
     </rect>
    </property>
   </widget>
