@@ -20,6 +20,7 @@
 #include "view/dialogsettings.h"
 #include "exportdialog.h"
 #include "view/projectdialog.h"
+#include "import/import.h"
 #include <sstream>
 
 MainWindow::MainWindow() {
@@ -43,7 +44,7 @@ MainWindow::MainWindow() {
         }
     }
     reloadProjects();
-    createTaskLog();
+    createTaskLogWindow();
     createCurrentTimeWindow();
 
     setupActions();
@@ -62,7 +63,7 @@ MainWindow::MainWindow() {
     createTray();
 }
 
-void MainWindow::createTaskLog() {
+void MainWindow::createTaskLogWindow() {
     _logWindow = new TaskLogWindow();
     _logWindow->setAllowedAreas(Qt::BottomDockWidgetArea);
 
@@ -113,6 +114,7 @@ void MainWindow::setupActions() {
     trcMenu->addAction(stop);
     prjMenu->addAction(newProject);
     QAction* editProject = prjMenu->addAction(QIcon(":/img/edit-project.png"), tr("Edit Project Information"));
+
     prjMenu->addSeparator();
     prjMenu->addAction(newTask);
     prjMenu->addAction(editTask);
@@ -122,6 +124,7 @@ void MainWindow::setupActions() {
     _taskPopUpMenu->addAction(deleteTask);
     //    prjMenu->addAction(completeTask);
     prjMenu->addSeparator();
+    QAction* import = prjMenu->addAction(QIcon(":/img/import-projects.png"), tr("Import Projects"));
     QAction* expAction = prjMenu->addAction(QIcon(":/img/exportar.png"), tr("Export project information"));
     prjMenu->addSeparator();
     QAction* quit = prjMenu->addAction(QIcon(":/img/quit.png"), tr("Quit"));
@@ -130,6 +133,7 @@ void MainWindow::setupActions() {
 
     connect(newProject, SIGNAL(triggered()), this, SLOT(createNewProject()));
     connect(editProject, SIGNAL(triggered()), this, SLOT(editProject()));
+    connect(import, SIGNAL(triggered()), this, SLOT(importProjects()));
     connect(newTask, SIGNAL(triggered()), this, SLOT(createNewTask()));
     connect(editTask, SIGNAL(triggered()), this, SLOT(editNewTask()));
     connect(deleteTask, SIGNAL(triggered()), this, SLOT(deleteTask()));
@@ -370,5 +374,31 @@ void MainWindow::editProject() {
     int res = dialog->exec();
     if (res == QDialog::Accepted) {
         updateProject(dialog->project());
+    }
+}
+
+void MainWindow::importProjects() {
+    QString selectedFileName = QFileDialog::getOpenFileName(this, tr("Import Projects"), tr(""), tr("XML Files (*.xml)"));
+    if (selectedFileName.size() > 0){
+        Template* tem = readTemplates()->at(0);
+        string* status = tem->statusList()->at(0);
+        vector<Project*>* imported = import(tem, status, new string(selectedFileName.toStdString()), ALLNETIC_FILE);
+
+        for (vector<Project*>::iterator iter = imported->begin(); iter != imported->end(); iter++) {
+            Project* proj = *iter;
+            _projects->push_back(proj);
+            createProject(proj);
+            vector<Task*>* tasks = proj->tasks();
+            for (vector<Task*>::iterator iterTask = tasks->begin(); iterTask != tasks->end(); iterTask++ ) {
+                Task* task = *iterTask;
+                createTask(task);
+                vector<TaskLog*>* logs = task->logs();
+                for (vector<TaskLog*>::iterator iterTaskLog = logs->begin(); iterTaskLog != logs->end(); iterTaskLog++) {
+                    TaskLog* log = *iterTaskLog;
+                    createTaskLog(task, log);
+                }
+            }
+        }
+        reloadProjects();
     }
 }

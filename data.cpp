@@ -216,6 +216,8 @@ int createProject(Project* project) {
 
     int res = writeFile(fileName.str(), projDef, false);
 
+    project->setProjectFileName(projName);
+
     return res;
 }
 

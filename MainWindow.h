@@ -26,7 +26,7 @@ public:
     virtual ~MainWindow();
 private:
     TaskDelegate* createTaskDelegate();
-    void createTaskLog();
+    void createTaskLogWindow();
     void createCurrentTimeWindow();
     void createTray();
     void setupActions();
@@ -62,6 +62,7 @@ public slots:
     int createNewProject();
     void editProject();
     void exportProjects();
+    void importProjects();
     void taskContextMenuRequested(QPoint pos);
 
     void setActiveTask(Task* task);

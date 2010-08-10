@@ -12,6 +12,7 @@ INCLUDEPATH += . \
     util \
     view
 LIBS += -lXss
+QT += xml
 
 # LIBS += -lRpcrt4
 # Input
@@ -48,7 +49,9 @@ HEADERS += config.h \
     view/exportdialog.h \
     data/exportutility.h \
     view/dialogsettings.h \
-    view/projectdialog.h
+    view/projectdialog.h \
+    import/allneticimporthandler.h \
+    import/import.h
 FORMS += MainWindow.ui \
     taskdialog.ui \
     tasklogwindow.ui \
@@ -92,7 +95,9 @@ SOURCES += data.cpp \
     view/exportdialog.cpp \
     data/exportutility.cpp \
     view/dialogsettings.cpp \
-    view/projectdialog.cpp
+    view/projectdialog.cpp \
+    import/allneticimporthandler.cpp \
+    import/import.cpp
 OTHER_FILES += djon.rc
 RESOURCES += djon_rs.qrc
 RC_FILE = djon.rc
