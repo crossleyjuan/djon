@@ -141,7 +141,11 @@ DTime* Project::totalTime() {
 char* Project::toChar() {
     std::stringstream ss;
     ss << "project-name:" << *_name  << ";\n";
-    ss << "project-description:" << *_description << ";\n";
+    if (_description != NULL) {
+        ss << "project-description:" << *_description << ";\n";
+    } else {
+        ss << "project-description:;\n";
+    }
 
     string ssOut =  ss.str();
     char* res = (char*)malloc(ssOut.size() + 1);

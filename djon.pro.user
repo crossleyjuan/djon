@@ -58,6 +58,7 @@
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Qt in PATH Debug</value>
    <value key="QtVersionId" type="int">3</value>
    <value key="ToolChain" type="int">0</value>
+   <value key="addQDumper" type=""></value>
    <value key="buildConfiguration" type="int">2</value>
   </valuemap>
  </data>
@@ -67,6 +68,7 @@
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Qt in PATH Release</value>
    <value key="QtVersionId" type="int">3</value>
    <value key="ToolChain" type="int">0</value>
+   <value key="addQDumper" type=""></value>
    <value key="buildConfiguration" type="int">0</value>
   </valuemap>
  </data>
@@ -76,6 +78,7 @@
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">debug Debug</value>
    <value key="QtVersionId" type="int">3</value>
    <value key="ToolChain" type="int">0</value>
+   <value key="addQDumper" type=""></value>
    <value key="buildConfiguration" type="int">2</value>
   </valuemap>
  </data>
@@ -83,12 +86,95 @@
   <variable>buildconfiguration-Qt in PATH Debug-buildstep0</variable>
   <valuemap type="QVariantMap">
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Qt in PATH Debug</value>
+   <valuelist key="abstractProcess.Environment" type="QVariantList">
+    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-ZV32Ov6zNf,guid=41dc4f3f5bd169f8b5465afc4c60b8e5</value>
+    <value type="QString">DEFAULTS_PATH=/usr/share/gconf/gnome.default.path</value>
+    <value type="QString">DESKTOP_SESSION=gnome</value>
+    <value type="QString">DISPLAY=:0.0</value>
+    <value type="QString">GDMSESSION=gnome</value>
+    <value type="QString">GDM_KEYBOARD_LAYOUT=latam</value>
+    <value type="QString">GDM_LANG=en_US.utf8</value>
+    <value type="QString">GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
+    <value type="QString">GNOME_KEYRING_CONTROL=/tmp/keyring-vVwmp9</value>
+    <value type="QString">GPG_AGENT_INFO=/tmp/gpg-6G9ZAQ/S.gpg-agent:1616:1</value>
+    <value type="QString">GTK_MODULES=canberra-gtk-module</value>
+    <value type="QString">HOME=/home/cross</value>
+    <value type="QString">LANG=en_US.utf8</value>
+    <value type="QString">LD_LIBRARY_PATH=/usr/lib/qtcreator:</value>
+    <value type="QString">LOGNAME=cross</value>
+    <value type="QString">MANDATORY_PATH=/usr/share/gconf/gnome.mandatory.path</value>
+    <value type="QString">ORBIT_SOCKETDIR=/tmp/orbit-cross</value>
+    <value type="QString">PATH=/usr/bin:/home/cross/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games</value>
+    <value type="QString">PWD=/home/cross</value>
+    <value type="QString">QTDIR=/usr/share/qt4</value>
+    <value type="QString">SESSION_MANAGER=local/cross-ubuntu:@/tmp/.ICE-unix/1537,unix/cross-ubuntu:/tmp/.ICE-unix/1537</value>
+    <value type="QString">SHELL=/bin/bash</value>
+    <value type="QString">SPEECHD_PORT=7560</value>
+    <value type="QString">SSH_AGENT_PID=1615</value>
+    <value type="QString">SSH_AUTH_SOCK=/tmp/keyring-vVwmp9/ssh</value>
+    <value type="QString">USER=cross</value>
+    <value type="QString">USERNAME=cross</value>
+    <value type="QString">XAUTHORITY=/var/run/gdm/auth-for-cross-qgMF78/database</value>
+    <value type="QString">XDG_CONFIG_DIRS=/etc/xdg/xdg-gnome:/etc/xdg</value>
+    <value type="QString">XDG_DATA_DIRS=/usr/share/gnome:/usr/local/share/:/usr/share/</value>
+    <value type="QString">XDG_SESSION_COOKIE=74eb09877d4689c43d25ede949f6f250-1281407204.812772-988904190</value>
+   </valuelist>
+   <valuelist key="abstractProcess.arguments" type="QVariantList">
+    <value type="QString">/home/cross/workspace/djon/djon/djon.pro</value>
+    <value type="QString">-spec</value>
+    <value type="QString">linux-g++</value>
+    <value type="QString">-r</value>
+    <value type="QString">CONFIG+=debug</value>
+   </valuelist>
+   <value key="abstractProcess.command" type="QString">/usr/bin/qmake-qt4</value>
+   <value key="abstractProcess.enabled" type="bool">false</value>
+   <value key="abstractProcess.workingDirectory" type="QString">/home/cross/workspace/djon/djon</value>
   </valuemap>
  </data>
  <data>
   <variable>buildconfiguration-Qt in PATH Debug-buildstep1</variable>
   <valuemap type="QVariantMap">
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Qt in PATH Debug</value>
+   <valuelist key="abstractProcess.Environment" type="QVariantList">
+    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-ZV32Ov6zNf,guid=41dc4f3f5bd169f8b5465afc4c60b8e5</value>
+    <value type="QString">DEFAULTS_PATH=/usr/share/gconf/gnome.default.path</value>
+    <value type="QString">DESKTOP_SESSION=gnome</value>
+    <value type="QString">DISPLAY=:0.0</value>
+    <value type="QString">GDMSESSION=gnome</value>
+    <value type="QString">GDM_KEYBOARD_LAYOUT=latam</value>
+    <value type="QString">GDM_LANG=en_US.utf8</value>
+    <value type="QString">GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
+    <value type="QString">GNOME_KEYRING_CONTROL=/tmp/keyring-vVwmp9</value>
+    <value type="QString">GPG_AGENT_INFO=/tmp/gpg-6G9ZAQ/S.gpg-agent:1616:1</value>
+    <value type="QString">GTK_MODULES=canberra-gtk-module</value>
+    <value type="QString">HOME=/home/cross</value>
+    <value type="QString">LANG=en_US.utf8</value>
+    <value type="QString">LD_LIBRARY_PATH=/usr/lib/qtcreator:</value>
+    <value type="QString">LOGNAME=cross</value>
+    <value type="QString">MANDATORY_PATH=/usr/share/gconf/gnome.mandatory.path</value>
+    <value type="QString">ORBIT_SOCKETDIR=/tmp/orbit-cross</value>
+    <value type="QString">PATH=/usr/bin:/home/cross/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games</value>
+    <value type="QString">PWD=/home/cross</value>
+    <value type="QString">QTDIR=/usr/share/qt4</value>
+    <value type="QString">SESSION_MANAGER=local/cross-ubuntu:@/tmp/.ICE-unix/1537,unix/cross-ubuntu:/tmp/.ICE-unix/1537</value>
+    <value type="QString">SHELL=/bin/bash</value>
+    <value type="QString">SPEECHD_PORT=7560</value>
+    <value type="QString">SSH_AGENT_PID=1615</value>
+    <value type="QString">SSH_AUTH_SOCK=/tmp/keyring-vVwmp9/ssh</value>
+    <value type="QString">USER=cross</value>
+    <value type="QString">USERNAME=cross</value>
+    <value type="QString">XAUTHORITY=/var/run/gdm/auth-for-cross-qgMF78/database</value>
+    <value type="QString">XDG_CONFIG_DIRS=/etc/xdg/xdg-gnome:/etc/xdg</value>
+    <value type="QString">XDG_DATA_DIRS=/usr/share/gnome:/usr/local/share/:/usr/share/</value>
+    <value type="QString">XDG_SESSION_COOKIE=74eb09877d4689c43d25ede949f6f250-1281407204.812772-988904190</value>
+   </valuelist>
+   <value key="abstractProcess.IgnoreReturnValue" type="bool">false</value>
+   <valuelist key="abstractProcess.arguments" type="QVariantList">
+    <value type="QString">-w</value>
+   </valuelist>
+   <value key="abstractProcess.command" type="QString">/usr/bin/make</value>
+   <value key="abstractProcess.enabled" type="bool">true</value>
+   <value key="abstractProcess.workingDirectory" type="QString">/home/cross/workspace/djon/djon</value>
   </valuemap>
  </data>
  <data>
