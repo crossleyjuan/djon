@@ -60,12 +60,12 @@ void ExportDialog::on_pushButton_clicked()
 void ExportDialog::done(int res) {
     bool valid = true;
 
-    if (res == 0) {
+    if (res == 1) {
         if (ui->fileName->text().length() == 0) {
             QMessageBox box(this);
             box.setText(tr("You should select a destination file name"));
             box.setWindowTitle(tr("d-jon export"));
-            box.show();
+            box.exec();
             valid = false;
         }
     }

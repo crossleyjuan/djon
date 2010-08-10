@@ -18,6 +18,7 @@ class TaskLogWindow;
 class TimeTracker;
 class CurrentTime;
 class TaskModel;
+class TaskHeaderView;
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -26,7 +27,7 @@ public:
     virtual ~MainWindow();
 private:
     TaskDelegate* createTaskDelegate();
-    void createTaskLog();
+    void createTaskLogWindow();
     void createCurrentTimeWindow();
     void createTray();
     void setupActions();
@@ -38,6 +39,7 @@ private:
     std::vector<Project*>* _projects;
     IdleDetector* _idleDetector;
     TimeTracker* _timeTracker;
+    TaskHeaderView* _taskHeader;
     TaskLog* _activeLog;
     Project* _activeProject;
     Task* _activeTask;
@@ -62,6 +64,7 @@ public slots:
     int createNewProject();
     void editProject();
     void exportProjects();
+    void importProjects();
     void taskContextMenuRequested(QPoint pos);
 
     void setActiveTask(Task* task);
