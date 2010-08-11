@@ -51,7 +51,8 @@ HEADERS += config.h \
     view/dialogsettings.h \
     view/projectdialog.h \
     import/allneticimporthandler.h \
-    import/import.h
+    import/import.h \
+    import/xmlerrorhanlder.h
 FORMS += MainWindow.ui \
     taskdialog.ui \
     tasklogwindow.ui \
@@ -97,7 +98,8 @@ SOURCES += data.cpp \
     view/dialogsettings.cpp \
     view/projectdialog.cpp \
     import/allneticimporthandler.cpp \
-    import/import.cpp
+    import/import.cpp \
+    import/xmlerrorhanlder.cpp
 OTHER_FILES += djon.rc
 RESOURCES += djon_rs.qrc
 RC_FILE = djon.rc
