@@ -28,6 +28,7 @@ MainWindow::MainWindow() {
     _activeProject = NULL;
     _activeTask = NULL;
     _activeLog = NULL;
+    _taskHeader = NULL;
 
     _projects = loadProjects();
     if (_projects->size() == 0) {
@@ -265,7 +266,12 @@ void MainWindow::reloadTasks() {
 //    TaskModel* model2 = new TaskModel(ONLY_TASKS, *_projects);
     widget.ganttView->setModel(_taskModel);
     widget.ganttView->setIndentation(0);
-    widget.ganttView->setHeader(new TaskHeaderView(_projects, Qt::Horizontal, widget.ganttView));
+    if (_taskHeader == NULL) {
+        _taskHeader = new TaskHeaderView(_projects, Qt::Horizontal, widget.ganttView);
+    } else {
+        _taskHeader->refresh();
+    }
+    widget.ganttView->setHeader(_taskHeader);
 //    widget.ganttView->setItemsExpandable(false);;
     TaskDelegate* delegate = createTaskDelegate();
     widget.ganttView->setItemDelegate(delegate);
@@ -384,21 +390,23 @@ void MainWindow::importProjects() {
         string* status = tem->statusList()->at(0);
         vector<Project*>* imported = import(tem, status, new string(selectedFileName.toStdString()), ALLNETIC_FILE);
 
-        for (vector<Project*>::iterator iter = imported->begin(); iter != imported->end(); iter++) {
-            Project* proj = *iter;
-            _projects->push_back(proj);
-            createProject(proj);
-            vector<Task*>* tasks = proj->tasks();
-            for (vector<Task*>::iterator iterTask = tasks->begin(); iterTask != tasks->end(); iterTask++ ) {
-                Task* task = *iterTask;
-                createTask(task);
-                vector<TaskLog*>* logs = task->logs();
-                for (vector<TaskLog*>::iterator iterTaskLog = logs->begin(); iterTaskLog != logs->end(); iterTaskLog++) {
-                    TaskLog* log = *iterTaskLog;
-                    createTaskLog(task, log);
+        if (imported) {
+            for (vector<Project*>::iterator iter = imported->begin(); iter != imported->end(); iter++) {
+                Project* proj = *iter;
+                _projects->push_back(proj);
+                createProject(proj);
+                vector<Task*>* tasks = proj->tasks();
+                for (vector<Task*>::iterator iterTask = tasks->begin(); iterTask != tasks->end(); iterTask++ ) {
+                    Task* task = *iterTask;
+                    createTask(task);
+                    vector<TaskLog*>* logs = task->logs();
+                    for (vector<TaskLog*>::iterator iterTaskLog = logs->begin(); iterTaskLog != logs->end(); iterTaskLog++) {
+                        TaskLog* log = *iterTaskLog;
+                        createTaskLog(task, log);
+                    }
                 }
             }
+            reloadProjects();
         }
-        reloadProjects();
     }
 }

@@ -7,40 +7,7 @@ TaskHeaderView::TaskHeaderView(std::vector<Project*>* projects, Qt::Orientation 
 //    setDefaultSectionSize(200);
     _projects = projects;
 //    this->setResizeMode(0, QHeaderView::ResizeToContents);
-    DateTime* startDate = NULL;
-    DateTime* endDate = NULL;
-    int totalDays = 0;
-
-    for (std::vector<Project*>::iterator itProj = _projects->begin(); itProj != _projects->end(); itProj++) {
-        Project* proj = *itProj;
-        std::vector<Task*>* tasks = proj->tasks();
-        for (std::vector<Task*>::iterator itTask = tasks->begin(); itTask != tasks->end(); itTask++) {
-            Task* tsk = *itTask;
-            DateTime* tskStartDate = tsk->startDate();
-            if ((startDate == NULL) || (*startDate > *tskStartDate)) {
-                startDate = tskStartDate;
-            }
-            DateTime* tskEndDate = tsk->endDate();
-            if ((endDate == NULL) || (*endDate < *tskEndDate)) {
-                endDate = tskEndDate;
-            }
-        }
-    }
-//    if (startDate != NULL) {
-//        totalDays = startDate->daysTo(*endDate) + 1;
-//        if ((totalDays > 1) && (totalDays < 8)) {
-//            scale = DAY;
-//        } else if ((totalDays > 7) && (totalDays < 16)) {
-//            scale = HALF_MONTH;
-//        } else if (totalDays > 15) {
-//            scale = MONTH;
-//        }
-//    }
-    _startDate = startDate;
-    _endDate = endDate;
-    int days = startDate->toQDateTime()->daysTo(*endDate->toQDateTime());
-    setDefaultSectionSize( (days+2) * 45);
-
+    refresh();
 }
 
 void TaskHeaderView::paintSection ( QPainter * painter, const QRect & rect, int logicalIndex ) const {
@@ -125,4 +92,39 @@ void TaskHeaderView::paintSection ( QPainter * painter, const QRect & rect, int 
 //    p->restore();
 }
 
+void TaskHeaderView::refresh() {
+    DateTime* startDate = NULL;
+    DateTime* endDate = NULL;
+    int totalDays = 0;
 
+    for (std::vector<Project*>::iterator itProj = _projects->begin(); itProj != _projects->end(); itProj++) {
+        Project* proj = *itProj;
+        std::vector<Task*>* tasks = proj->tasks();
+        for (std::vector<Task*>::iterator itTask = tasks->begin(); itTask != tasks->end(); itTask++) {
+            Task* tsk = *itTask;
+            DateTime* tskStartDate = tsk->startDate();
+            if ((startDate == NULL) || (*startDate > *tskStartDate)) {
+                startDate = tskStartDate;
+            }
+            DateTime* tskEndDate = tsk->endDate();
+            if ((endDate == NULL) || (*endDate < *tskEndDate)) {
+                endDate = tskEndDate;
+            }
+        }
+    }
+//    if (startDate != NULL) {
+//        totalDays = startDate->daysTo(*endDate) + 1;
+//        if ((totalDays > 1) && (totalDays < 8)) {
+//            scale = DAY;
+//        } else if ((totalDays > 7) && (totalDays < 16)) {
+//            scale = HALF_MONTH;
+//        } else if (totalDays > 15) {
+//            scale = MONTH;
+//        }
+//    }
+    _startDate = startDate;
+    _endDate = endDate;
+    int days = startDate->toQDateTime()->daysTo(*endDate->toQDateTime());
+    setDefaultSectionSize( (days+2) * 45);
+
+}

@@ -13,6 +13,7 @@ public:
     explicit TaskHeaderView(std::vector<Project*>* projects, Qt::Orientation orientation, QWidget *parent = 0);
     int sectionSizeHint(int logicalIndex) const;
     int sectionSize(int logicalIndex) const;
+    void refresh();
 //    int length() const;
 //    QSize sizeHint() const;
 //    int minimumSectionSize() const;

@@ -13,6 +13,7 @@ AllneticImportHandler::AllneticImportHandler(Template* defaultTemplate, string* 
 }
 
 bool AllneticImportHandler::startDocument() {
+    return true;
 }
 
 Project* AllneticImportHandler::parseProject(QXmlAttributes attrs) {
@@ -70,10 +71,11 @@ bool AllneticImportHandler::startElement(const QString& namespaceURI, const QStr
         TaskLog* log = parseTaskLog(atts);
         _currentTask->addLog(log);
     }
+    return true;
 }
 
 bool AllneticImportHandler::endElement(const QString& namespaceURI, const QString& localName, const QString& qName) {
-
+    return true;
 }
 
 vector<Project*>* AllneticImportHandler::projects() {

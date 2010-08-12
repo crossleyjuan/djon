@@ -65,6 +65,7 @@ Section "djon (required)"
   File "mingwm10.dll"
   File "QtCored4.dll"
   File "QtGuid4.dll"
+  File "QtXmld4.dll"
   CreateDirectory $PROFILE\.djon
   CreateDirectory $PROFILE\.djon\templates
   CreateDirectory $PROFILE\.djon\Projects
@@ -119,7 +120,8 @@ Section "Uninstall"
   Delete $INSTDIR\mingwm10.dll
   Delete $INSTDIR\QtCored4.dll
   Delete $INSTDIR\QtGuid4.dll
-  
+  Delete $INSTDIR\QtXmld4.dll
+
   ; Remove shortcuts, if any
   Delete "$SMPROGRAMS\djon\*.*"
 
