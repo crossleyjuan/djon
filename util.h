@@ -56,7 +56,7 @@ bool makedir(const char* path);
 std::string* getHomeDir();
 hashmap* parseTextFormat(std::string text);
 
-char* readConfValue(const string& name, char* def);
+const char* readConfValue(const string& name, const char* def);
 int writeConfValue(const string& name, const string& value);
 
 #endif	/* _UTIL_H */

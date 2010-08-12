@@ -95,7 +95,6 @@ void TaskHeaderView::paintSection ( QPainter * painter, const QRect & rect, int 
 void TaskHeaderView::refresh() {
     DateTime* startDate = NULL;
     DateTime* endDate = NULL;
-    int totalDays = 0;
 
     for (std::vector<Project*>::iterator itProj = _projects->begin(); itProj != _projects->end(); itProj++) {
         Project* proj = *itProj;

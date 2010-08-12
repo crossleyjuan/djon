@@ -1,10 +1,11 @@
-#include "xmlerrorhanlder.h"
+#include "xmlerrorhandler.h"
 #include <QObject>
 #include <sstream>
 #include <string>
 
 XMLErrorHandler::XMLErrorHandler()
 {
+    _exception = NULL;
 }
 
 bool XMLErrorHandler::warning(const QXmlParseException& exception) {

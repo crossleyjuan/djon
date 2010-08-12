@@ -1,26 +1,42 @@
 #include "errorHandle.h"
+#include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <QMessageBox>
+#include <sstream>
+#include <string>
 
-const char* lastError;
-int lastErrorCode;
+char* _lastError;
+int _lastErrorCode;
 
-void setLastError(int errorCode, const char* errorDescription) {
-    lastErrorCode = errorCode;
-    lastError = errorDescription;
+void setLastError(int errorCode, const char* errorDescription, ...) {
+    va_list varlist;
+    va_start(varlist, errorDescription);
+
+    int len = strlen(errorDescription) * 2;
+    _lastError = (char*)malloc(len);
+    memset(_lastError, 0, len);
+    vsprintf(_lastError, errorDescription, varlist);
+    va_end(varlist);
+
+    _lastErrorCode = errorCode;
 }
 
 bool errorOcurred() {
-    return (lastError > 0);
+    return (_lastError > 0);
 }
 
-const char* getLastErrorDescription() {
-    return lastError;
+const char* lastErrorDescription() {
+    return _lastError;
 }
 
-int getLastErrorCode() {
-    return lastErrorCode;
+int lastErrorCode() {
+    return _lastErrorCode;
 }
 
 void clearError() {
-    lastError = 0;
-    lastErrorCode = 0;
+    _lastError = 0;
+    _lastErrorCode = 0;
 }
+

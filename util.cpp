@@ -96,12 +96,10 @@ bool endsWith(const char* text, const char* end) {
     if (strlen(end) > strlen(text)) {
         return false;
     }
-    int pos = 0;
-    while (pos < strlen(end)) {
+    for (unsigned int pos = 0; strlen(end) > pos; pos++) {
         if (end[strlen(end) - pos] != text[strlen(text) - pos]) {
             return false;
         }
-        pos++;
     }
     return true;
 }
@@ -127,7 +125,7 @@ std::vector<string*>* split(string str, string token) {
 
 long countChar(const char* s, const char c) {
     long num = 0;
-    for (int x = 0; x < strlen(s); x++) {
+    for (unsigned int x = 0; x < strlen(s); x++) {
         if (s[x] == c) {
             num++;
         }
@@ -160,7 +158,6 @@ std::string* uuid() {
     memset(ch, 0, 36);
     uuid_unparse(t, ch);
     string* res = new string(ch);
-    qDebug(ch);
     return res;
 #else
     QUuid uuid = QUuid::createUuid();
@@ -198,7 +195,7 @@ std::string* getHomeDir() {
     return home;
 }
 
-char* readConfValue(const string& name, char* def) {
+const char* readConfValue(const string& name, const char* def) {
     std::string* homeDir = getHomeDir();
     std::string confFileName = *homeDir + "/.djon/djon.conf";
     char* conf = readFile(const_cast<char*> (confFileName.c_str()));
@@ -255,10 +252,7 @@ void readElement(string& readed, stringstream &str) {
 
 hashmap* parseTextFormat(std::string text) {
     hashmap* mapValue = new hashmap();
-    string name;
-    string value;
     stringstream in(text);
-    char* test = NULL;
     while (in.good()) {
         string element;
         readElement(element, in);

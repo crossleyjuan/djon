@@ -125,7 +125,6 @@ void TaskModel::setupModelData(TaskItem *parent)
     QHash<QString, TaskItem*> hash;
 
     for (vector<Project*>::iterator iter = _projects.begin(); iter != _projects.end(); iter++) {
-        int position = 0;
         Project* project = *iter;
         vector<Task*>* tasks = project->tasks();
 

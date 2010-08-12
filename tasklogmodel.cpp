@@ -49,7 +49,7 @@ QVariant TaskLogModel::data(const QModelIndex &index, int role) const {
 }
 
 bool TaskLogModel::setData(const QModelIndex &index, const QVariant &value, int role) {
-    qDebug("setdata");
+    qDebug("TaskLogModel::setData");
     TaskLog* log = (TaskLog*)index.internalPointer();
 
     bool newTaskLog = false;
@@ -79,6 +79,7 @@ bool TaskLogModel::setData(const QModelIndex &index, const QVariant &value, int 
     } else {
         updateTaskLog(_task, log);
     }
+    return true;
 }
 
 QModelIndex TaskLogModel::index(int row, int column, const QModelIndex &parent) const {
@@ -86,7 +87,7 @@ QModelIndex TaskLogModel::index(int row, int column, const QModelIndex &parent) 
         return QModelIndex();
 
     vector<TaskLog*>* logs = _task->logs();
-    if (row < logs->size()) {
+    if (row < (int)logs->size()) {
         TaskLog* log = logs->at(row);
         return createIndex(row, column, log);
     } else {

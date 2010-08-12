@@ -10,6 +10,8 @@ AllneticImportHandler::AllneticImportHandler(Template* defaultTemplate, string* 
     _defaultTemplate = defaultTemplate;
     _defaultStatus = defaultStatus;
     _projects = new vector<Project*>();
+    _currentProject = NULL;
+    _currentTask = NULL;
 }
 
 bool AllneticImportHandler::startDocument() {

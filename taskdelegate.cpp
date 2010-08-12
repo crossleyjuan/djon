@@ -6,7 +6,7 @@ TaskDelegate::TaskDelegate(vector<Project*>* projects)
 {
     QDate* startDate = NULL;
     QDate* endDate = NULL;
-    SCALE scale;
+    SCALE scale = DAY;
     int totalDays = 0;
     _projects = projects;
 
@@ -69,13 +69,6 @@ void TaskDelegate::drawBackground(QPainter* p, const QStyleOptionViewItem & opti
     int cols = (option.rect.width() / (textSize + margin));
     int columnSize = textSize + margin;
 
-    QDate startDate;
-    int days = 0;
-    if (_startDate != NULL) {
-        startDate = QDate(_startDate->year(), _startDate->month(), _startDate->day());
-        days = startDate.daysTo(*_endDate) / cols;
-    }
-
     p->setFont(QFont("Arial", 9));
     for (int x = 0; x < (cols + 1); x++) {
         QColor barcolor;
@@ -88,7 +81,6 @@ void TaskDelegate::drawBackground(QPainter* p, const QStyleOptionViewItem & opti
         p->setPen(QPen(barcolor));
         int left = (x*columnSize) + option.rect.left();
         int top = 0 + option.rect.top();
-        int width = columnSize;
         int heigth = option.rect.height();
         p->drawRect(left, top, columnSize, heigth);
 
@@ -159,7 +151,6 @@ void TaskDelegate::drawTasks(QPainter* p, const QStyleOptionViewItem & option, c
     p->save();
     int margin = 15;
     int textSize = 30;
-    int cols = (option.rect.width() / (textSize + margin));
     int dayWidth = textSize + margin;
 //    int dayWidth = option.rect.width() / _totalDays;
 

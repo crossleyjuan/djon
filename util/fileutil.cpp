@@ -53,13 +53,13 @@ int writeFile(const std::string& fileName, const std::string& text, bool append)
     return 0;
 }
 
-int getdir (char* dir, vector<char*> &files, char* extension)
+int getdir (const char* dir, vector<char*> &files, const char* extension)
 {
     DIR *dp;
     struct dirent *dirp;
     if((dp  = opendir(dir)) == NULL) {
-        cout << "Error(" << errno << ") opening " << dir << endl;
-        return errno;
+        setLastError(1, "Error opening the dir: %s", dir);
+        return 1;
     }
 
     int len = strlen(extension) + 2;

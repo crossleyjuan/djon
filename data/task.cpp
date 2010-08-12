@@ -13,6 +13,21 @@
 #include <string>
 
 Task::Task(const Task& orig) {
+    _id = orig._id;
+    _shortDescription = orig._shortDescription;
+    _longDescription = orig._longDescription;
+    _duration = orig._duration;
+    _startDate = orig._startDate;
+    _endDate = orig._endDate;
+    _project = orig._project;
+    _jobs = orig._jobs;
+    _templateName = orig._templateName;
+    _status = orig._status;
+    _totalTime = orig._totalTime;
+    _childCount = orig._childCount;
+
+    _logs = orig._logs;
+    _subTasks = orig._subTasks;
 }
 
 Task::Task(Project* project) {
@@ -26,6 +41,7 @@ Task::Task(Project* project) {
     _templateName = NULL;
     _status = NULL;
     _childCount = 0;
+    _totalTime = 0;
 
     _logs = new std::vector<TaskLog*>();
     _subTasks = new std::vector<Task*>();
@@ -173,6 +189,8 @@ std::vector<TaskLog*>* Task::logs() {
 Task::Task(Project* project, std::string* taskDef) {
     _project = project;
     _subTasks = NULL;
+    _childCount = 0;
+    _totalTime = 0;
     _logs = new vector<TaskLog*>();
 
     hashmap* values = parseTextFormat(*taskDef);
