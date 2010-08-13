@@ -11,7 +11,7 @@ INCLUDEPATH += . \
     data \
     util \
     view
-# LIBS += -lXss
+LIBS += -lXss
 QT += xml
 
 # LIBS += -lRpcrt4

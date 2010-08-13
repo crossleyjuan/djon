@@ -18,6 +18,9 @@ void TaskHeaderView::paintSection ( QPainter * painter, const QRect & rect, int 
     p->setPen(QPen(QColor("white")));
     p->drawRect(0, 0, width(), height());
 
+    if (!_startDate || !_endDate) {
+        return;
+    }
 //    int columnSize = geometry().width() / NUM_COLS;
     int textSize = 30;
     int margin = 15;
@@ -123,7 +126,8 @@ void TaskHeaderView::refresh() {
 //    }
     _startDate = startDate;
     _endDate = endDate;
-    int days = startDate->toQDateTime()->daysTo(*endDate->toQDateTime());
-    setDefaultSectionSize( (days+2) * 45);
-
+    if (_startDate && _endDate) {
+        int days = startDate->toQDateTime()->daysTo(*endDate->toQDateTime());
+        setDefaultSectionSize( (days+2) * 45);
+    }
 }
