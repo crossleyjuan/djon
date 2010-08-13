@@ -39,7 +39,8 @@ DateTime::DateTime(int year, int month, int day, int hour, int min, int secs) {
 }
 
 void toInt(char* chr, int* dest) {
-    if (strlen(chr) > 0) {
+    // Non empty string
+    if (*chr != '\0') {
         *dest = atoi(chr);
     }
 }

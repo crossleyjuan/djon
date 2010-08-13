@@ -17,9 +17,11 @@ Project::Project() {
     _tasksMap = new std::map<string, Task*>();
     _name = NULL;
     _description = NULL;
+    _projectFileName = NULL;
 }
 
 Project::Project(string projDef) {
+    Project();
     hashmap* values = parseTextFormat((char*)projDef.c_str());
 
     _name = new string(READ_ELEMENT(values, "project-name"));
@@ -35,6 +37,7 @@ Project::Project(const Project& orig) {
     this->_name = orig._name;
     this->_tasks = orig._tasks;
     this->_tasksMap = orig._tasksMap;
+    this->_projectFileName = orig._projectFileName;
 }
 
 Project::~Project() {
@@ -175,8 +178,8 @@ std::string* Project::nextChildId() {
     return res;
 }
 
-void Project::removeTask(Task* task) {
-    qDebug("removeTask: %s", task->id()->c_str());
+int Project::removeTask(Task* task) {
+    qDebug("Removing task: %s", task->id()->c_str());
     vector<Task*>* subTasks = task->subTasks();
     for (vector<Task*>::iterator iterSub = subTasks->begin(); iterSub != subTasks->end(); iterSub++) {
         Task* tsk = *iterSub;
@@ -192,7 +195,10 @@ void Project::removeTask(Task* task) {
         }
     }
 
-    deleteTask(task);
+    if (deleteTask(task) != 0) {
+        return 1;
+    }
+    return 0;
 }
 
 string* Project::projectFileName() {

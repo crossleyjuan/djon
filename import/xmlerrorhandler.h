@@ -1,5 +1,5 @@
-#ifndef XMLERRORHANLDER_H
-#define XMLERRORHANLDER_H
+#ifndef XMLERRORHANDLER_H
+#define XMLERRORHANDLER_H
 
 #include <QXmlErrorHandler>
 
@@ -20,4 +20,4 @@ private:
     QXmlParseException* _exception;
 };
 
-#endif // XMLERRORHANLDER_H
+#endif // XMLERRORHANDLER_H

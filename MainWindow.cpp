@@ -29,22 +29,9 @@ MainWindow::MainWindow() {
     _activeTask = NULL;
     _activeLog = NULL;
     _taskHeader = NULL;
+    _projects = NULL;
 
-    _projects = loadProjects();
-    if (_projects->size() == 0) {
-        ProjectWizard* wizard = new ProjectWizard();
-        int res = 1;
-        if (wizard->exec() == QWizard::Accepted) {
-            res = createProject(wizard->project());
-            if (res != 0) {
-                exit(0);
-            }
-            _projects = loadProjects();
-        } else {
-            exit(0);
-        }
-    }
-    reloadProjects();
+    initialize();
     createTaskLogWindow();
     createCurrentTimeWindow();
 
@@ -62,6 +49,7 @@ MainWindow::MainWindow() {
     connect(qApp, SIGNAL(aboutToQuit()), _timeTracker, SLOT(stopRecord()));
 
     createTray();
+
 }
 
 void MainWindow::createTaskLogWindow() {
@@ -235,7 +223,7 @@ int MainWindow::createNewProject() {
             QMessageBox box;
             box.setWindowTitle(tr("d-Jon"));
             string errorDescription = string("An error ocurred creating the project file. Error: ");
-            errorDescription += getLastErrorDescription();
+            errorDescription += lastErrorDescription();
             box.setText(tr(errorDescription.c_str()));
             box.exec();
         } else {
@@ -409,4 +397,42 @@ void MainWindow::importProjects() {
             reloadProjects();
         }
     }
+}
+
+void MainWindow::showErrorMessage(int errorCode, const char* errorMessage, QWidget* parent) {
+    std::stringstream ss;
+    ss << errorMessage;
+    if (errorCode > 0) {
+        ss << "\nError Code: " << errorCode;
+    }
+    std::string msg = ss.str();
+    QMessageBox::critical(this, QString("d-jon Error"), QString(msg.c_str()));
+    clearError();
+}
+
+void MainWindow::showErrorMessage(const char* errorMessage, QWidget* parent) {
+    showErrorMessage(-1, errorMessage, parent);
+}
+
+void MainWindow::initialize() {
+    _projects = loadProjects();
+    if (errorOcurred()) {
+        showErrorMessage(lastErrorDescription(), this);
+    }
+    if (_projects->size() == 0) {
+        ProjectWizard* wizard = new ProjectWizard();
+        if (wizard->exec() == QWizard::Accepted) {
+            int res = createProject(wizard->project());
+            if (res != 0) {
+                exit(0);
+            }
+            _projects = loadProjects();
+            if (errorOcurred()) {
+                showErrorMessage(lastErrorDescription(), this);
+            }
+        } else {
+            exit(0);
+        }
+    }
+    reloadProjects();
 }

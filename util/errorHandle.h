@@ -1,13 +1,14 @@
 #ifndef ERRORHANDLE_H
 #define ERRORHANDLE_H
 
+#include <QWidget>
 /******************************************************************
 Error Functions
 */
-void setLastError(int errorCode, const char* errorDescription);
+void setLastError(int errorCode, const char* errorDescription, ...);
 bool errorOcurred();
-const char* getLastErrorDescription();
-int getLastErrorCode();
+const char* lastErrorDescription();
+int lastErrorCode();
 void clearError();
 /******************************************************************/
 

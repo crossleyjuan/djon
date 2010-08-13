@@ -23,7 +23,7 @@ public:
     std::string* closedStatus();
     std::vector<string*>* statusList();
     std::vector<string*>* subTaskList();
-    bool isDefault();
+    bool isDefault() const;
 };
 
 #endif // TEMPLATE_H

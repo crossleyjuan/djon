@@ -38,6 +38,6 @@ std::vector<string*>* Template::subTaskList() {
     return _subTaskList;
 }
 
-bool Template::isDefault() {
+bool Template::isDefault() const {
     return _default;
 }

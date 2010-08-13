@@ -33,6 +33,8 @@ private:
     void setupActions();
     void reloadProjects();
     void reloadTasks();
+    void showErrorMessage(int errorCode, const char* errorMessage, QWidget* parent);
+    void showErrorMessage(const char* errorMessage, QWidget* parent);
 
     Ui::MainWindow widget;
     TaskLogWindow* _logWindow;
@@ -52,6 +54,7 @@ public:
     void closeEvent(QCloseEvent *event);
 
 public slots:
+    void initialize();
     void selectTaskChanged(QModelIndex current, QModelIndex previous);
     void timeStopped(Task* task, TaskLog* taskLog);
     void idleTimeOut();

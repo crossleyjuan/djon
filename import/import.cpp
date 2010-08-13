@@ -1,5 +1,5 @@
 #include "import.h"
-#include "xmlerrorhanlder.h"
+#include "xmlerrorhandler.h"
 #include <QXmlSimpleReader>
 #include <QMessageBox>
 

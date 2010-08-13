@@ -11,7 +11,7 @@ public:
     DTime(DTime& time);
     ~DTime();
 
-    long secs();
+    long secs() const;
     QTime* toQTime();
     const char* toChar();
 

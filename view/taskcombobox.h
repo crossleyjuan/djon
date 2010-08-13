@@ -20,15 +20,15 @@ public:
         _element = element;
     }
 
-    void* element() {
+    void* element() const {
         return _element;
     }
 
-    bool taskElement() {
+    bool taskElement() const {
         return _taskElement;
     }
 
-    int id() {
+    int id() const {
         return _id;
     }
 };

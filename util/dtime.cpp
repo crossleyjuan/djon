@@ -18,7 +18,7 @@ DTime::~DTime() {
     _secs = 0;
 }
 
-long DTime::secs() {
+long DTime::secs() const {
     return _secs;
 }
 
