@@ -435,8 +435,6 @@ void MainWindow::initialize() {
             if (errorOcurred()) {
                 showErrorMessage(lastErrorDescription(), this);
             }
-        } else {
-            exit(0);
         }
     }
     reloadProjects();
