@@ -90,6 +90,7 @@ void MainWindow::setupActions() {
     QMenu* optMenu = menuBar->addMenu(tr("Options"));
 
     QAction* newProject = bar->addAction(QIcon(":/img/new-project.png"), tr("Create Project"));
+    QAction* openProject = bar->addAction(QIcon(":/img/open-project.png"), tr("Open Existing Project"));
     bar->addSeparator();
     QAction* newTask = bar->addAction(QIcon(":/img/new-task.png"), tr("Create SubTask"));
     QAction* editTask = bar->addAction(QIcon(":/img/edit-task.png"), tr("Edit Task"));
@@ -102,7 +103,9 @@ void MainWindow::setupActions() {
     trcMenu->addAction(record);
     trcMenu->addAction(stop);
     prjMenu->addAction(newProject);
+    prjMenu->addAction(openProject);
     QAction* editProject = prjMenu->addAction(QIcon(":/img/edit-project.png"), tr("Edit Project Information"));
+    QAction* closeProject = prjMenu->addAction(QIcon(":/img/close-project.png"), tr("Close Project"));
 
     prjMenu->addSeparator();
     prjMenu->addAction(newTask);
@@ -121,7 +124,9 @@ void MainWindow::setupActions() {
     QAction* settings = optMenu->addAction(QIcon(":/img/settings.png"), tr("Settings"));
 
     connect(newProject, SIGNAL(triggered()), this, SLOT(createNewProject()));
+    connect(openProject, SIGNAL(triggered()), this, SLOT(openProject()));
     connect(editProject, SIGNAL(triggered()), this, SLOT(editProject()));
+    connect(closeProject, SIGNAL(triggered()), this, SLOT(closeProject()));
     connect(import, SIGNAL(triggered()), this, SLOT(importProjects()));
     connect(newTask, SIGNAL(triggered()), this, SLOT(createNewTask()));
     connect(editTask, SIGNAL(triggered()), this, SLOT(editNewTask()));
@@ -434,5 +439,25 @@ void MainWindow::initialize() {
             exit(0);
         }
     }
+    reloadProjects();
+}
+
+void MainWindow::openProject() {
+    QString selectedFileName = QFileDialog::getOpenFileName(this, tr("Open Project"), tr(readConfValue("last-project-dir")), tr("djon files (*.djon)"));
+    if (selectedFileName.size() > 0){
+        QFile file(selectedFileName);
+        string fileName = file.fileName().toStdString();
+        fileName = fileName.substr(fileName.find_last_of("/") + 1);
+        fileName = fileName.substr(0, fileName.length() - 5);
+        addProject(fileName.c_str());
+        _projects = loadProjects();
+        reloadProjects();
+    }
+}
+
+void MainWindow::closeProject() {
+    string* projectFileName = _activeProject->projectFileName();
+    removeProject(projectFileName->c_str());
+    _projects = loadProjects();
     reloadProjects();
 }

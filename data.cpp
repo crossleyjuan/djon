@@ -82,31 +82,27 @@ void loadTaskLogs(Project* project) {
 
 std::vector<Project*>* loadProjects() {
     const char* lastDir = getLastDir();
-    std::vector<char*> files;
 
     std::vector<Project*>* projects = new std::vector<Project*>();
 
-    int res = getdir(lastDir, files, std::string("djon").c_str());
-    if (res == 0) {
-        for (vector<char*>::iterator it = files.begin(); it != files.end(); it++) {
-            char* fileName = (*it);
-            stringstream ss;
-            ss << lastDir;
-            ss << "/";
-            ss << fileName;
-            char* projectDef = readFile(const_cast<char*>(ss.str().c_str()));
+    const char* openProjects = readConfValue("open-projects", "");
+    vector<string*>* prjs = split(string(openProjects), string(","));
 
-            string projectFileName(fileName);
-            unsigned int dot = projectFileName.find_last_of('.');
-            if (dot != projectFileName.npos) {
-                projectFileName = projectFileName.substr(0, dot);
-            }
-            Project* project = new Project(projectDef);
-            project->setProjectFileName(new string(projectFileName));
-            projects->push_back(project);
-            loadTasks(project);
-            loadTaskLogs(project);
-        }
+    for (vector<string*>::iterator it = prjs->begin(); it != prjs->end(); it++) {
+        string* fileName = (*it);
+        stringstream ss;
+        ss << lastDir;
+        ss << "/";
+        ss << *fileName;
+        ss << ".djon";
+        string fullPath = ss.str();
+        char* projectDef = readFile(const_cast<char*>(fullPath.c_str()));
+
+        Project* project = new Project(projectDef);
+        project->setProjectFileName(fileName);
+        projects->push_back(project);
+        loadTasks(project);
+        loadTaskLogs(project);
     }
     return projects;
 }
@@ -214,6 +210,8 @@ int createProject(Project* project) {
     int res = writeFile(fileName.str(), projDef, false);
 
     project->setProjectFileName(projName);
+
+    addProject(projName->c_str());
 
     return res;
 }
@@ -336,4 +334,39 @@ int deleteTask(Task* task) {
 
         return res;
     }
+}
+
+void addProject(const char* fileName) {
+    string* openProjects = new string(readConfValue("open-projects", ""));
+    if (openProjects->find(fileName) == -1) {
+        if (openProjects->length() > 0) {
+            openProjects->append(",");
+        } else {
+            openProjects = new string("");
+        }
+        openProjects->append(fileName);
+        writeConfValue("open-projects", *openProjects);
+    }
+}
+
+void removeProject(const char* fileName) {
+    string* openProjects = new string(readConfValue("open-projects", ""));
+    vector<string*>* projects = split(*openProjects, ",");
+    vector<string*> newProjects;
+    for (vector<string*>::iterator iter = projects->begin(); iter != projects->end(); iter++) {
+        string* project = *iter;
+        if (project->compare(fileName) != 0) {
+            newProjects.push_back(project);
+        }
+    }
+    string result;
+    for (vector<string*>::iterator i = newProjects.begin(); i != newProjects.end(); ) {
+        string* file = *i;
+        result = result.append(*file);
+        i++;
+        if (i != newProjects.end()) {
+            result = result.append(",");
+        }
+    }
+    writeConfValue("open-projects", result);
 }

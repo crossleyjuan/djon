@@ -17,6 +17,8 @@ std::vector<Project*>* loadProjects();
 vector<Template*>* readTemplates();
 Template* readTemplate(const string& templateName);
 int createProject(Project* project);
+void addProject(const char* fileName);
+void removeProject(const char* fileName);
 int updateProject(Project* project);
 int createTask(Task* task);
 int updateTask(Task* task);

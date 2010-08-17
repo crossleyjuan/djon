@@ -81,3 +81,7 @@ int getdir (const char* dir, vector<char*> &files, const char* extension)
     return 0;
 }
 
+char* fileName(const char* path) {
+    char* pathSeparator;
+    return "";
+}
