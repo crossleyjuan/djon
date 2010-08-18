@@ -74,6 +74,50 @@ DTime* Task::totalTime() {
 
 }
 
+DTime* Task::totalTimeCurrentWeek() {
+    vector<Task*>* child = subTasks();
+    DateTime startDayWeek = DateTime::startDayOfWeek();
+    DateTime startDayOfNextWeek = DateTime::startDayOfNextWeek();
+    if (child->size() == 0) {
+        long totalTime = 0;
+        for (vector<TaskLog*>::iterator iterLog = _logs->begin(); iterLog != _logs->end(); iterLog++) {
+            TaskLog* log = *iterLog;
+            if ((*(log->start) >= startDayWeek) &&
+                (*(log->end) < startDayOfNextWeek)) {
+                totalTime += ((*log->end) - (*log->start));
+            }
+        }
+        return new DTime(totalTime);
+    } else {
+        DTime* tm = new DTime();
+        for (vector<Task*>::iterator iter = child->begin(); iter != child->end(); iter++) {
+            Task* sub = *iter;
+            tm->add(*sub->totalTime());
+        }
+        return tm;
+    }
+
+}
+
+DTime* Task::totalTimeCurrentDay() {
+    vector<Task*>* child = subTasks();
+    if (child->size() == 0) {
+        long totalTime = 0;
+        for (vector<TaskLog*>::iterator iterLog = _logs->begin(); iterLog != _logs->end(); iterLog++) {
+            TaskLog* log = *iterLog;
+            totalTime += ((*log->end) - (*log->start));
+        }
+        return new DTime(totalTime);
+    } else {
+        DTime* tm = new DTime();
+        for (vector<Task*>::iterator iter = child->begin(); iter != child->end(); iter++) {
+            Task* sub = *iter;
+            tm->add(*sub->totalTime());
+        }
+        return tm;
+    }
+
+}
 void Task::setStatus(std::string* _status) {
     this->_status = _status;
 }

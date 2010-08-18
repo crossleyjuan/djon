@@ -153,6 +153,32 @@ DTime* Project::totalTime() {
     return result;
 }
 
+DTime* Project::totalTimeCurrentWeek() {
+    vector<Task*>* tasks = _tasks;
+    DTime* result = new DTime();
+    for (vector<Task*>::iterator iter = tasks->begin(); iter != tasks->end(); iter++) {
+        Task* task = *iter;
+        if (task->childCount() == 0) {
+            result->add(*task->totalTime());
+        }
+    }
+
+    return result;
+}
+
+DTime* Project::totalTimeCurrentDay() {
+    vector<Task*>* tasks = _tasks;
+    DTime* result = new DTime();
+    for (vector<Task*>::iterator iter = tasks->begin(); iter != tasks->end(); iter++) {
+        Task* task = *iter;
+        if (task->childCount() == 0) {
+            result->add(*task->totalTime());
+        }
+    }
+
+    return result;
+}
+
 char* Project::toChar() {
     std::stringstream ss;
     ss << "project-name:" << *_name  << ";\n";

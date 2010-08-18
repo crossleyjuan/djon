@@ -38,6 +38,9 @@ public:
     int childCount();
     void setTotalTime(DTime* _totalTime);
     DTime* totalTime();
+    DTime* totalTimeCurrentWeek();
+    DTime* totalTimeCurrentDay();
+
     void setStatus(std::string* _status);
     std::string* status() const;
     void setTemplateName(std::string* _templateName);

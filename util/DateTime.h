@@ -22,6 +22,10 @@ public:
     DateTime(const DateTime& orig);
     virtual ~DateTime();
 
+    static DateTime startDayOfWeek();
+    static DateTime startDayOfNextWeek();
+    static DateTime today();
+
     char* toChar();
     QDateTime* toQDateTime();
     double toDouble() const;

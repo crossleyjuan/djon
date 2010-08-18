@@ -18,7 +18,7 @@ TaskModel::TaskModel(MODELTYPE type, const vector<Project*> projects, QObject *p
     if (_type == ONLY_TASKS) {
         rootData << "Description";
     } else {
-        rootData << "Description" << "Total Time" << "Gantt";
+        rootData << "Description" << "Total Time" << "Week" << "Day";
     }
     rootItem = new TaskItem(rootData);
     setupModelData(rootItem);
@@ -35,7 +35,7 @@ int TaskModel::columnCount(const QModelIndex &parent) const
         case ONLY_TASKS:
             return 1;
         case WITH_TIMES:
-            return 2;
+            return 4;
     default:
             return 0;
     }

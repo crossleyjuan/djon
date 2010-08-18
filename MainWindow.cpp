@@ -39,7 +39,7 @@ MainWindow::MainWindow() {
     setupActions();
     setWindowState(Qt::WindowMaximized);
 
-    widget.taskView->setColumnWidth(0, 300);
+    widget.taskView->setColumnWidth(0, 250);
 //    _idleDetector = new IdleDetector(5*60);// 5*60
     _idleDetector = new IdleDetector();// 5*60
     connect(_idleDetector, SIGNAL(idleTimeOut()), this, SLOT(idleTimeOut()));

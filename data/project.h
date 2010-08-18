@@ -42,6 +42,9 @@ public:
     DateTime* startDate();
     DateTime* endDate();
     DTime* totalTime();
+    DTime* totalTimeCurrentWeek();
+    DTime* totalTimeCurrentDay();
+
     Task* task(string& id);
     std::string* nextChildId();
     char* toChar();

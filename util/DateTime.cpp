@@ -190,3 +190,27 @@ long DateTime::operator -(const DateTime& dateTimeRight) const {
     return secs;
 }
 
+DateTime DateTime::startDayOfWeek() {
+    QDate today = QDate::currentDate();
+    while (today.dayOfWeek() != 1) {
+        today = today.addDays(-1);
+    }
+    DateTime result(today.year(), today.month(), today.day());
+    return result;
+}
+
+DateTime DateTime::startDayOfNextWeek() {
+    QDate today = QDate::currentDate();
+    while (today.dayOfWeek() != 7) {
+        today = today.addDays(1);
+    }
+    today.addDays(1);
+    DateTime result(today.year(), today.month(), today.day());
+    return result;
+}
+
+DateTime DateTime::today() {
+    QDate today = QDate::currentDate();
+    DateTime result(today.year(), today.month(), today.day());
+    return result;
+}

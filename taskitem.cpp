@@ -71,6 +71,26 @@
          if (_type == NONE) {
              return itemData.at(column);
          }
+     case 2:
+         if (_type == PROJECT) {
+             return QString(_project->totalTimeCurrentWeek()->toChar());
+         }
+         if (_type == TASK) {
+             return QString(_task->totalTimeCurrentWeek()->toChar());
+         }
+         if (_type == NONE) {
+             return itemData.at(column);
+         }
+     case 3:
+         if (_type == PROJECT) {
+             return QString(_project->totalTimeCurrentDay()->toChar());
+         }
+         if (_type == TASK) {
+             return QString(_task->totalTimeCurrentDay()->toChar());
+         }
+         if (_type == NONE) {
+             return itemData.at(column);
+         }
      default:
          return QVariant();
      }
