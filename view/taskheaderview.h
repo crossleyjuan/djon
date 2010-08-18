@@ -14,6 +14,7 @@ public:
     int sectionSizeHint(int logicalIndex) const;
     int sectionSize(int logicalIndex) const;
     void refresh();
+    void setProjects(std::vector<Project*>* projects);
 //    int length() const;
 //    QSize sizeHint() const;
 //    int minimumSectionSize() const;

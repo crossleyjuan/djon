@@ -14,6 +14,7 @@ TaskModel::TaskModel(MODELTYPE type, const vector<Project*> projects, QObject *p
     QList<QVariant> rootData;
     _type = type;
     _projects = projects;
+    _trackedTask = NULL;
     if (_type == ONLY_TASKS) {
         rootData << "Description";
     } else {
@@ -49,6 +50,16 @@ QVariant TaskModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
+
+    if (role == Qt::BackgroundRole) {
+        if (_trackedTask != NULL) {
+            Task* indexTask = task(index);
+            if ((indexTask != NULL) && (*indexTask == *_trackedTask)) {
+                return qVariantFromValue(QColor(Qt::yellow));
+            }
+        }
+        return QVariant();
+    }
 
     if (role != Qt::DisplayRole)
         return QVariant();
@@ -180,4 +191,12 @@ bool TaskModel::setData(const QModelIndex &index, const QVariant &value, int rol
         }
     }
     return false;
+}
+
+void TaskModel::setTrackedTask(Task *task) {
+    _trackedTask = task;
+}
+
+Task* TaskModel::trackedTask() const {
+    return _trackedTask;
 }

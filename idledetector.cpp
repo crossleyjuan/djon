@@ -58,7 +58,7 @@ void IdleDetector::timeout() {
 #endif
     if (idlesecs > m_idleMaxSecs) {
         timer->stop();
-        idleTimeOut();
+        emit idleTimeOut();
     }
 }
 

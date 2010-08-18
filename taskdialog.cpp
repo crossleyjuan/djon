@@ -113,6 +113,9 @@ void TaskDialog::on_buttonBox_accepted()
 
     if (!_update) {
         m_project->addTask(m_task);
+        if (errorOcurred()) {
+            return;
+        }
         createTask(m_task);
         m_task->processTemplate();
     } else {

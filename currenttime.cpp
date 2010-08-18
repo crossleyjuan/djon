@@ -106,6 +106,6 @@ void CurrentTime::setActiveTask(Task* activeTask) {
         tsk = tsk->parent();
     }
     Project* proj = activeTask->project();
-    description.insert(0, *proj->description() + " / ");
+    description.insert(0, *proj->name() + " / ");
     ui->currentTask->setText(QString(description.c_str()));
 }

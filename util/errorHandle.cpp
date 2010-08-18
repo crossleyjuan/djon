@@ -1,4 +1,5 @@
 #include "errorHandle.h"
+#include "util.h"
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,7 +16,7 @@ void setLastError(int errorCode, const char* errorDescription, ...) {
     va_start(varlist, errorDescription);
 
     int len = strlen(errorDescription) * 2;
-    _lastError = (char*)malloc(len);
+    _lastError = (char*)mmalloc(len);
     memset(_lastError, 0, len);
     vsprintf(_lastError, errorDescription, varlist);
     va_end(varlist);

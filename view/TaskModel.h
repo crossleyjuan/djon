@@ -40,6 +40,10 @@ public:
 
     Task* task(const QModelIndex &index) const;
     Project* project(const QModelIndex &index) const;
+    // This will set the currently tracked (time tracked) task
+    void setTrackedTask(Task* task);
+    // This will retrieve the currently tracked (time tracked) task
+    Task* trackedTask() const;
 
 private:
     void setupModelData(TaskItem *parent);
@@ -47,6 +51,7 @@ private:
     TaskItem *rootItem;
     std::vector<Project*> _projects;
     MODELTYPE _type;
+    Task* _trackedTask;
 };
 
 #endif

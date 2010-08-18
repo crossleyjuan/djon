@@ -1,4 +1,5 @@
 #include "stringfunctions.h"
+#include "util.h"
 #include <string.h>
 #include <stdlib.h>
 
@@ -8,7 +9,7 @@ char* strcpy(std::string str) {
 
 char* strcpy(char* str) {
     int len = strlen(str);
-    char* result = (char*)malloc(len + 1);
+    char* result = (char*)mmalloc(len + 1);
     memset(result, 0, len +1);
     memcpy(result, str, len);
     return result;

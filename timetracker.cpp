@@ -16,6 +16,9 @@ TimeTracker::TimeTracker(QObject *parent) :
 }
 
 void TimeTracker::startRecord(Task* task) {
+    if (_status == RUNNING) {
+        stopRecord();
+    }
     TaskLog* taskLog = new TaskLog();
     taskLog->id = uuid();
     taskLog->start = new DateTime();
@@ -89,8 +92,11 @@ TaskLog* TimeTracker::taskLog() {
 
 void TimeTracker::moveCurrentRecordToTask(Task* newTask) {
     _task->removeLog(_taskLog);
+    deleteTaskLog(_task, _taskLog);
+
     _task = newTask;
     _task->addLog(_taskLog);
+    createTaskLog(_task, _taskLog);
 }
 
 void TimeTracker::destroyCurrentRecord() {

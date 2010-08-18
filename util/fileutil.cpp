@@ -1,6 +1,7 @@
 #include "fileutil.h"
 #include "stringfunctions.h"
 #include "errorHandle.h"
+#include "util.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -63,7 +64,7 @@ int getdir (const char* dir, vector<char*> &files, const char* extension)
     }
 
     int len = strlen(extension) + 2;
-    char* fileextension = (char*)malloc(len);
+    char* fileextension = (char*)mmalloc(len);
 
     memset(fileextension, 0, len);
     fileextension[0] = '.';
@@ -81,7 +82,3 @@ int getdir (const char* dir, vector<char*> &files, const char* extension)
     return 0;
 }
 
-char* fileName(const char* path) {
-    char* pathSeparator;
-    return "";
-}

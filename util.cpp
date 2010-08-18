@@ -204,11 +204,12 @@ const char* readConfValue(const string& name, const char* def) {
     std::string lastDir = READ_ELEMENT(mapConf, name);
 
     if (lastDir.size() == 0) {
+        free(conf);
         return def;
     }
-    char* res = (char*)malloc(lastDir.size());
-    strcpy(res, lastDir.c_str());
+    char* res = strcpy(lastDir);
     delete (homeDir);
+    free(conf);
     return res;
 }
 
@@ -266,4 +267,13 @@ hashmap* parseTextFormat(std::string text) {
         }
     }
     return mapValue;
+}
+
+void* mmalloc(size_t size) {
+    void* p = malloc(size);
+    if (p == NULL) {
+        qDebug("Out of memory!!!");
+        exit(EXIT_FAILURE);
+    }
+    return p;
 }

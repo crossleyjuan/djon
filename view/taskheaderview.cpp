@@ -5,9 +5,7 @@ TaskHeaderView::TaskHeaderView(std::vector<Project*>* projects, Qt::Orientation 
     QHeaderView(orientation, parent)
 {
 //    setDefaultSectionSize(200);
-    _projects = projects;
-//    this->setResizeMode(0, QHeaderView::ResizeToContents);
-    refresh();
+    setProjects(projects);
 }
 
 void TaskHeaderView::paintSection ( QPainter * painter, const QRect & rect, int logicalIndex ) const {
@@ -130,4 +128,9 @@ void TaskHeaderView::refresh() {
         int days = startDate->toQDateTime()->daysTo(*endDate->toQDateTime());
         setDefaultSectionSize( (days+2) * 45);
     }
+}
+
+void TaskHeaderView::setProjects(std::vector<Project *> *projects) {
+    _projects = projects;
+    refresh();
 }

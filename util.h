@@ -59,5 +59,12 @@ hashmap* parseTextFormat(std::string text);
 const char* readConfValue(const string& name, const char* def = 0);
 int writeConfValue(const string& name, const string& value);
 
+/***********************************************************************
+* Memory functions
+***********************************************************************/
+void* mmalloc(size_t size);
+
+/***********************************************************************/
+
 #endif	/* _UTIL_H */
 

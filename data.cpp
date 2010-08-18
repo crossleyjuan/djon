@@ -17,6 +17,7 @@ const char* getLastDir() {
 }
 
 void loadTasks(Project* project) {
+    qDebug("loadTasks(Project* project)");
     const char* lastDir = getLastDir();
 
     string fileName = string(lastDir) + "/" + *project->projectFileName() + ".tsk";
@@ -32,12 +33,18 @@ void loadTasks(Project* project) {
         string* staskDef = new string(tsk + 2);
         Task* task = new Task(project, staskDef);
         project->addTask(task);
+        if (errorOcurred()) {
+            return;
+        }
         delete(staskDef);
         taskDef = strtok(NULL, "}}");
     }
+    free(taskDefs);
+    qDebug("out loadTasks(Project* project)");
 }
 
 void processTaskLog(Project* project, string* logDef) {
+    qDebug("processTaskLog(Project* project, string* logDef)");
     hashmap* values = parseTextFormat(*logDef);
 
     std::string* taskLogId = new std::string(READ_ELEMENT(values, "log-id"));
@@ -53,14 +60,19 @@ void processTaskLog(Project* project, string* logDef) {
     log->logDescription = logDescription;
 
     Task* task = project->task(*taskId);
+    if (task == NULL) {
+        setLastError(5, "The tasklog %s refers an invalid task %s.", taskLogId->c_str(), taskId->c_str());
+        return;
+    }
     task->addLog(log);
 
     delete(values);
+    qDebug("out processTaskLog(Project* project, string* logDef)");
 }
 
 void loadTaskLogs(Project* project) {
+    qDebug("loadTaskLogs(Project* project)");
     const char* lastDir = getLastDir();
-    std::vector<char*> files;
 
     string fileName = string(lastDir) + "/" + *project->projectFileName() + ".log";
 
@@ -75,12 +87,18 @@ void loadTaskLogs(Project* project) {
         string* slogDef = new string(log + 2);
         processTaskLog(project, slogDef);
 
+        if (errorOcurred()) {
+            return;
+        }
         delete(slogDef);
         logDef = strtok(NULL, "}}");
     }
+    free(logDefs);
+    qDebug("out loadTaskLogs(Project* project)");
 }
 
 std::vector<Project*>* loadProjects() {
+    qDebug("loadProjects()");
     const char* lastDir = getLastDir();
 
     std::vector<Project*>* projects = new std::vector<Project*>();
@@ -102,8 +120,16 @@ std::vector<Project*>* loadProjects() {
         project->setProjectFileName(fileName);
         projects->push_back(project);
         loadTasks(project);
+        if (errorOcurred()) {
+            return NULL;
+        }
         loadTaskLogs(project);
+        if (errorOcurred()) {
+            return NULL;
+        }
+        free(projectDef);
     }
+    qDebug("out loadProjects()");
     return projects;
 }
 
@@ -125,7 +151,8 @@ vector<Template*>* readTemplates() {
         for (vector<char*>::iterator it = files.begin(); it != files.end(); it++) {
             string fileName = path + std::string(*it);
 
-            hashmap* conf = parseTextFormat(string(readFile(const_cast<char*>(fileName.c_str()))));
+            char* tempDef = readFile(const_cast<char*>(fileName.c_str()));
+            hashmap* conf = parseTextFormat(string(tempDef));
 
             string* templateName = new std::string(READ_ELEMENT(conf, "template-name"));
             string* templateDescription = new std::string(READ_ELEMENT(conf, "template-description"));
@@ -141,6 +168,7 @@ vector<Template*>* readTemplates() {
             } else {
                 m_templates->push_back(tpl);
             }
+            free(tempDef);
         }
     }
 
@@ -185,7 +213,8 @@ int updateTask(Task* task) {
     const char* lastDir = getLastDir();
     stringstream fileName;
     fileName << lastDir << "/" << *projName << ".tsk";
-    string* current = new string(readFile(const_cast<char*>(fileName.str().c_str())));
+    char* ccurrent = readFile(const_cast<char*>(fileName.str().c_str()));
+    string* current = new string(ccurrent);
 
     int posStart = current->find(string("{{\ntask-id:") + *task->id() + ";");
     int posEnd = current->find(string("}}\n"), posStart) + 3;
@@ -195,6 +224,8 @@ int updateTask(Task* task) {
 
     int res = writeFile(fileName.str(), newFile, false);
 
+    free(ccurrent);
+    delete(current);
     return res;
 }
 
@@ -267,7 +298,8 @@ int updateTaskLog(Task* task, TaskLog* taskLog) {
     const char* lastDir = getLastDir();
     stringstream fileName;
     fileName << lastDir << "/" << *projName << ".log";
-    string* current = new string(readFile(const_cast<char*>(fileName.str().c_str())));
+    char* ccurrent = readFile(const_cast<char*>(fileName.str().c_str()));
+    string* current = new string(ccurrent);
 
     int posStart = current->find(string("{{\nlog-id:") + *taskLog->id + ";");
     int posEnd = current->find(string("}}\n"), posStart) + 3;
@@ -277,6 +309,8 @@ int updateTaskLog(Task* task, TaskLog* taskLog) {
 
     int res = writeFile(fileName.str(), newFile, false);
 
+    free(ccurrent);
+    delete(current);
     return res;
 }
 
@@ -285,7 +319,8 @@ int deleteTaskLog(Task* task, TaskLog* taskLog) {
     const char* lastDir = getLastDir();
     stringstream fileName;
     fileName << lastDir << "/" << *projName << ".log";
-    string* current = new string(readFile(const_cast<char*>(fileName.str().c_str())));
+    char* ccurrent = readFile(const_cast<char*>(fileName.str().c_str()));
+    string* current = new string(ccurrent);
 
     string lookingFor = string("{{\nlog-id:") + *taskLog->id + ";";
     int posStart = current->find(lookingFor);
@@ -296,6 +331,8 @@ int deleteTaskLog(Task* task, TaskLog* taskLog) {
 
     int res = writeFile(fileName.str(), newFile, false);
 
+    free(ccurrent);
+    delete(current);
     return res;
 }
 
@@ -318,22 +355,24 @@ int deleteTask(Task* task) {
     const char* lastDir = getLastDir();
     stringstream fileName;
     fileName << lastDir << "/" << *projName << ".tsk";
-    string* current = new string(readFile(const_cast<char*>(fileName.str().c_str())));
+    char* ccurrent = readFile(const_cast<char*>(fileName.str().c_str()));
+    string* current = new string(ccurrent);
 
     int posStart = current->find(string("{{\ntask-id:") + *task->id() + ";");
     int posEnd = current->find(string("}}\n"), posStart) + 3;
 
     if (posStart <= 0) {
         setLastError(3, "the task id: %s was not found in the task file, and will not be updated.", task->id()->c_str());
-        return 1;
+        res = 1;
     } else {
         int size = posEnd - posStart;
         string newFile = current->replace(posStart, size, string(""));
 
         res += writeFile(fileName.str(), newFile, false);
-
-        return res;
     }
+    free(ccurrent);
+    free(current);
+    return res;
 }
 
 void addProject(const char* fileName) {

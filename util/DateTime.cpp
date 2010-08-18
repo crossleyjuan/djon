@@ -6,6 +6,7 @@
  */
 
 #include "DateTime.h"
+#include "util.h"
 #include <string.h>
 #include <stdlib.h>
 #include <sstream>
@@ -145,7 +146,7 @@ DateTime::~DateTime() {
 }
 
 char* DateTime::toChar() {
-    char* buffer = (char*)malloc(16);
+    char* buffer = (char*)mmalloc(16);
     memset(buffer, 0, 16);
     sprintf(buffer, "%04d%02d%02d.%02d%02d%02d", _year, _month, _day, _hour, _min, _secs);
 

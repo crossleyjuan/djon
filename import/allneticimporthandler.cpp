@@ -68,6 +68,9 @@ bool AllneticImportHandler::startElement(const QString& namespaceURI, const QStr
     if (qName.compare(QString("task")) == 0) {
         _currentTask = parseTask(atts);
         _currentProject->addTask(_currentTask);
+        if (errorOcurred()) {
+            return false;
+        }
     }
     if (qName.compare(QString("period")) == 0) {
         TaskLog* log = parseTaskLog(atts);

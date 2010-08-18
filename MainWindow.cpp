@@ -24,6 +24,7 @@
 #include <sstream>
 
 MainWindow::MainWindow() {
+    qDebug("MainWindow::MainWindow()");
     widget.setupUi(this);
     _activeProject = NULL;
     _activeTask = NULL;
@@ -53,6 +54,7 @@ MainWindow::MainWindow() {
 }
 
 void MainWindow::createTaskLogWindow() {
+    qDebug("MainWindow::createTaskLogWindow()");
     _logWindow = new TaskLogWindow();
     _logWindow->setAllowedAreas(Qt::BottomDockWidgetArea);
 
@@ -60,6 +62,7 @@ void MainWindow::createTaskLogWindow() {
 }
 
 TaskDelegate* MainWindow::createTaskDelegate() {
+    qDebug("MainWindow::createTaskDelegate()");
     TaskDelegate* delegate = new TaskDelegate(_projects);
     return delegate;
 }
@@ -68,15 +71,20 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::selectTaskChanged(QModelIndex current, QModelIndex previous) {
+    qDebug("MainWindow::selectTaskChanged");
     TaskModel* model = (TaskModel*)current.model();
-    _activeTask = model->task(current);
-    _activeProject = model->project(current);
-    if (_activeTask != NULL) {
-        _logWindow->refresh(_activeTask);
+    Task* task = model->task(current);
+    if (task != NULL) {
+        setActiveTask(task);
+    } else {
+        Project* project = model->project(current);
+        setActiveTask(NULL);
+        _activeProject = project;
     }
 }
 
 void MainWindow::setupActions() {
+    qDebug("MainWindow::setupActions()");
     QToolBar* bar = new QToolBar("Options");
     addToolBar(bar);
 
@@ -116,10 +124,10 @@ void MainWindow::setupActions() {
     _taskPopUpMenu->addAction(deleteTask);
     //    prjMenu->addAction(completeTask);
     prjMenu->addSeparator();
-    QAction* import = prjMenu->addAction(QIcon(":/img/import-projects.png"), tr("Import Projects"));
-    QAction* expAction = prjMenu->addAction(QIcon(":/img/exportar.png"), tr("Export project information"));
+    QAction* import = prjMenu->addAction(QIcon(":/img/import-project.png"), tr("Import Projects"));
+    QAction* expAction = prjMenu->addAction(QIcon(":/img/export-project.png"), tr("Export project information"));
     prjMenu->addSeparator();
-    QAction* quit = prjMenu->addAction(QIcon(":/img/quit.png"), tr("Quit"));
+    QAction* quit = prjMenu->addAction(QIcon(":/img/exit.png"), tr("Quit"));
 
     QAction* settings = optMenu->addAction(QIcon(":/img/settings.png"), tr("Settings"));
 
@@ -144,6 +152,7 @@ void MainWindow::setupActions() {
 }
 
 void MainWindow::idleTimeOut() {
+    qDebug("MainWindow::idleTimeOut()");
     // This will enforce the new TaskLog
     _timeTracker->startRecord(_activeTask);
     IdleTaskWindow* w = new IdleTaskWindow(_projects, _timeTracker);
@@ -152,10 +161,12 @@ void MainWindow::idleTimeOut() {
 }
 
 void MainWindow::startRecord() {
+    qDebug("MainWindow::startRecord()");
     if (_activeTask != NULL) {
         if (_timeTracker->status() == RUNNING) {
             _timeTracker->stopRecord();
         }
+        _taskModel->setTrackedTask(_activeTask);
         _timeWindow->setActiveTask(_activeTask);
         _timeTracker->startRecord(_activeTask);
         _idleDetector->start();
@@ -164,13 +175,24 @@ void MainWindow::startRecord() {
 }
 
 void MainWindow::stopRecord() {
+    qDebug("MainWindow::stopRecord()");
     _timeTracker->stopRecord();
     _logWindow->refresh(_timeTracker->task());
     _idleDetector->stop();
+    _taskModel->setTrackedTask(NULL);
 }
 
 void MainWindow::setActiveTask(Task* task) {
-
+    qDebug("MainWindow::setActiveTask");
+    _activeTask = task;
+    if (_activeTask == NULL) {
+        _activeProject = NULL;
+    } else {
+        _activeProject = task->project();
+        if (_activeTask != NULL) {
+            _logWindow->refresh(_activeTask);
+        }
+    }
 }
 
 void MainWindow::setActiveTaskLog(Task* task, TaskLog* taskLog) {
@@ -178,6 +200,7 @@ void MainWindow::setActiveTaskLog(Task* task, TaskLog* taskLog) {
 }
 
 void MainWindow::createCurrentTimeWindow() {
+    qDebug("MainWindow::createCurrentTimeWindow()");
     _timeWindow = new CurrentTime(_projects);
     //    _timeWindow->setAllowedAreas(Qt::BottomDockWidgetArea | Qt::BottomRightCorner);
 
@@ -185,6 +208,7 @@ void MainWindow::createCurrentTimeWindow() {
 }
 
 void MainWindow::createNewTask() {
+    qDebug("MainWindow::createNewTask()");
     if (_activeProject == NULL) {
         QMessageBox box;
         box.setText("You don't have an active project, you should create a project first.");
@@ -206,6 +230,7 @@ void MainWindow::createNewTask() {
 }
 
 void MainWindow::editNewTask() {
+    qDebug("MainWindow::editNewTask()");
     if (_activeTask == NULL) {
         QMessageBox box;
         box.setText("You don't have an active task, select one task and then use edit option.");
@@ -220,6 +245,7 @@ void MainWindow::editNewTask() {
 }
 
 int MainWindow::createNewProject() {
+    qDebug("MainWindow::createNewProject()");
     ProjectWizard* wizard = new ProjectWizard();
     int res = 1;
     if (wizard->exec() == QWizard::Accepted) {
@@ -233,6 +259,10 @@ int MainWindow::createNewProject() {
             box.exec();
         } else {
             _projects = loadProjects();
+            if (errorOcurred()) {
+                showErrorMessage(lastErrorCode(), lastErrorDescription(), this);
+                return 1;
+            }
             if (_projects->size() == 1) {
                 _activeProject = _projects->at(0);
             }
@@ -247,6 +277,7 @@ int MainWindow::createNewProject() {
 }
 
 void MainWindow::reloadProjects() {
+    qDebug("MainWindow::reloadProjects()");
     if (_projects->size() == 1) {
         _activeProject = _projects->at(0);
     }
@@ -254,15 +285,17 @@ void MainWindow::reloadProjects() {
 }
 
 void MainWindow::reloadTasks() {
+    qDebug("MainWindow::reloadTasks()");
     _taskModel = new TaskModel(WITH_TIMES, *_projects);
     widget.taskView->setModel(_taskModel);
+    widget.taskView->setStyleSheet("*[mandatoryField=\"true\"] { background-color: yellow }");
 //    TaskModel* model2 = new TaskModel(ONLY_TASKS, *_projects);
     widget.ganttView->setModel(_taskModel);
     widget.ganttView->setIndentation(0);
     if (_taskHeader == NULL) {
         _taskHeader = new TaskHeaderView(_projects, Qt::Horizontal, widget.ganttView);
     } else {
-        _taskHeader->refresh();
+        _taskHeader->setProjects(_projects);
     }
     widget.ganttView->setHeader(_taskHeader);
 //    widget.ganttView->setItemsExpandable(false);;
@@ -283,10 +316,12 @@ void MainWindow::reloadTasks() {
 }
 
 void MainWindow::timeStopped(Task* task, TaskLog* taskLog) {
+    qDebug("MainWindow::timeStopped");
     _idleDetector->stop();
 }
 
 void MainWindow::deleteTask() {
+    qDebug("MainWindow::deleteTask()");
     if (_activeTask != NULL) {
         // Check if the selected task is being tracked
         if (_timeTracker->status() == RUNNING) {
@@ -310,12 +345,14 @@ void MainWindow::completeTask() {
 }
 
 void MainWindow::exportProjects() {
+    qDebug("MainWindow::exportProjects()");
     ExportDialog dialog(*_projects, this);
     dialog.exec();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    qDebug("MainWindow::closeEvent");
     if (_trayIcon->isVisible()) {
         int closeToSysTray = atoi(readConfValue("close-to-systray", "1"));
         if (closeToSysTray) {
@@ -337,6 +374,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 }
 
 void MainWindow::createTray() {
+    qDebug("MainWindow::createTray");
     _trayIcon = new QSystemTrayIcon(QIcon(":/img/djon.png"), this);
     connect(_trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(restoreWindowState()));
     QMenu* mnu = new QMenu(this);
@@ -349,10 +387,12 @@ void MainWindow::createTray() {
 
 
 void MainWindow::taskContextMenuRequested(QPoint pos) {
+    qDebug("MainWindow::taskContextMenuRequested");
     _taskPopUpMenu->popup(QCursor::pos());
 }
 
 void MainWindow::settings() {
+    qDebug("MainWindow::settings");
     DialogSettings settings;
     int res = settings.exec();
     if (res == QDialog::Accepted) {
@@ -361,6 +401,7 @@ void MainWindow::settings() {
 }
 
 void MainWindow::restoreWindowState() {
+    qDebug("MainWindow::restoreWindowState");
     if (isHidden()) {
         showMaximized();
     } else {
@@ -369,6 +410,7 @@ void MainWindow::restoreWindowState() {
 }
 
 void MainWindow::editProject() {
+    qDebug("MainWindow::editProject");
     ProjectDialog* dialog = new ProjectDialog(_activeProject, this);
     int res = dialog->exec();
     if (res == QDialog::Accepted) {
@@ -377,6 +419,7 @@ void MainWindow::editProject() {
 }
 
 void MainWindow::importProjects() {
+    qDebug("MainWindow::importProjects");
     QString selectedFileName = QFileDialog::getOpenFileName(this, tr("Import Projects"), tr(""), tr("XML Files (*.xml)"));
     if (selectedFileName.size() > 0){
         Template* tem = readTemplates()->at(0);
@@ -400,11 +443,14 @@ void MainWindow::importProjects() {
                 }
             }
             reloadProjects();
+        } else if (errorOcurred()) {
+            showErrorMessage(lastErrorCode(), lastErrorDescription(), this);
         }
     }
 }
 
 void MainWindow::showErrorMessage(int errorCode, const char* errorMessage, QWidget* parent) {
+    qDebug("MainWindow::showErrorMessage(int errorCode, const char* errorMessage, QWidget* parent)");
     std::stringstream ss;
     ss << errorMessage;
     if (errorCode > 0) {
@@ -416,13 +462,17 @@ void MainWindow::showErrorMessage(int errorCode, const char* errorMessage, QWidg
 }
 
 void MainWindow::showErrorMessage(const char* errorMessage, QWidget* parent) {
+    qDebug("MainWindow::showErrorMessage(const char* errorMessage, QWidget* parent)");
     showErrorMessage(-1, errorMessage, parent);
 }
 
 void MainWindow::initialize() {
+    qDebug("MainWindow::initialize()");
     _projects = loadProjects();
     if (errorOcurred()) {
         showErrorMessage(lastErrorDescription(), this);
+        exit(EXIT_FAILURE);
+        return;
     }
     if (_projects->size() == 0) {
         ProjectWizard* wizard = new ProjectWizard();
@@ -441,6 +491,7 @@ void MainWindow::initialize() {
 }
 
 void MainWindow::openProject() {
+    qDebug("MainWindow::openProject()");
     QString selectedFileName = QFileDialog::getOpenFileName(this, tr("Open Project"), tr(readConfValue("last-project-dir")), tr("djon files (*.djon)"));
     if (selectedFileName.size() > 0){
         QFile file(selectedFileName);
@@ -454,8 +505,13 @@ void MainWindow::openProject() {
 }
 
 void MainWindow::closeProject() {
+    qDebug("MainWindow::closeProject()");
     string* projectFileName = _activeProject->projectFileName();
     removeProject(projectFileName->c_str());
     _projects = loadProjects();
+    if (errorOcurred()) {
+        showErrorMessage(lastErrorDescription(), this);
+        return;
+    }
     reloadProjects();
 }

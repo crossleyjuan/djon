@@ -21,6 +21,7 @@ Project::Project() {
 }
 
 Project::Project(string projDef) {
+    qDebug("Project::Project(string projDef)");
     Project();
     hashmap* values = parseTextFormat((char*)projDef.c_str());
 
@@ -30,6 +31,7 @@ Project::Project(string projDef) {
     _tasks = new vector<Task*>();
     _tasksMap = new std::map<string, Task*>();
     delete(values);
+    qDebug("out Project::Project(string projDef)");
 }
 
 Project::Project(const Project& orig) {
@@ -68,13 +70,23 @@ std::vector<Task*>* Project::tasks() {
 }
 
 void Project::addTask(Task* task) {
+    Task* checkTask = this->task(*task->id());
+    if (checkTask != NULL) {
+        setLastError(4, "The task %s alread exists in this project, the file: %s.tsk contains an invalid data. Please fix this manually", task->id()->c_str(), projectFileName()->c_str());
+        return;
+    }
     task->setProject(this);
     _tasks->push_back(task);
     _tasksMap->insert(pair<string, Task*>(*task->id(), task));
 }
 
 Task* Project::task(string& id) {
-    return (*_tasksMap)[id];
+    map<string, Task*>::iterator iter = _tasksMap->find(id);
+    if (iter != _tasksMap->end()) {
+        return iter->second;
+    } else {
+        return NULL;
+    }
 }
 
 // prefix should be 1, 2.1, etc.
@@ -151,7 +163,7 @@ char* Project::toChar() {
     }
 
     string ssOut =  ss.str();
-    char* res = (char*)malloc(ssOut.size() + 1);
+    char* res = (char*)mmalloc(ssOut.size() + 1);
     memset(res, 0, ss.str().size() + 1);
     strcpy(res, ssOut.c_str());
 

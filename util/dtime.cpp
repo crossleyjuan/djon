@@ -1,4 +1,5 @@
 #include "dtime.h"
+#include "util.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -46,7 +47,7 @@ void DTime::time(int& hour, int& min, int& sec) const {
 
 const char* DTime::toChar() {
 
-    char* buffer = (char*)malloc(20);
+    char* buffer = (char*)mmalloc(20);
     memset(buffer, 0, 20);
 
     int hour;

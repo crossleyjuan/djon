@@ -187,6 +187,7 @@ std::vector<TaskLog*>* Task::logs() {
 }
 
 Task::Task(Project* project, std::string* taskDef) {
+    qDebug("Task::Task(Project* project, std::string* taskDef)");
     _project = project;
     _subTasks = NULL;
     _childCount = 0;
@@ -196,6 +197,7 @@ Task::Task(Project* project, std::string* taskDef) {
     hashmap* values = parseTextFormat(*taskDef);
 
     _id = new std::string(READ_ELEMENT(values, "task-id"));
+    qDebug("Loading task id: %s", _id->c_str());
     _shortDescription =  new std::string(READ_ELEMENT(values, "short-description"));
     _longDescription = new std::string(READ_ELEMENT(values, "long-description"));
     _duration = atoi(READ_ELEMENT(values, "duration").c_str());
@@ -205,6 +207,7 @@ Task::Task(Project* project, std::string* taskDef) {
     _status = new string(READ_ELEMENT(values, "status"));
 
     delete(values);
+    qDebug("out Task::Task(Project* project, std::string* taskDef)");
 }
 
 char* Task::toChar() {
@@ -222,7 +225,7 @@ char* Task::toChar() {
     ss << "template-name:" << *_templateName << ";\n";
 
     string ssOut = ss.str();
-    char* res = (char*)malloc(ssOut.size() + 1);
+    char* res = (char*)mmalloc(ssOut.size() + 1);
     memset(res, 0, ssOut.size() + 1);
     strcpy(res, ssOut.c_str());
 
@@ -301,6 +304,9 @@ void Task::processTemplate() {
         sub->setTemplateName(new string(tempSub));
 
         _project->addTask(sub);
+        if (errorOcurred()) {
+            return;
+        }
         createTask(sub);
         sub->processTemplate();
     }
