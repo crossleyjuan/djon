@@ -227,6 +227,10 @@ void MainWindow::createNewTask() {
     }
     TaskDialog* dialog = new TaskDialog(_activeProject, new std::string(taskId.toStdString()), this);
     if (dialog->exec() == QDialog::Accepted) {
+        if (errorOcurred()) {
+            showErrorMessage(lastErrorCode(), lastErrorDescription(), this);
+            return;
+        }
         reloadTasks();
     }
 }
@@ -446,6 +450,7 @@ void MainWindow::importProjects() {
             reloadProjects();
         } else if (errorOcurred()) {
             showErrorMessage(lastErrorCode(), lastErrorDescription(), this);
+            return;
         }
     }
 }

@@ -361,7 +361,7 @@ int deleteTask(Task* task) {
     int posStart = current->find(string("{{\ntask-id:") + *task->id() + ";");
     int posEnd = current->find(string("}}\n"), posStart) + 3;
 
-    if (posStart <= 0) {
+    if (posStart == std::string::npos) {
         setLastError(3, "the task id: %s was not found in the task file, and will not be updated.", task->id()->c_str());
         res = 1;
     } else {

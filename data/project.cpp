@@ -98,7 +98,10 @@ std::vector<Task*>* Project::subTasks(string* prefix) {
         string* id = task->id();
         int dotsInPrefix = countChar(prefix->c_str(), '.');
         int dotsInId = countChar(id->c_str(), '.');
-        if ((dotsInId -1) == dotsInPrefix) {
+        if ((prefix->length() == 0) &&
+            (dotsInId == 0)){
+            res->push_back(task);
+        } else if ((dotsInId -1) == dotsInPrefix) {
             if ((id->compare(0, prefix->length(), *prefix) == 0) &&
                 (id->compare(*prefix) != 0)) {
                 res->push_back(task);

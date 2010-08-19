@@ -2,7 +2,7 @@
 Name "D-Jon"
 
 ; The file to write
-OutFile "setup_djon.exe"
+OutFile "shared\setup_djon.exe"
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\djon
@@ -100,6 +100,8 @@ Section "Start Menu Shortcuts"
   CreateDirectory "$SMPROGRAMS\djon"
   CreateShortCut "$SMPROGRAMS\djon\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
   CreateShortCut "$SMPROGRAMS\djon\djon.lnk" "$INSTDIR\djon.exe" "" "$INSTDIR\djon.exe" 0
+
+  Exec '"$INSTDIR\djon.exe"'
   
 SectionEnd
 
