@@ -40,6 +40,8 @@ MainWindow::MainWindow() {
     setWindowState(Qt::WindowMaximized);
 
     widget.taskView->setColumnWidth(0, 250);
+    widget.taskView->setColumnWidth(1, 70);
+    widget.taskView->setColumnWidth(2, 70);
 //    _idleDetector = new IdleDetector(5*60);// 5*60
     _idleDetector = new IdleDetector();// 5*60
     connect(_idleDetector, SIGNAL(idleTimeOut()), this, SLOT(idleTimeOut()));
@@ -288,9 +290,8 @@ void MainWindow::reloadTasks() {
     qDebug("MainWindow::reloadTasks()");
     _taskModel = new TaskModel(WITH_TIMES, *_projects);
     widget.taskView->setModel(_taskModel);
-    widget.taskView->setStyleSheet("*[mandatoryField=\"true\"] { background-color: yellow }");
-//    TaskModel* model2 = new TaskModel(ONLY_TASKS, *_projects);
-    widget.ganttView->setModel(_taskModel);
+    TaskModel* model2 = new TaskModel(ONLY_TASKS, *_projects);
+    widget.ganttView->setModel(model2);
     widget.ganttView->setIndentation(0);
     if (_taskHeader == NULL) {
         _taskHeader = new TaskHeaderView(_projects, Qt::Horizontal, widget.ganttView);

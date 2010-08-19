@@ -153,7 +153,7 @@ char* DateTime::toChar() {
     return buffer;
 }
 
-QDateTime* DateTime::toQDateTime() {
+QDateTime* DateTime::toQDateTime() const {
     QDate date(_year, _month, _day);
     QTime tim(_hour, _min, _secs);
     QDateTime* dateTime = new QDateTime(date, tim);
@@ -213,4 +213,12 @@ DateTime DateTime::today() {
     QDate today = QDate::currentDate();
     DateTime result(today.year(), today.month(), today.day());
     return result;
+}
+
+DateTime DateTime::addDays(int days) const {
+    QDateTime* date = toQDateTime();
+    QDateTime newDate = date->addDays(days);
+    DateTime dtNew(newDate);
+    delete(date);
+    return dtNew;
 }

@@ -155,11 +155,12 @@ DTime* Project::totalTime() {
 
 DTime* Project::totalTimeCurrentWeek() {
     vector<Task*>* tasks = _tasks;
+
     DTime* result = new DTime();
     for (vector<Task*>::iterator iter = tasks->begin(); iter != tasks->end(); iter++) {
         Task* task = *iter;
         if (task->childCount() == 0) {
-            result->add(*task->totalTime());
+            result->add(*task->totalTimeCurrentWeek());
         }
     }
 
@@ -172,7 +173,7 @@ DTime* Project::totalTimeCurrentDay() {
     for (vector<Task*>::iterator iter = tasks->begin(); iter != tasks->end(); iter++) {
         Task* task = *iter;
         if (task->childCount() == 0) {
-            result->add(*task->totalTime());
+            result->add(*task->totalTimeCurrentDay());
         }
     }
 

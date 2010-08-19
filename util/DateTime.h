@@ -25,9 +25,10 @@ public:
     static DateTime startDayOfWeek();
     static DateTime startDayOfNextWeek();
     static DateTime today();
+    DateTime addDays(int days) const;
 
     char* toChar();
-    QDateTime* toQDateTime();
+    QDateTime* toQDateTime() const;
     double toDouble() const;
     void setSecs(int _secs);
     int getSecs() const;

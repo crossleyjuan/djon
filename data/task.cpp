@@ -92,7 +92,7 @@ DTime* Task::totalTimeCurrentWeek() {
         DTime* tm = new DTime();
         for (vector<Task*>::iterator iter = child->begin(); iter != child->end(); iter++) {
             Task* sub = *iter;
-            tm->add(*sub->totalTime());
+            tm->add(*sub->totalTimeCurrentWeek());
         }
         return tm;
     }
@@ -101,18 +101,23 @@ DTime* Task::totalTimeCurrentWeek() {
 
 DTime* Task::totalTimeCurrentDay() {
     vector<Task*>* child = subTasks();
+    DateTime today = DateTime::today();
+    DateTime tomorrow = today.addDays(1);
     if (child->size() == 0) {
         long totalTime = 0;
         for (vector<TaskLog*>::iterator iterLog = _logs->begin(); iterLog != _logs->end(); iterLog++) {
             TaskLog* log = *iterLog;
-            totalTime += ((*log->end) - (*log->start));
+            if ((*log->start >= today) &&
+                (*log->end < tomorrow)) {
+                totalTime += ((*log->end) - (*log->start));
+            }
         }
         return new DTime(totalTime);
     } else {
         DTime* tm = new DTime();
         for (vector<Task*>::iterator iter = child->begin(); iter != child->end(); iter++) {
             Task* sub = *iter;
-            tm->add(*sub->totalTime());
+            tm->add(*sub->totalTimeCurrentDay());
         }
         return tm;
     }
