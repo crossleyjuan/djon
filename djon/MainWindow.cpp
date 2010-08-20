@@ -21,7 +21,9 @@
 #include "exportdialog.h"
 #include "view/projectdialog.h"
 #include "import/import.h"
+#ifdef WINDOWS
 #include "updatemanager.h"
+#endif
 #include <sstream>
 
 MainWindow::MainWindow() {
@@ -54,8 +56,10 @@ MainWindow::MainWindow() {
 
     createTray();
 
+#ifdef WINDOWS
     _updateManager = new UpdateManager(this);
     _updateManager->startCheck(10);
+#endif
 }
 
 void MainWindow::createTaskLogWindow() {

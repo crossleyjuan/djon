@@ -11,10 +11,10 @@ INCLUDEPATH += . \
     view \
     ../includes
 
-# LIBS += -lXss
+LIBS += -lXss
 QT += xml
 
-LIBS += ../libs/djon-util.dll
+LIBS += ../libs/libdjon-util.so
 
 # LIBS += -lRpcrt4
 # Input

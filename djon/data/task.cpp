@@ -100,9 +100,6 @@ DTime* Task::totalTimeCurrentWeek() {
 }
 
 DTime* Task::totalTimeCurrentDay() {
-    if (_id->compare("1") == 0) {
-        qDebug("aqui");
-    }
     vector<Task*>* child = subTasks();
     DateTime today = DateTime::today();
     DateTime tomorrow = today.addDays(1);
