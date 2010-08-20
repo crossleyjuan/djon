@@ -21,6 +21,7 @@
 #include "exportdialog.h"
 #include "view/projectdialog.h"
 #include "import/import.h"
+#include "updatemanager.h"
 #include <sstream>
 
 MainWindow::MainWindow() {
@@ -53,6 +54,8 @@ MainWindow::MainWindow() {
 
     createTray();
 
+    _updateManager = new UpdateManager(this);
+    _updateManager->startCheck(10);
 }
 
 void MainWindow::createTaskLogWindow() {
@@ -160,6 +163,9 @@ void MainWindow::idleTimeOut() {
     IdleTaskWindow* w = new IdleTaskWindow(_projects, _timeTracker);
     connect(w, SIGNAL(currentTaskChanged(Task*)), _timeWindow, SLOT(setActiveTask(Task*)));
     w->exec();
+    if (_timeTracker->status() == RUNNING) {
+        _idleDetector->start();
+    }
 }
 
 void MainWindow::startRecord() {

@@ -1,7 +1,7 @@
 #ifndef ERRORHANDLE_H
 #define ERRORHANDLE_H
 
-#include <QWidget>
+#include <QObject>
 /******************************************************************
 Error Functions
 */

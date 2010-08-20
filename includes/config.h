@@ -3,4 +3,6 @@
 
 #define WINDOWS
 
+#define VERSION "0.22010081905"
+
 #endif // CONFIG_H

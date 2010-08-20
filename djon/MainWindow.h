@@ -19,6 +19,7 @@ class TimeTracker;
 class CurrentTime;
 class TaskModel;
 class TaskHeaderView;
+class UpdateManager;
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -49,6 +50,7 @@ private:
     TaskModel* _taskModel;
     QSystemTrayIcon* _trayIcon;
     QMenu* _taskPopUpMenu;
+    UpdateManager* _updateManager;
 
 public:
     void closeEvent(QCloseEvent *event);

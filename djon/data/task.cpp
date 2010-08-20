@@ -100,6 +100,9 @@ DTime* Task::totalTimeCurrentWeek() {
 }
 
 DTime* Task::totalTimeCurrentDay() {
+    if (_id->compare("1") == 0) {
+        qDebug("aqui");
+    }
     vector<Task*>* child = subTasks();
     DateTime today = DateTime::today();
     DateTime tomorrow = today.addDays(1);
@@ -107,9 +110,12 @@ DTime* Task::totalTimeCurrentDay() {
         long totalTime = 0;
         for (vector<TaskLog*>::iterator iterLog = _logs->begin(); iterLog != _logs->end(); iterLog++) {
             TaskLog* log = *iterLog;
-            if ((*log->start >= today) &&
-                (*log->end < tomorrow)) {
-                totalTime += ((*log->end) - (*log->start));
+            if (*log->start >= today) {
+                if (*log->end < tomorrow) {
+                    totalTime += ((*log->end) - (*log->start));
+                } else {
+                    totalTime += ((*log->end) - tomorrow);
+                }
             }
         }
         return new DTime(totalTime);

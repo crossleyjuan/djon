@@ -102,8 +102,9 @@ std::vector<Task*>* Project::subTasks(string* prefix) {
             (dotsInId == 0)){
             res->push_back(task);
         } else if ((dotsInId -1) == dotsInPrefix) {
-            if ((id->compare(0, prefix->length(), *prefix) == 0) &&
-                (id->compare(*prefix) != 0)) {
+            int posNextDot = id->find_first_of('.', prefix->length());
+            string currentPrefix = id->substr(0, posNextDot);
+            if (currentPrefix.compare(*prefix) == 0) {
                 res->push_back(task);
             }
         }

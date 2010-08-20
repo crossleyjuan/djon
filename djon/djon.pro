@@ -5,19 +5,20 @@ TEMPLATE = app
 TARGET = 
 DEPENDPATH += . \
     data \
-    util \
     view
 INCLUDEPATH += . \
     data \
-    util \
-    view
+    view \
+    ../includes
+
 # LIBS += -lXss
 QT += xml
 
+LIBS += ../libs/djon-util.dll
+
 # LIBS += -lRpcrt4
 # Input
-HEADERS += config.h \
-    data.h \
+HEADERS += data.h \
     globaldefs.h \
     MainWindow.h \
     taskdelegate.h \
@@ -26,20 +27,14 @@ HEADERS += config.h \
     tasklogmodel.h \
     tasklogwindow.h \
     template.h \
-    util.h \
     data/project.h \
     data/task.h \
-    util/DateTime.h \
-    util/fileutil.h \
-    util/stringfunctions.h \
     view/TaskModel.h \
     view/taskheaderview.h \
     idledetector.h \
     timetracker.h \
     tasklogdelegate.h \
-    util/dtime.h \
     currenttime.h \
-    util/errorHandle.h \
     view/projectwizard.h \
     view/projectinfo.h \
     view/projectsummary.h \
@@ -52,7 +47,8 @@ HEADERS += config.h \
     view/projectdialog.h \
     import/allneticimporthandler.h \
     import/import.h \
-    import/xmlerrorhandler.h
+    import/xmlerrorhandler.h \
+    updatemanager.h
 FORMS += MainWindow.ui \
     taskdialog.ui \
     tasklogwindow.ui \
@@ -73,20 +69,14 @@ SOURCES += data.cpp \
     tasklogmodel.cpp \
     tasklogwindow.cpp \
     template.cpp \
-    util.cpp \
     data/project.cpp \
     data/task.cpp \
-    util/DateTime.cpp \
-    util/fileutil.cpp \
-    util/stringfunctions.cpp \
     view/TaskModel.cpp \
     view/taskheaderview.cpp \
     idledetector.cpp \
     timetracker.cpp \
     tasklogdelegate.cpp \
-    util/dtime.cpp \
     currenttime.cpp \
-    util/errorHandle.cpp \
     view/projectwizard.cpp \
     view/projectinfo.cpp \
     view/projectsummary.cpp \
@@ -99,9 +89,11 @@ SOURCES += data.cpp \
     view/projectdialog.cpp \
     import/allneticimporthandler.cpp \
     import/import.cpp \
-    import/xmlerrorhandler.cpp
+    import/xmlerrorhandler.cpp \
+    updatemanager.cpp
 OTHER_FILES += djon.rc
-RESOURCES += djon_rs.qrc
+RESOURCES += \
+    djon_rs.qrc
 RC_FILE = djon.rc
 
 # CONFIG += console

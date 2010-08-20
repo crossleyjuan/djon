@@ -62,6 +62,8 @@ Section "djon (required)"
   
   ; Put file there
   File "djon.exe"
+  File "djon-util.dll"
+  File "updater.exe"
   
   File /oname=$PROFILE\.djon\templates\AnaRequerimientos.tpl AnaRequerimientos.tpl
   File /oname=$PROFILE\.djon\templates\Bugs.tpl Bugs.tpl

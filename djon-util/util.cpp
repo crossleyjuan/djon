@@ -184,6 +184,15 @@ bool makedir(const char* path) {
     }
 }
 
+std::string* getTempDir() {
+#ifndef WINDOWS
+    string* tmp = new string(getenv("TMP"));
+#else
+    string* tmp = new std::string(getenv("TMP"));
+#endif
+    return tmp;
+}
+
 std::string* getHomeDir() {
 #ifndef WINDOWS
     string* home = new string(getenv("HOME"));
