@@ -21,6 +21,7 @@
 #include "exportdialog.h"
 #include "view/projectdialog.h"
 #include "import/import.h"
+#include "config.h"
 #ifdef WINDOWS
 #include "updatemanager.h"
 #endif
@@ -313,7 +314,7 @@ void MainWindow::reloadTasks() {
     qDebug("MainWindow::reloadTasks()");
     if (_taskModel != NULL) {
         _taskModel->setProjects(*_projects);
-        _ganttModel->setProjects(*_projects);
+//        _ganttModel->setProjects(*_projects);
         _taskHeader->setProjects(_projects);
     } else {
         _taskModel = new TaskModel(WITH_TIMES, *_projects);

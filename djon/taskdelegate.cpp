@@ -57,7 +57,7 @@ void TaskDelegate::paint ( QPainter * painter, const QStyleOptionViewItem & opti
 }
 
 QSize TaskDelegate::sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const {
-    return QSize(500, 15);
+    return QSize(500, 13);
 }
 
 void TaskDelegate::drawBackground(QPainter* p, const QStyleOptionViewItem & option, const QModelIndex & index ) const {

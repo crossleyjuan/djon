@@ -30,5 +30,4 @@ HEADERS +=\
     util/errorHandle.h \
     util/dtime.h \
     util/DateTime.h \
-    util/stringfunctions.h \
-    config.h
+    util/stringfunctions.h

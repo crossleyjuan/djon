@@ -61,6 +61,8 @@ Section "djon (required)"
   ; Put file there
   File "djon.exe"
   ; File "djon.nsi"
+  File "djon-util.dll"
+  File "updater.exe"
   File "libgcc_s_dw2-1.dll"
   File "mingwm10.dll"
   File "QtCored4.dll"

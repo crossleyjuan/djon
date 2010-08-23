@@ -1,8 +1,8 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define LINUX
+#define WINDOWS
 
-#define VERSION "0.22010081905"
+#define VERSION "0.22010082302"
 
 #endif // CONFIG_H

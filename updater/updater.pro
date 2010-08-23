@@ -19,3 +19,8 @@ SOURCES += main.cpp \
 
 HEADERS  += \
     Local.h
+
+OTHER_FILES += \
+    djon.rc \
+    update.exe.manifest
+RC_FILE = djon.rc
