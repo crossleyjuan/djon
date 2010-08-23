@@ -44,9 +44,11 @@ public:
     void setTrackedTask(Task* task);
     // This will retrieve the currently tracked (time tracked) task
     Task* trackedTask() const;
+    void setProjects(const vector<Project*> projects);
 
 private:
     void setupModelData(TaskItem *parent);
+    void refreshData();
 
     TaskItem *rootItem;
     std::vector<Project*> _projects;

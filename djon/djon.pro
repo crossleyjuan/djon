@@ -10,10 +10,8 @@ INCLUDEPATH += . \
     data \
     view \
     ../includes
-
 LIBS += -lXss
 QT += xml
-
 LIBS += ../libs/libdjon-util.so
 
 # LIBS += -lRpcrt4
@@ -59,7 +57,8 @@ FORMS += MainWindow.ui \
     idletaskwindow.ui \
     view/exportdialog.ui \
     view/dialogsettings.ui \
-    view/projectdialog.ui
+    view/projectdialog.ui \
+    MainWindow.ui
 SOURCES += data.cpp \
     main.cpp \
     MainWindow.cpp \
@@ -92,8 +91,5 @@ SOURCES += data.cpp \
     import/xmlerrorhandler.cpp \
     updatemanager.cpp
 OTHER_FILES += djon.rc
-RESOURCES += \
-    djon_rs.qrc
+RESOURCES += djon_rs.qrc
 RC_FILE = djon.rc
-
-# CONFIG += console

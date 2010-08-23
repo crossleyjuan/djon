@@ -49,6 +49,9 @@ void TaskDelegate::paint ( QPainter * painter, const QStyleOptionViewItem & opti
     if (!index.isValid()) {
         return;
     }
+    if (index.column() != 0) {
+        return;
+    }
     drawBackground(painter, option, index);
     drawTasks(painter, option, index);
 }

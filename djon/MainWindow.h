@@ -48,6 +48,7 @@ private:
     Task* _activeTask;
     CurrentTime* _timeWindow;
     TaskModel* _taskModel;
+    TaskModel* _ganttModel;
     QSystemTrayIcon* _trayIcon;
     QMenu* _taskPopUpMenu;
     UpdateManager* _updateManager;

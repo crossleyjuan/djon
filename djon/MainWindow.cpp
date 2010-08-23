@@ -29,11 +29,20 @@
 MainWindow::MainWindow() {
     qDebug("MainWindow::MainWindow()");
     widget.setupUi(this);
+    _logWindow = NULL;
+    _projects = NULL;
+    _idleDetector = NULL;
+    _timeTracker = NULL;
+    _taskHeader = NULL;
+    _activeLog = NULL;
     _activeProject = NULL;
     _activeTask = NULL;
-    _activeLog = NULL;
-    _taskHeader = NULL;
-    _projects = NULL;
+    _timeWindow = NULL;
+    _taskModel = NULL;
+    _ganttModel = NULL;
+    _trayIcon = NULL;
+    _taskPopUpMenu = NULL;
+    _updateManager = NULL;
 
     initialize();
     createTaskLogWindow();
@@ -302,32 +311,34 @@ void MainWindow::reloadProjects() {
 
 void MainWindow::reloadTasks() {
     qDebug("MainWindow::reloadTasks()");
-    _taskModel = new TaskModel(WITH_TIMES, *_projects);
-    widget.taskView->setModel(_taskModel);
-    TaskModel* model2 = new TaskModel(ONLY_TASKS, *_projects);
-    widget.ganttView->setModel(model2);
-    widget.ganttView->setIndentation(0);
-    if (_taskHeader == NULL) {
-        _taskHeader = new TaskHeaderView(_projects, Qt::Horizontal, widget.ganttView);
-    } else {
+    if (_taskModel != NULL) {
+        _taskModel->setProjects(*_projects);
+        _ganttModel->setProjects(*_projects);
         _taskHeader->setProjects(_projects);
-    }
-    widget.ganttView->setHeader(_taskHeader);
-//    widget.ganttView->setItemsExpandable(false);;
-    TaskDelegate* delegate = createTaskDelegate();
-    widget.ganttView->setItemDelegate(delegate);
-    widget.ganttView->setColumnHidden(1, true);
+    } else {
+        _taskModel = new TaskModel(WITH_TIMES, *_projects);
+        widget.taskView->setModel(_taskModel);
+        //_ganttModel = new TaskModel(ONLY_TASKS, *_projects);
+        widget.ganttView->setModel(_taskModel);
+        widget.ganttView->setIndentation(0);
+        _taskHeader = new TaskHeaderView(_projects, Qt::Horizontal, widget.ganttView);
+        widget.ganttView->setHeader(_taskHeader);
 
+        widget.taskView->setAlternatingRowColors(true);
+        widget.taskView->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+        TaskDelegate* delegate = createTaskDelegate();
+        widget.ganttView->setItemDelegate(delegate);
+        widget.ganttView->setColumnHidden(1, true);
+    }
     connect(widget.taskView, SIGNAL(collapsed(QModelIndex)), widget.ganttView, SLOT(collapse(QModelIndex)));
     connect(widget.taskView, SIGNAL(expanded(QModelIndex)), widget.ganttView, SLOT(expand(QModelIndex)));
     connect(widget.taskView->verticalScrollBar(), SIGNAL(valueChanged(int)), widget.ganttView->verticalScrollBar(), SLOT(setValue(int)));
     connect(widget.ganttView->verticalScrollBar(), SIGNAL(valueChanged(int)), widget.taskView->verticalScrollBar(), SLOT(setValue(int)));
+    connect(widget.taskView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(selectTaskChanged(QModelIndex,QModelIndex)));
 
-    widget.taskView->setAlternatingRowColors(true);
     widget.taskView->expandAll();
     widget.ganttView->expandAll();
-    widget.taskView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    connect(widget.taskView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(selectTaskChanged(QModelIndex,QModelIndex)));
 }
 
 void MainWindow::timeStopped(Task* task, TaskLog* taskLog) {

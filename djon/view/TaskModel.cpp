@@ -11,17 +11,11 @@
 TaskModel::TaskModel(MODELTYPE type, const vector<Project*> projects, QObject *parent)
     : QAbstractItemModel(parent)
 {
-    QList<QVariant> rootData;
     _type = type;
     _projects = projects;
     _trackedTask = NULL;
-    if (_type == ONLY_TASKS) {
-        rootData << "Description";
-    } else {
-        rootData << "Description" << "Total Time" << "Week" << "Day";
-    }
-    rootItem = new TaskItem(rootData);
-    setupModelData(rootItem);
+
+    refreshData();
 }
 
 TaskModel::~TaskModel()
@@ -80,7 +74,10 @@ QVariant TaskModel::headerData(int section, Qt::Orientation orientation,
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
         return rootItem->data(section);
 
+//    if (role == Qt::SizeHintRole)
+//        return QSize(1, 1);
     return QVariant();
+
 }
 
 QModelIndex TaskModel::index(int row, int column, const QModelIndex &parent)
@@ -199,4 +196,22 @@ void TaskModel::setTrackedTask(Task *task) {
 
 Task* TaskModel::trackedTask() const {
     return _trackedTask;
+}
+
+void TaskModel::setProjects(const vector<Project*> projects) {
+    _projects = projects;
+    refreshData();
+}
+
+void TaskModel::refreshData() {
+    QList<QVariant> rootData;
+    if (_type == ONLY_TASKS) {
+        rootData << "Description";
+    } else {
+        rootData << "Description" << "Total Time" << "Week" << "Day";
+    }
+    rootItem = new TaskItem(rootData);
+    setupModelData(rootItem);
+    // resets the views states (invalidate previously sent data)
+//    reset();
 }

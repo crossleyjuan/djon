@@ -13,13 +13,10 @@ IdleTaskWindow::IdleTaskWindow(std::vector<Project*>* projects, TimeTracker* tim
     this->_projects = projects;
     m_ui->comboBox->setModel(new TaskModel(ONLY_TASKS, *projects));
 
+    QTime current = QTime::currentTime();
+    QString text("You have been idle since: " + current.toString(tr("hh:mm:ss AP")) + ", what do you want to do with the registered time?");
+    m_ui->idleMessage->setText(text);
     setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
-    /*
-    setWindowFlags(Qt::Dialog |
-                   Qt::WindowStaysOnTopHint |
-                   Qt::CustomizeWindowHint |
-                   Qt::WindowTitleHint);
-                   */
     _timeTracker = timeTracker;
     connect(this, SIGNAL(accepted()), this, SLOT(on_accepted()));
 }
