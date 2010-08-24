@@ -222,3 +222,15 @@ DateTime DateTime::addDays(int days) const {
     delete(date);
     return dtNew;
 }
+
+int DateTime::daysTo(const DateTime& dt) const {
+    QDateTime* thisDate = toQDateTime();
+    QDateTime* qdt = dt.toQDateTime();
+
+    int days = thisDate->daysTo(*qdt);
+
+    delete(thisDate);
+    delete(qdt);
+
+    return days;
+}

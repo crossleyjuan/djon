@@ -22,10 +22,13 @@
 #include "view/projectdialog.h"
 #include "import/import.h"
 #include "config.h"
+#include "ganttscene.h"
 #ifdef WINDOWS
 #include "updatemanager.h"
 #endif
 #include <sstream>
+#include <QGraphicsView>
+#include "ganttscene.h"
 
 MainWindow::MainWindow() {
     qDebug("MainWindow::MainWindow()");
@@ -70,6 +73,11 @@ MainWindow::MainWindow() {
     _updateManager = new UpdateManager(this);
     _updateManager->startCheck(10);
 #endif
+
+    GanttScene* scene = new GanttScene();
+    scene->setModel(_taskModel);
+    QGraphicsView* view = new QGraphicsView(scene);
+    view->show();
 }
 
 void MainWindow::createTaskLogWindow() {

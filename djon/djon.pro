@@ -12,7 +12,7 @@ INCLUDEPATH += . \
     ../includes
 # LIBS += -lXss
 QT += xml
-LIBS += ../libs/djon-util.dll
+LIBS += -L../libs -ldjon-util
 
 # LIBS += -lRpcrt4
 # Input
@@ -46,7 +46,8 @@ HEADERS += data.h \
     import/allneticimporthandler.h \
     import/import.h \
     import/xmlerrorhandler.h \
-    updatemanager.h
+    updatemanager.h \
+    view/ganttscene.h
 FORMS += MainWindow.ui \
     taskdialog.ui \
     tasklogwindow.ui \
@@ -89,7 +90,8 @@ SOURCES += data.cpp \
     import/allneticimporthandler.cpp \
     import/import.cpp \
     import/xmlerrorhandler.cpp \
-    updatemanager.cpp
+    updatemanager.cpp \
+    view/ganttscene.cpp
 OTHER_FILES += djon.rc
 RESOURCES += djon_rs.qrc
 RC_FILE = djon.rc

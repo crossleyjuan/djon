@@ -3,6 +3,6 @@
 
 #define WINDOWS
 
-#define VERSION "0.22010082302"
+#define VERSION "0.22010082401"
 
 #endif // CONFIG_H

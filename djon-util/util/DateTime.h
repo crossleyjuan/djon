@@ -26,6 +26,7 @@ public:
     static DateTime startDayOfNextWeek();
     static DateTime today();
     DateTime addDays(int days) const;
+    int daysTo(const DateTime& dt) const;
 
     char* toChar();
     QDateTime* toQDateTime() const;
