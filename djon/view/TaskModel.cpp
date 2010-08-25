@@ -55,6 +55,10 @@ QVariant TaskModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
+    if (role == Qt::SizeHintRole) {
+        return QSize(100, 15);
+    }
+
     if (role != Qt::DisplayRole)
         return QVariant();
 
@@ -75,7 +79,7 @@ QVariant TaskModel::headerData(int section, Qt::Orientation orientation,
         return rootItem->data(section);
 
 //    if (role == Qt::SizeHintRole)
-//        return QSize(1, 1);
+//        return QSize(50, 20);
     return QVariant();
 
 }

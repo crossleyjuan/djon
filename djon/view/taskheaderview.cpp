@@ -19,7 +19,6 @@ void TaskHeaderView::paintSection ( QPainter * painter, const QRect & rect, int 
     if (!_startDate || !_endDate) {
         return;
     }
-//    int columnSize = geometry().width() / NUM_COLS;
     int textSize = 30;
     int margin = 15;
     int cols = (rect.width() / (textSize + margin));
@@ -52,45 +51,6 @@ void TaskHeaderView::paintSection ( QPainter * painter, const QRect & rect, int 
         p->drawText(x*(textSize + margin), 15, startDate.toString("dd-MMM"));
         startDate = startDate.addDays(days);
     }
-//    p->setBrush(QBrush(QColor("white")));
-//    p->setPen(QPen(QColor("white")));
-//    p->drawRect(rect);
-//
-//    //    int columnSize = geometry().width() / NU_COLS;
-//    int textSize = 30;
-//    int margin = 15;
-//    int cols = (rect.width() / (textSize + margin));
-//    int columnSize = textSize + margin;
-//
-//    QDate startDate;
-//    int days = 0;
-//    if (_startDate != NULL) {
-//        startDate = QDate(_startDate->year(), _startDate->month(), _startDate->day());
-//        days = startDate.daysTo(*_endDate) / cols;
-//    }
-//
-//    p->setFont(QFont("Arial", 9));
-//    for (int x = 0; x < (cols + 1); x++) {
-//        QColor barcolor;
-//        if ((x % 2) > 0) {
-//            barcolor = QColor("white");
-//        } else {
-//            barcolor = QColor(235, 235, 235);
-//        }
-//        p->setBrush(QBrush(barcolor));
-//        p->setPen(QPen(barcolor));
-//        int left = (x*columnSize) + rect.left();
-//        int top = 0 + rect.top();
-//        int width = columnSize;
-//        int heigth = rect.height();
-//        p->drawRect(left, top, columnSize, heigth);
-//
-//        QPen pen(QColor(200, 200, 200));
-//        pen.setStyle(Qt::DashLine);
-//        p->setPen(pen);
-//        p->drawLine(x*columnSize + rect.left(), 0 + rect.top(), x*columnSize + rect.left(), rect.height());
-//    }
-//    p->restore();
 }
 
 void TaskHeaderView::refresh() {

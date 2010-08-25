@@ -37,8 +37,14 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="verticalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
        <property name="alternatingRowColors">
         <bool>true</bool>
+       </property>
+       <property name="verticalScrollMode">
+        <enum>QAbstractItemView::ScrollPerPixel</enum>
        </property>
        <property name="autoExpandDelay">
         <number>-1</number>
@@ -50,18 +56,12 @@
         <bool>true</bool>
        </property>
       </widget>
-      <widget class="QTreeView" name="ganttView">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-         <horstretch>2</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
+      <widget class="QGraphicsView" name="ganttView">
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
        </property>
-       <property name="verticalScrollBarPolicy">
-        <enum>Qt::ScrollBarAsNeeded</enum>
-       </property>
-       <property name="horizontalScrollBarPolicy">
-        <enum>Qt::ScrollBarAsNeeded</enum>
+       <property name="transformationAnchor">
+        <enum>QGraphicsView::NoAnchor</enum>
        </property>
       </widget>
      </widget>
@@ -74,7 +74,7 @@
      <x>0</x>
      <y>0</y>
      <width>396</width>
-     <height>23</height>
+     <height>18</height>
     </rect>
    </property>
   </widget>

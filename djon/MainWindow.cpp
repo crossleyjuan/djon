@@ -43,10 +43,10 @@ MainWindow::MainWindow() {
     _activeTask = NULL;
     _timeWindow = NULL;
     _taskModel = NULL;
-    _ganttModel = NULL;
     _trayIcon = NULL;
     _taskPopUpMenu = NULL;
     _updateManager = NULL;
+    _ganttScene = NULL;
 
     initialize();
     createTaskLogWindow();
@@ -73,11 +73,6 @@ MainWindow::MainWindow() {
     _updateManager = new UpdateManager(this);
     _updateManager->startCheck(10);
 #endif
-
-    GanttScene* scene = new GanttScene();
-    scene->setModel(_taskModel);
-    QGraphicsView* view = new QGraphicsView(scene);
-    view->show();
 }
 
 void MainWindow::createTaskLogWindow() {
@@ -322,32 +317,26 @@ void MainWindow::reloadTasks() {
     qDebug("MainWindow::reloadTasks()");
     if (_taskModel != NULL) {
         _taskModel->setProjects(*_projects);
-//        _ganttModel->setProjects(*_projects);
+        _ganttScene->refresh();
         _taskHeader->setProjects(_projects);
     } else {
         _taskModel = new TaskModel(WITH_TIMES, *_projects);
         widget.taskView->setModel(_taskModel);
-        //_ganttModel = new TaskModel(ONLY_TASKS, *_projects);
-        widget.ganttView->setModel(_taskModel);
-        widget.ganttView->setIndentation(0);
+        _ganttScene = new GanttScene();
+        _ganttScene->setModel(_taskModel);
+        widget.ganttView->setScene(_ganttScene);
         _taskHeader = new TaskHeaderView(_projects, Qt::Horizontal, widget.ganttView);
-        widget.ganttView->setHeader(_taskHeader);
 
         widget.taskView->setAlternatingRowColors(true);
         widget.taskView->setSelectionBehavior(QAbstractItemView::SelectRows);
-
-        TaskDelegate* delegate = createTaskDelegate();
-        widget.ganttView->setItemDelegate(delegate);
-        widget.ganttView->setColumnHidden(1, true);
     }
-    connect(widget.taskView, SIGNAL(collapsed(QModelIndex)), widget.ganttView, SLOT(collapse(QModelIndex)));
-    connect(widget.taskView, SIGNAL(expanded(QModelIndex)), widget.ganttView, SLOT(expand(QModelIndex)));
+    connect(widget.taskView, SIGNAL(collapsed(QModelIndex)), _ganttScene, SLOT(collapse(QModelIndex)));
+    connect(widget.taskView, SIGNAL(expanded(QModelIndex)), _ganttScene, SLOT(expand(QModelIndex)));
     connect(widget.taskView->verticalScrollBar(), SIGNAL(valueChanged(int)), widget.ganttView->verticalScrollBar(), SLOT(setValue(int)));
     connect(widget.ganttView->verticalScrollBar(), SIGNAL(valueChanged(int)), widget.taskView->verticalScrollBar(), SLOT(setValue(int)));
     connect(widget.taskView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(selectTaskChanged(QModelIndex,QModelIndex)));
 
     widget.taskView->expandAll();
-    widget.ganttView->expandAll();
 }
 
 void MainWindow::timeStopped(Task* task, TaskLog* taskLog) {

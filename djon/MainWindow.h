@@ -13,6 +13,7 @@
 #include <vector>
 #include "taskdelegate.h"
 #include "idledetector.h"
+#include "view/ganttscene.h"
 
 class TaskLogWindow;
 class TimeTracker;
@@ -48,7 +49,8 @@ private:
     Task* _activeTask;
     CurrentTime* _timeWindow;
     TaskModel* _taskModel;
-    TaskModel* _ganttModel;
+    GanttScene* _ganttScene;
+
     QSystemTrayIcon* _trayIcon;
     QMenu* _taskPopUpMenu;
     UpdateManager* _updateManager;
