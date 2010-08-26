@@ -58,6 +58,8 @@ MainWindow::MainWindow() {
     widget.taskView->setColumnWidth(0, 250);
     widget.taskView->setColumnWidth(1, 70);
     widget.taskView->setColumnWidth(2, 70);
+    widget.taskView->setColumnWidth(3, 70);
+    widget.taskView->setMinimumWidth(390);
 //    _idleDetector = new IdleDetector(5*60);// 5*60
     _idleDetector = new IdleDetector();// 5*60
     connect(_idleDetector, SIGNAL(idleTimeOut()), this, SLOT(idleTimeOut()));

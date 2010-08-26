@@ -38,8 +38,8 @@ private:
     void initialize();
     bool isCollapsed(const QModelIndex& index);
 
-    DateTime* _startDate;
-    DateTime* _endDate;
+    DateTime _startDate;
+    DateTime _endDate;
     TaskModel* _model;
     int _viewSizeHeight;
     int _viewSizeWidth;

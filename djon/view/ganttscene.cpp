@@ -15,8 +15,6 @@ void GanttScene::initialize() {
     _currentX = 0;
     _currentY = 0;
     this->_dayWidth = 0;
-    this->_endDate = NULL;
-    this->_startDate = NULL;
     this->_totalDays = 0;
     this->_viewSizeHeight = 0;
     this->_viewSizeWidth = 0;
@@ -35,6 +33,32 @@ void GanttScene::refresh() {
 }
 
 void GanttScene::createHeader() {
+    QSize size = headerSizeHint();
+
+    QLinearGradient grad(0, 0, 0, size.height());
+    int dark = 210;
+    grad.setColorAt(1, QColor(dark, dark, dark));
+    grad.setColorAt(0.7, QColor(dark + 20, dark + 20, dark + 20));
+    grad.setColorAt(0, Qt::white);
+    QBrush background(grad);
+    QPen pen(QColor(220, 220, 220));
+    addRect(0, 0, _viewSizeWidth, size.height() + 1, pen, background)->setZValue(1);
+
+    int textSize = 30;
+    int margin = 15;
+    int columnSize = 45;
+
+    QDateTime startDate = *_startDate.addDays(-1).toQDateTime();
+    for (int x = 0; x < _totalDays; x++) {
+        QPen textPen(Qt::black);
+        QGraphicsSimpleTextItem* text = addSimpleText(startDate.toString("dd-MMM"), QFont("Arial", 8));
+        text->setPos(x * 45 + 2, 3);
+        text->setVisible(true);
+//        text->setPen(textPen);
+        text->setZValue(1);
+        startDate = startDate.addDays(1);
+    }
+
     _currentY += headerSizeHint().height();
 }
 
@@ -84,27 +108,27 @@ QGraphicsItem* GanttScene::getGroupItem(const QModelIndex &index) {
 
     QSize size = sizeHint(index);
 
-    int daysToStart = _startDate->daysTo(*startDate);
+    int daysToStart = _startDate.daysTo(*startDate);
     int x1 = daysToStart * _dayWidth;
     int y1 = _currentY + size.height() - 10;
 
     int x2 = x1 + (days * _dayWidth);
-    int y2 = _currentY + size.height() - 5;
+    int y2 = _currentY + size.height() - 6;
 
-    QGraphicsItem* item = addRect(x1, y1, (x2 - x1), (y2 - y1), pblack, bblack);
+    QGraphicsItem* item = addRect(x1 - 4, y1, (x2 - x1) + 8, (y2 - y1), pblack, bblack);
     item->setZValue(1);
     QVector<QPointF> trian1;
-    trian1 << QPointF(x1, y1);
-    trian1 << QPointF(x1 + 5, y1);
-    trian1 << QPointF(x1, y1 + 10);
+    trian1 << QPointF(x1 - 4, y2);
+    trian1 << QPointF(x1, y2 + 4);
+    trian1 << QPointF(x1 + 4, y2);
     QPolygonF poly1(trian1);
     item = addPolygon(poly1, pblack, bblack);
     item->setZValue(1);
 
     QVector<QPointF> trian2;
-    trian2 << QPointF(x2, y1);
-    trian2 << QPointF(x2 - 5, y1);
-    trian2 << QPointF(x2, y1 + 10);
+    trian2 << QPointF(x2 - 4 , y2);
+    trian2 << QPointF(x2, y2 + 4);
+    trian2 << QPointF(x2 + 4, y2);
     QPolygonF poly2(trian2);
 
     item = addPolygon(poly2, pblack, bblack);
@@ -129,21 +153,25 @@ QGraphicsItem* GanttScene::getTaskItem(const QModelIndex &index) {
     QDate* endDate = new QDate(barEndDate->getYear(), barEndDate->getMonth(), barEndDate->getDay());
     int days = startDate->daysTo(*endDate) + 1;
 
-    QPen pen(QColor("blue"));
-    QBrush brush(QColor("blue"));
-
     QSize size = sizeHint(index);
 
-    int bordermargin = (15 * .5) / 2;
+    int bordermargin = (size.height() * .4) / 2;
 
-    int daysToStart = _startDate->daysTo(*task->startDate());
+    int daysToStart = _startDate.daysTo(*task->startDate());
     int x1 = daysToStart * _dayWidth;
     int y1 = _currentY + bordermargin;
 
     int x2 = x1 + (days * _dayWidth);
     int y2 = _currentY + size.height() - bordermargin;
 
-    QGraphicsItem* item = this->addRect(x1, y1, (x2 - x1), (y2 - y1), pen, brush);
+    QLinearGradient grad(QPointF(x1, y1), QPointF(x1, y2));
+    grad.setColorAt(0, QColor(0, 0, 150));
+    grad.setColorAt(0.4, QColor(0, 0, 180));
+    grad.setColorAt(1, QColor(200, 200, 255));
+    QBrush b(grad);//QImage(":/img/task_bar.png"));//(QPixmap(":/img/task_bar.png"));
+    QPen pen(QColor(0, 0, 150));
+
+    QGraphicsItem* item = this->addRect(x1, y1, (x2 - x1), (y2 - y1), pen, b);
     item->setZValue(1);
     _currentY += sizeHint(index).height();
     return item;
@@ -167,7 +195,7 @@ void GanttScene::createBackground() {
         if ((x % 2) > 0) {
             barcolor = QColor("white");
         } else {
-            barcolor = QColor(235, 235, 235);
+            barcolor = QColor(240, 240, 240);
         }
         QBrush brushBar(barcolor);
         QPen penBar(barcolor);
@@ -188,8 +216,8 @@ void GanttScene::createBackground() {
 void GanttScene::setupScene() {
     this->clear();
 
-    createHeader();
     calcZoom();
+    createHeader();
     int projects = _model->rowCount(QModelIndex());
     for (int x = 0; x < projects; x++) {
         QModelIndex index = _model->index(x, 0);
@@ -233,9 +261,9 @@ void GanttScene::calcZoom() {
         }
     }
     */
-    _startDate = start;
-    _endDate = end;
-    _totalDays = _startDate->daysTo(*_endDate);
+    _startDate = start->addDays(-1);
+    _endDate = end->addDays(1);
+    _totalDays = _startDate.daysTo(_endDate) + 5;
     this->_viewSizeWidth = _totalDays * _dayWidth;
 }
 

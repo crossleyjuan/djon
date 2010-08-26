@@ -11,6 +11,7 @@ QT       -= gui
 TARGET = djon-util
 TEMPLATE = lib
 
+DESTDIR = ../libs
 DEFINES += DJONUTIL_LIBRARY
 
 INCLUDEPATH += ../includes

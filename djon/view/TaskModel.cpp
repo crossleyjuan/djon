@@ -56,7 +56,7 @@ QVariant TaskModel::data(const QModelIndex &index, int role) const
     }
 
     if (role == Qt::SizeHintRole) {
-        return QSize(100, 15);
+        return QSize(10, 15);
     }
 
     if (role != Qt::DisplayRole)

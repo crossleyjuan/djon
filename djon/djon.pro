@@ -6,11 +6,14 @@ TARGET =
 DEPENDPATH += . \
     data \
     view
+
+DESTDIR = ../libs
+
 INCLUDEPATH += . \
     data \
     view \
     ../includes
-# LIBS += -lXss
+LIBS += -lXss
 QT += xml
 LIBS += -L../libs -ldjon-util
 
