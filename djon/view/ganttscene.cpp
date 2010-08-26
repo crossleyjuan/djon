@@ -63,10 +63,16 @@ void GanttScene::createHeader() {
 }
 
 void GanttScene::drawIndex(const QModelIndex &index) {
+    if (!index.isValid()) {
+        return;
+    }
     if (_model->rowCount(index) > 0) {
         getGroupItem(index);
     } else {
-        getTaskItem(index);
+        Task* task = _model->task(index);
+        if (task != NULL) {
+            getTaskItem(index);
+        }
     }
 }
 
@@ -240,12 +246,14 @@ void GanttScene::calcZoom() {
         Project* proj = _model->project(pIndex);
         if (pIndex.isValid()) {
             DateTime* pStart = proj->startDate();
-            DateTime* pEnd = proj->endDate();
-            if ((start == NULL) || (*pStart < *start)) {
-                start = pStart;
-            }
-            if ((end == NULL) || (*pEnd > *end)) {
-                end = pEnd;
+            if (pStart != NULL) {
+                DateTime* pEnd = proj->endDate();
+                if ((start == NULL) || (*pStart < *start)) {
+                    start = pStart;
+                }
+                if ((end == NULL) || (*pEnd > *end)) {
+                    end = pEnd;
+                }
             }
         }
     }
@@ -261,8 +269,13 @@ void GanttScene::calcZoom() {
         }
     }
     */
-    _startDate = start->addDays(-1);
-    _endDate = end->addDays(1);
+    if (start != NULL) {
+        _startDate = start->addDays(-1);
+        _endDate = end->addDays(1);
+    } else {
+        _startDate = DateTime::today();
+        _endDate = _startDate.addDays(1);
+    }
     _totalDays = _startDate.daysTo(_endDate) + 5;
     this->_viewSizeWidth = _totalDays * _dayWidth;
 }

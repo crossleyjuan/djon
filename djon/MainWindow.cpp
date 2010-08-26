@@ -146,6 +146,10 @@ void MainWindow::setupActions() {
     _taskPopUpMenu->addAction(newTask);
     _taskPopUpMenu->addAction(editTask);
     _taskPopUpMenu->addAction(deleteTask);
+    _taskPopUpMenu->addSeparator();
+    _taskPopUpMenu->addAction(newProject);
+    _taskPopUpMenu->addAction(editProject);
+    _taskPopUpMenu->addAction(closeProject);
     //    prjMenu->addAction(completeTask);
     prjMenu->addSeparator();
     QAction* import = prjMenu->addAction(QIcon(":/img/import-project.png"), tr("Import Projects"));
@@ -349,21 +353,28 @@ void MainWindow::timeStopped(Task* task, TaskLog* taskLog) {
 void MainWindow::deleteTask() {
     qDebug("MainWindow::deleteTask()");
     if (_activeTask != NULL) {
-        // Check if the selected task is being tracked
-        if (_timeTracker->status() == RUNNING) {
-            Task* trackedTask = _timeTracker->task();
-            if (trackedTask == _activeTask) {
-                _timeTracker->stopRecord();
+        std::stringstream ss;
+        ss << "This action will delete the Task \"" << *_activeTask->shortDescription();
+        ss << "\" and all its subtasks, are you sure?";
+        std::string message = ss.str();
+        int res = QMessageBox::question(this, tr("djon"), QString(message.c_str()), QMessageBox::Yes, QMessageBox::No);
+        if (res == QMessageBox::Yes) {
+            // Check if the selected task is being tracked
+            if (_timeTracker->status() == RUNNING) {
+                Task* trackedTask = _timeTracker->task();
+                if (trackedTask == _activeTask) {
+                    _timeTracker->stopRecord();
+                }
             }
+
+            Project* project = _activeTask->project();
+            project->removeTask(_activeTask);
+            //_taskModel->reset();
+
+            _activeTask = NULL;
+
+            reloadTasks();
         }
-
-        Project* project = _activeTask->project();
-        project->removeTask(_activeTask);
-        //_taskModel->reset();
-
-        _activeTask = NULL;
-
-        reloadTasks();
     }
 }
 

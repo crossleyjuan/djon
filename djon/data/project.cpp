@@ -238,6 +238,11 @@ int Project::removeTask(Task* task) {
         }
     }
 
+    std::map<string, Task*>::iterator iter = _tasksMap->find(*task->id());
+    if (iter != _tasksMap->end()) {
+        _tasksMap->erase(iter);
+    }
+
     if (deleteTask(task) != 0) {
         return 1;
     }
