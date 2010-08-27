@@ -3,6 +3,6 @@
 
 #define LINUX
 
-#define VERSION "0.22010082401"
+#define VERSION "0.22010082701"
 
 #endif // CONFIG_H

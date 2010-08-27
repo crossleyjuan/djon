@@ -51,6 +51,10 @@ MainWindow::MainWindow() {
     createTaskLogWindow();
     createCurrentTimeWindow();
 
+#ifdef WINDOWS
+    _updateManager = new UpdateManager(this);
+    _updateManager->startCheck(240);
+#endif
     setupActions();
     setWindowState(Qt::WindowMaximized);
 
@@ -70,10 +74,6 @@ MainWindow::MainWindow() {
 
     createTray();
 
-#ifdef WINDOWS
-    _updateManager = new UpdateManager(this);
-    _updateManager->startCheck(10);
-#endif
 }
 
 void MainWindow::createTaskLogWindow() {
@@ -119,6 +119,7 @@ void MainWindow::setupActions() {
     QMenu* prjMenu = menuBar->addMenu(tr("Project"));
     QMenu* trcMenu = menuBar->addMenu(tr("Tracker"));
     QMenu* optMenu = menuBar->addMenu(tr("Options"));
+    QMenu* helpMenu = menuBar->addMenu(tr("Help"));
 
     QAction* newProject = bar->addAction(QIcon(":/img/new-project.png"), tr("Create Project"));
     QAction* openProject = bar->addAction(QIcon(":/img/open-project.png"), tr("Open Existing Project"));
@@ -137,6 +138,8 @@ void MainWindow::setupActions() {
     prjMenu->addAction(openProject);
     QAction* editProject = prjMenu->addAction(QIcon(":/img/edit-project.png"), tr("Edit Project Information"));
     QAction* closeProject = prjMenu->addAction(QIcon(":/img/close-project.png"), tr("Close Project"));
+
+    QAction* checkUpdate = helpMenu->addAction(QIcon(":/img/update.png"), tr("Check Updates"));
 
     prjMenu->addSeparator();
     prjMenu->addAction(newTask);
@@ -171,7 +174,9 @@ void MainWindow::setupActions() {
     connect(record, SIGNAL(triggered()), this, SLOT(startRecord()));
     connect(stop, SIGNAL(triggered()), this, SLOT(stopRecord()));
     connect(expAction, SIGNAL(triggered()), this, SLOT(exportProjects()));
-
+#ifdef WINDOWS
+    connect(checkUpdate, SIGNAL(triggered()), _updateManager, SLOT(check()));
+#endif
     connect(settings, SIGNAL(triggered()), this, SLOT(settings()));
 
     connect(widget.taskView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(taskContextMenuRequested(QPoint)));
@@ -548,3 +553,4 @@ void MainWindow::closeProject() {
     }
     reloadProjects();
 }
+
