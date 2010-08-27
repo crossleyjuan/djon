@@ -19,6 +19,8 @@ GanttView::GanttView(QWidget *parent) :
 }
 
 void GanttView::createHeader() {
+    _headerScene->clear();
+
     QSize size = headerSizeHint();
 
     QLinearGradient grad(0, 0, 0, size.height());
@@ -63,7 +65,9 @@ void GanttView::setModel(TaskModel *taskModel) {
     _ganttScene = new GanttScene(this);
     _headerScene = new QGraphicsScene(this);
     _headerView.setScene(_headerScene);
+    _headerView.setAlignment(Qt::AlignLeft | Qt::AlignTop);
     _ganttView.setScene(_ganttScene);
+    _ganttView.setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
     _ganttScene->setModel(_model);
     createHeader();
@@ -75,4 +79,17 @@ QScrollBar* GanttView::horizontalScrollBar() {
 
 QScrollBar* GanttView::verticalScrollBar() {
     return _ganttView.verticalScrollBar();
+}
+
+void GanttView::collapse(const QModelIndex& index) {
+    _ganttScene->collapse(index);
+}
+
+void GanttView::expand(const QModelIndex& index) {
+    _ganttScene->expand(index);
+}
+
+void GanttView::refresh() {
+    _ganttScene->refresh();
+    createHeader();
 }

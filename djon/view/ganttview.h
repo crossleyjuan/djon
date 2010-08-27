@@ -13,10 +13,13 @@ public:
     void setModel(TaskModel* taskModel);
     QScrollBar* horizontalScrollBar();
     QScrollBar* verticalScrollBar();
+    void refresh();
 
 signals:
 
 public slots:
+    void collapse(const QModelIndex& index);
+    void expand(const QModelIndex& index);
 
 private:
     void createHeader();
