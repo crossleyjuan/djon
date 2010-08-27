@@ -324,21 +324,19 @@ void MainWindow::reloadTasks() {
     if (_taskModel != NULL) {
         _taskModel->setProjects(*_projects);
         _ganttScene->refresh();
-        _taskHeader->setProjects(_projects);
+//        _taskHeader->setProjects(_projects);
     } else {
         _taskModel = new TaskModel(WITH_TIMES, *_projects);
         widget.taskView->setModel(_taskModel);
-        _ganttScene = new GanttScene();
-        _ganttScene->setModel(_taskModel);
-        widget.ganttView->setScene(_ganttScene);
-        _taskHeader = new TaskHeaderView(_projects, Qt::Horizontal, widget.ganttView);
+        widget.ganttView->setModel(_taskModel);
+//        _taskHeader = new TaskHeaderView(_projects, Qt::Horizontal, widget.ganttView);
 
         widget.taskView->setAlternatingRowColors(true);
         widget.taskView->setSelectionBehavior(QAbstractItemView::SelectRows);
     }
     connect(widget.taskView, SIGNAL(collapsed(QModelIndex)), _ganttScene, SLOT(collapse(QModelIndex)));
     connect(widget.taskView, SIGNAL(expanded(QModelIndex)), _ganttScene, SLOT(expand(QModelIndex)));
-    connect(widget.taskView->verticalScrollBar(), SIGNAL(valueChanged(int)), widget.ganttView->verticalScrollBar(), SLOT(setValue(int)));
+//    connect(widget.taskView->verticalScrollBar(), SIGNAL(valueChanged(int)), widget.ganttView->verticalScrollBar(), SLOT(setValue(int)));
     connect(widget.ganttView->verticalScrollBar(), SIGNAL(valueChanged(int)), widget.taskView->verticalScrollBar(), SLOT(setValue(int)));
     connect(widget.taskView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(selectTaskChanged(QModelIndex,QModelIndex)));
 

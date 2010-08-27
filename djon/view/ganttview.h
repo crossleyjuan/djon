@@ -1,28 +1,32 @@
 #ifndef GANTTVIEW_H
 #define GANTTVIEW_H
 
-#include <QGraphicsView>
-#include <QGraphicsScene>
-#include <vector>
+#include "ganttscene.h"
+#include <QWidget>
+#include <QtGui>
 
-class Project;
-
-class GanttView : public QGraphicsView
+class GanttView : public QWidget
 {
 Q_OBJECT
 public:
     explicit GanttView(QWidget *parent = 0);
-    void setProjects(const std::vector<Project>* projects);
+    void setModel(TaskModel* taskModel);
+    QScrollBar* horizontalScrollBar();
+    QScrollBar* verticalScrollBar();
 
 signals:
 
 public slots:
 
 private:
-    void setupItems();
+    void createHeader();
+    QSize headerSizeHint();
 
-    QGraphicsScene* _scene;
-    const std::vector<Project>* _projects;
+    QGraphicsView _headerView;
+    QGraphicsView _ganttView;
+    TaskModel* _model;
+    GanttScene* _ganttScene;
+    QGraphicsScene* _headerScene;
 };
 
 #endif // GANTTVIEW_H

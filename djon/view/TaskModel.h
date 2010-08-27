@@ -54,6 +54,7 @@ private:
     std::vector<Project*> _projects;
     MODELTYPE _type;
     Task* _trackedTask;
+    QModelIndex _trackedIndex;
 };
 
 #endif

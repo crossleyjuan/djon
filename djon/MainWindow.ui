@@ -50,20 +50,7 @@
         <bool>true</bool>
        </property>
       </widget>
-      <widget class="QGraphicsView" name="ganttView">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-       </property>
-       <property name="transformationAnchor">
-        <enum>QGraphicsView::NoAnchor</enum>
-       </property>
-      </widget>
+      <widget class="GanttView" name="ganttView" native="true"/>
      </widget>
     </item>
    </layout>
@@ -74,12 +61,20 @@
      <x>0</x>
      <y>0</y>
      <width>396</width>
-     <height>18</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>GanttView</class>
+   <extends>QWidget</extends>
+   <header>ganttview.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="djon_rs.qrc"/>
  </resources>

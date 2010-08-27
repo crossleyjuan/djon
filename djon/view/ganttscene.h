@@ -15,6 +15,11 @@ class GanttScene : public QGraphicsScene
 public:
     explicit GanttScene(QObject *parent = 0);
     void setModel(TaskModel* model);
+    QSize viewSizeHint();
+    DateTime startDate();
+    DateTime endDate();
+    int dayWidth();
+    int totalDays();
 
 signals:
 
@@ -27,10 +32,8 @@ protected:
     QGraphicsItem* getTaskItem(const QModelIndex& index);
     QGraphicsItem* getGroupItem(const QModelIndex& index);
     void createBackground();
-    void createHeader();
     void drawIndex(const QModelIndex& index);
     QSize sizeHint(const QModelIndex& index);
-    QSize headerSizeHint();
 
 private:
     void setupScene();

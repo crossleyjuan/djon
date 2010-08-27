@@ -6,16 +6,15 @@ TARGET =
 DEPENDPATH += . \
     data \
     view
-
 DESTDIR = ../libs
-
 INCLUDEPATH += . \
     data \
     view \
     ../includes
-# LIBS += -lXss
+LIBS += -lXss
 QT += xml
-LIBS += -L../libs -ldjon-util
+LIBS += -L../libs \
+    -ldjon-util
 
 # LIBS += -lRpcrt4
 # Input
@@ -50,7 +49,8 @@ HEADERS += data.h \
     import/import.h \
     import/xmlerrorhandler.h \
     updatemanager.h \
-    view/ganttscene.h
+    view/ganttscene.h \
+    view/ganttview.h
 FORMS += MainWindow.ui \
     taskdialog.ui \
     tasklogwindow.ui \
@@ -94,7 +94,8 @@ SOURCES += data.cpp \
     import/import.cpp \
     import/xmlerrorhandler.cpp \
     updatemanager.cpp \
-    view/ganttscene.cpp
+    view/ganttscene.cpp \
+    view/ganttview.cpp
 OTHER_FILES += djon.rc
 RESOURCES += djon_rs.qrc
 RC_FILE = djon.rc

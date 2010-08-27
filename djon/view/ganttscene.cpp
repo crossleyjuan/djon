@@ -32,36 +32,6 @@ void GanttScene::refresh() {
     setupScene();
 }
 
-void GanttScene::createHeader() {
-    QSize size = headerSizeHint();
-
-    QLinearGradient grad(0, 0, 0, size.height());
-    int dark = 210;
-    grad.setColorAt(1, QColor(dark, dark, dark));
-    grad.setColorAt(0.7, QColor(dark + 20, dark + 20, dark + 20));
-    grad.setColorAt(0, Qt::white);
-    QBrush background(grad);
-    QPen pen(QColor(220, 220, 220));
-    addRect(0, 0, _viewSizeWidth, size.height() + 1, pen, background)->setZValue(1);
-
-    int textSize = 30;
-    int margin = 15;
-    int columnSize = 45;
-
-    QDateTime startDate = *_startDate.addDays(-1).toQDateTime();
-    for (int x = 0; x < _totalDays; x++) {
-        QPen textPen(Qt::black);
-        QGraphicsSimpleTextItem* text = addSimpleText(startDate.toString("dd-MMM"), QFont("Arial", 8));
-        text->setPos(x * 45 + 2, 3);
-        text->setVisible(true);
-//        text->setPen(textPen);
-        text->setZValue(1);
-        startDate = startDate.addDays(1);
-    }
-
-    _currentY += headerSizeHint().height();
-}
-
 void GanttScene::drawIndex(const QModelIndex &index) {
     if (!index.isValid()) {
         return;
@@ -74,15 +44,6 @@ void GanttScene::drawIndex(const QModelIndex &index) {
             getTaskItem(index);
         }
     }
-}
-
-QSize GanttScene::headerSizeHint() {
-    QVariant vSize = _model->headerData(0, Qt::Vertical, Qt::SizeHintRole);
-    QSize sizeHint = QSize(10, 19);
-    if (vSize.canConvert<QSize>()) {
-        sizeHint = qvariant_cast<QSize>(vSize);
-    }
-    return sizeHint;
 }
 
 QSize GanttScene::sizeHint(const QModelIndex &index) {
@@ -187,8 +148,7 @@ void GanttScene::createBackground() {
     QBrush brush(QColor("white"));
     QPen pen(QColor("white"));
     // Background color
-    QGraphicsItem* item = this->addRect(0, 0, _viewSizeWidth, _viewSizeHeight, pen, brush);
-    item->setZValue(0);
+    this->addRect(0, 0, _viewSizeWidth, _viewSizeHeight, pen, brush);
 
     //    int columnSize = geometry().width() / NU_COLS;
     int textSize = 30;
@@ -208,14 +168,12 @@ void GanttScene::createBackground() {
         int left = (x*columnSize) + 0;
         int top = 0;
         int heigth = _viewSizeHeight;
-        item = addRect(left, top, columnSize, heigth, penBar, brushBar);
-        item->setZValue(0);
+        addRect(left, top, columnSize, heigth, penBar, brushBar);
 
         QPen pen(QColor(200, 200, 200));
         pen.setStyle(Qt::DashLine);
 
-        item = addLine(x*columnSize, 0 , x*columnSize, heigth, pen);
-        item->setZValue(0);
+        addLine(x*columnSize, 0 , x*columnSize, heigth, pen);
     }
 }
 
@@ -223,7 +181,6 @@ void GanttScene::setupScene() {
     this->clear();
 
     calcZoom();
-    createHeader();
     int projects = _model->rowCount(QModelIndex());
     for (int x = 0; x < projects; x++) {
         QModelIndex index = _model->index(x, 0);
@@ -315,3 +272,24 @@ bool GanttScene::isCollapsed(const QModelIndex &index) {
     }
     return found;
 }
+
+QSize GanttScene::viewSizeHint() {
+    return QSize(_viewSizeWidth, _viewSizeHeight);
+}
+
+DateTime GanttScene::startDate() {
+    return _startDate;
+}
+
+DateTime GanttScene::endDate() {
+    return _endDate;
+}
+
+int GanttScene::dayWidth() {
+    return _dayWidth;
+}
+
+int GanttScene::totalDays() {
+    return _totalDays;
+}
+
