@@ -21,6 +21,7 @@ class CurrentTime;
 class TaskModel;
 class TaskHeaderView;
 class UpdateManager;
+class UserPreferencesController;
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -49,6 +50,7 @@ private:
     Task* _activeTask;
     CurrentTime* _timeWindow;
     TaskModel* _taskModel;
+    UserPreferencesController* _userPreferencesController;
 
     QSystemTrayIcon* _trayIcon;
     QMenu* _taskPopUpMenu;
@@ -75,6 +77,8 @@ public slots:
     void exportProjects();
     void importProjects();
     void taskContextMenuRequested(QPoint pos);
+    void collapse(const QModelIndex& index);
+    void expand(const QModelIndex& index);
 
     void setActiveTask(Task* task);
     void setActiveTaskLog(Task* task, TaskLog* taskLog);

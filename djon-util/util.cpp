@@ -204,22 +204,44 @@ std::string* getHomeDir() {
     return home;
 }
 
+const char* readValue(std::string cont, std::string key) {
+    hashmap* map = parseTextFormat(cont);
+    std::string value = READ_ELEMENT(map, key);
+
+    if (value.size() == 0) {
+        return "";
+    }
+    char* res = strcpy(value);
+
+    delete(map);
+    return res;
+}
+
 const char* readConfValue(const string& name, const char* def) {
     std::string* homeDir = getHomeDir();
     std::string confFileName = *homeDir + "/.djon/djon.conf";
     char* conf = readFile(const_cast<char*> (confFileName.c_str()));
 
-    hashmap* mapConf = parseTextFormat(conf);
-    std::string lastDir = READ_ELEMENT(mapConf, name);
-
-    if (lastDir.size() == 0) {
-        free(conf);
-        return def;
+    const char* res = readValue(string(conf), name);
+    if (strlen(res) == 0) {
+        res = def;
     }
-    char* res = strcpy(lastDir);
     delete (homeDir);
     free(conf);
     return res;
+}
+
+string replaceValue(string cont, string key, string value) {
+    int pos = cont.find(key + ":");
+    string newValue = key + ":" + value + ";";
+    if (pos != cont.npos) {
+        int end = cont.find(";", pos) + 1;
+        cont = cont.replace(pos, end - pos, newValue);
+    } else {
+        cont = cont.append(newValue);
+    }
+
+    return cont;
 }
 
 int writeConfValue(const string& name, const string& value) {
@@ -227,15 +249,10 @@ int writeConfValue(const string& name, const string& value) {
     std::string confFileName = *homeDir + "/.djon/djon.conf";
     std::string conf = std::string(readFile(const_cast<char*> (confFileName.c_str())));
 
-    int pos = conf.find(name + ":");
-    string newValue = name + ":" + value + ";";
-    if (pos > 0) {
-        int end = conf.find(";", pos) + 1;
-        conf = conf.replace(pos, end - pos, newValue);
-    } else {
-        conf.append(newValue);
-    }
+    conf = replaceValue(conf, name, value);
+
     int res = writeFile(confFileName, conf, false);
+
     delete(homeDir);
     return res;
 }
@@ -286,3 +303,39 @@ void* mmalloc(size_t size) {
     }
     return p;
 }
+
+int writePreference(const std::string& key, const std::string& value) {
+    std::string* home = getHomeDir();
+    std::string fileName = home->append("/.djon/djon.user");
+
+    qDebug("writePreference key: %s, value: %s", key.c_str(), value.c_str());
+    std::string currentData = std::string(readFile(const_cast<char*> (fileName.c_str())));
+
+    qDebug("currentData %s", currentData.c_str());
+    currentData = replaceValue(currentData, key, value);
+    qDebug("newData %s", currentData.c_str());
+
+    int res = writeFile(fileName, currentData, false);
+
+    delete(home);
+
+    return res;
+}
+
+const char* readPreference(const std::string& key, const char* def) {
+    std::string* home = getHomeDir();
+    std::string fileName = home->append("/.djon/djon.user");
+
+    string cont = readFile(const_cast<char*>(fileName.c_str()));
+
+    const char* value = readValue(cont, key);
+
+    if (strlen(value) == 0) {
+        value = def;
+    }
+
+    delete (home);
+
+    return value;
+}
+

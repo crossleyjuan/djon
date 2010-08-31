@@ -60,6 +60,11 @@ hashmap* parseTextFormat(std::string text);
 const char* readConfValue(const string& name, const char* def = 0);
 int writeConfValue(const string& name, const string& value);
 
+int writePreference(const std::string& key, const std::string& value);
+const char* readPreference(const std::string& key, const char* def);
+
+int test();
+
 /***********************************************************************
 * Memory functions
 ***********************************************************************/

@@ -23,6 +23,7 @@
 #include "import/import.h"
 #include "config.h"
 #include "ganttscene.h"
+#include "userpreferencescontroller.h"
 #ifdef WINDOWS
 #include "updatemanager.h"
 #endif
@@ -46,6 +47,7 @@ MainWindow::MainWindow() {
     _trayIcon = NULL;
     _taskPopUpMenu = NULL;
     _updateManager = NULL;
+    _userPreferencesController = new UserPreferencesController(_taskModel);
 
     initialize();
     createTaskLogWindow();
@@ -338,6 +340,9 @@ void MainWindow::reloadTasks() {
     }
     connect(widget.taskView, SIGNAL(collapsed(QModelIndex)), widget.ganttView, SLOT(collapse(QModelIndex)));
     connect(widget.taskView, SIGNAL(expanded(QModelIndex)), widget.ganttView, SLOT(expand(QModelIndex)));
+    connect(widget.taskView, SIGNAL(collapsed(QModelIndex)), _userPreferencesController, SLOT(collapsed(QModelIndex)));
+    connect(widget.taskView, SIGNAL(expanded(QModelIndex)), _userPreferencesController, SLOT(expanded(QModelIndex)));
+
     connect(widget.taskView->verticalScrollBar(), SIGNAL(valueChanged(int)), widget.ganttView->verticalScrollBar(), SLOT(setValue(int)));
     connect(widget.ganttView->verticalScrollBar(), SIGNAL(valueChanged(int)), widget.taskView->verticalScrollBar(), SLOT(setValue(int)));
     connect(widget.taskView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(selectTaskChanged(QModelIndex,QModelIndex)));
@@ -554,3 +559,10 @@ void MainWindow::closeProject() {
     reloadProjects();
 }
 
+void MainWindow::collapse(const QModelIndex& index) {
+
+}
+
+void MainWindow::expand(const QModelIndex& index) {
+
+}

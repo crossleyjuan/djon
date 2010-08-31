@@ -40,6 +40,7 @@ public:
 
     Task* task(const QModelIndex &index) const;
     Project* project(const QModelIndex &index) const;
+
     // This will set the currently tracked (time tracked) task
     void setTrackedTask(Task* task);
     // This will retrieve the currently tracked (time tracked) task
