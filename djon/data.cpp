@@ -409,3 +409,15 @@ void removeProject(const char* fileName) {
     }
     writeConfValue("open-projects", result);
 }
+
+Project* searchProject(vector<Project*> projects, string name) {
+    vector<Project*>::iterator iterProj = projects.begin();
+    for (; iterProj != projects.end(); iterProj++) {
+        Project* prj = *iterProj;
+        if (prj->name()->compare(name) == 0) {
+            return prj;
+            break;
+        }
+    }
+    return NULL;
+}

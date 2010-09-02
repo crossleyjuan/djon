@@ -17,6 +17,7 @@ public:
 public slots:
     void collapsed(const QModelIndex index);
     void expanded(const QModelIndex& index);
+    void setLastTrackedTask(const QModelIndex& index);
 
 private:
     const TaskModel* _model;

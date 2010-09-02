@@ -21,3 +21,9 @@ void UserPreferencesController::expanded(const QModelIndex& index) {
     Task* task = _model->task(index);
     removeCollapsedElement(project, task);
 }
+
+void UserPreferencesController::setLastTrackedTask(const QModelIndex& index) {
+    Project* project = _model->project(index);
+    Task* task = _model->task(index);
+    saveLastTrackedTask(task);
+}

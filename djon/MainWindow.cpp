@@ -78,6 +78,7 @@ MainWindow::MainWindow() {
 
     createTray();
 
+    setLastSelectedTask();
 }
 
 void MainWindow::createTaskLogWindow() {
@@ -210,6 +211,7 @@ void MainWindow::startRecord() {
         _timeTracker->startRecord(_activeTask);
         _idleDetector->start();
         _logWindow->refresh(_activeTask);
+        _userPreferencesController->setLastTrackedTask(_taskModel->index(_activeProject, _activeTask));
     }
 }
 
@@ -572,21 +574,14 @@ void MainWindow::expand(const QModelIndex& index) {
 }
 
 void MainWindow::refreshCollapsedState() {
-    vector<CollapsedElement*>* elements = collapsedElements();
+    vector<Element*>* elements = collapsedElements();
     Project* lastProject = NULL;
-    for (vector<CollapsedElement*>::iterator iter = elements->begin(); iter != elements->end(); iter++) {
-        CollapsedElement* elem = *iter;
+    for (vector<Element*>::iterator iter = elements->begin(); iter != elements->end(); iter++) {
+        Element* elem = *iter;
         string* projName = elem->project();
         // Search for the project and leave it in lastProject variable
         if ((lastProject == NULL) || (lastProject->name()->compare(*projName) != 0)) {
-            lastProject = NULL;
-            for (vector<Project*>::iterator iterProj = _projects->begin(); iterProj != _projects->end(); iterProj++) {
-                Project* prj = *iterProj;
-                if (prj->name()->compare(*projName) == 0) {
-                    lastProject = prj;
-                    break;
-                }
-            }
+            lastProject = searchProject(*_projects, *projName);
         }
         Task* collapsedTask = NULL;
         if (lastProject != NULL) {
@@ -600,3 +595,18 @@ void MainWindow::refreshCollapsedState() {
         }
     }
 }
+
+void MainWindow::setLastSelectedTask() {
+    widget.taskView->setAnimated(false);
+    Element* element = lastTrackedTaskId();
+    if (element != NULL) {
+        Project* project = searchProject(*_projects, *element->project());
+        Task* task = project->task(*element->task());
+        QModelIndex index = _taskModel->index(project, task);
+        if (index.isValid()) {
+            widget.taskView->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
+        }
+    }
+    widget.taskView->setAnimated(true);
+}
+

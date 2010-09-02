@@ -14,6 +14,8 @@
 #include "template.h"
 
 std::vector<Project*>* loadProjects();
+Project* searchProject(vector<Project*> projects, string name);
+
 vector<Template*>* readTemplates();
 Template* readTemplate(const string& templateName);
 int createProject(Project* project);

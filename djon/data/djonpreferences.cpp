@@ -57,8 +57,8 @@ void removeCollapsedElement(Project* project, Task* task) {
     }
 }
 
-std::vector<CollapsedElement*>* collapsedElements() {
-    std::vector<CollapsedElement*>* result = new std::vector<CollapsedElement*>();
+std::vector<Element*>* collapsedElements() {
+    std::vector<Element*>* result = new std::vector<Element*>();
     std::string currentPref = string(readPreference(string("collapsed"), ""));
 
     std::vector<string*>* elements = split(currentPref, "--");
@@ -74,8 +74,32 @@ std::vector<CollapsedElement*>* collapsedElements() {
         if ((task != NULL) && (task->length() == 0)) {
             task = NULL;
         }
-        CollapsedElement* collapsed = new CollapsedElement(project, task);
+        Element* collapsed = new Element(project, task);
         result->push_back(collapsed);
     }
     return result;
+}
+
+void saveLastTrackedTask(Task* task) {
+    stringstream ss;
+    ss << *task->project()->name() << "++" << *task->id();
+
+    string taskDef = ss.str();
+
+    writePreference("last-tracked-task", taskDef);
+}
+
+ Element* lastTrackedTaskId() {
+    std::string currentPref = string(readPreference(string("last-tracked-task"), ""));
+
+    if (currentPref.length() > 0) {
+        std::vector<string*>* elements = split(currentPref, "++");
+        string* project = elements->at(0);
+        string* task = elements->at(1);
+
+        Element* element = new Element(project, task);
+        return element;
+    } else {
+        return NULL;
+    }
 }

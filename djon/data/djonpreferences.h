@@ -5,9 +5,9 @@
 #include <string>
 #include <vector>
 
-class CollapsedElement {
+class Element {
 public:
-    CollapsedElement(std::string* project, std::string* task = 0) {
+    Element(std::string* project, std::string* task = 0) {
         _project = project;
         _task = task;
     }
@@ -30,6 +30,8 @@ private:
 
 void addCollapsedElement(Project* project, Task* task = 0);
 void removeCollapsedElement(Project* project, Task* task = 0);
-std::vector<CollapsedElement*>* collapsedElements();
+std::vector<Element*>* collapsedElements();
+void saveLastTrackedTask(Task* task);
+Element* lastTrackedTaskId();
 
 #endif // DJONPREFERENCES_H
