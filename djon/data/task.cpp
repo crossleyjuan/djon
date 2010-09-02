@@ -325,7 +325,8 @@ bool Task::removeLog(TaskLog* log) {
 }
 
 bool Task::operator==(const Task& task) const {
-    if (task.id()->compare(*_id) == 0) {
+    if ((*task.project() == *_project)
+        && (task.id()->compare(*_id) == 0)) {
         return true;
     } else {
         return false;
