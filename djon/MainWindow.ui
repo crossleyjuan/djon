@@ -46,9 +46,6 @@
        <property name="indentation">
         <number>10</number>
        </property>
-       <property name="animated">
-        <bool>true</bool>
-       </property>
       </widget>
       <widget class="GanttView" name="ganttView" native="true"/>
      </widget>
@@ -61,7 +58,7 @@
      <x>0</x>
      <y>0</y>
      <width>396</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

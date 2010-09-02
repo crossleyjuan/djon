@@ -38,6 +38,7 @@ private:
     void reloadTasks();
     void showErrorMessage(int errorCode, const char* errorMessage, QWidget* parent);
     void showErrorMessage(const char* errorMessage, QWidget* parent);
+    void refreshCollapsedState();
 
     Ui::MainWindow widget;
     TaskLogWindow* _logWindow;

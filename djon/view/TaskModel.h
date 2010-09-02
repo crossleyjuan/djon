@@ -46,10 +46,13 @@ public:
     // This will retrieve the currently tracked (time tracked) task
     Task* trackedTask() const;
     void setProjects(const vector<Project*> projects);
+    QModelIndex index(Project* project);
+    QModelIndex index(Project* project, Task* task);
 
 private:
     void setupModelData(TaskItem *parent);
     void refreshData();
+    QModelIndex search(QModelIndex root, Task* task);
 
     TaskItem *rootItem;
     std::vector<Project*> _projects;

@@ -49,7 +49,7 @@ int writeFile(const std::string& fileName, const std::string& text, bool append)
         return 1;
     }
 
-    ofs << text << endl;
+    ofs << text;
     ofs.close();
     return 0;
 }

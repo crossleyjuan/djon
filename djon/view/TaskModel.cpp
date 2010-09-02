@@ -219,3 +219,45 @@ void TaskModel::refreshData() {
     // resets the views states (invalidate previously sent data)
 //    reset();
 }
+
+QModelIndex TaskModel::index(Project* prj) {
+    int rows = rowCount(QModelIndex());
+    for (int row = 0; row < rows; row++) {
+        QModelIndex test = index(row, 0, QModelIndex());
+        Project* testPrj = project(test);
+        if (*testPrj == *prj) {
+            return test;
+        }
+    }
+    return QModelIndex();
+}
+
+QModelIndex TaskModel::search(QModelIndex root, Task* tsk) {
+    for (int row = 0; row < rowCount(root); row++) {
+        QModelIndex test = index(row, 0, root);
+        Task* testTask = task(test);
+        if ((testTask != NULL) && (*testTask == *tsk)) {
+            return test;
+        }
+        if (rowCount(test) > 0) {
+            test = search(test, tsk);
+            if (test.isValid()) {
+                return test;
+            }
+        }
+    }
+    return QModelIndex();
+}
+
+QModelIndex TaskModel::index(Project* project, Task* task) {
+    QModelIndex indexProject = index(project);
+    if (task != NULL) {
+        if (indexProject.isValid()) {
+            return search(indexProject, task);
+        } else {
+            return QModelIndex();
+        }
+    } else {
+        return indexProject;
+    }
+}

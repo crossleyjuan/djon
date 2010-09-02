@@ -24,6 +24,8 @@
 #include "config.h"
 #include "ganttscene.h"
 #include "userpreferencescontroller.h"
+#include "djonpreferences.h"
+
 #ifdef WINDOWS
 #include "updatemanager.h"
 #endif
@@ -309,7 +311,6 @@ int MainWindow::createNewProject() {
             }
             _taskModel = new TaskModel(WITH_TIMES, *_projects);
             widget.taskView->setModel(_taskModel);
-            widget.taskView->expandAll();
             connect(widget.taskView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(selectTaskChanged(QModelIndex,QModelIndex)));
         }
     }
@@ -347,7 +348,10 @@ void MainWindow::reloadTasks() {
     connect(widget.ganttView->verticalScrollBar(), SIGNAL(valueChanged(int)), widget.taskView->verticalScrollBar(), SLOT(setValue(int)));
     connect(widget.taskView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(selectTaskChanged(QModelIndex,QModelIndex)));
 
+    widget.taskView->setAnimated(false);
     widget.taskView->expandAll();
+    refreshCollapsedState();
+    widget.taskView->setAnimated(true);
 }
 
 void MainWindow::timeStopped(Task* task, TaskLog* taskLog) {
@@ -565,4 +569,34 @@ void MainWindow::collapse(const QModelIndex& index) {
 
 void MainWindow::expand(const QModelIndex& index) {
 
+}
+
+void MainWindow::refreshCollapsedState() {
+    vector<CollapsedElement*>* elements = collapsedElements();
+    Project* lastProject = NULL;
+    for (vector<CollapsedElement*>::iterator iter = elements->begin(); iter != elements->end(); iter++) {
+        CollapsedElement* elem = *iter;
+        string* projName = elem->project();
+        // Search for the project and leave it in lastProject variable
+        if ((lastProject == NULL) || (lastProject->name()->compare(*projName) != 0)) {
+            lastProject = NULL;
+            for (vector<Project*>::iterator iterProj = _projects->begin(); iterProj != _projects->end(); iterProj++) {
+                Project* prj = *iterProj;
+                if (prj->name()->compare(*projName) == 0) {
+                    lastProject = prj;
+                    break;
+                }
+            }
+        }
+        Task* collapsedTask = NULL;
+        if (lastProject != NULL) {
+            if (elem->task() != NULL) {
+                collapsedTask = lastProject->task(*elem->task());
+            }
+            QModelIndex index = _taskModel->index(lastProject, collapsedTask);
+            if (index.isValid()) {
+                widget.taskView->collapse(index);
+            }
+        }
+    }
 }

@@ -256,3 +256,7 @@ string* Project::projectFileName() {
 void Project::setProjectFileName(string* projectFileName) {
     _projectFileName = projectFileName;
 }
+
+bool Project::operator ==(const Project& prj) const {
+    return (prj._projectFileName->compare(*_projectFileName) == 0);
+}

@@ -20,7 +20,6 @@ public slots:
 
 private:
     const TaskModel* _model;
-
 };
 
 #endif // USERPREFERENCESCONTROLLER_H

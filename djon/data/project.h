@@ -48,6 +48,7 @@ public:
     Task* task(string& id);
     std::string* nextChildId();
     char* toChar();
+    bool operator==(const Project& prj) const;
 
 private:
     string* _name;
