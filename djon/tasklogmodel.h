@@ -2,6 +2,7 @@
 #define TASKLOGMODEL_H
 
 #include <QtGui>
+#include <vector>
 
 class Task;
 class TaskLog;
@@ -17,10 +18,12 @@ public:
     QModelIndex index(int row, int column, const QModelIndex &parent) const;
     Qt::ItemFlags flags(const QModelIndex &index) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+    void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
 
 private:
     Task* _task;
     QList<QVariant> _headerData;
+    std::vector<TaskLog*> _logs;
 };
 
 #endif // TASKLOGMODEL_H

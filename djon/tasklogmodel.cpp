@@ -1,19 +1,21 @@
 #include "tasklogmodel.h"
-
 #include "data.h"
+#include <vector>
+#include <algorithm>
+
+int __sortColumn;
+Qt::SortOrder __sortOrder;
 
 TaskLogModel::TaskLogModel(Task* task)
 {
     _task = task;
+    _logs = *_task->logs();
+
     _headerData << "Description" << "Start Date" << "End Date";
-//    QAbstractItemModel::setHeaderData(0, Qt::Horizontal, QObject::tr("Description"));
-//    QAbstractItemModel::setHeaderData(1, Qt::Horizontal, QObject::tr("Start Date"));
-//    QAbstractItemModel::setHeaderData(2, Qt::Horizontal, QObject::tr("End Date"));
 }
 
 int TaskLogModel::rowCount(const QModelIndex &parent) const {
-    vector<TaskLog*>* logs = _task->logs();
-    return logs->size() + 1; // Always creates a new log row
+    return _logs.size() + 1; // Always creates a new log row
 }
 
 int TaskLogModel::columnCount(const QModelIndex &parent) const {
@@ -86,9 +88,8 @@ QModelIndex TaskLogModel::index(int row, int column, const QModelIndex &parent) 
     if (!hasIndex(row, column, parent))
         return QModelIndex();
 
-    vector<TaskLog*>* logs = _task->logs();
-    if (row < (int)logs->size()) {
-        TaskLog* log = logs->at(row);
+    if (row < (int)_logs.size()) {
+        TaskLog* log = _logs.at(row);
         return createIndex(row, column, log);
     } else {
         return createIndex(row, column, NULL);
@@ -104,4 +105,31 @@ QVariant TaskLogModel::headerData(int section, Qt::Orientation orientation, int 
         return _headerData.at(section);
 
     return QVariant();
+}
+
+bool compare(TaskLog* log1, TaskLog* log2) {
+    bool result = false;
+    switch (__sortColumn) {
+        case 0: // Description
+            result = (log1->logDescription->compare(*log2->logDescription) < 0);
+            break;
+        case 1: // Start
+            result = (*log1->start < *log2->start);
+            break;
+        case 2: // End
+            result = (*log1->end < *log2->end);
+            break;
+        default:
+            throw;
+    }
+
+    if (__sortOrder == Qt::DescendingOrder) {
+        result != result;
+    }
+    return result;
+}
+
+void TaskLogModel::sort(int column, Qt::SortOrder order) {
+    __sortColumn = column;
+    std::sort(_logs.begin(), _logs.end(), compare);
 }
