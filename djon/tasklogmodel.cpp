@@ -122,7 +122,9 @@ bool compare(TaskLog* log1, TaskLog* log2) {
                 if ((log1->logDescription == NULL) && (log2->logDescription != NULL)) {
                     result = false;
                 } else if ((log1->logDescription != NULL) && (log2->logDescription == NULL)) {
-                    return true;
+                    result = true;
+                } else if ((log1->logDescription == NULL) && (log2->logDescription == NULL)) {
+                    result = (log1->id->compare(*log2->id) < 0);
                 } else {
                     int com = log1->logDescription->compare(*log2->logDescription);
                     if (com == 0) {
