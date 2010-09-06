@@ -2,6 +2,7 @@
 #include "data.h"
 #include <vector>
 #include <algorithm>
+#include <sstream>
 
 int __sortColumn;
 Qt::SortOrder __sortOrder;
@@ -109,27 +110,48 @@ QVariant TaskLogModel::headerData(int section, Qt::Orientation orientation, int 
 
 bool compare(TaskLog* log1, TaskLog* log2) {
     bool result = false;
-    switch (__sortColumn) {
-        case 0: // Description
-            result = (log1->logDescription->compare(*log2->logDescription) < 0);
-            break;
-        case 1: // Start
-            result = (*log1->start < *log2->start);
-            break;
-        case 2: // End
-            result = (*log1->end < *log2->end);
-            break;
-        default:
-            throw;
+    if ((log1 == NULL) && (log2 != NULL)) {
+        result = false;
+    } else if ((log1 != NULL) && (log2 == NULL)) {
+        result = true;
+    } else if ((log1 == NULL) && (log2 == NULL)) {
+        result = (log1->id->compare(*log2->id) < 0);
+    } else {
+        switch (__sortColumn) {
+            case 0: // Description
+                if ((log1->logDescription == NULL) && (log2->logDescription != NULL)) {
+                    result = false;
+                } else if ((log1->logDescription != NULL) && (log2->logDescription == NULL)) {
+                    return true;
+                } else {
+                    int com = log1->logDescription->compare(*log2->logDescription);
+                    if (com == 0) {
+                        result = (log1->id->compare(*log2->id) < 0);
+                    } else {
+                        result = (com < 0);
+                    }
+                }
+                break;
+            case 1: // Start
+                result = (*log1->start < *log2->start);
+                break;
+            case 2: // End
+                result = (*log1->end < *log2->end);
+                break;
+            default:
+                throw;
+        }
     }
 
     if (__sortOrder == Qt::DescendingOrder) {
-        result != result;
+        result = !result;
     }
     return result;
 }
 
 void TaskLogModel::sort(int column, Qt::SortOrder order) {
     __sortColumn = column;
+    __sortOrder = order;
     std::sort(_logs.begin(), _logs.end(), compare);
+    reset();
 }

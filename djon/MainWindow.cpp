@@ -444,6 +444,9 @@ void MainWindow::settings() {
     DialogSettings settings;
     int res = settings.exec();
     if (res == QDialog::Accepted) {
+        if (_activeTask != NULL) {
+            _logWindow->refresh(_activeTask);
+        }
         _idleDetector->refreshIdleMaxSecs();
     }
 }

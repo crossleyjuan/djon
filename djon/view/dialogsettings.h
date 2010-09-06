@@ -20,7 +20,9 @@ protected:
     void changeEvent(QEvent *e);
 
 private:
+    void populateLogOrderBy();
     Ui::DialogSettings *ui;
+
 
 private slots:
     void on_DialogSettings_accepted();

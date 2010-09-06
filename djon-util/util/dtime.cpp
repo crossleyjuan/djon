@@ -15,6 +15,11 @@ DTime::DTime(DTime& time) {
     this->_secs = time._secs;
 }
 
+DTime::DTime(const QTime& time) {
+    int secs = QTime(0, 0, 0, 0).secsTo(time);
+    _secs = secs;
+}
+
 DTime::~DTime() {
     _secs = 0;
 }
@@ -23,7 +28,6 @@ long DTime::secs() const {
     return _secs;
 }
 
-/*
 QTime* DTime::toQTime() {
     int secs = _secs;
 
@@ -34,7 +38,6 @@ QTime* DTime::toQTime() {
     QTime* res = new QTime(hour, min, secs);
     return res;
 }
-*/
 
 void DTime::time(int& hour, int& min, int& sec) const {
     int tmpSecs = _secs;

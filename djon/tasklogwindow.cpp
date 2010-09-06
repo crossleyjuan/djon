@@ -46,5 +46,14 @@ void TaskLogWindow::refresh(Task* task) {
     m_ui->tableView->setColumnWidth(0, 300);
     m_ui->tableView->setColumnWidth(1, 150);
     m_ui->tableView->setColumnWidth(2, 150);
+
+    string sort(readPreference("log-sort", ""));
+    if (sort.length() > 0) {
+        std::vector<string*>* options = split(sort, "++");
+        int column = atoi(options->at(0)->c_str());
+        int order = atoi(options->at(1)->c_str());
+        Qt::SortOrder sortOrder = (order == 0) ? Qt::AscendingOrder: Qt::DescendingOrder;
+        m_ui->tableView->sortByColumn(column, sortOrder);
+    }
 }
 

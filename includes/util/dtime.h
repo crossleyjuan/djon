@@ -8,6 +8,7 @@ class DTime
 public:
     DTime();
     DTime(long secs);
+    DTime(const QTime& time);
     DTime(DTime& time);
     ~DTime();
 
