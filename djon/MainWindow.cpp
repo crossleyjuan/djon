@@ -604,10 +604,12 @@ void MainWindow::setLastSelectedTask() {
     Element* element = lastTrackedTaskId();
     if (element != NULL) {
         Project* project = searchProject(*_projects, *element->project());
-        Task* task = project->task(*element->task());
-        QModelIndex index = _taskModel->index(project, task);
-        if (index.isValid()) {
-            widget.taskView->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
+        if (project != NULL) {
+            Task* task = project->task(*element->task());
+            QModelIndex index = _taskModel->index(project, task);
+            if (index.isValid()) {
+                widget.taskView->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
+            }
         }
     }
     widget.taskView->setAnimated(true);

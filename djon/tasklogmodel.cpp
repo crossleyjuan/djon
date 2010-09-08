@@ -93,7 +93,7 @@ QModelIndex TaskLogModel::index(int row, int column, const QModelIndex &parent) 
         TaskLog* log = _logs.at(row);
         return createIndex(row, column, log);
     } else {
-        return createIndex(row, column, NULL);
+        return createIndex(row, column, (void*)NULL);
     }
 }
 
