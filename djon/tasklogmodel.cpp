@@ -10,13 +10,13 @@ Qt::SortOrder __sortOrder;
 TaskLogModel::TaskLogModel(Task* task)
 {
     _task = task;
-    _logs = *_task->logs();
+    _logs = _task->logs();
 
     _headerData << "Description" << "Start Date" << "End Date";
 }
 
 int TaskLogModel::rowCount(const QModelIndex &parent) const {
-    return _logs.size() + 1; // Always creates a new log row
+    return _logs->size() + 1; // Always creates a new log row
 }
 
 int TaskLogModel::columnCount(const QModelIndex &parent) const {
@@ -89,8 +89,8 @@ QModelIndex TaskLogModel::index(int row, int column, const QModelIndex &parent) 
     if (!hasIndex(row, column, parent))
         return QModelIndex();
 
-    if (row < (int)_logs.size()) {
-        TaskLog* log = _logs.at(row);
+    if (row < (int)_logs->size()) {
+        TaskLog* log = _logs->at(row);
         return createIndex(row, column, log);
     } else {
         return createIndex(row, column, (void*)NULL);
@@ -154,6 +154,6 @@ bool compare(TaskLog* log1, TaskLog* log2) {
 void TaskLogModel::sort(int column, Qt::SortOrder order) {
     __sortColumn = column;
     __sortOrder = order;
-    std::sort(_logs.begin(), _logs.end(), compare);
+    std::sort(_logs->begin(), _logs->end(), compare);
     reset();
 }

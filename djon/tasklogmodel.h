@@ -23,7 +23,7 @@ public:
 private:
     Task* _task;
     QList<QVariant> _headerData;
-    std::vector<TaskLog*> _logs;
+    std::vector<TaskLog*>* _logs;
 };
 
 #endif // TASKLOGMODEL_H
