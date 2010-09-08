@@ -11,6 +11,8 @@ INCLUDEPATH += . \
     data \
     view \
     ../includes
+include(../qtsingleapplication-2.6_1-opensource/src/qtsingleapplication.pri)
+
 linux-g++:LIBS += -lXss
 QT += xml
 LIBS += -L../libs \

@@ -5,7 +5,7 @@
  * Created on July 9, 2010, 8:46 AM
  */
 
-#include <QtGui/QApplication>
+#include <QtSingleApplication>
 #include <QtGui>
 #include "MainWindow.h"
 #include "data.h"
@@ -15,8 +15,16 @@ int main(int argc, char *argv[]) {
     // initialize resources, if needed
     // Q_INIT_RESOURCE(resfile);
 
-    QApplication app(argc, argv);
+    QtSingleApplication app(argc, argv);
+
+    if (app.isRunning()) {
+        app.sendMessage(QString("wake"));
+        return 0;
+    }
+
     MainWindow mainWindow;
+
+    QObject::connect(&app, SIGNAL(messageReceived(const QString&)), &mainWindow, SLOT(restoreWindowState()));
 
     mainWindow.show();
 
