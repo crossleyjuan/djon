@@ -30,7 +30,7 @@ public:
 
 signals:
     void timeStopped(Task* task, TaskLog* taskLog);
-    void timeChanged(DTime& currentLogTime, DTime& taskTotalTime);
+    void timeChanged(Task* task, DTime& currentLogTime, DTime& taskTotalTime);
 
 public slots:
     void startRecord(Task* task);

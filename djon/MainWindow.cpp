@@ -71,7 +71,8 @@ MainWindow::MainWindow() {
     connect(_idleDetector, SIGNAL(idleTimeOut()), this, SLOT(idleTimeOut()));
 
     _timeTracker = new TimeTracker();
-    connect(_timeTracker, SIGNAL(timeChanged(DTime&, DTime&)), _timeWindow, SLOT(updateTime(DTime&, DTime&)));
+    connect(_timeTracker, SIGNAL(timeChanged(Task*, DTime&, DTime&)), _timeWindow, SLOT(updateTime(Task*, DTime&, DTime&)));
+    connect(_timeTracker, SIGNAL(timeChanged(Task*, DTime&, DTime&)), _taskModel, SLOT(timeChanged(Task*)));
     connect(_timeTracker, SIGNAL(timeStopped(Task*,TaskLog*)), this, SLOT(timeStopped(Task*, TaskLog*)));
     connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()));
 
@@ -452,11 +453,8 @@ void MainWindow::settings() {
 
 void MainWindow::restoreWindowState() {
     qDebug("MainWindow::restoreWindowState");
-    if (isHidden()) {
-        show();
-    } else {
-        show();
-    }
+    show();
+    activateWindow();
     qApp->activeWindow();
     raise();
 }

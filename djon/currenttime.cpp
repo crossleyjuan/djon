@@ -92,7 +92,7 @@ void CurrentTime::changeEvent(QEvent *e)
     }
 }
 
-void CurrentTime::updateTime(DTime& currentLogTime, DTime& totalTaskTime) {
+void CurrentTime::updateTime(Task* task, DTime& currentLogTime, DTime& totalTaskTime) {
     ui->currentTime->setText(QString(currentLogTime.toChar()));
     ui->totalTime->setText(QString(totalTaskTime.toChar()));
 }

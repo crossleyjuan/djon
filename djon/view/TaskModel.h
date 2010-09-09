@@ -49,6 +49,9 @@ public:
     QModelIndex index(Project* project);
     QModelIndex index(Project* project, Task* task);
 
+public slots:
+    void timeChanged(Task* task);
+
 private:
     void setupModelData(TaskItem *parent);
     void refreshData();

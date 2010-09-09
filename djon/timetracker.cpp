@@ -79,7 +79,7 @@ void TimeTracker::timeOut() {
         _ticksToSaveLog = 0;
     }
     DTime totalTime(_totalTaskTimeSecs);
-    emit timeChanged(tm, totalTime);
+    emit timeChanged(this->_task, tm, totalTime);
 }
 
 TIMERSTATUS TimeTracker::status() {
