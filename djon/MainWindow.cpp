@@ -71,7 +71,7 @@ MainWindow::MainWindow() {
     connect(_idleDetector, SIGNAL(idleTimeOut()), this, SLOT(idleTimeOut()));
 
     _timeTracker = new TimeTracker();
-    connect(_timeTracker, SIGNAL(timeChanged(DTime&)), _timeWindow, SLOT(updateTime(DTime&)));
+    connect(_timeTracker, SIGNAL(timeChanged(DTime&, DTime&)), _timeWindow, SLOT(updateTime(DTime&, DTime&)));
     connect(_timeTracker, SIGNAL(timeStopped(Task*,TaskLog*)), this, SLOT(timeStopped(Task*, TaskLog*)));
     connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()));
 
@@ -218,7 +218,6 @@ void MainWindow::startRecord() {
 void MainWindow::stopRecord() {
     qDebug("MainWindow::stopRecord()");
     _timeTracker->stopRecord();
-    _logWindow->refresh(_timeTracker->task());
     _idleDetector->stop();
     _taskModel->setTrackedTask(NULL);
 }

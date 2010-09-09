@@ -24,7 +24,7 @@ protected:
     void changeEvent(QEvent *e);
 
 public slots:
-    void updateTime(DTime& tm);
+    void updateTime(DTime& currentLogTime, DTime& totalTaskTime);
     void setActiveTask(Task* task);
 
 private:

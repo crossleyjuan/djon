@@ -92,20 +92,32 @@ void CurrentTime::changeEvent(QEvent *e)
     }
 }
 
-void CurrentTime::updateTime(DTime& tm) {
-    ui->currentTime->setText(QString(tm.toChar()));
+void CurrentTime::updateTime(DTime& currentLogTime, DTime& totalTaskTime) {
+    ui->currentTime->setText(QString(currentLogTime.toChar()));
+    ui->totalTime->setText(QString(totalTaskTime.toChar()));
 }
 
 void CurrentTime::setActiveTask(Task* activeTask) {
     _activeTask = activeTask;
-//    ui->comboBox->setCurrentIndex(3);
-    string description = *activeTask->shortDescription();
-    Task* tsk = activeTask->parent();
-    while (tsk != NULL) {
-        description.insert(0, *tsk->shortDescription() + " / ");
-        tsk = tsk->parent();
+    if (_activeTask != NULL) {
+    //    ui->comboBox->setCurrentIndex(3);
+        string description = *activeTask->shortDescription();
+        Task* tsk = activeTask->parent();
+        while (tsk != NULL) {
+            description.insert(0, *tsk->shortDescription() + " / ");
+            tsk = tsk->parent();
+        }
+        Project* proj = activeTask->project();
+        description.insert(0, *proj->name() + " / ");
+
+        ui->currentTask->setText(QString(description.c_str()));
+        DTime* totalTime = _activeTask->totalTime();
+        DTime tm;
+        ui->totalTime->setText(totalTime->toChar());
+        ui->currentTime->setText(tm.toChar());
+    } else {
+        ui->currentTask->setText(tr(""));
+        ui->totalTime->setText(tr(""));
+        ui->currentTime->setText(tr(""));
     }
-    Project* proj = activeTask->project();
-    description.insert(0, *proj->name() + " / ");
-    ui->currentTask->setText(QString(description.c_str()));
 }

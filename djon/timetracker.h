@@ -30,7 +30,7 @@ public:
 
 signals:
     void timeStopped(Task* task, TaskLog* taskLog);
-    void timeChanged(DTime& time);
+    void timeChanged(DTime& currentLogTime, DTime& taskTotalTime);
 
 public slots:
     void startRecord(Task* task);
@@ -46,6 +46,7 @@ private:
     TaskLog* _taskLog;
     QTimer* _timer;
     long _secs;
+    long _totalTaskTimeSecs;
     long _ticksToSaveLog; // This will record the ticks to save the current running log (avoid Failure)
 
     TIMERSTATUS _status;
