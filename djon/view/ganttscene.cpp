@@ -188,6 +188,7 @@ void GanttScene::setupScene() {
     }
     this->_viewSizeHeight = _currentY; // + headerSizeHint().height()
     createBackground();
+    setSceneRect(0, 0, _viewSizeWidth, _viewSizeHeight);
 }
 
 void GanttScene::calcZoom() {
