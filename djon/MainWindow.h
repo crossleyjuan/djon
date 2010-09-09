@@ -81,6 +81,9 @@ public slots:
     void taskContextMenuRequested(QPoint pos);
     void collapse(const QModelIndex& index);
     void expand(const QModelIndex& index);
+    void aboutToQuit();
+    void saveWindowState();
+    void restoreSavedWindowState();
 
     void setActiveTask(Task* task);
     void setActiveTaskLog(Task* task, TaskLog* taskLog);

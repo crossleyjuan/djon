@@ -60,7 +60,6 @@ MainWindow::MainWindow() {
     _updateManager->startCheck(240);
 #endif
     setupActions();
-    setWindowState(Qt::WindowMaximized);
 
     widget.taskView->setColumnWidth(0, 250);
     widget.taskView->setColumnWidth(1, 70);
@@ -74,11 +73,12 @@ MainWindow::MainWindow() {
     _timeTracker = new TimeTracker();
     connect(_timeTracker, SIGNAL(timeChanged(DTime&)), _timeWindow, SLOT(updateTime(DTime&)));
     connect(_timeTracker, SIGNAL(timeStopped(Task*,TaskLog*)), this, SLOT(timeStopped(Task*, TaskLog*)));
-    connect(qApp, SIGNAL(aboutToQuit()), _timeTracker, SLOT(stopRecord()));
+    connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()));
 
     createTray();
 
     setLastSelectedTask();
+    restoreSavedWindowState();
 }
 
 void MainWindow::createTaskLogWindow() {
@@ -454,10 +454,12 @@ void MainWindow::settings() {
 void MainWindow::restoreWindowState() {
     qDebug("MainWindow::restoreWindowState");
     if (isHidden()) {
-        showMaximized();
+        show();
     } else {
         show();
     }
+    qApp->activeWindow();
+    raise();
 }
 
 void MainWindow::editProject() {
@@ -615,3 +617,41 @@ void MainWindow::setLastSelectedTask() {
     widget.taskView->setAnimated(true);
 }
 
+void MainWindow::aboutToQuit() {
+    _timeTracker->stopRecord();
+    saveWindowState();
+}
+
+void MainWindow::saveWindowState() {
+    int wState = windowState();
+    std::stringstream state;
+    state << wState << "++";
+    if (wState != Qt::WindowMaximized) {
+        QRect rect = geometry();
+        state << rect.left() << "++";
+        state << rect.top() << "++";
+        state << rect.width() << "++";
+        state << rect.height();
+    }
+    std::string sstate = state.str();
+    writePreference("last-window-state", sstate);
+}
+
+void MainWindow::restoreSavedWindowState() {
+    std::string state(readPreference("last-window-state", ""));
+
+    if (state.length() > 0) {
+        std::vector<string*>* values = split(state, "++");
+        Qt::WindowState wState = static_cast<Qt::WindowState>(atoi(values->at(0)->c_str()));
+        setWindowState(wState);
+        if (windowState() != Qt::WindowMaximized) {
+            int left = atoi(values->at(1)->c_str());
+            int top = atoi(values->at(2)->c_str());
+            int width = atoi(values->at(3)->c_str());
+            int height = atoi(values->at(4)->c_str());
+            setGeometry(left, top, width, height);
+        }
+    } else {
+        setWindowState(Qt::WindowMaximized);;
+    }
+}
