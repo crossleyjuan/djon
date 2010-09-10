@@ -13,7 +13,6 @@ InstallDirRegKey HKLM "Software\djon" "Install_Dir"
 
 ; Request application privileges for Windows Vista
 RequestExecutionLevel admin
-
 ;--------------------------------
 
 ; Pages
@@ -68,6 +67,8 @@ Section "djon (required)"
   File "QtCored4.dll"
   File "QtGuid4.dll"
   File "QtXmld4.dll"
+  File "QtNetworkd4.dll"
+
   CreateDirectory $PROFILE\.djon
   CreateDirectory $PROFILE\.djon\templates
   CreateDirectory $PROFILE\.djon\Projects
@@ -92,6 +93,7 @@ Section "djon (required)"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\djon" "UninstallString" '"$INSTDIR\uninstall.exe"'
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\djon" "NoModify" 1
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\djon" "NoRepair" 1
+  WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Run" "djon" "$INSTDIR\djon.exe"
   WriteUninstaller "uninstall.exe"
   
 SectionEnd

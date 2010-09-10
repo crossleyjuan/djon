@@ -18,6 +18,7 @@ QT += xml
 LIBS += -L../libs \
     -ldjon-util
 
+CONFIG += static
 # LIBS += -lRpcrt4
 # Input
 HEADERS += data.h \
