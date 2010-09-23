@@ -24,12 +24,17 @@ protected:
 
 private:
     void populateTemplate();
+    void save();
+
     Ui::TaskDialog *m_ui;
     Task* m_task;
     Project* m_project;
     vector<Template*>* m_templates;
     string* _id;
     bool _update; // true if it's updating, false if it's creating
+
+public slots:
+    void done(int);
 
 private slots:
     void on_buttonBox_rejected();

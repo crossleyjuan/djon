@@ -98,8 +98,38 @@ void TaskDialog::changeEvent(QEvent *e)
     }
 }
 
-void TaskDialog::on_buttonBox_accepted()
-{
+void TaskDialog::done(int res) {
+    bool valid = true;
+
+    if (res == 1) {
+        if (m_ui->shortDescription->text().length() == 0) {
+            QMessageBox box(this);
+            box.setText(tr("The short description of the task is required"));
+            box.setWindowTitle(tr("d-jon"));
+            box.exec();
+            m_ui->shortDescription->setFocus();
+            valid = false;
+        }
+        if (valid) {
+            DateTime start(m_ui->startDate->dateTime());
+            DateTime end(m_ui->endDate->dateTime());
+            if (end < start) {
+                QMessageBox box(this);
+                box.setText(tr("End Date cannot be lesser than Start Date"));
+                box.setWindowTitle(tr("d-jon"));
+                box.exec();
+                m_ui->endDate->setFocus();
+                valid = false;
+            }
+        }
+    }
+    if (valid) {
+        save();
+        QDialog::done(res);
+    }
+}
+
+void TaskDialog::save() {
     m_task->setId(_id);
     m_task->setShortDescription(new string(m_ui->shortDescription->text().toStdString()));
     m_task->setLongDescription(new string(m_ui->description->document()->toPlainText().toStdString()));
@@ -121,6 +151,10 @@ void TaskDialog::on_buttonBox_accepted()
     } else {
         updateTask(m_task);
     }
+}
+
+void TaskDialog::on_buttonBox_accepted()
+{
 }
 
 void TaskDialog::on_buttonBox_rejected()
