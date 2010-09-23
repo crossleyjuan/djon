@@ -10,6 +10,7 @@
 #include "MainWindow.h"
 #include "data.h"
 #include "TaskModel.h"
+#include "config.h"
 
 int main(int argc, char *argv[]) {
     // initialize resources, if needed
@@ -17,10 +18,12 @@ int main(int argc, char *argv[]) {
 
     QtSingleApplication app(argc, argv);
 
+#ifndef TESTING
     if (app.isRunning()) {
         app.sendMessage(QString("wake"));
         return 0;
     }
+#endif
 
     MainWindow mainWindow;
 
