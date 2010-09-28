@@ -3,9 +3,12 @@
 #include "config.h"
 #include <QMessageBox>
 #include <QProcess>
+#ifdef WINDOWS
+#include <windows.h>
+#endif
 
 UpdateManager::UpdateManager(QObject *parent) :
-    QObject(parent)
+        QObject(parent)
 {
     _timer = new QTimer(this);
     _mins = 10;
@@ -19,18 +22,20 @@ void UpdateManager::startCheck(int mins) {
 }
 
 void UpdateManager::check() {
+#ifdef WINDOWS
     _timer->stop();
     const char* updater = readConfValue("updater", "");
-    if (*updater != '\0') {
+    if (*updater != '/0') {
         if (strcmp(updater, "local") == 0) {
             const char* versionFile = readConfValue("version-file", "");
-            if (*versionFile != '\0') {
+            if (*versionFile != '/0') {
                 const char* version = readFile(const_cast<char*>(versionFile));
-                if ((*version != '\0') && (strcmp(version, VERSION) != 0)) {
+                if ((*version != '/0') && (strcmp(version, VERSION) != 0)) {
                     int res = QMessageBox::question(NULL, "d-jon update", "A new version of d-jon is available, do you want to update now?", QMessageBox::Yes, QMessageBox::No);
                     if (res == QMessageBox::Yes) {
-                        QProcess* process = new QProcess();
-                        process->start("updater.exe");
+                        char* cfile = "updater.exe";
+
+                        ShellExecuteA(NULL, "open", cfile, NULL, NULL, SW_SHOWNORMAL);
                         exit(0);
                     }
                 }
@@ -43,4 +48,5 @@ void UpdateManager::check() {
         _timer->stop();
     }
     _timer->start(_mins * 60000);
+#endif
 }

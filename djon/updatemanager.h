@@ -1,3 +1,4 @@
+#include "config.h"
 #ifndef UPDATEMANAGER_H
 #define UPDATEMANAGER_H
 
