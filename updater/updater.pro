@@ -8,6 +8,7 @@ QT       += core gui
 
 TARGET = updater
 TEMPLATE = app
+DESTDIR = ../libs
 
 INCLUDEPATH += . \
     ../includes
