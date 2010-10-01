@@ -55,7 +55,9 @@ HEADERS += data.h \
     view/ganttscene.h \
     view/ganttview.h \
     view/userpreferencescontroller.h \
-    data/djonpreferences.h
+    data/djonpreferences.h \
+    data/duration.h \
+    view/durationcontrol.h
 FORMS += MainWindow.ui \
     taskdialog.ui \
     tasklogwindow.ui \
@@ -102,7 +104,9 @@ SOURCES += data.cpp \
     view/ganttscene.cpp \
     view/ganttview.cpp \
     view/userpreferencescontroller.cpp \
-    data/djonpreferences.cpp
+    data/djonpreferences.cpp \
+    data/duration.cpp \
+    view/durationcontrol.cpp
 OTHER_FILES += djon.rc
 RESOURCES += djon_rs.qrc
 RC_FILE = djon.rc

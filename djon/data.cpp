@@ -52,11 +52,17 @@ void processTaskLog(Project* project, string* logDef) {
     DateTime* startDate = new DateTime(READ_ELEMENT(values, "log-start-time"));
     DateTime* endDate = new DateTime(READ_ELEMENT(values, "log-end-time"));
     std::string* logDescription = new string(READ_ELEMENT(values, "log-description"));
+    DateTime* lap = NULL;
+    string logLap = READ_ELEMENT(values, "log-lap");
 
+    if (logLap.length() > 0) {
+        lap = new DateTime(logLap);
+    }
     TaskLog* log = new TaskLog();
     log->id = taskLogId;
     log->start = startDate;
     log->end = endDate;
+    log->lastLap = lap;
     log->logDescription = logDescription;
 
     Task* task = project->task(*taskId);
@@ -271,6 +277,9 @@ int createTaskLog(Task* task, TaskLog* taskLog) {
     if (taskLog->logDescription != NULL) {
         ssTaskLogDef << "log-description:" << *taskLog->logDescription << "\n";
     }
+    if (taskLog->lastLap != NULL) {
+        ssTaskLogDef << "log-lap:" << *taskLog->lastLap->toChar() << "\n";
+    }
     ssTaskLogDef << "}}";
 
     string* projName = task->project()->projectFileName();
@@ -291,6 +300,9 @@ int updateTaskLog(Task* task, TaskLog* taskLog) {
     ssTaskLogDef << "log-end-time:" << taskLog->end->toChar() << ";\n";
     if (taskLog->logDescription != NULL) {
         ssTaskLogDef << "log-description:" << *taskLog->logDescription << "\n";
+    }
+    if (taskLog->lastLap != NULL) {
+        ssTaskLogDef << "log-lap:" << *taskLog->lastLap->toChar() << "\n";
     }
     ssTaskLogDef << "}}\n";
 

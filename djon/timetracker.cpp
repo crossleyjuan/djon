@@ -12,6 +12,7 @@ TimeTracker::TimeTracker(QObject *parent) :
     _taskLog = NULL;
     _timer = new QTimer();
     _ticksToSaveLog = 0;
+    _lastLapTime = NULL;
     connect(_timer, SIGNAL(timeout()), this, SLOT(timeOut()));
 }
 
@@ -103,8 +104,51 @@ void TimeTracker::moveCurrentRecordToTask(Task* newTask) {
     createTaskLog(_task, _taskLog);
 }
 
+void TimeTracker::moveLappedRecordToTask(Task* newTask) {
+    TaskLog* newLog = new TaskLog();
+    newLog->id = uuid();
+    newLog->start = _taskLog->lastLap;
+    newLog->end = _taskLog->end;
+    newLog->lastLap = NULL;
+    newLog->logDescription = NULL;
+    newTask->addLog(newLog);
+    createTaskLog(newTask, newLog);
+
+    _taskLog->end = _taskLog->lastLap;
+    _taskLog->lastLap = NULL;
+    updateTaskLog(_task, _taskLog);
+
+    _taskLog = newLog;
+    _task = newTask;
+}
+
 void TimeTracker::destroyCurrentRecord() {
     stopRecord();
     _task->removeLog(_taskLog);
     deleteTaskLog(_task, _taskLog);
+    _taskLog = NULL;
+}
+
+void TimeTracker::removeLapTime() {
+    if (_taskLog != NULL) {
+        if (_taskLog->lastLap != NULL) {
+            _taskLog->end = _taskLog->lastLap;
+        }
+        _taskLog->lastLap = NULL;
+        updateTaskLog(_task, _taskLog);
+    }
+}
+
+void TimeTracker::startRecordLap() {
+    _taskLog->lastLap = new DateTime();
+}
+
+void TimeTracker::cleanLapTime() {
+    if (_taskLog != NULL) {
+        if (_taskLog->lastLap != NULL) {
+            delete _taskLog->lastLap;
+        }
+        _taskLog->lastLap = NULL;
+        updateTaskLog(_task, _taskLog);
+    }
 }

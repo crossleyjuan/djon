@@ -4,6 +4,8 @@
 #include "data.h"
 #include "TaskModel.h"
 #include "timetracker.h"
+#include <sstream>
+#include <string>
 
 IdleTaskWindow::IdleTaskWindow(std::vector<Project*>* projects, TimeTracker* timeTracker, QWidget *parent) :
     QDialog(parent),
@@ -14,7 +16,15 @@ IdleTaskWindow::IdleTaskWindow(std::vector<Project*>* projects, TimeTracker* tim
     m_ui->comboBox->setModel(new TaskModel(ONLY_TASKS, *projects));
 
     QTime current = QTime::currentTime();
-    QString text("You have been idle since: " + current.toString(tr("hh:mm:ss AP")) + ", what do you want to do with the registered time?");
+    std::stringstream ssMessage;
+    ssMessage << "The timer was running and registering time to: ";
+    ssMessage << *timeTracker->task()->shortDescription() << ".\n";
+    ssMessage << "You have been idle since: ";
+    ssMessage << current.toString(tr("hh:mm:ss AP")).toStdString();
+    ssMessage << ", what do you want to do with the registered time?";
+
+    std::string mess = ssMessage.str();
+    QString text(mess.c_str());
     m_ui->idleMessage->setText(text);
     setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
     _timeTracker = timeTracker;
@@ -42,14 +52,15 @@ void IdleTaskWindow::changeEvent(QEvent *e)
 void IdleTaskWindow::on_accepted()
 {
     if (m_ui->dontCount->isChecked()) {
-        _timeTracker->destroyCurrentRecord();
+        _timeTracker->removeLapTime();
     } else if (m_ui->countToTask->isChecked()) {
         TreeComboBox* box = m_ui->comboBox;
         TaskModel* model = (TaskModel*)box->model();
         QModelIndex index = box->currentModelIndex();
         Task* task = model->task(index);
-        _timeTracker->moveCurrentRecordToTask(task);
+        _timeTracker->moveLappedRecordToTask(task);
         emit currentTaskChanged(task);
     }
+    _timeTracker->cleanLapTime();
 }
 

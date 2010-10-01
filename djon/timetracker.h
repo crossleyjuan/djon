@@ -26,6 +26,7 @@ public:
     Task* task();
     TaskLog* taskLog();
     void moveCurrentRecordToTask(Task* newTask);
+    void moveLappedRecordToTask(Task* newTask);
     void destroyCurrentRecord();
 
 signals:
@@ -34,7 +35,10 @@ signals:
 
 public slots:
     void startRecord(Task* task);
+    void startRecordLap();
     void startRecord(Task* task, TaskLog* taskLog);
+    void removeLapTime();
+    void cleanLapTime();
     void stopRecord();
     void changeTask(Task* task);
     void changeTaskLog(Task* task, TaskLog* log);
@@ -45,6 +49,7 @@ private:
     Task* _task;
     TaskLog* _taskLog;
     QTimer* _timer;
+    DateTime* _lastLapTime;
     long _secs;
     long _totalTaskTimeSecs;
     long _ticksToSaveLog; // This will record the ticks to save the current running log (avoid Failure)

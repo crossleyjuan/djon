@@ -37,7 +37,7 @@ TaskDialog::TaskDialog(Project* project, Task* task, QWidget *parent) :
     if (task->longDescription() != NULL) {
         m_ui->description->setPlainText(QString(task->longDescription()->c_str()));
     }
-    m_ui->duration->setText(QString(toString(task->duration()).c_str()));
+    m_ui->duration->setText(QString(task->duration().toChar()));
     m_ui->startDate->setDateTime(*m_task->startDate()->toQDateTime());
     m_ui->endDate->setDateTime(*m_task->endDate()->toQDateTime());
 
@@ -123,8 +123,10 @@ void TaskDialog::done(int res) {
             }
         }
     }
-    if (valid) {
+    if (valid && (res == 1)) {
         save();
+    }
+    if (valid) {
         QDialog::done(res);
     }
 }
@@ -133,7 +135,7 @@ void TaskDialog::save() {
     m_task->setId(_id);
     m_task->setShortDescription(new string(m_ui->shortDescription->text().toStdString()));
     m_task->setLongDescription(new string(m_ui->description->document()->toPlainText().toStdString()));
-    m_task->setDuration(m_ui->duration->text().toInt());
+    m_task->setDuration(Duration(m_ui->duration->text().toStdString()));
     m_task->setEndDate(new DateTime(m_ui->endDate->dateTime()));
     m_task->setStartDate(new DateTime(m_ui->startDate->dateTime()));
     QString templateName = m_ui->cboTemplate->itemData(m_ui->cboTemplate->currentIndex()).toString();

@@ -30,7 +30,7 @@ char* readFile(char* fileName) {
 
     delete(buffer);
 
-    char* result = strcpy((char*)str.c_str());
+    char* result = strcpy(str);
     return result;
 }
 

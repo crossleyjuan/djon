@@ -35,7 +35,6 @@ Task::Task(Project* project) {
     _id = NULL;
     _shortDescription = NULL;
     _longDescription = NULL;
-    _duration = NULL;
     _startDate = NULL;
     _endDate = NULL;
     _templateName = NULL;
@@ -202,11 +201,11 @@ DateTime* Task::startDate() {
     }
 }
 
-void Task::setDuration(int _duration) {
+void Task::setDuration(Duration _duration) {
     this->_duration = _duration;
 }
 
-int Task::duration() const {
+Duration Task::duration() const {
     return _duration;
 }
 
@@ -252,7 +251,7 @@ Task::Task(Project* project, std::string* taskDef) {
     qDebug("Loading task id: %s", _id->c_str());
     _shortDescription =  new std::string(READ_ELEMENT(values, "short-description"));
     _longDescription = new std::string(READ_ELEMENT(values, "long-description"));
-    _duration = atoi(READ_ELEMENT(values, "duration").c_str());
+    _duration = Duration(READ_ELEMENT(values, "duration").c_str());
     _startDate = new DateTime(READ_ELEMENT(values, "startdate"));
     _endDate = new DateTime(READ_ELEMENT(values, "enddate"));
     _templateName = new string(READ_ELEMENT(values, "template-name"));
@@ -272,7 +271,7 @@ char* Task::toChar() {
     }
     ss << "enddate:" << _endDate->toChar() << ";\n";
     ss << "startdate:" << _startDate->toChar() << ";\n";
-    ss << "duration:" << _duration << ";\n";
+    ss << "duration:" << _duration.toChar() << ";\n";
     ss << "status:" << *_status << ";\n";
     ss << "template-name:" << *_templateName << ";\n";
 
@@ -349,7 +348,7 @@ void Task::processTemplate() {
         std::stringstream ssId;
         ssId << *id() << "." << subId++;
         sub->setId(new string(ssId.str()));
-        sub->setDuration(1);
+        sub->setDuration(Duration(1, 0, 0));
         sub->setEndDate(endDate());
         sub->setShortDescription(new string(subTaskName));
         sub->setStartDate(startDate());

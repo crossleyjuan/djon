@@ -32,7 +32,7 @@ Task* AllneticImportHandler::parseTask(QXmlAttributes attrs) {
 
     tsk->setStartDate(parseDateTime(attrs.value("start")));
     tsk->setEndDate(parseDateTime(attrs.value("finish")));
-    tsk->setDuration(1);
+    tsk->setDuration(Duration(1, 0, 0));
     tsk->setId(new string(attrs.value(QString("number")).toStdString()));
     tsk->setTemplateName(_defaultTemplate->name());
     tsk->setStatus(_defaultStatus);

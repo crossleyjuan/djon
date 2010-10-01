@@ -10,7 +10,7 @@
 
 #include <string>
 
-char* strcpy(char* str);
+char* strcpy(char* str, int len);
 char* strcpy(std::string str);
 bool endsWith(char* source, char* check);
 

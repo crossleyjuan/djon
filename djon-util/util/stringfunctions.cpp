@@ -4,11 +4,10 @@
 #include <stdlib.h>
 
 char* strcpy(std::string str) {
-    return strcpy((char*)str.c_str());
+    return strcpy(const_cast<char*>(str.c_str()), str.length());
 }
 
-char* strcpy(char* str) {
-    int len = strlen(str);
+char* strcpy(char* str, int len) {
     char* result = (char*)mmalloc(len + 1);
     memset(result, 0, len +1);
     memcpy(result, str, len);

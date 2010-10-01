@@ -9,6 +9,7 @@
 #define	_TASK_H
 
 #include "util.h"
+#include "duration.h"
 #include <vector>
 #include <string>
 
@@ -20,6 +21,7 @@ public:
     std::string* id;
     DateTime* start; //YYYYMMDD.HHMMSS
     DateTime* end; //YYYYMMDD.HHMMSS
+    DateTime* lastLap; //YYYYMMDD.HHMMSS
     std::string* logDescription;
 
     DTime* totalTime();
@@ -53,8 +55,8 @@ public:
     DateTime* endDate();
     void setStartDate(DateTime* _startDate);
     DateTime* startDate();
-    void setDuration(int _duration);
-    int duration() const;
+    void setDuration(Duration _duration);
+    Duration duration() const;
     void setLongDescription(std::string* _longDescription);
     std::string* longDescription() const;
     void setShortDescription(std::string* _shortDescription);
@@ -77,7 +79,7 @@ private:
     string* _id;
     std::string* _shortDescription;
     std::string* _longDescription;
-    int _duration;
+    Duration _duration;
     DateTime* _startDate;
     DateTime* _endDate;
     Project* _project;
