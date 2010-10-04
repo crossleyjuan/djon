@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <sstream>
+#include <string>
 
 Duration::Duration() {
     _days = 0;
@@ -22,17 +24,25 @@ Duration::Duration(const std::string duration) {
     _minutes = 0;
     // ##
     // ##d##H##m
-    if (duration.find('x') != std::string::npos) {
-        char* cdur = const_cast<char*>(duration.c_str());
-        char* temp = strtok(cdur, "x");
-        _days = atoi(temp);
-        temp = strtok(NULL, "x");
-        _hours = atoi(temp);
-        temp = strtok(NULL, "x");
-        _minutes = atoi(temp);
+    const char* cdur = duration.c_str();
+    int len = duration.length();
+    if (strcspn(cdur, "dhm") != len) {
+        std::vector<std::string*>* tokens = tokenizer(duration, "dhm");
+        int pos = 0;
+        if (strcspn(cdur, "d") != len) {
+            _days = atoi(tokens->at(pos)->c_str());
+            pos++;
+        }
+        if (strcspn(cdur, "h") != len) {
+            _hours = atoi(tokens->at(pos)->c_str());
+            pos++;
+        }
+        if (strcspn(cdur, "m") != len) {
+            _minutes = atoi(tokens->at(pos)->c_str());
+        }
     } else {
-        if (duration.length() > 0) {
-            _days = atoi(duration.c_str());
+        if (strlen(cdur) > 0) {
+            _days = atoi(cdur);
         }
     }
 }
@@ -72,10 +82,16 @@ void Duration::setMinutes(int minutes) {
 }
 
 char* Duration::toChar() {
-    char* buffer = (char*)mmalloc(9);
-    memset(buffer, 0, 6);
-    sprintf(buffer, "%02dx%02dx%02d", _days, _hours, _minutes);
+    std::stringstream ss;
+    ss << _days << "d";
+    ss << _hours << "h";
+    ss << _minutes << "m";
+    std::string res = ss.str();
+    return strcpy(res);
+//    char* buffer = (char*)mmalloc(9);
+//    memset(buffer, 0, 6);
+//    sprintf(buffer, "%02d\\d%02d\\h%02d\\m", _days, _hours, _minutes);
 
-    return buffer;
+//    return buffer;
 }
 

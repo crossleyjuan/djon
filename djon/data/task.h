@@ -29,7 +29,7 @@ public:
 
 class Task {
 public:
-    Task(Project* project, std::string* taskDef);
+    Task(Project* project, const std::string taskDef);
     Task(Project* project);
 
     Task(const Task& orig);

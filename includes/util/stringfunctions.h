@@ -9,10 +9,12 @@
 #define	_STRINGFUNCTIONS_H
 
 #include <string>
+#include <vector>
 
 char* strcpy(char* str, int len);
 char* strcpy(std::string str);
 bool endsWith(char* source, char* check);
+std::vector<std::string*>* tokenizer(const std::string source, const char* tokens);
 
 #endif	/* _STRINGFUNCTIONS_H */
 

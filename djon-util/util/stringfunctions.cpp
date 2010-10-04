@@ -26,3 +26,16 @@ bool endsWith(char* source, char* check) {
     }
 }
 
+std::vector<string*>* tokenizer(const std::string source, const char* tokens) {
+    std::vector<string*>* result = new std::vector<string*>();
+    char* csource = strcpy(source);
+    char* token = strtok(csource, tokens);
+    while (token != NULL) {
+        std::string* item = new string(token);
+        result->push_back(item);
+        token = strtok(NULL, tokens);
+    }
+    free(csource);
+
+    return result;
+}

@@ -237,7 +237,7 @@ std::vector<TaskLog*>* Task::logs() {
     return _logs;
 }
 
-Task::Task(Project* project, std::string* taskDef) {
+Task::Task(Project* project, const std::string taskDef) {
     qDebug("Task::Task(Project* project, std::string* taskDef)");
     _project = project;
     _subTasks = NULL;
@@ -245,7 +245,7 @@ Task::Task(Project* project, std::string* taskDef) {
     _totalTime = 0;
     _logs = new vector<TaskLog*>();
 
-    hashmap* values = parseTextFormat(*taskDef);
+    hashmap* values = parseTextFormat(taskDef);
 
     _id = new std::string(READ_ELEMENT(values, "task-id"));
     qDebug("Loading task id: %s", _id->c_str());

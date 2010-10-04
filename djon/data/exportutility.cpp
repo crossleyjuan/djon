@@ -39,6 +39,7 @@ void ExportUtility::executeExport(std::string fileName, DateTime* logsFrom, Date
             ssTask << "name=\"" << *task->shortDescription() << "\" ";
             ssTask << "start=\"" << task->startDate()->toQDateTime()->toString(Qt::ISODate).toStdString() << "\" ";
             ssTask << "end=\"" << task->endDate()->toQDateTime()->toString(Qt::ISODate).toStdString() << "\" ";
+            ssTask << "duration=\"" << task->duration().toChar() << "\" ";
             ssTask << "timelength=\"" << task->totalTime()->toChar() << "\" ";
 
             stringstream periods;

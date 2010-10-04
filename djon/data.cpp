@@ -24,20 +24,17 @@ void loadTasks(Project* project) {
 
     char* taskDefs = readFile(const_cast<char*>(fileName.c_str()));
 
-    char* taskDef = strtok(taskDefs, "}}");
-    while (taskDef != NULL) {
-        char* tsk = strchr(taskDef, '{');
-        if (tsk == NULL) {
-            break;
+    std::vector<string*>* taskDef = tokenizer(taskDefs, "}}");
+    for (std::vector<string*>::iterator iter = taskDef->begin(); iter != taskDef->end(); iter++) {
+        string* staskDef = *iter;
+        if (staskDef->find("{{") != std::string::npos) {
+            string tsk = staskDef->substr(staskDef->find("{{") + 2);
+            Task* task = new Task(project, tsk);
+            project->addTask(task);
+            if (errorOcurred()) {
+                return;
+            }
         }
-        string* staskDef = new string(tsk + 2);
-        Task* task = new Task(project, staskDef);
-        project->addTask(task);
-        if (errorOcurred()) {
-            return;
-        }
-        delete(staskDef);
-        taskDef = strtok(NULL, "}}");
     }
     free(taskDefs);
     qDebug("out loadTasks(Project* project)");

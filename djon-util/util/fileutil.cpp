@@ -31,6 +31,7 @@ char* readFile(char* fileName) {
     delete(buffer);
 
     char* result = strcpy(str);
+
     return result;
 }
 

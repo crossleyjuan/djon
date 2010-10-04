@@ -29,7 +29,7 @@ void UpdateManager::check() {
         if (strcmp(updater, "local") == 0) {
             const char* versionFile = readConfValue("version-file", "");
             if (*versionFile != '/0') {
-                //                const char* version = readFile(const_cast<char*>(versionFile));
+                const char* version = readFile(const_cast<char*>(versionFile));
                 if ((*version != '\0') && (strcmp(version, VERSION) != 0)) {
                     int res = QMessageBox::question(NULL, "d-jon update", "A new version of d-jon is available, do you want to update now?", QMessageBox::Yes, QMessageBox::No);
                     if (res == QMessageBox::Yes) {

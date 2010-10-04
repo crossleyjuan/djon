@@ -5,6 +5,6 @@
 
 #define VERSION "1.0201009101"
 
-#define TESTING
+// #define TESTING
 
 #endif // CONFIG_H
