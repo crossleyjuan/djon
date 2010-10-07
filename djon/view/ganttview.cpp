@@ -40,7 +40,7 @@ void GanttView::createHeader() {
     QDateTime startDate = *_ganttScene->startDate().addDays(-1).toQDateTime();
     for (int x = 0; x < _ganttScene->totalDays(); x++) {
         QPen textPen(Qt::black);
-        QGraphicsSimpleTextItem* text = _headerScene->addSimpleText(startDate.toString("dd-MMM"), QFont("Arial", 8));
+        QGraphicsSimpleTextItem* text = _headerScene->addSimpleText(startDate.addDays(1).toString("dd-MMM"), QFont("Arial", 8));
         text->setPos(x * 45 + 2, 3);
         text->setVisible(true);
 //        text->setPen(textPen);
