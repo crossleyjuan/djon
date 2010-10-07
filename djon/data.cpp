@@ -386,7 +386,16 @@ int deleteTask(Task* task) {
 
 void addProject(const char* fileName) {
     string* openProjects = new string(readConfValue("open-projects", ""));
-    if (openProjects->find(fileName) == -1) {
+    std::vector<string*>* currentProjects = split(*openProjects, ",");
+    bool found = false;
+    for (std::vector<string*>::iterator iter = currentProjects->begin(); iter != currentProjects->end(); iter++) {
+        string* item = *iter;
+        if (item->compare(fileName) == 0) {
+            found = true;
+            break;
+        }
+    }
+    if (!found) {
         if (openProjects->length() > 0) {
             openProjects->append(",");
         } else {

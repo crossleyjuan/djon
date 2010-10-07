@@ -104,12 +104,12 @@ bool endsWith(const char* text, const char* end) {
     return true;
 }
 
-std::vector<string*>* split(string str, string token) {
+std::vector<string*>* split(const string str, string token) {
 //    char* s = (char*) malloc(str.size());
     const char* delim = token.c_str();
 
     //strcpy(s, str.c_str());
-    char* s = (char*)str.c_str();
+    char* s = strcpy((char*)str.c_str());
 
     vector<string*>* res = new vector<string*>();
     char* ptr;
