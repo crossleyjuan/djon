@@ -53,6 +53,7 @@ void IdleTaskWindow::on_accepted()
 {
     if (m_ui->dontCount->isChecked()) {
         _timeTracker->removeLapTime();
+        _timeTracker->dropRecordedTime();
     } else if (m_ui->countToTask->isChecked()) {
         TreeComboBox* box = m_ui->comboBox;
         TaskModel* model = (TaskModel*)box->model();

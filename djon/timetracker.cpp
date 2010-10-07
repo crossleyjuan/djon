@@ -152,3 +152,11 @@ void TimeTracker::cleanLapTime() {
         updateTaskLog(_task, _taskLog);
     }
 }
+
+void TimeTracker::dropRecordedTime() {
+    if (_status == RUNNING) {
+        emit timeStopped(_task, _taskLog);
+    }
+    _status = STOPPED;
+    _timer->stop();
+}

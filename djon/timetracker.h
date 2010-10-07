@@ -40,6 +40,7 @@ public slots:
     void removeLapTime();
     void cleanLapTime();
     void stopRecord();
+    void dropRecordedTime();
     void changeTask(Task* task);
     void changeTaskLog(Task* task, TaskLog* log);
 
