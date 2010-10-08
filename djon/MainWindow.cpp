@@ -660,10 +660,10 @@ void MainWindow::restoreSavedWindowState() {
 }
 
 void MainWindow::checkReleaseNotes() {
-    const char* relNotes = readConfValue(string("release-notes"), "0");
-    if (relNotes[0] == '0') {
+    const char* relVersion = readConfValue(string("last-release-notes"), "");
+    if ((strlen(relVersion) == 0) || (strcmp(relVersion, VERSION) != 0)) {
         showReleaseNotes();
-        writeConfValue(string("release-notes"), string("1"));
+        writeConfValue(string("last-release-notes"), string(VERSION));
     }
 }
 
