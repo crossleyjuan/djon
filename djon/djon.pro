@@ -58,7 +58,8 @@ HEADERS += data.h \
     data/djonpreferences.h \
     data/duration.h \
     view/durationcontrol.h \
-    view/releasenotesview.h
+    view/releasenotesview.h \
+    view/systrayicon.h
 FORMS += MainWindow.ui \
     taskdialog.ui \
     tasklogwindow.ui \
@@ -109,7 +110,8 @@ SOURCES += data.cpp \
     data/djonpreferences.cpp \
     data/duration.cpp \
     view/durationcontrol.cpp \
-    view/releasenotesview.cpp
+    view/releasenotesview.cpp \
+    view/systrayicon.cpp
 OTHER_FILES += djon.rc
 RESOURCES += djon_rs.qrc
 RC_FILE = djon.rc

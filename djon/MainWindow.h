@@ -22,6 +22,7 @@ class TaskModel;
 class TaskHeaderView;
 class UpdateManager;
 class UserPreferencesController;
+class SysTrayIcon;
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -54,8 +55,9 @@ private:
     CurrentTime* _timeWindow;
     TaskModel* _taskModel;
     UserPreferencesController* _userPreferencesController;
+    QAction* _recordButton;
 
-    QSystemTrayIcon* _trayIcon;
+    SysTrayIcon* _trayIcon;
     QMenu* _taskPopUpMenu;
     UpdateManager* _updateManager;
 

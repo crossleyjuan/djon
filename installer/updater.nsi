@@ -63,6 +63,9 @@ Section "djon (required)"
   ; Put file there
   File "djon.exe"
   File "djon-util.dll"
+  File "QtWebKitd4.dll"
+  File "QtXmlPatternsd4.dll"
+  File "phonond4.dll"
   File "updater.exe"
   
   File /oname=$PROFILE\.djon\templates\AnaRequerimientos.tpl AnaRequerimientos.tpl

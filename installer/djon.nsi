@@ -68,6 +68,9 @@ Section "djon (required)"
   File "QtGuid4.dll"
   File "QtXmld4.dll"
   File "QtNetworkd4.dll"
+  File "QtWebKitd4.dll"
+  File "QtXmlPatternsd4.dll"
+  File "phonond4.dll"
 
   CreateDirectory $PROFILE\.djon
   CreateDirectory $PROFILE\.djon\templates
@@ -95,7 +98,7 @@ Section "djon (required)"
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\djon" "NoRepair" 1
   WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Run" "djon" "$INSTDIR\djon.exe"
   WriteUninstaller "uninstall.exe"
-  
+
 SectionEnd
 
 ; Optional section (can be disabled by the user)
@@ -105,8 +108,6 @@ Section "Start Menu Shortcuts"
   CreateShortCut "$SMPROGRAMS\djon\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
   CreateShortCut "$SMPROGRAMS\djon\djon.lnk" "$INSTDIR\djon.exe" "" "$INSTDIR\djon.exe" 0
 
-  Exec '"$INSTDIR\djon.exe"'
-  
 SectionEnd
 
 ;--------------------------------

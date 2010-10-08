@@ -33,6 +33,7 @@
 #include <sstream>
 #include <QGraphicsView>
 #include "ganttscene.h"
+#include "systrayicon.h"
 
 MainWindow::MainWindow() {
     qDebug("MainWindow::MainWindow()");
@@ -50,6 +51,7 @@ MainWindow::MainWindow() {
     _trayIcon = NULL;
     _taskPopUpMenu = NULL;
     _updateManager = NULL;
+    _recordButton = NULL;
     _userPreferencesController = new UserPreferencesController(_taskModel);
 
     checkReleaseNotes();
@@ -137,10 +139,10 @@ void MainWindow::setupActions() {
     QAction* deleteTask = bar->addAction(QIcon(":/img/delete-task.png"), tr("Delete Task"));
     //    QAction* completeTask = bar->addAction(QIcon(":/img/complete-task.png"), tr("Complete Task"));
     bar->addSeparator();
-    QAction* record = bar->addAction(QIcon(":/img/start.png"), tr("Start New Record"));
+    _recordButton = bar->addAction(QIcon(":/img/start.png"), tr("Start New Record"));
     QAction* stop = bar->addAction(QIcon(":/img/stop.png"), tr("Stop Current Record"));
 
-    trcMenu->addAction(record);
+    trcMenu->addAction(_recordButton);
     trcMenu->addAction(stop);
     prjMenu->addAction(newProject);
     prjMenu->addAction(openProject);
@@ -182,7 +184,7 @@ void MainWindow::setupActions() {
     connect(deleteTask, SIGNAL(triggered()), this, SLOT(deleteTask()));
     connect(quit, SIGNAL(triggered()), qApp, SLOT(quit()));
     //    connect(completeTask, SIGNAL(triggered()), this, SLOT(completeTask()));
-    connect(record, SIGNAL(triggered()), this, SLOT(startRecord()));
+    connect(_recordButton, SIGNAL(triggered()), this, SLOT(startRecord()));
     connect(stop, SIGNAL(triggered()), this, SLOT(stopRecord()));
     connect(expAction, SIGNAL(triggered()), this, SLOT(exportProjects()));
 #ifdef WINDOWS
@@ -219,6 +221,8 @@ void MainWindow::startRecord() {
         _idleDetector->start();
         _logWindow->refresh(_activeTask);
         _userPreferencesController->setLastTrackedTask(_taskModel->index(_activeProject, _activeTask));
+        _trayIcon->trackerStarted();
+        _recordButton->setIcon(QIcon(":/img/play_running.png"));
     }
 }
 
@@ -227,6 +231,8 @@ void MainWindow::stopRecord() {
     _timeTracker->stopRecord();
     _idleDetector->stop();
     _taskModel->setTrackedTask(NULL);
+    _trayIcon->trackerStopped();
+    _recordButton->setIcon(QIcon(":/img/start.png"));
 }
 
 void MainWindow::setActiveTask(Task* task) {
@@ -429,7 +435,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::createTray() {
     qDebug("MainWindow::createTray");
-    _trayIcon = new QSystemTrayIcon(QIcon(":/img/djon.png"), this);
+    _trayIcon = new SysTrayIcon(this);
     connect(_trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(restoreWindowState()));
     QMenu* mnu = new QMenu(this);
     QAction* quit = mnu->addAction(QIcon(":/img/quit.png"), tr("Quit"));

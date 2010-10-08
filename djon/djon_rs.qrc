@@ -18,5 +18,12 @@
         <file alias="export-project.png">img/export.png</file>
         <file alias="exit.png">img/exit.png</file>
         <file alias="settings.png">img/settings.png</file>
+        <file alias="djon_1.png">img/djon_1.png</file>
+        <file alias="djon_2.png">img/djon_2.png</file>
+        <file alias="djon_3.png">img/djon_3.png</file>
+        <file alias="djon_4.png">img/djon_4.png</file>
+        <file alias="djon_5.png">img/djon_5.png</file>
+        <file alias="djon_6.png">img/djon_6.png</file>
+        <file alias="play_running.png">img/Play_running.png</file>
     </qresource>
 </RCC>
