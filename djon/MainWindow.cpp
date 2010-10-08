@@ -25,6 +25,7 @@
 #include "ganttscene.h"
 #include "userpreferencescontroller.h"
 #include "djonpreferences.h"
+#include "releasenotesview.h"
 
 #ifdef WINDOWS
 #include "updatemanager.h"
@@ -51,6 +52,7 @@ MainWindow::MainWindow() {
     _updateManager = NULL;
     _userPreferencesController = new UserPreferencesController(_taskModel);
 
+    checkReleaseNotes();
     initialize();
     createTaskLogWindow();
     createCurrentTimeWindow();
@@ -145,7 +147,10 @@ void MainWindow::setupActions() {
     QAction* editProject = prjMenu->addAction(QIcon(":/img/edit-project.png"), tr("Edit Project Information"));
     QAction* closeProject = prjMenu->addAction(QIcon(":/img/close-project.png"), tr("Close Project"));
 
+#ifdef WINDOWS
     QAction* checkUpdate = helpMenu->addAction(QIcon(":/img/update.png"), tr("Check Updates"));
+#endif
+    QAction* releaseNotes = helpMenu->addAction(QIcon(":/img/release-notes.png"), tr("Release Notes"));
 
     prjMenu->addSeparator();
     prjMenu->addAction(newTask);
@@ -183,6 +188,7 @@ void MainWindow::setupActions() {
 #ifdef WINDOWS
     connect(checkUpdate, SIGNAL(triggered()), _updateManager, SLOT(check()));
 #endif
+    connect(releaseNotes, SIGNAL(triggered()), this, SLOT(showReleaseNotes()));
     connect(settings, SIGNAL(triggered()), this, SLOT(settings()));
 
     connect(widget.taskView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(taskContextMenuRequested(QPoint)));
@@ -651,4 +657,17 @@ void MainWindow::restoreSavedWindowState() {
     } else {
         setWindowState(Qt::WindowMaximized);;
     }
+}
+
+void MainWindow::checkReleaseNotes() {
+    const char* relNotes = readConfValue(string("release-notes"), "0");
+    if (relNotes[0] == '0') {
+        showReleaseNotes();
+        writeConfValue(string("release-notes"), string("1"));
+    }
+}
+
+void MainWindow::showReleaseNotes() {
+    ReleaseNotesView* view = new ReleaseNotesView();
+    view->exec();
 }

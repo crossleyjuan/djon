@@ -40,6 +40,7 @@ private:
     void showErrorMessage(const char* errorMessage, QWidget* parent);
     void refreshCollapsedState();
     void setLastSelectedTask();
+    void checkReleaseNotes();
 
     Ui::MainWindow widget;
     TaskLogWindow* _logWindow;
@@ -84,6 +85,7 @@ public slots:
     void aboutToQuit();
     void saveWindowState();
     void restoreSavedWindowState();
+    void showReleaseNotes();
 
     void setActiveTask(Task* task);
     void setActiveTaskLog(Task* task, TaskLog* taskLog);

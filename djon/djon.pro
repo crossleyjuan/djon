@@ -12,13 +12,13 @@ INCLUDEPATH += . \
     view \
     ../includes
 include(../qtsingleapplication-2.6_1-opensource/src/qtsingleapplication.pri)
-
 linux-g++:LIBS += -lXss
-QT += xml
+QT += xml \
+    webkit
 LIBS += -L../libs \
     -ldjon-util
-
 CONFIG += static
+
 # LIBS += -lRpcrt4
 # Input
 HEADERS += data.h \
@@ -57,7 +57,8 @@ HEADERS += data.h \
     view/userpreferencescontroller.h \
     data/djonpreferences.h \
     data/duration.h \
-    view/durationcontrol.h
+    view/durationcontrol.h \
+    view/releasenotesview.h
 FORMS += MainWindow.ui \
     taskdialog.ui \
     tasklogwindow.ui \
@@ -69,7 +70,8 @@ FORMS += MainWindow.ui \
     view/exportdialog.ui \
     view/dialogsettings.ui \
     view/projectdialog.ui \
-    MainWindow.ui
+    MainWindow.ui \
+    view/releasenotesview.ui
 SOURCES += data.cpp \
     main.cpp \
     MainWindow.cpp \
@@ -106,7 +108,8 @@ SOURCES += data.cpp \
     view/userpreferencescontroller.cpp \
     data/djonpreferences.cpp \
     data/duration.cpp \
-    view/durationcontrol.cpp
+    view/durationcontrol.cpp \
+    view/releasenotesview.cpp
 OTHER_FILES += djon.rc
 RESOURCES += djon_rs.qrc
 RC_FILE = djon.rc
