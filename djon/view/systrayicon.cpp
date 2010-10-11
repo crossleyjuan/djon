@@ -18,7 +18,7 @@ void SysTrayIcon::trackerStarted() {
 }
 
 void SysTrayIcon::trackerStopped() {
-    setIcon(QIcon(":/img/djon_1.png"));
+    setIcon(QIcon(":/img/djon.png"));
     if (_running) {
         _timer->stop();
         _running = false;

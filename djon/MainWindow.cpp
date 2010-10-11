@@ -231,8 +231,6 @@ void MainWindow::stopRecord() {
     _timeTracker->stopRecord();
     _idleDetector->stop();
     _taskModel->setTrackedTask(NULL);
-    _trayIcon->trackerStopped();
-    _recordButton->setIcon(QIcon(":/img/start.png"));
 }
 
 void MainWindow::setActiveTask(Task* task) {
@@ -371,6 +369,8 @@ void MainWindow::reloadTasks() {
 void MainWindow::timeStopped(Task* task, TaskLog* taskLog) {
     qDebug("MainWindow::timeStopped");
     _idleDetector->stop();
+    _trayIcon->trackerStopped();
+    _recordButton->setIcon(QIcon(":/img/start.png"));
 }
 
 void MainWindow::deleteTask() {
