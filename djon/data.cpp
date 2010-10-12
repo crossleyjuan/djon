@@ -277,7 +277,7 @@ int createTaskLog(Task* task, TaskLog* taskLog) {
     if (taskLog->lastLap != NULL) {
         ssTaskLogDef << "log-lap:" << *taskLog->lastLap->toChar() << "\n";
     }
-    ssTaskLogDef << "}}";
+    ssTaskLogDef << "}}\n";
 
     string* projName = task->project()->projectFileName();
     const char* lastDir = getLastDir();
