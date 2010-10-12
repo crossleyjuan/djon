@@ -48,6 +48,7 @@ public:
     bool operator >=(const DateTime& dateTime) const;
     bool operator <=(const DateTime& dateTime) const;
     long operator -(const DateTime& dateTimeRight) const;
+    bool operator ==(const DateTime& dateTime) const;
 
 private:
     void initialize(const QDateTime& dateTime);

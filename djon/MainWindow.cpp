@@ -351,6 +351,7 @@ void MainWindow::reloadTasks() {
         widget.taskView->setAlternatingRowColors(true);
         widget.taskView->setSelectionBehavior(QAbstractItemView::SelectRows);
     }
+    widget.ganttView->scrollToday();
     connect(widget.taskView, SIGNAL(collapsed(QModelIndex)), widget.ganttView, SLOT(collapse(QModelIndex)));
     connect(widget.taskView, SIGNAL(expanded(QModelIndex)), widget.ganttView, SLOT(expand(QModelIndex)));
     connect(widget.taskView, SIGNAL(collapsed(QModelIndex)), _userPreferencesController, SLOT(collapsed(QModelIndex)));

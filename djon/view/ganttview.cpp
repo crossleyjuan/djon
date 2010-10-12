@@ -10,6 +10,7 @@ GanttView::GanttView(QWidget *parent) :
     _headerScene = NULL;
     _headerView.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     _headerView.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    _todayPos = 0;
     connect(_ganttView.horizontalScrollBar(), SIGNAL(valueChanged(int)), _headerView.horizontalScrollBar(), SLOT(setValue(int)));
     lay->addWidget(&_headerView);
     lay->addWidget(&_ganttView);
@@ -37,14 +38,21 @@ void GanttView::createHeader() {
     int margin = 15;
     int columnSize = 45;
 
-    QDateTime startDate = *_ganttScene->startDate().addDays(-1).toQDateTime();
+    DateTime startDate = _ganttScene->startDate().addDays(-1);
+    DateTime today;
+    today.setHour(0);
+    today.setMin(0);
+    today.setSecs(0);
     for (int x = 0; x < _ganttScene->totalDays(); x++) {
         QPen textPen(Qt::black);
-        QGraphicsSimpleTextItem* text = _headerScene->addSimpleText(startDate.addDays(1).toString("dd-MMM"), QFont("Arial", 8));
+        QGraphicsSimpleTextItem* text = _headerScene->addSimpleText(startDate.addDays(1).toQDateTime()->toString("dd-MMM"), QFont("Arial", 8));
         text->setPos(x * 45 + 2, 3);
         text->setVisible(true);
 //        text->setPen(textPen);
         text->setZValue(1);
+        if (startDate == today) {
+            _todayPos = (x * 45 + 2);
+        }
         startDate = startDate.addDays(1);
     }
     _headerView.setMaximumHeight(headerSizeHint().height());
@@ -92,4 +100,12 @@ void GanttView::expand(const QModelIndex& index) {
 void GanttView::refresh() {
     _ganttScene->refresh();
     createHeader();
+}
+
+void GanttView::scrollToday() {
+    if (_todayPos > 0) {
+        QPoint currentPos = this->_ganttView.pos();
+        currentPos.setX(_todayPos);
+        this->_ganttView.centerOn(currentPos);
+    }
 }

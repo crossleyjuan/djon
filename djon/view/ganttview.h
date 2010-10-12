@@ -20,6 +20,7 @@ signals:
 public slots:
     void collapse(const QModelIndex& index);
     void expand(const QModelIndex& index);
+    void scrollToday();
 
 private:
     void createHeader();
@@ -30,6 +31,7 @@ private:
     TaskModel* _model;
     GanttScene* _ganttScene;
     QGraphicsScene* _headerScene;
+    int _todayPos;
 };
 
 #endif // GANTTVIEW_H

@@ -182,6 +182,17 @@ bool DateTime::operator <=(const DateTime& dateTime) const {
     return toDouble() <= dateTime.toDouble();
 }
 
+bool DateTime::operator ==(const DateTime& dateTime) const {
+    DateTime test = dateTime;
+    DateTime thisDate = *this;
+    if ((test.getHour() == 0) && (test.getMin() == 0) && (test.getSecs() == 0)) {
+        thisDate.setHour(0);
+        thisDate.setMin(0);
+        thisDate.setSecs(0);
+    }
+    return test.toDouble() == thisDate.toDouble();
+}
+
 long DateTime::operator -(const DateTime& dateTimeRight) const {
     DateTime left = *this; // Copy this
     DateTime right = dateTimeRight; // copy the argument

@@ -156,6 +156,11 @@ void GanttScene::createBackground() {
     int cols = _totalDays;
     int columnSize = textSize + margin;
 
+    DateTime startDate = this->_startDate;
+    DateTime today;
+    today.setHour(0);
+    today.setMin(0);
+    today.setSecs(0);
     for (int x = 0; x < (cols + 1); x++) {
         QColor barcolor;
         if ((x % 2) > 0) {
@@ -174,6 +179,11 @@ void GanttScene::createBackground() {
         pen.setStyle(Qt::DashLine);
 
         addLine(x*columnSize, 0 , x*columnSize, heigth, pen);
+        if (startDate == today) {
+            barcolor = QColor(230, 230, 250);
+            addRect(left, top, columnSize, heigth, penBar, QBrush(barcolor));
+        }
+        startDate = startDate.addDays(1);
     }
 }
 
