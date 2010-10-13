@@ -27,9 +27,9 @@
 #include "djonpreferences.h"
 #include "releasenotesview.h"
 
-#ifdef WINDOWS
+//#ifdef WINDOWS
 #include "updatemanager.h"
-#endif
+//#endif
 #include <sstream>
 #include <QGraphicsView>
 #include "ganttscene.h"
@@ -59,10 +59,10 @@ MainWindow::MainWindow() {
     createTaskLogWindow();
     createCurrentTimeWindow();
 
-#ifdef WINDOWS
+//#ifdef WINDOWS
     _updateManager = new UpdateManager(this);
-    _updateManager->startCheck(240);
-#endif
+    _updateManager->startCheck(5);
+//#endif
     setupActions();
 
     widget.taskView->setColumnWidth(0, 250);
@@ -149,9 +149,9 @@ void MainWindow::setupActions() {
     QAction* editProject = prjMenu->addAction(QIcon(":/img/edit-project.png"), tr("Edit Project Information"));
     QAction* closeProject = prjMenu->addAction(QIcon(":/img/close-project.png"), tr("Close Project"));
 
-#ifdef WINDOWS
+//#ifdef WINDOWS
     QAction* checkUpdate = helpMenu->addAction(QIcon(":/img/update.png"), tr("Check Updates"));
-#endif
+//#endif
     QAction* releaseNotes = helpMenu->addAction(QIcon(":/img/release-notes.png"), tr("Release Notes"));
 
     prjMenu->addSeparator();
@@ -187,9 +187,9 @@ void MainWindow::setupActions() {
     connect(_recordButton, SIGNAL(triggered()), this, SLOT(startRecord()));
     connect(stop, SIGNAL(triggered()), this, SLOT(stopRecord()));
     connect(expAction, SIGNAL(triggered()), this, SLOT(exportProjects()));
-#ifdef WINDOWS
+//#ifdef WINDOWS
     connect(checkUpdate, SIGNAL(triggered()), _updateManager, SLOT(check()));
-#endif
+//#endif
     connect(releaseNotes, SIGNAL(triggered()), this, SLOT(showReleaseNotes()));
     connect(settings, SIGNAL(triggered()), this, SLOT(settings()));
 
@@ -223,6 +223,7 @@ void MainWindow::startRecord() {
         _userPreferencesController->setLastTrackedTask(_taskModel->index(_activeProject, _activeTask));
         _trayIcon->trackerStarted();
         _recordButton->setIcon(QIcon(":/img/play_running.png"));
+        connect(_timeTracker, SIGNAL(timeChanged(Task*,DTime&,DTime&)), _taskModel, SLOT(timeChanged(Task*)));
     }
 }
 

@@ -21,3 +21,4 @@ HEADERS += djon-util_global.h \
     util/dtime.h \
     util/DateTime.h \
     util/stringfunctions.h
+
