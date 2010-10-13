@@ -1,0 +1,22 @@
+Source: d-jon
+Version: 1.0201010111
+Section: contrib
+Priority: optional
+Maintainer: d-jon group <contact@d-jon.com>
+Depends: libxss1 (>= 1.2.0-2), libqt4-webkit (>= 4.6.2), libqt4-xml (>= 4.6.2), libqtgui4 (>= 4.6.2), libqt4-network (>= 4.6.2), libqtcore4 (>= 4.6.2), libc6 (>= 2.11.1), libstdc++6 (>= 4.4.3), libgcc1 (>= 4.4.3)
+Homepage: http://d-jon.com
+Package: d-jon
+Architecture: all
+Description: Project Management with Time tracking
+ d-Jon is a project manager system that implements time tracking, templates, multi-project and other features
+ that will help you to keep control of your project.
+ Features:
+ Multi project: You can manage multiple projects at the same time.
+ Time tracking: Track your time for every task in your project.
+ Manual time entries: You can create your own time logs, useful when you don't have your computer close to you.
+ Gantt View: You can see your tasks in a gantt chart.
+ Templates (EE): You can create templates for your tasks, every time you create a task using that template the 
+ subtasks will be automatically created for you, example: Development Cycles includes several task that you should
+ create every time you add a new development cycle to your project.
+ Export (EE): export your projects, tasks and time logs and use them in other applications, reports, etc.
+
