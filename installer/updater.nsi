@@ -1,7 +1,7 @@
 ; The name of the installer
 Name "d-jon updater"
 
-SilentInstall silent
+; SilentInstall silent
 
 ; The file to write
 OutFile "shared\update_djon.exe"

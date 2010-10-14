@@ -27,6 +27,7 @@ public slots:
 private:
     void downloadUpdater();
     void processNextStep();
+    void checkVersion();
 
     QTimer* _timer;
     int _mins;
@@ -35,6 +36,7 @@ private:
     QHttp* _http;
     int _httpGetId;
     QFile* _file;
+    bool _isLastVersion;
 
     bool _versionConfDownloaded;
     bool _updateDownloaded;

@@ -8,18 +8,20 @@
 #endif
 #include <QUrl>
 #include <QByteArray>
+#include <string>
 
 UpdateManager::UpdateManager(QObject *parent) :
         QObject(parent)
 {
     _timer = new QTimer(this);
-    _mins = 10;
     _updateDownloaded = false;
     _versionConfDownloaded = false;
     _httpRequestAborted = false;
     _http = new QHttp(this);
     _file = NULL;
+    _mins = 0;
     _downloading = false;
+    _isLastVersion = false;
     connect(_timer, SIGNAL(timeout()), this, SLOT(check()));
 
     connect(_http, SIGNAL(requestFinished(int,bool)),
@@ -28,8 +30,8 @@ UpdateManager::UpdateManager(QObject *parent) :
             this, SLOT(updateDataReadProgress(int,int)));
     connect(_http, SIGNAL(responseHeaderReceived(QHttpResponseHeader)),
             this, SLOT(readResponseHeader(QHttpResponseHeader)));
-//    connect(http, SIGNAL(authenticationRequired(QString,quint16,QAuthenticator*)),
-//            this, SLOT(slotAuthenticationRequired(QString,quint16,QAuthenticator*)));
+    //    connect(http, SIGNAL(authenticationRequired(QString,quint16,QAuthenticator*)),
+    //            this, SLOT(slotAuthenticationRequired(QString,quint16,QAuthenticator*)));
 }
 
 void UpdateManager::startCheck(int mins) {
@@ -39,13 +41,15 @@ void UpdateManager::startCheck(int mins) {
 }
 
 void UpdateManager::downloadUpdater() {
-//    const char*  = ;//"update_djon.exe";
     std::string fileName;
     const char* address;
     if (!_versionConfDownloaded) {
         fileName = string("version.conf");
         address = readConfValue("version-file", "");
     } else {
+        if (_isLastVersion) {
+            return;
+        }
         fileName = string("update_djon.exe");
         address = readConfValue("updater-address", "");
     }
@@ -89,6 +93,7 @@ void UpdateManager::httpRequestFinished(int requestId, bool error)
         _file = 0;
         if (!_versionConfDownloaded) {
             _versionConfDownloaded = true;
+            checkVersion();
         } else if (!_updateDownloaded) {
             _updateDownloaded = true;
         }
@@ -122,6 +127,18 @@ void UpdateManager::updateDataReadProgress(int bytesRead, int totalBytes)
 }
 
 void UpdateManager::check() {
+    if (_downloading) {
+        return;
+    }
+
+    if (_isLastVersion) {
+        // only reset these values if the last check returned that this is
+        // the last version
+        _isLastVersion = false;
+        _versionConfDownloaded = false;
+        _updateDownloaded = false;
+    }
+
     _timer->stop();
     const char* updater = readConfValue("updater", "");
     if (*updater != '/0') {
@@ -133,6 +150,9 @@ void UpdateManager::check() {
 }
 
 void UpdateManager::processNextStep() {
+    if (_isLastVersion) {
+        return;
+    }
     if (!_versionConfDownloaded || !_updateDownloaded) {
         downloadUpdater();
     } else {
@@ -145,5 +165,16 @@ void UpdateManager::processNextStep() {
             exit(0);
 #endif
         }
+        _downloading = false;
+    }
+}
+
+void UpdateManager::checkVersion() {
+    char* version = readFile(const_cast<char*>(std::string(*getTempDir() + "\\version.conf").c_str()));
+
+    if (QString(version).trimmed().compare(QString(VERSION)) != 0) {
+        _isLastVersion = false;
+    } else {
+        _isLastVersion = true;
     }
 }
