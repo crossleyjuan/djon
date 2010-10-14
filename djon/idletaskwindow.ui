@@ -54,7 +54,7 @@
        <item row="2" column="0">
         <widget class="QRadioButton" name="countToTask">
          <property name="text">
-          <string>Count the time other task</string>
+          <string>Count the time to other task</string>
          </property>
         </widget>
        </item>

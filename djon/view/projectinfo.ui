@@ -17,7 +17,7 @@
    <string>Project Information</string>
   </property>
   <property name="subTitle">
-   <string>Here you will provide all the inforamtion needed to the project creation process.</string>
+   <string>Here you will provide all the information needed to the project creation process.</string>
   </property>
   <attribute name="pageId">
    <string notr="true">PROJ_INFO</string>

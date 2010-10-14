@@ -61,7 +61,7 @@ MainWindow::MainWindow() {
 
 #ifdef WINDOWS
     _updateManager = new UpdateManager(this);
-    _updateManager->startCheck(1);
+    _updateManager->startCheck(240);
 #endif
     setupActions();
 
@@ -223,7 +223,7 @@ void MainWindow::startRecord() {
         _userPreferencesController->setLastTrackedTask(_taskModel->index(_activeProject, _activeTask));
         _trayIcon->trackerStarted();
         _recordButton->setIcon(QIcon(":/img/play_running.png"));
-        connect(_timeTracker, SIGNAL(timeChanged(Task*,DTime&,DTime&)), _taskModel, SLOT(timeChanged(Task*)));
+        //connect(_timeTracker, SIGNAL(timeChanged(Task*,DTime&,DTime&)), _taskModel, SLOT(timeChanged(Task*)));
     }
 }
 

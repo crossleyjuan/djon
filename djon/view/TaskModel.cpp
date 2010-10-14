@@ -263,8 +263,8 @@ QModelIndex TaskModel::index(Project* project, Task* task) {
 }
 
 void TaskModel::timeChanged(Task* task) {
-    QModelIndex taskIndex = index(task->project(), task);
+//    QModelIndex taskIndex = index(task->project(), task);
 
-    QModelIndex timeIndex = index(taskIndex.row(), 1, taskIndex.parent());
-    emit dataChanged(timeIndex, timeIndex);
+//    QModelIndex timeIndex = index(taskIndex.row(), 1, taskIndex.parent());
+//    emit dataChanged(timeIndex, timeIndex);
 }
