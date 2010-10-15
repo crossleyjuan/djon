@@ -1,4 +1,0 @@
-template-name: Ciclo;
-template-description: Ciclos de Desarrollo;
-status: NEW,IN-PROGRESS,CLOSED*;
-subtasks: 01 Planeacion(CommonTask),02 Desarrollo BR(CommonTask),03 Analisis BR(CommonTask),04 Analisis(CommonTask),05 Inspeccion Analisis(CommonTask),06 Comite Analisis(CommonTask),07 Diseño(CommonTask),08 Inspeccion Diseño(CommonTask),09 Comite Diseño(CommonTask),10 DB Build(CommonTask),11 Inspeccion DB Build(CommonTask),12 Implementacion(CommonTask),13 Pruebas(CommonTask),14 Actualizacion Documentos(CommonTask),15 Inspeccion Calidad(CommonTask),16 Merge(CommonTask),17 Release Notes(CommonTask),18 Inspeccion Release Notes(CommonTask)

@@ -140,12 +140,7 @@ void UpdateManager::check() {
     }
 
     _timer->stop();
-    const char* updater = readConfValue("updater", "");
-    if (*updater != '/0') {
-        processNextStep();
-    } else {
-        _timer->stop();
-    }
+    processNextStep();
     _timer->start(_mins * 60000);
 }
 

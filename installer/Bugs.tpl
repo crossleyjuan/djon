@@ -1,4 +1,4 @@
 template-name: Bug;
-template-description: Correccion de Bugs;
-status: NEW,RESOLVED,CLOSED*;
-subtasks: Reproduccion(DevTask), Correccion(DevTask), Deploy(DevTask);
+template-description: Bug Fixing;
+status: NEW,CLOSED*;
+subtasks: Test(DevTask), Fix(DevTask), Deploy(DevTask);

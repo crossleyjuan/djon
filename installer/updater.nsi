@@ -63,16 +63,7 @@ Section "djon (required)"
   ; Put file there
   File "djon.exe"
   File "djon-util.dll"
-  File "QtWebKitd4.dll"
-  File "QtXmlPatternsd4.dll"
-  File "phonond4.dll"
   File "updater.exe"
-  
-  File /oname=$PROFILE\.djon\templates\AnaRequerimientos.tpl AnaRequerimientos.tpl
-  File /oname=$PROFILE\.djon\templates\Bugs.tpl Bugs.tpl
-  File /oname=$PROFILE\.djon\templates\ciclos.tpl ciclos.tpl
-  File /oname=$PROFILE\.djon\templates\Tasks.tpl Tasks.tpl
-  File /oname=$PROFILE\.djon\templates\CommonTask.tpl CommonTask.tpl
   
   ; if the conf file exists, remove it and replace with the new one
 ;  Delete $PROFILE\.djon\djon.conf

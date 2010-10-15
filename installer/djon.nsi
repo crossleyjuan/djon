@@ -76,15 +76,15 @@ Section "djon (required)"
   CreateDirectory $PROFILE\.djon\templates
   CreateDirectory $PROFILE\.djon\Projects
   
-  File /oname=$PROFILE\.djon\templates\AnaRequerimientos.tpl AnaRequerimientos.tpl
+  File /oname=$PROFILE\.djon\templates\Req.tpl Req.tpl
   File /oname=$PROFILE\.djon\templates\Bugs.tpl Bugs.tpl
-  File /oname=$PROFILE\.djon\templates\ciclos.tpl ciclos.tpl
+  File /oname=$PROFILE\.djon\templates\cycle.tpl cycle.tpl
   File /oname=$PROFILE\.djon\templates\Tasks.tpl Tasks.tpl
   File /oname=$PROFILE\.djon\templates\CommonTask.tpl CommonTask.tpl
   
   ; if the conf file exists, remove it and replace with the new one
   Delete $PROFILE\.djon\djon.conf
-  Push "last-project-dir:$PROFILE\.djon\Projects;$\r$\nidle-timeout:300;$\r$\nupdater:local;$\r$\nversion-file:\\dev-juanc\djon\version.conf;$\r$\nupdater-address:\\dev-juanc\djon\update_djon.exe;$\r$\n"
+  Push "last-project-dir:$PROFILE\.djon\Projects;$\r$\nidle-timeout:300;$\r$\nversion-file:http://d-jon.com/downloads/version.conf;$\r$\nupdater-address:http://d-jon.com/downloads/update_djon.exe;$\r$\n"
   Push "$PROFILE\.djon\djon.conf"
   Call WriteToFile
   
