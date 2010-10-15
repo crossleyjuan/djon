@@ -271,11 +271,11 @@ int createTaskLog(Task* task, TaskLog* taskLog) {
     ssTaskLogDef << "task-id:" << *task->id() << ";\n";
     ssTaskLogDef << "log-start-time:" << taskLog->start->toChar() << ";\n";
     ssTaskLogDef << "log-end-time:" << taskLog->end->toChar() << ";\n";
+    if (taskLog->lastLap != NULL) {
+        ssTaskLogDef << "log-lap:" << *taskLog->lastLap->toChar() << ";\n";
+    }
     if (taskLog->logDescription != NULL) {
         ssTaskLogDef << "log-description:" << *taskLog->logDescription << "\n";
-    }
-    if (taskLog->lastLap != NULL) {
-        ssTaskLogDef << "log-lap:" << *taskLog->lastLap->toChar() << "\n";
     }
     ssTaskLogDef << "}}\n";
 
