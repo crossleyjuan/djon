@@ -14,6 +14,8 @@ class UpdateManager : public QObject
 public:
     explicit UpdateManager(QObject *parent = 0);
     void startCheck(int mins);
+    void pause();
+    void resume();
 
 signals:
     void versionFound();

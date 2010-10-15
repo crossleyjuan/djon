@@ -200,6 +200,7 @@ void MainWindow::setupActions() {
 void MainWindow::idleTimeOut() {
     qDebug("MainWindow::idleTimeOut()");
     // This will enforce the new TaskLog
+    _updateManager->pause();
     _timeTracker->startRecordLap();
     IdleTaskWindow* w = new IdleTaskWindow(_projects, _timeTracker);
     connect(w, SIGNAL(currentTaskChanged(Task*)), _timeWindow, SLOT(setActiveTask(Task*)));
@@ -207,6 +208,7 @@ void MainWindow::idleTimeOut() {
     if (_timeTracker->status() == RUNNING) {
         _idleDetector->start();
     }
+    _updateManager->resume();
 }
 
 void MainWindow::startRecord() {

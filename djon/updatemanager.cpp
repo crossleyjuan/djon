@@ -173,3 +173,11 @@ void UpdateManager::checkVersion() {
         _isLastVersion = true;
     }
 }
+
+void UpdateManager::pause() {
+    _timer->stop();
+}
+
+void UpdateManager::resume() {
+    startCheck(_mins);
+}
