@@ -1,24 +1,13 @@
-find . -type d | xargs chmod 755
-fakeroot dpkg-deb --build debian
-lintian debian.deb
+#!/bin/sh
 
-Estructura de directorios:
-debian:
-DEBIAN
-usr
+#updates the current binary files
+cp ../libs/djon debian/usr/bin/
+cp ../libs/libdjon-util.so ../libs/libdjon-util.so.1 ../libs/libdjon-util.so.1.0 ../libs/libdjon-util.so.1.0.0 debian/usr/lib/
 
-debian/DEBIAN:
-control
+# dpkg -S /bin/cat
+# apt-cache showpkg libxss1
+find debian -type d | xargs chmod 755
+fakeroot dpkg-deb --build debian djon.deb
+lintian djon.deb
 
-debian/usr:
-bin
-lib
 
-debian/usr/bin:
-djon
-
-debian/usr/lib:
-libdjon-util.so
-libdjon-util.so.1
-libdjon-util.so.1.0
-libdjon-util.so.1.0.0
