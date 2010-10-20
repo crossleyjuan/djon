@@ -1,41 +1,44 @@
 #ifndef TASKITEM_H
 #define TASKITEM_H
 
- #include <QList>
- #include <QVariant>
+#include <QList>
+#include <QVariant>
 #include "data.h"
 
 enum ELEMENT_TYPE {
     NONE,
     TASK,
-    PROJECT
+    PROJECT,
+    SUMMARY
 };
 
- class TaskItem
- {
- public:
-     TaskItem(const QList<QVariant> &data, TaskItem *parent = 0);
-     TaskItem(Project* project, Task* task, TaskItem *parent = 0);
-     TaskItem(Project* project, TaskItem *parent = 0);
-     ~TaskItem();
+class TaskItem
+{
+public:
+    TaskItem(const QList<QVariant> &data, TaskItem *parent = 0);
+    TaskItem(Project* project, Task* task, TaskItem *parent = 0);
+    TaskItem(Project* project, TaskItem *parent = 0);
+    TaskItem(std::vector<Project*> projects, TaskItem *parent = 0);
+    ~TaskItem();
 
-     void appendChild(TaskItem *child);
+    void appendChild(TaskItem *child);
 
-     TaskItem *child(int row);
-     int childCount() const;
-     int columnCount() const;
-     QVariant data(int column) const;
-     int row() const;
-     TaskItem *parent();
-     Task* task();
-     Project* project();
+    TaskItem *child(int row);
+    int childCount() const;
+    int columnCount() const;
+    QVariant data(int column) const;
+    int row() const;
+    TaskItem *parent();
+    Task* task();
+    Project* project();
 
- private:
-     QList<TaskItem*> childItems;
-     QList<QVariant> itemData;
-     TaskItem *parentItem;
-     Task* _task;
-     Project* _project;
-     ELEMENT_TYPE _type; // true if the taskitem represents a task, false if it's a project
- };
+private:
+    QList<TaskItem*> childItems;
+    QList<QVariant> itemData;
+    TaskItem *parentItem;
+    Task* _task;
+    Project* _project;
+    std::vector<Project*> _allprojects;
+    ELEMENT_TYPE _type;
+};
 #endif // TASKITEM_H

@@ -11,7 +11,7 @@ DTime::DTime(long secs) {
     _secs = secs;
 }
 
-DTime::DTime(DTime& time) {
+DTime::DTime(const DTime& time) {
     this->_secs = time._secs;
 }
 
@@ -68,4 +68,10 @@ void DTime::add(long secs) {
 
 void DTime::add(DTime& time) {
     _secs += time.secs();
+}
+
+DTime DTime::operator +(const DTime& dtime) const {
+    DTime current = *this;
+    long secs = dtime.secs();
+    return DTime(current.secs() + secs);
 }

@@ -27,7 +27,6 @@ void addCollapsedElement(Project* project, Task* task) {
         currentPref.append(collapsedElement);
         writePreference(string("collapsed"), currentPref);
     }
-
 }
 
 void removeCollapsedElement(Project* project, Task* task) {

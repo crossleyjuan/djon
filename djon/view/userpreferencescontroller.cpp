@@ -11,19 +11,24 @@ UserPreferencesController::UserPreferencesController(const TaskModel* model) {
 
 void UserPreferencesController::collapsed(const QModelIndex index) {
     Project* project = _model->project(index);
-    Task* task = _model->task(index);
-
-    addCollapsedElement(project, task);
+    if (project != NULL) {
+        Task* task = _model->task(index);
+        addCollapsedElement(project, task);
+    }
 }
 
 void UserPreferencesController::expanded(const QModelIndex& index) {
     Project* project = _model->project(index);
-    Task* task = _model->task(index);
-    removeCollapsedElement(project, task);
+    if (project != NULL) {
+        Task* task = _model->task(index);
+        removeCollapsedElement(project, task);
+    }
 }
 
 void UserPreferencesController::setLastTrackedTask(const QModelIndex& index) {
     Project* project = _model->project(index);
-    Task* task = _model->task(index);
-    saveLastTrackedTask(task);
+    if (project != NULL) {
+        Task* task = _model->task(index);
+        saveLastTrackedTask(task);
+    }
 }

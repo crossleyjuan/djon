@@ -55,6 +55,13 @@ QVariant TaskModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
+    if (role == Qt::TextAlignmentRole) {
+        if (index.column() > 0) {
+            return Qt::AlignRight;
+        } else {
+            return QVariant();
+        }
+    }
     if (role == Qt::SizeHintRole) {
         return QSize(10, 15);
     }
@@ -215,17 +222,20 @@ void TaskModel::refreshData() {
         rootData << "Description" << "Total Time" << "Week" << "Day";
     }
     rootItem = new TaskItem(rootData);
-    setupModelData(rootItem);
+    TaskItem* summary = new TaskItem(_projects, rootItem);
+    rootItem->appendChild(summary);
+    setupModelData(summary);
     // resets the views states (invalidate previously sent data)
 //    reset();
 }
 
 QModelIndex TaskModel::index(Project* prj) {
-    int rows = rowCount(QModelIndex());
+    QModelIndex summary = index(0, 0, QModelIndex());
+    int rows = rowCount(summary);
     for (int row = 0; row < rows; row++) {
-        QModelIndex test = index(row, 0, QModelIndex());
+        QModelIndex test = index(row, 0, summary);
         Project* testPrj = project(test);
-        if (*testPrj == *prj) {
+        if ((testPrj != NULL) && (*testPrj == *prj)) {
             return test;
         }
     }

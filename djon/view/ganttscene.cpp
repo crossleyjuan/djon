@@ -5,7 +5,7 @@
 #include "TaskModel.h"
 
 GanttScene::GanttScene(QObject *parent) :
-    QGraphicsScene(parent)
+        QGraphicsScene(parent)
 {
     this->_model = NULL;
     initialize();
@@ -59,48 +59,56 @@ QGraphicsItem* GanttScene::getGroupItem(const QModelIndex &index) {
     Project* project = _model->project(index);
     Task* task = _model->task(index);
 
-    DateTime* startDate;
-    DateTime* endDate;
+    DateTime* startDate = NULL;
+    DateTime* endDate = NULL;
     if (task != NULL) {
         startDate = task->startDate();
         endDate = task->endDate();
     } else {
-        startDate = project->startDate();
-        endDate = project->endDate();
+        if (project != NULL) {
+            startDate = project->startDate();
+            endDate = project->endDate();
+        } else {
+            startDate = &_startDate;
+            endDate = &_endDate;
+        }
     }
-    int days = startDate->daysTo(*endDate) + 1;
+    // Only print group header for projects (not for summary)
+    if (project != NULL) {
+        int days = startDate->daysTo(*endDate) + 1;
 
-    QPen pblack(QColor("black"));
-    QBrush bblack(QColor("black"));
+        QPen pblack(QColor("black"));
+        QBrush bblack(QColor("black"));
 
-    QSize size = sizeHint(index);
+        QSize size = sizeHint(index);
 
-    int daysToStart = _startDate.daysTo(*startDate);
-    int x1 = daysToStart * _dayWidth;
-    int y1 = _currentY + size.height() - 10;
+        int daysToStart = _startDate.daysTo(*startDate);
+        int x1 = daysToStart * _dayWidth;
+        int y1 = _currentY + size.height() - 10;
 
-    int x2 = x1 + (days * _dayWidth);
-    int y2 = _currentY + size.height() - 6;
+        int x2 = x1 + (days * _dayWidth);
+        int y2 = _currentY + size.height() - 6;
 
-    QGraphicsItem* item = addRect(x1 - 4, y1, (x2 - x1) + 8, (y2 - y1), pblack, bblack);
-    item->setZValue(1);
-    QVector<QPointF> trian1;
-    trian1 << QPointF(x1 - 4, y2);
-    trian1 << QPointF(x1, y2 + 4);
-    trian1 << QPointF(x1 + 4, y2);
-    QPolygonF poly1(trian1);
-    item = addPolygon(poly1, pblack, bblack);
-    item->setZValue(1);
+        QGraphicsItem* item = addRect(x1 - 4, y1, (x2 - x1) + 8, (y2 - y1), pblack, bblack);
+        item->setZValue(1);
+        QVector<QPointF> trian1;
+        trian1 << QPointF(x1 - 4, y2);
+        trian1 << QPointF(x1, y2 + 4);
+        trian1 << QPointF(x1 + 4, y2);
+        QPolygonF poly1(trian1);
+        item = addPolygon(poly1, pblack, bblack);
+        item->setZValue(1);
 
-    QVector<QPointF> trian2;
-    trian2 << QPointF(x2 - 4 , y2);
-    trian2 << QPointF(x2, y2 + 4);
-    trian2 << QPointF(x2 + 4, y2);
-    QPolygonF poly2(trian2);
+        QVector<QPointF> trian2;
+        trian2 << QPointF(x2 - 4 , y2);
+        trian2 << QPointF(x2, y2 + 4);
+        trian2 << QPointF(x2 + 4, y2);
+        QPolygonF poly2(trian2);
 
-    item = addPolygon(poly2, pblack, bblack);
-    item->setZValue(1);
+        item = addPolygon(poly2, pblack, bblack);
+        item->setZValue(1);
 
+    }
     _currentY += sizeHint(index).height();
     if (!isCollapsed(index)) {
         for (int x = 0; x < _model->rowCount(index); x++) {
@@ -202,7 +210,8 @@ void GanttScene::setupScene() {
 }
 
 void GanttScene::calcZoom() {
-    int projCount = _model->rowCount(QModelIndex());
+    QModelIndex summaryIndex = _model->index(0, 0, QModelIndex());
+    int projCount = _model->rowCount(summaryIndex);
 
     DateTime* start = NULL;
     DateTime* end = NULL;
@@ -210,7 +219,7 @@ void GanttScene::calcZoom() {
     _viewSizeWidth = 0;
     _dayWidth = 45;
     for (int x = 0; x < projCount; x++) {
-        QModelIndex pIndex = _model->index(x, 0, QModelIndex());
+        QModelIndex pIndex = _model->index(x, 0, summaryIndex);
         Project* proj = _model->project(pIndex);
         if (pIndex.isValid()) {
             DateTime* pStart = proj->startDate();

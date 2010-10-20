@@ -8,6 +8,14 @@
     _type = TASK;
  }
 
+ TaskItem::TaskItem(std::vector<Project*> projects, TaskItem *parent) {
+     parentItem = parent;
+     _task = NULL;
+    _project = NULL;
+    _allprojects = projects;
+    _type = SUMMARY;
+ }
+
  TaskItem::TaskItem(const QList<QVariant> &data, TaskItem *parent) {
      parentItem = parent;
      itemData = data;
@@ -61,6 +69,9 @@
          if (_type == NONE) {
              return itemData.at(column);
          }
+         if (_type == SUMMARY) {
+             return "Projects";
+         }
      case 1:
          if (_type == PROJECT) {
              return QString(_project->totalTime()->toChar());
@@ -70,6 +81,14 @@
          }
          if (_type == NONE) {
              return itemData.at(column);
+         }
+         if (_type == SUMMARY) {
+             DTime totalTime;
+             for (std::vector<Project*>::const_iterator iter = _allprojects.begin(); iter != _allprojects.end(); iter++) {
+                 Project *prj = *iter;
+                 totalTime = totalTime + *prj->totalTime();
+             }
+             return QString(totalTime.toChar());
          }
      case 2:
          if (_type == PROJECT) {
@@ -81,6 +100,14 @@
          if (_type == NONE) {
              return itemData.at(column);
          }
+         if (_type == SUMMARY) {
+             DTime totalTime;
+             for (vector<Project*>::const_iterator iter = _allprojects.begin(); iter != _allprojects.end(); iter++) {
+                 Project* prj = *iter;
+                 totalTime = totalTime + *prj->totalTimeCurrentWeek();
+             }
+             return QString(totalTime.toChar());
+         }
      case 3:
          if (_type == PROJECT) {
              return QString(_project->totalTimeCurrentDay()->toChar());
@@ -90,6 +117,14 @@
          }
          if (_type == NONE) {
              return itemData.at(column);
+         }
+         if (_type == SUMMARY) {
+             DTime totalTime;
+             for (vector<Project*>::const_iterator iter = _allprojects.begin(); iter != _allprojects.end(); iter++) {
+                 Project* prj = *iter;
+                 totalTime = totalTime + *prj->totalTimeCurrentDay();
+             }
+             return QString(totalTime.toChar());
          }
      default:
          return QVariant();

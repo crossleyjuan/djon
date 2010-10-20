@@ -9,7 +9,7 @@ public:
     DTime();
     DTime(long secs);
     DTime(const QTime& time);
-    DTime(DTime& time);
+    DTime(const DTime& time);
     ~DTime();
 
     long secs() const;
@@ -18,6 +18,9 @@ public:
 
     void add(long secs);
     void add(DTime& time);
+
+    DTime operator +(const DTime& dtime) const;
+
 
 private:
     long _secs;
