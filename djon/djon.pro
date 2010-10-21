@@ -12,7 +12,6 @@ INCLUDEPATH += . \
     view \
     ../includes
 include(../qtsingleapplication-2.6_1-opensource/src/qtsingleapplication.pri)
-linux-g++:LIBS += -lXss
 QT += xml \
     webkit
 LIBS += -L../libs \
@@ -59,7 +58,9 @@ HEADERS += data.h \
     data/duration.h \
     view/durationcontrol.h \
     view/releasenotesview.h \
-    view/systrayicon.h
+    view/systrayicon.h \
+    workingdetector.h \
+    view/workingdetectionwindow.h
 FORMS += MainWindow.ui \
     taskdialog.ui \
     tasklogwindow.ui \
@@ -72,7 +73,8 @@ FORMS += MainWindow.ui \
     view/dialogsettings.ui \
     view/projectdialog.ui \
     MainWindow.ui \
-    view/releasenotesview.ui
+    view/releasenotesview.ui \
+    view/workingdetectionwindow.ui
 SOURCES += data.cpp \
     main.cpp \
     MainWindow.cpp \
@@ -111,7 +113,9 @@ SOURCES += data.cpp \
     data/duration.cpp \
     view/durationcontrol.cpp \
     view/releasenotesview.cpp \
-    view/systrayicon.cpp
+    view/systrayicon.cpp \
+    workingdetector.cpp \
+    view/workingdetectionwindow.cpp
 OTHER_FILES += djon.rc
 RESOURCES += djon_rs.qrc
 RC_FILE = djon.rc

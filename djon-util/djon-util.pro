@@ -2,9 +2,12 @@
 # Project created by QtCreator 2010-08-19T11:35:54
 # -------------------------------------------------
 QT += xml
-QT -= gui
+# QT -= gui
 TARGET = djon-util
 TEMPLATE = lib
+
+linux-g++:LIBS += -lXss
+
 DESTDIR = ../libs
 DEFINES += DJONUTIL_LIBRARY
 INCLUDEPATH += ../includes

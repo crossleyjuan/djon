@@ -206,6 +206,7 @@ int createTask(Task* task) {
 }
 
 int updateTask(Task* task) {
+    qDebug("int updateTask(Task* task)");
     std::stringstream ssTaskDef;
     const char* taskDef = task->toChar();
     ssTaskDef << "{{\n";
@@ -233,6 +234,7 @@ int updateTask(Task* task) {
 }
 
 int createProject(Project* project) {
+    qDebug("int createProject(Project* project)");
     std::string projDef(project->toChar());
 
     string* projName = project->name();
@@ -251,6 +253,7 @@ int createProject(Project* project) {
 }
 
 int updateProject(Project* project) {
+    qDebug("int updateProject(Project* project)");
     std::string projDef(project->toChar());
 
     string* projName = project->projectFileName();
@@ -261,6 +264,14 @@ int updateProject(Project* project) {
     int res = writeFile(fileName.str(), projDef, false);
 
     return res;
+}
+
+TaskLog* createTaskLog(Task* task) {
+    qDebug("TaskLog* createTaskLog(Task* task)");
+    TaskLog* log = new TaskLog();
+    log->id = uuid();
+    task->addLog(log);
+    return log;
 }
 
 int createTaskLog(Task* task, TaskLog* taskLog) {
@@ -288,6 +299,7 @@ int createTaskLog(Task* task, TaskLog* taskLog) {
 }
 
 int updateTaskLog(Task* task, TaskLog* taskLog) {
+    qDebug("int updateTaskLog(Task* task, TaskLog* taskLog)");
     std::stringstream ssTaskLogDef;
 
     ssTaskLogDef << "{{\n";
@@ -324,6 +336,7 @@ int updateTaskLog(Task* task, TaskLog* taskLog) {
 }
 
 int deleteTaskLog(Task* task, TaskLog* taskLog) {
+    qDebug("int deleteTaskLog(Task* task, TaskLog* taskLog)");
     string* projName = task->project()->projectFileName();
     const char* lastDir = getLastDir();
     stringstream fileName;
@@ -346,6 +359,7 @@ int deleteTaskLog(Task* task, TaskLog* taskLog) {
 }
 
 int deleteTask(Task* task) {
+    qDebug("int deleteTask(Task* task)");
     int res = 0;
     std::vector<TaskLog*>* logs = task->logs();
     for (std::vector<TaskLog*>::iterator iterLog = logs->begin(); iterLog != logs->end(); iterLog++) {

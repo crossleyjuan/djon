@@ -33,7 +33,7 @@ String functions
 std::string toString(double a);
 std::string toString(double a, int fixedPrecision);
 std::string toString(int a);
-std::vector<string*>* split(const string str, string token);
+std::vector<string*>* split(string str, string token);
 long countChar(const char* s, const char c);
 /*****************************************************************/
 
@@ -46,6 +46,8 @@ int toInt(QDateTime date);
 double toDouble(QDateTime dt);
 
 void logInfo(char* text);
+
+long idleTime();
 
 bool endsWith(const char* text, const char* end);
 
@@ -62,8 +64,6 @@ int writeConfValue(const string& name, const string& value);
 
 int writePreference(const std::string& key, const std::string& value);
 const char* readPreference(const std::string& key, const char* def);
-
-int test();
 
 /***********************************************************************
 * Memory functions

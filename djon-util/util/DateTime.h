@@ -28,7 +28,7 @@ public:
     DateTime addDays(int days) const;
     int daysTo(const DateTime& dt) const;
 
-    char* toChar();
+    char* toChar() const;
     QDateTime* toQDateTime() const;
     double toDouble() const;
     void setSecs(int _secs);

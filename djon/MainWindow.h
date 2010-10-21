@@ -13,6 +13,7 @@
 #include <vector>
 #include "taskdelegate.h"
 #include "idledetector.h"
+#include "workingdetector.h"
 #include "view/ganttscene.h"
 
 class TaskLogWindow;
@@ -47,6 +48,7 @@ private:
     TaskLogWindow* _logWindow;
     std::vector<Project*>* _projects;
     IdleDetector* _idleDetector;
+    WorkingDetector* _workingDetector;
     TimeTracker* _timeTracker;
     TaskHeaderView* _taskHeader;
     TaskLog* _activeLog;
@@ -69,6 +71,7 @@ public slots:
     void selectTaskChanged(QModelIndex current, QModelIndex previous);
     void timeStopped(Task* task, TaskLog* taskLog);
     void idleTimeOut();
+    void workingDetected(const DateTime since);
     void startRecord();
     void stopRecord();
     void createNewTask();
@@ -92,6 +95,7 @@ public slots:
     void setActiveTask(Task* task);
     void setActiveTaskLog(Task* task, TaskLog* taskLog);
     void restoreWindowState();
+    void trackerStarted(Task* task, TaskLog* taskLog);
 
     void settings();
 };

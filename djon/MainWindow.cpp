@@ -10,6 +10,7 @@
 #include "view/TaskModel.h"
 #include "globaldefs.h"
 #include "tasklogwindow.h"
+#include "workingdetectionwindow.h"
 #include "taskheaderview.h"
 #include "timetracker.h"
 #include "currenttime.h"
@@ -26,6 +27,7 @@
 #include "userpreferencescontroller.h"
 #include "djonpreferences.h"
 #include "releasenotesview.h"
+#include "workingdetector.h"
 
 #ifdef WINDOWS
 #include "updatemanager.h"
@@ -41,6 +43,7 @@ MainWindow::MainWindow() {
     _logWindow = NULL;
     _projects = NULL;
     _idleDetector = NULL;
+    _workingDetector = NULL;
     _timeTracker = NULL;
     _taskHeader = NULL;
     _activeLog = NULL;
@@ -74,16 +77,22 @@ MainWindow::MainWindow() {
     _idleDetector = new IdleDetector();// 5*60
     connect(_idleDetector, SIGNAL(idleTimeOut()), this, SLOT(idleTimeOut()));
 
+    _workingDetector = new WorkingDetector();
+    connect(_workingDetector, SIGNAL(workingDetected(DateTime)), this, SLOT(workingDetected(DateTime)));
+
     _timeTracker = new TimeTracker();
     connect(_timeTracker, SIGNAL(timeChanged(Task*, DTime&, DTime&)), _timeWindow, SLOT(updateTime(Task*, DTime&, DTime&)));
     connect(_timeTracker, SIGNAL(timeChanged(Task*, DTime&, DTime&)), _taskModel, SLOT(timeChanged(Task*)));
     connect(_timeTracker, SIGNAL(timeStopped(Task*,TaskLog*)), this, SLOT(timeStopped(Task*, TaskLog*)));
+    connect(_timeTracker, SIGNAL(trackerStarted(Task*,TaskLog*)), this, SLOT(trackerStarted(Task*,TaskLog*)));
     connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()));
 
     createTray();
 
     setLastSelectedTask();
     restoreSavedWindowState();
+
+    _workingDetector->startDetection();
 }
 
 void MainWindow::createTaskLogWindow() {
@@ -213,6 +222,7 @@ void MainWindow::idleTimeOut() {
 #ifdef WINDOWS
     _updateManager->resume();
 #endif
+    _workingDetector->startDetection();
 }
 
 void MainWindow::startRecord() {
@@ -221,15 +231,7 @@ void MainWindow::startRecord() {
         if (_timeTracker->status() == RUNNING) {
             _timeTracker->stopRecord();
         }
-        _taskModel->setTrackedTask(_activeTask);
-        _timeWindow->setActiveTask(_activeTask);
         _timeTracker->startRecord(_activeTask);
-        _idleDetector->start();
-        _logWindow->refresh(_activeTask);
-        _userPreferencesController->setLastTrackedTask(_taskModel->index(_activeProject, _activeTask));
-        _trayIcon->trackerStarted();
-        _recordButton->setIcon(QIcon(":/img/play_running.png"));
-        //connect(_timeTracker, SIGNAL(timeChanged(Task*,DTime&,DTime&)), _taskModel, SLOT(timeChanged(Task*)));
     }
 }
 
@@ -379,6 +381,7 @@ void MainWindow::timeStopped(Task* task, TaskLog* taskLog) {
     _idleDetector->stop();
     _trayIcon->trackerStopped();
     _recordButton->setIcon(QIcon(":/img/start.png"));
+    _workingDetector->startDetection();
 }
 
 void MainWindow::deleteTask() {
@@ -684,4 +687,23 @@ void MainWindow::checkReleaseNotes() {
 void MainWindow::showReleaseNotes() {
     ReleaseNotesView* view = new ReleaseNotesView();
     view->exec();
+}
+
+void MainWindow::workingDetected(const DateTime since) {
+    WorkingDetectionWindow* w = new WorkingDetectionWindow(_projects, _timeTracker, since, this);
+    connect(w, SIGNAL(currentTaskChanged(Task*)), this, SLOT(setActiveTask(Task*)));
+    w->exec();
+}
+
+void MainWindow::trackerStarted(Task* task, TaskLog* taskLog) {
+    _activeTask = task;
+    _activeLog = taskLog;
+    _taskModel->setTrackedTask(task);
+    _timeWindow->setActiveTask(task);
+    _idleDetector->start();
+    _logWindow->refresh(task);
+    _userPreferencesController->setLastTrackedTask(_taskModel->index(task->project(), task));
+    _trayIcon->trackerStarted();
+    _recordButton->setIcon(QIcon(":/img/play_running.png"));
+    _workingDetector->stopDetection();
 }

@@ -20,26 +20,27 @@ void TimeTracker::startRecord(Task* task) {
     if (_status == RUNNING) {
         stopRecord();
     }
-    TaskLog* taskLog = new TaskLog();
-    taskLog->id = uuid();
+    TaskLog* taskLog = createTaskLog(task);
     taskLog->start = new DateTime();
     taskLog->end = new DateTime();
-    task->addLog(taskLog);
     createTaskLog(task, taskLog);
     startRecord(task, taskLog);
 }
 
-void TimeTracker::startRecord(Task* task, TaskLog* taskLog) {
+void TimeTracker::startRecord(Task* task, TaskLog* taskLog, DateTime* startTime) {
     _task = task;
     _taskLog = taskLog;
 
-    DateTime* startTime = new DateTime(QDateTime::currentDateTime());
+    if (startTime == NULL) {
+        startTime = new DateTime(QDateTime::currentDateTime());
+    }
     _taskLog->start = startTime;
     _status = RUNNING;
     _secs = 0;
     _totalTaskTimeSecs = task->totalTime()->secs();
     _ticksToSaveLog = 0;
     _timer->start(1000);
+    emit trackerStarted(_task, _taskLog);
 }
 
 void TimeTracker::stopRecord() {

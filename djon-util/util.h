@@ -47,6 +47,8 @@ double toDouble(QDateTime dt);
 
 void logInfo(char* text);
 
+long idleTime();
+
 bool endsWith(const char* text, const char* end);
 
 std::string* uuid();

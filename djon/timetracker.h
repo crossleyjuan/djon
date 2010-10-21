@@ -32,11 +32,12 @@ public:
 signals:
     void timeStopped(Task* task, TaskLog* taskLog);
     void timeChanged(Task* task, DTime& currentLogTime, DTime& taskTotalTime);
+    void trackerStarted(Task* task, TaskLog* taskLog);
 
 public slots:
     void startRecord(Task* task);
     void startRecordLap();
-    void startRecord(Task* task, TaskLog* taskLog);
+    void startRecord(Task* task, TaskLog* taskLog, DateTime* startTime = 0);
     void removeLapTime();
     void cleanLapTime();
     void stopRecord();
