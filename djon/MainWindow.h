@@ -24,6 +24,7 @@ class TaskHeaderView;
 class UpdateManager;
 class UserPreferencesController;
 class SysTrayIcon;
+class TrackControlWindow;
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -46,7 +47,6 @@ private:
 
     Ui::MainWindow widget;
     TaskLogWindow* _logWindow;
-    std::vector<Project*>* _projects;
     IdleDetector* _idleDetector;
     WorkingDetector* _workingDetector;
     TimeTracker* _timeTracker;
@@ -58,6 +58,7 @@ private:
     TaskModel* _taskModel;
     UserPreferencesController* _userPreferencesController;
     QAction* _recordButton;
+    TrackControlWindow *_trackWindow;
 
     SysTrayIcon* _trayIcon;
     QMenu* _taskPopUpMenu;

@@ -1,0 +1,38 @@
+#ifndef TRACKCONTROLWINDOW_H
+#define TRACKCONTROLWINDOW_H
+
+#include <QWidget>
+#include <vector>
+
+class Project;
+class TimeTracker;
+class Task;
+class TaskModel;
+
+namespace Ui {
+    class TrackControlWindow;
+}
+
+class TrackControlWindow : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit TrackControlWindow(std::vector<Project*>* projects, TimeTracker* timeTracker, QWidget *parent = 0);
+    ~TrackControlWindow();
+
+public slots:
+    void refresh(Task* task);
+    void trackerStateChanged(Task* task);
+
+private:
+    void refreshProjects(std::vector<Project*>* projects);
+
+    Ui::TrackControlWindow *ui;
+    std::vector<Project*>* _projects;
+    TimeTracker* _timeTracker;
+    Task* _currentTask;
+    TaskModel* _taskModel;
+};
+
+#endif // TRACKCONTROLWINDOW_H

@@ -28,6 +28,7 @@ public:
     void moveCurrentRecordToTask(Task* newTask);
     void moveLappedRecordToTask(Task* newTask);
     void destroyCurrentRecord();
+    DTime trackedTime();
 
 signals:
     void timeStopped(Task* task, TaskLog* taskLog);

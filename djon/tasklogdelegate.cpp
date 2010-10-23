@@ -17,7 +17,7 @@ QWidget *TaskLogDelegate::createEditor(QWidget *parent,
         return new QLineEdit(parent);
     case 1:
     case 2:
-        return new QDateTimeEdit(parent);
+        return new QDateTimeEdit(QDateTime::currentDateTime(), parent);
     }
 
     return new QWidget();

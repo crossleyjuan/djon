@@ -28,6 +28,7 @@
 #include "djonpreferences.h"
 #include "releasenotesview.h"
 #include "workingdetector.h"
+#include "trackcontrolwindow.h"
 
 #ifdef WINDOWS
 #include "updatemanager.h"
@@ -36,6 +37,8 @@
 #include <QGraphicsView>
 #include "ganttscene.h"
 #include "systrayicon.h"
+
+std::vector<Project*>* _projects;
 
 MainWindow::MainWindow() {
     qDebug("MainWindow::MainWindow()");
@@ -93,6 +96,9 @@ MainWindow::MainWindow() {
     restoreSavedWindowState();
 
     _workingDetector->startDetection();
+
+    _trackWindow = new TrackControlWindow(_projects, _timeTracker, this);
+    _trackWindow->show();
 }
 
 void MainWindow::createTaskLogWindow() {
@@ -690,7 +696,7 @@ void MainWindow::showReleaseNotes() {
 }
 
 void MainWindow::workingDetected(const DateTime since) {
-    WorkingDetectionWindow* w = new WorkingDetectionWindow(_projects, _timeTracker, since, this);
+    WorkingDetectionWindow* w = new WorkingDetectionWindow(_projects, _workingDetector, _timeTracker, since, this);
     connect(w, SIGNAL(currentTaskChanged(Task*)), this, SLOT(setActiveTask(Task*)));
     w->exec();
 }

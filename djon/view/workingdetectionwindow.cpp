@@ -4,10 +4,11 @@
 #include "data.h"
 #include "TaskModel.h"
 #include "timetracker.h"
+#include "workingdetector.h"
 #include <sstream>
 #include <string>
 
-WorkingDetectionWindow::WorkingDetectionWindow(std::vector<Project*>* projects, TimeTracker* timeTracker, const DateTime since, QWidget *parent) :
+WorkingDetectionWindow::WorkingDetectionWindow(std::vector<Project*>* projects, WorkingDetector* workingDetector, TimeTracker* timeTracker, const DateTime since, QWidget *parent) :
     QDialog(parent),
     m_ui(new Ui::WorkingDetectionWindow)
 {
@@ -17,6 +18,7 @@ WorkingDetectionWindow::WorkingDetectionWindow(std::vector<Project*>* projects, 
 
     _since = new DateTime(since);
     _timeTracker = timeTracker;
+    _workingDetector = workingDetector;
     std::stringstream ssMessage;
 
     ssMessage << "d-jon detected that you have been working since: ";
@@ -61,6 +63,8 @@ void WorkingDetectionWindow::on_accepted()
         log->end = new DateTime();
         createTaskLog(task, log);
         _timeTracker->startRecord(task, log, _since);
+    } else if (m_ui->dontCount->isChecked()) {
+        _workingDetector->startDetection();
     }
 }
 

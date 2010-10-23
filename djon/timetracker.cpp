@@ -161,3 +161,7 @@ void TimeTracker::dropRecordedTime() {
     _status = STOPPED;
     _timer->stop();
 }
+
+DTime TimeTracker::trackedTime() {
+    return DTime(_secs);
+}
