@@ -25,5 +25,6 @@
         <file alias="djon_5.png">img/djon_5.png</file>
         <file alias="djon_6.png">img/djon_6.png</file>
         <file alias="play_running.png">img/Play_running.png</file>
+        <file alias="close_toolbar.png">img/close_icon.png</file>
     </qresource>
 </RCC>

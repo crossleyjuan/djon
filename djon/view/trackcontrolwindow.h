@@ -33,6 +33,9 @@ private:
     TimeTracker* _timeTracker;
     Task* _currentTask;
     TaskModel* _taskModel;
+
+private slots:
+    void on_pushButton_clicked();
 };
 
 #endif // TRACKCONTROLWINDOW_H

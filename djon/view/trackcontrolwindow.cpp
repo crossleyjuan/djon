@@ -10,7 +10,8 @@ TrackControlWindow::TrackControlWindow(std::vector<Project*>* projects, TimeTrac
 {
     ui->setupUi(this);
     _timeTracker = timeTracker;
-    refreshProjects(_projects);
+    refreshProjects(projects);
+    setWindowFlags(Qt::Tool | Qt::WindowStaysOnTopHint);
 }
 
 TrackControlWindow::~TrackControlWindow()
@@ -52,4 +53,9 @@ void TrackControlWindow::trackerStateChanged(Task* task) {
         ui->actionButton->setIcon(QIcon(":/img/start.png"));
         break;
     }
+}
+
+void TrackControlWindow::on_pushButton_clicked()
+{
+    this->close();
 }

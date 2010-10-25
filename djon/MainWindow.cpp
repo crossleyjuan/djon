@@ -97,7 +97,7 @@ MainWindow::MainWindow() {
 
     _workingDetector->startDetection();
 
-    _trackWindow = new TrackControlWindow(_projects, _timeTracker, this);
+    _trackWindow = new TrackControlWindow(_projects, _timeTracker, NULL);
     _trackWindow->show();
 }
 

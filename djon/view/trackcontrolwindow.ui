@@ -6,52 +6,80 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>443</width>
-    <height>41</height>
+    <width>370</width>
+    <height>32</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>d-jon fast control</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
+  <property name="windowIcon">
+   <iconset resource="../djon_rs.qrc">
+    <normaloff>:/img/djon.png</normaloff>:/img/djon.png</iconset>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>3</number>
+   </property>
+   <property name="margin">
+    <number>3</number>
+   </property>
    <item>
-    <widget class="QPushButton" name="actionButton">
-     <property name="maximumSize">
-      <size>
-       <width>32</width>
-       <height>32</height>
-      </size>
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
      </property>
-     <property name="text">
-      <string/>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
      </property>
-     <property name="icon">
-      <iconset resource="../djon_rs.qrc">
-       <normaloff>:/img/start.png</normaloff>:/img/start.png</iconset>
-     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="margin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QPushButton" name="actionButton">
+        <property name="maximumSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../djon_rs.qrc">
+          <normaloff>:/img/start.png</normaloff>:/img/start.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QTimeEdit" name="timeEdit">
+        <property name="maximumSize">
+         <size>
+          <width>80</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="displayFormat">
+         <string>h:mm:ss</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="TreeComboBox" name="comboBox"/>
+      </item>
+     </layout>
     </widget>
-   </item>
-   <item>
-    <widget class="QTimeEdit" name="timeEdit">
-     <property name="maximumSize">
-      <size>
-       <width>90</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="readOnly">
-      <bool>true</bool>
-     </property>
-     <property name="displayFormat">
-      <string>h:mm:ss</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="TreeComboBox" name="comboBox"/>
    </item>
   </layout>
  </widget>
