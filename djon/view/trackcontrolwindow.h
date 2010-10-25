@@ -25,6 +25,10 @@ public slots:
     void refresh(Task* task);
     void trackerStateChanged(Task* task);
 
+protected:
+    void mousePressEvent(QMouseEvent *);
+    void mouseMoveEvent(QMouseEvent *);
+
 private:
     void refreshProjects(std::vector<Project*>* projects);
 
@@ -33,8 +37,10 @@ private:
     TimeTracker* _timeTracker;
     Task* _currentTask;
     TaskModel* _taskModel;
+    QPoint _dragPosition;
 
 private slots:
+    void on_actionButton_clicked();
     void on_pushButton_clicked();
 };
 

@@ -35,7 +35,7 @@ void TreeComboBox::showPopup()
 void TreeComboBox::hidePopup()
 {
     setRootModelIndex(view()->currentIndex().parent());
-    setCurrentIndex(view()->currentIndex().row());
+    setCurrentModelIndex(view()->currentIndex());
     if (skipNextHide)
         skipNextHide = false;
     else
@@ -49,4 +49,13 @@ TreeComboBox::~TreeComboBox()
 
 QModelIndex TreeComboBox::currentModelIndex() {
     return view()->currentIndex();
+}
+
+void TreeComboBox::setCurrentModelIndex(const QModelIndex& index) {
+    QTreeView* tview = (QTreeView*)view();
+
+    tview->selectionModel()->setCurrentIndex(index, QItemSelectionModel::SelectCurrent);
+
+    QString str = view()->model()->data(index, Qt::DisplayRole).toString();
+    qDebug("selected: %s", str.toStdString().c_str());
 }

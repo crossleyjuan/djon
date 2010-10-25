@@ -3,6 +3,8 @@
 
 #include <QtGui>
 
+class Task;
+
 class TreeComboBox : public QComboBox {
     Q_OBJECT
 public:
@@ -12,6 +14,7 @@ public:
     virtual void showPopup();
     virtual void hidePopup();
     QModelIndex currentModelIndex();
+    void setCurrentModelIndex(const QModelIndex& index);
 
 protected:
 

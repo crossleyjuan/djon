@@ -93,12 +93,17 @@ MainWindow::MainWindow() {
     createTray();
 
     setLastSelectedTask();
+
+    _trackWindow = new TrackControlWindow(_projects, _timeTracker, NULL);
+    _trackWindow->show();
+    connect(_timeTracker, SIGNAL(timeChanged(Task*,DTime&,DTime&)), _trackWindow, SLOT(refresh(Task*)));
+    connect(_timeTracker, SIGNAL(trackerStarted(Task*,TaskLog*)), _trackWindow, SLOT(trackerStateChanged(Task*)));
+    connect(_timeTracker, SIGNAL(timeStopped(Task*,TaskLog*)), _trackWindow, SLOT(trackerStateChanged(Task*)));
+
     restoreSavedWindowState();
 
     _workingDetector->startDetection();
 
-    _trackWindow = new TrackControlWindow(_projects, _timeTracker, NULL);
-    _trackWindow->show();
 }
 
 void MainWindow::createTaskLogWindow() {
@@ -661,6 +666,18 @@ void MainWindow::saveWindowState() {
     }
     std::string sstate = state.str();
     writePreference("last-window-state", sstate);
+
+    _trackWindow->geometry();
+    std::stringstream trackState;
+    QRect rect = _trackWindow->geometry();
+    trackState << rect.left() << "++";
+    trackState << rect.top() << "++";
+    trackState << rect.width() << "++";
+    trackState << rect.height();
+
+    std::string strackState = trackState.str();
+    writePreference("last-track-window-state", strackState);
+
 }
 
 void MainWindow::restoreSavedWindowState() {
@@ -680,6 +697,17 @@ void MainWindow::restoreSavedWindowState() {
     } else {
         setWindowState(Qt::WindowMaximized);;
     }
+
+    std::string trackState(readPreference("last-track-window-state", ""));
+    if (trackState.length() > 0) {
+        std::vector<string*>* values = split(trackState, "++");
+        int left = atoi(values->at(0)->c_str());
+        int top = atoi(values->at(1)->c_str());
+        int width = atoi(values->at(2)->c_str());
+        int height = atoi(values->at(3)->c_str());
+        _trackWindow->setGeometry(left, top, width, height);
+    }
+
 }
 
 void MainWindow::checkReleaseNotes() {

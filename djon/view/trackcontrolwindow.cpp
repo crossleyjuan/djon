@@ -11,7 +11,7 @@ TrackControlWindow::TrackControlWindow(std::vector<Project*>* projects, TimeTrac
     ui->setupUi(this);
     _timeTracker = timeTracker;
     refreshProjects(projects);
-    setWindowFlags(Qt::Tool | Qt::WindowStaysOnTopHint);
+    setWindowFlags(Qt::Tool | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 }
 
 TrackControlWindow::~TrackControlWindow()
@@ -29,12 +29,7 @@ void TrackControlWindow::refresh(Task* task) {
     _currentTask = task;
     QModelIndex index = _taskModel->index(task->project(), task);
     if (index.isValid()) {
-        int row = 0;
-        while (index.parent() != QModelIndex()) {
-            row += index.row();
-            index = index.parent();
-        }
-        ui->comboBox->setCurrentIndex(row);
+        ui->comboBox->setCurrentModelIndex(index);
     }
     ui->timeEdit->setTime(*_timeTracker->trackedTime().toQTime());
 }
@@ -58,4 +53,24 @@ void TrackControlWindow::trackerStateChanged(Task* task) {
 void TrackControlWindow::on_pushButton_clicked()
 {
     this->close();
+}
+
+void TrackControlWindow::mousePressEvent(QMouseEvent *event)
+ {
+     if (event->button() == Qt::LeftButton) {
+         _dragPosition = event->globalPos() - frameGeometry().topLeft();
+         event->accept();
+     }
+ }
+
+void TrackControlWindow::mouseMoveEvent(QMouseEvent *event)
+{
+    if (event->buttons() & Qt::LeftButton) {
+        move(event->globalPos() - _dragPosition);
+        event->accept();
+    }
+}
+
+void TrackControlWindow::on_actionButton_clicked()
+{
 }
