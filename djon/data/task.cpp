@@ -55,22 +55,16 @@ int Task::childCount() {
 
 DTime* Task::totalTime() {
     vector<Task*>* child = subTasks();
-    if (child->size() == 0) {
-        long totalTime = 0;
-        for (vector<TaskLog*>::iterator iterLog = _logs->begin(); iterLog != _logs->end(); iterLog++) {
-            TaskLog* log = *iterLog;
-            totalTime += ((*log->end) - (*log->start));
-        }
-        return new DTime(totalTime);
-    } else {
-        DTime* tm = new DTime();
-        for (vector<Task*>::iterator iter = child->begin(); iter != child->end(); iter++) {
-            Task* sub = *iter;
-            tm->add(*sub->totalTime());
-        }
-        return tm;
+    DTime* tm = new DTime();
+    for (vector<TaskLog*>::iterator iterLog = _logs->begin(); iterLog != _logs->end(); iterLog++) {
+        TaskLog* log = *iterLog;
+        tm->add((*log->end) - (*log->start));
     }
-
+    for (vector<Task*>::iterator iter = child->begin(); iter != child->end(); iter++) {
+        Task* sub = *iter;
+        tm->add(*sub->totalTime());
+    }
+    return tm;
 }
 
 DTime* Task::totalTimeCurrentWeek() {
