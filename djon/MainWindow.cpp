@@ -229,11 +229,12 @@ void MainWindow::idleTimeOut() {
     w->exec();
     if (_timeTracker->status() == RUNNING) {
         _idleDetector->start();
+    } else {
+        _workingDetector->startDetection();
     }
 #ifdef WINDOWS
     _updateManager->resume();
 #endif
-    _workingDetector->startDetection();
 }
 
 void MainWindow::startRecord() {

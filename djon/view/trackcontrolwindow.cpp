@@ -11,8 +11,8 @@ TrackControlWindow::TrackControlWindow(std::vector<Project*>* projects, TimeTrac
 {
     ui->setupUi(this);
     _timeTracker = timeTracker;
-    refreshProjects(projects);
-    setWindowFlags(Qt::Tool | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+    refreshProjects(projects); // Qt::FramelessWindowHint |
+    setWindowFlags(Qt::FramelessWindowHint | Qt::WindowShadeButtonHint |Qt::WindowStaysOnTopHint);
 }
 
 TrackControlWindow::~TrackControlWindow()
@@ -40,13 +40,13 @@ void TrackControlWindow::trackerStateChanged(Task* task) {
     TIMERSTATUS status = _timeTracker->status();
     switch (status) {
     case RUNNING:
-        ui->actionButton->setIcon(QIcon(":/img/play_running.png"));
+        ui->actionButton->setIcon(QIcon(":/img/stop.png"));
         break;
     case STOPPED:
         ui->actionButton->setIcon(QIcon(":/img/start.png"));
         break;
     case PAUSED:
-        ui->actionButton->setIcon(QIcon(":/img/stop.png"));
+        ui->actionButton->setIcon(QIcon(":/img/start.png"));
         break;
     }
 }
@@ -74,4 +74,15 @@ void TrackControlWindow::mouseMoveEvent(QMouseEvent *event)
 
 void TrackControlWindow::on_actionButton_clicked()
 {
+    if (_timeTracker->status() == STOPPED) {
+        QModelIndex index = ui->comboBox->currentModelIndex();
+        if (index.isValid()) {
+            Task* task = _taskModel->task(index);
+            if (task != NULL) {
+                this->_timeTracker->startRecord(task);
+            }
+        }
+    } else {
+        _timeTracker->stopRecord();
+    }
 }

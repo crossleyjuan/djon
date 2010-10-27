@@ -32,7 +32,7 @@ void GanttView::createHeader() {
     QBrush background(grad);
     QPen pen(QColor(220, 220, 220));
     QSize sizeHint = _ganttScene->viewSizeHint();
-    _headerScene->addRect(0, 0, sizeHint.width(), size.height() + 1, pen, background)->setZValue(0);
+    _headerScene->addRect(0, 0, sizeHint.width() + verticalScrollBar()->width(), size.height() + 1, pen, background)->setZValue(0);
 
     int textSize = 30;
     int margin = 15;
