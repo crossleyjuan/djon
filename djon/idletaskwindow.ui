@@ -66,7 +66,7 @@
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="TreeComboBox" name="comboBox"/>
+        <widget class="TreeComboBox" name="comboBox" native="true"/>
        </item>
       </layout>
      </item>
@@ -87,8 +87,9 @@
  <customwidgets>
   <customwidget>
    <class>TreeComboBox</class>
-   <extends>QComboBox</extends>
+   <extends>QWidget</extends>
    <header>treecombobox.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

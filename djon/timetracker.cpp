@@ -44,14 +44,16 @@ void TimeTracker::startRecord(Task* task, TaskLog* taskLog, DateTime* startTime)
 }
 
 void TimeTracker::stopRecord() {
-    if (_status == RUNNING) {
+    TIMERSTATUS currentStatus = _status;
+    currentStatus = _status;
+    _status = STOPPED;
+    _timer->stop();
+    if (currentStatus == RUNNING) {
         DateTime* stopTime = new DateTime();
         _taskLog->end = stopTime;
         updateTaskLog(_task, _taskLog);
         emit timeStopped(_task, _taskLog);
     }
-    _status = STOPPED;
-    _timer->stop();
 }
 
 

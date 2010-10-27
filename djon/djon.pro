@@ -61,7 +61,8 @@ HEADERS += data.h \
     view/systrayicon.h \
     workingdetector.h \
     view/workingdetectionwindow.h \
-    view/trackcontrolwindow.h
+    view/trackcontrolwindow.h \
+    view/treecombobox.h
 FORMS += MainWindow.ui \
     taskdialog.ui \
     tasklogwindow.ui \
@@ -76,7 +77,8 @@ FORMS += MainWindow.ui \
     MainWindow.ui \
     view/releasenotesview.ui \
     view/workingdetectionwindow.ui \
-    view/trackcontrolwindow.ui
+    view/trackcontrolwindow.ui \
+    view/treecombobox.ui
 SOURCES += data.cpp \
     main.cpp \
     MainWindow.cpp \
@@ -98,7 +100,6 @@ SOURCES += data.cpp \
     view/projectinfo.cpp \
     view/projectsummary.cpp \
     view/taskcombobox.cpp \
-    treecombobox.cpp \
     idletaskwindow.cpp \
     view/exportdialog.cpp \
     data/exportutility.cpp \
@@ -118,7 +119,8 @@ SOURCES += data.cpp \
     view/systrayicon.cpp \
     workingdetector.cpp \
     view/workingdetectionwindow.cpp \
-    view/trackcontrolwindow.cpp
+    view/trackcontrolwindow.cpp \
+    view/treecombobox.cpp
 OTHER_FILES += djon.rc
 RESOURCES += djon_rs.qrc
 RC_FILE = djon.rc
