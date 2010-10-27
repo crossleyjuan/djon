@@ -21,12 +21,12 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QListWidget" name="listWidget"/>
+    <widget class="QLineEdit" name="lineEdit"/>
    </item>
    <item>
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QToolButton" name="toolButton">
      <property name="text">
-      <string/>
+      <string>...</string>
      </property>
     </widget>
    </item>

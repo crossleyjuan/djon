@@ -3,6 +3,7 @@
 #include "TaskModel.h"
 #include "data.h"
 #include "timetracker.h"
+#include <QMouseEvent>
 
 TrackControlWindow::TrackControlWindow(std::vector<Project*>* projects, TimeTracker* timeTracker, QWidget *parent) :
     QWidget(parent),
@@ -45,7 +46,7 @@ void TrackControlWindow::trackerStateChanged(Task* task) {
         ui->actionButton->setIcon(QIcon(":/img/start.png"));
         break;
     case PAUSED:
-        ui->actionButton->setIcon(QIcon(":/img/start.png"));
+        ui->actionButton->setIcon(QIcon(":/img/stop.png"));
         break;
     }
 }

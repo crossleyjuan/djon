@@ -19,19 +19,30 @@ class TreeComboBox : public QWidget
     Q_OBJECT
 
 public:
-    explicit TreeComboBox(const TaskModel* model, QWidget *parent = 0);
+    explicit TreeComboBox(QWidget *parent = 0);
     ~TreeComboBox();
-public slots:
     void setModel(const TaskModel* model);
+    const TaskModel* model() const;
+    QModelIndex currentModelIndex();
 
+public slots:
+    void setCurrentModelIndex(const QModelIndex& index);
+
+protected:
+    bool eventFilter(QObject *obj, QEvent *event);
 private:
     void initialize();
-    void populate(const QModelIndex& index);
+//    void populate(const QModelIndex& index);
 
     Ui::TreeComboBox *ui;
     QTreeView* _treeView;
     const TaskModel* _model;
     std::map<std::string, int> _indexes;
+    QWidget* _parent;
+    QModelIndex _currentIndex;
+
+private slots:
+    void on_toolButton_clicked();
 };
 
 #endif // TREECOMBOBOX_H
