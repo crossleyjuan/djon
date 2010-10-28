@@ -24,6 +24,7 @@ public:
 public slots:
     void refresh(Task* task);
     void trackerStateChanged(Task* task);
+    void setCurrentTask(Task* task);
 
 protected:
     void mousePressEvent(QMouseEvent *);

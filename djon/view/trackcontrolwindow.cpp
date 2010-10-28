@@ -41,12 +41,15 @@ void TrackControlWindow::trackerStateChanged(Task* task) {
     switch (status) {
     case RUNNING:
         ui->actionButton->setIcon(QIcon(":/img/stop.png"));
+        ui->comboBox->setReadOnly(true);
         break;
     case STOPPED:
         ui->actionButton->setIcon(QIcon(":/img/start.png"));
+        ui->comboBox->setReadOnly(false);
         break;
     case PAUSED:
         ui->actionButton->setIcon(QIcon(":/img/start.png"));
+        ui->comboBox->setReadOnly(false);
         break;
     }
 }
@@ -85,4 +88,8 @@ void TrackControlWindow::on_actionButton_clicked()
     } else {
         _timeTracker->stopRecord();
     }
+}
+
+void TrackControlWindow::setCurrentTask(Task *task) {
+    refresh(task);
 }

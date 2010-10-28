@@ -30,9 +30,7 @@
 #include "workingdetector.h"
 #include "trackcontrolwindow.h"
 
-#ifdef WINDOWS
 #include "updatemanager.h"
-#endif
 #include <sstream>
 #include <QGraphicsView>
 #include "ganttscene.h"
@@ -65,10 +63,9 @@ MainWindow::MainWindow() {
     createTaskLogWindow();
     createCurrentTimeWindow();
 
-#ifdef WINDOWS
     _updateManager = new UpdateManager(this);
     _updateManager->startCheck(240);
-#endif
+
     setupActions();
 
     widget.taskView->setColumnWidth(0, 250);
@@ -90,9 +87,6 @@ MainWindow::MainWindow() {
     connect(_timeTracker, SIGNAL(trackerStarted(Task*,TaskLog*)), this, SLOT(trackerStarted(Task*,TaskLog*)));
     connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()));
 
-    createTray();
-
-    setLastSelectedTask();
 
     _trackWindow = new TrackControlWindow(_projects, _timeTracker, NULL);
     _trackWindow->show();
@@ -100,6 +94,8 @@ MainWindow::MainWindow() {
     connect(_timeTracker, SIGNAL(trackerStarted(Task*,TaskLog*)), _trackWindow, SLOT(trackerStateChanged(Task*)));
     connect(_timeTracker, SIGNAL(timeStopped(Task*,TaskLog*)), _trackWindow, SLOT(trackerStateChanged(Task*)));
 
+    createTray();
+    setLastSelectedTask();
     restoreSavedWindowState();
 
     _workingDetector->startDetection();
@@ -220,9 +216,9 @@ void MainWindow::setupActions() {
 void MainWindow::idleTimeOut() {
     qDebug("MainWindow::idleTimeOut()");
     // This will enforce the new TaskLog
-#ifdef WINDOWS
+
     _updateManager->pause();
-#endif
+
     _timeTracker->startRecordLap();
     IdleTaskWindow* w = new IdleTaskWindow(_projects, _timeTracker);
     connect(w, SIGNAL(currentTaskChanged(Task*)), _timeWindow, SLOT(setActiveTask(Task*)));
@@ -232,9 +228,8 @@ void MainWindow::idleTimeOut() {
     } else {
         _workingDetector->startDetection();
     }
-#ifdef WINDOWS
+
     _updateManager->resume();
-#endif
 }
 
 void MainWindow::startRecord() {
@@ -643,6 +638,7 @@ void MainWindow::setLastSelectedTask() {
             QModelIndex index = _taskModel->index(project, task);
             if (index.isValid()) {
                 widget.taskView->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
+                _trackWindow->setCurrentTask(task);
             }
         }
     }
@@ -663,7 +659,12 @@ void MainWindow::saveWindowState() {
         state << rect.left() << "++";
         state << rect.top() << "++";
         state << rect.width() << "++";
-        state << rect.height();
+        state << rect.height() << "++";
+    }
+    if (isVisible()) {
+        state << "1";
+    } else {
+        state << "0";
     }
     std::string sstate = state.str();
     writePreference("last-window-state", sstate);
@@ -688,12 +689,23 @@ void MainWindow::restoreSavedWindowState() {
         std::vector<string*>* values = split(state, "++");
         Qt::WindowState wState = static_cast<Qt::WindowState>(atoi(values->at(0)->c_str()));
         setWindowState(wState);
+        string* visible = new string("1");
         if (windowState() != Qt::WindowMaximized) {
             int left = atoi(values->at(1)->c_str());
             int top = atoi(values->at(2)->c_str());
             int width = atoi(values->at(3)->c_str());
             int height = atoi(values->at(4)->c_str());
             setGeometry(left, top, width, height);
+            if (values->size() > 5) {
+                visible = values->at(5);
+            }
+        } else {
+            if (values->size() > 1) {
+                visible = values->at(1);
+            }
+        }
+        if (visible->compare("0")) {
+            hide();
         }
     } else {
         setWindowState(Qt::WindowMaximized);;

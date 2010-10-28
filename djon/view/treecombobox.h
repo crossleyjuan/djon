@@ -18,12 +18,16 @@ class TreeComboBox : public QWidget
 {
     Q_OBJECT
 
+    Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
+
 public:
     explicit TreeComboBox(QWidget *parent = 0);
     ~TreeComboBox();
     void setModel(const TaskModel* model);
     const TaskModel* model() const;
     QModelIndex currentModelIndex();
+    void setReadOnly(bool);
+    bool isReadOnly();
 
 public slots:
     void setCurrentModelIndex(const QModelIndex& index);
@@ -40,6 +44,7 @@ private:
     std::map<std::string, int> _indexes;
     QWidget* _parent;
     QModelIndex _currentIndex;
+    bool _readOnly;
 
 private slots:
     void on_toolButton_clicked();

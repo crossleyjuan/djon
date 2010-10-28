@@ -35,9 +35,11 @@ UpdateManager::UpdateManager(QObject *parent) :
 }
 
 void UpdateManager::startCheck(int mins) {
+#ifdef WINDOWS
     _mins = mins;
     _timer->start(_mins * 60000);
     check();
+#endif
 }
 
 void UpdateManager::downloadUpdater() {
@@ -45,13 +47,13 @@ void UpdateManager::downloadUpdater() {
     const char* address;
     if (!_versionConfDownloaded) {
         fileName = string("version.conf");
-        address = readConfValue("version-file", "");
+        address = "http://d-jon.com/downloads/version.php";// readConfValue("version-file", "");
     } else {
         if (_isLastVersion) {
             return;
         }
         fileName = string("update_djon.exe");
-        address = readConfValue("updater-address", "");
+        address = "http://d-jon.com/downloads/update_djon.exe"; // readConfValue("updater-address", "");
     }
     fileName = *getTempDir() + "/" + fileName;
     _file = new QFile(QString(fileName.c_str()));
@@ -165,7 +167,7 @@ void UpdateManager::processNextStep() {
 }
 
 void UpdateManager::checkVersion() {
-    char* version = readFile(const_cast<char*>(std::string(*getTempDir() + "\\version.conf").c_str()));
+    char* version = readFile(const_cast<char*>(std::string(*getTempDir() + "/version.conf").c_str()));
 
     if (QString(version).trimmed().compare(QString(VERSION)) != 0) {
         _isLastVersion = false;

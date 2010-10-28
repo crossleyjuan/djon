@@ -97,3 +97,12 @@ bool TreeComboBox::eventFilter(QObject *obj, QEvent *event) {
     }
 }
 
+bool TreeComboBox::isReadOnly() {
+    return _readOnly;
+}
+
+void TreeComboBox::setReadOnly(bool readOnly) {
+    _readOnly = readOnly;
+    ui->lineEdit->setReadOnly(readOnly);
+    ui->toolButton->setEnabled(!readOnly);
+}
