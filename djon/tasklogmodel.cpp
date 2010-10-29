@@ -12,7 +12,7 @@ TaskLogModel::TaskLogModel(Task* task)
     _task = task;
     _logs = _task->logs();
 
-    _headerData << "Description" << "Start Date" << "End Date";
+    _headerData << "Description" << "Start Date" << "End Date" << "Time";
 }
 
 int TaskLogModel::rowCount(const QModelIndex &parent) const {
@@ -20,7 +20,7 @@ int TaskLogModel::rowCount(const QModelIndex &parent) const {
 }
 
 int TaskLogModel::columnCount(const QModelIndex &parent) const {
-    return 3;
+    return 4;
 }
 
 QVariant TaskLogModel::data(const QModelIndex &index, int role) const {
@@ -46,6 +46,8 @@ QVariant TaskLogModel::data(const QModelIndex &index, int role) const {
             return *log->start->toQDateTime();
         } else if (index.column() == 2) {
             return *log->end->toQDateTime();
+        } else if (index.column() == 3) {
+            return QString(DTime(*log->end - *log->start).toChar());
         }
     }
     return QString();
@@ -96,7 +98,11 @@ QModelIndex TaskLogModel::index(int row, int column, const QModelIndex &parent) 
 }
 
 Qt::ItemFlags TaskLogModel::flags(const QModelIndex &index) const {
-    return QAbstractItemModel::flags(index) | Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable;
+    if (index.column() != 3) {
+        return QAbstractItemModel::flags(index) | Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable;
+    } else {
+        return QAbstractItemModel::flags(index) | Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+    }
 }
 
 QVariant TaskLogModel::headerData(int section, Qt::Orientation orientation, int role) const {
