@@ -14,7 +14,7 @@ TreeComboBox::TreeComboBox(QWidget *parent) :
     _treeView->setHeaderHidden(true);
     _treeView->setVisible(false);
     _treeView->installEventFilter(this);
-    connect(_treeView, SIGNAL(clicked(QModelIndex)), this, SLOT(setCurrentModelIndex(QModelIndex)));
+    connect(_treeView, SIGNAL(clicked(QModelIndex)), this, SLOT(clicked(QModelIndex)));
     _parent = parent;
 }
 
@@ -65,28 +65,34 @@ void TreeComboBox::setCurrentModelIndex(const QModelIndex& index) {
 
 void TreeComboBox::on_toolButton_clicked()
 {
-    QRect parentRect;
+//    QRect parentRect;
 
     QRect frmGeometry = frameGeometry();
     QWidget* parentWindow = this;
     QPoint pos = this->pos();
-    while ((parentWindow != NULL) && (!(parentWindow->windowFlags() & Qt::Window))) {
+    int x = 0;
+    int y = 0;
+    while (parentWindow != NULL) { // && (
+        x += parentWindow->geometry().x();
+        y += parentWindow->geometry().y();
         parentWindow = (QWidget*)parentWindow->parentWidget();
     }
-    parentRect = parentWindow->geometry();
-    _treeView->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
     QRect rect;
-    rect.setX(parentRect.x() + frmGeometry.x() + parentWidget()->x());
-    int y = parentRect.y() + frmGeometry.height() + parentWidget()->y();
+    rect.setX(x);
+    y = y + height();
     if ((y+200) > qApp->desktop()->height()) {
-        y = parentRect.y() - 200;
+        y = y - height() - 200;
     }
     rect.setY(y);
     rect.setHeight(200);
     rect.setWidth(ui->lineEdit->width());
+
+    _treeView->setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
     _treeView->setGeometry(rect);
     _treeView->show();
-    _treeView->setFocus();
+    _treeView->activateWindow();
+    _treeView->setWindowTitle(tr(""));
+    _treeView->setFocus(Qt::PopupFocusReason);
 }
 
 bool TreeComboBox::eventFilter(QObject *obj, QEvent *event) {
@@ -105,4 +111,9 @@ void TreeComboBox::setReadOnly(bool readOnly) {
     _readOnly = readOnly;
     ui->lineEdit->setReadOnly(readOnly);
     ui->toolButton->setEnabled(!readOnly);
+}
+
+void TreeComboBox::clicked(const QModelIndex &index) {
+    setCurrentModelIndex(index);
+    emit currentIndexChanged(index);
 }

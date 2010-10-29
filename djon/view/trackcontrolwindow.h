@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <vector>
+#include <QModelIndex>
 
 class Project;
 class TimeTracker;
@@ -25,6 +26,7 @@ public slots:
     void refresh(Task* task);
     void trackerStateChanged(Task* task);
     void setCurrentTask(Task* task);
+    void updateCurrentTime();
 
 protected:
     void mousePressEvent(QMouseEvent *);
@@ -43,6 +45,7 @@ private:
 private slots:
     void on_actionButton_clicked();
     void on_pushButton_clicked();
+    void currentIndexChanged(const QModelIndex& index);
 };
 
 #endif // TRACKCONTROLWINDOW_H

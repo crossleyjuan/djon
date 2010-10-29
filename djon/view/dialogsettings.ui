@@ -63,7 +63,7 @@
          <item row="1" column="1">
           <widget class="QTimeEdit" name="idleTimeOut">
            <property name="displayFormat">
-            <string>h:mm</string>
+            <string>h:mm:ss</string>
            </property>
           </widget>
          </item>

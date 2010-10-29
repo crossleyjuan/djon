@@ -26,11 +26,15 @@ public:
     void setModel(const TaskModel* model);
     const TaskModel* model() const;
     QModelIndex currentModelIndex();
+    void setCurrentModelIndex(const QModelIndex& index);
     void setReadOnly(bool);
     bool isReadOnly();
 
 public slots:
-    void setCurrentModelIndex(const QModelIndex& index);
+    void clicked(const QModelIndex& index);
+
+signals:
+    void currentIndexChanged(const QModelIndex& index);
 
 protected:
     bool eventFilter(QObject *obj, QEvent *event);

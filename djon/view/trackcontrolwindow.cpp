@@ -12,7 +12,8 @@ TrackControlWindow::TrackControlWindow(std::vector<Project*>* projects, TimeTrac
     ui->setupUi(this);
     _timeTracker = timeTracker;
     refreshProjects(projects); // Qt::FramelessWindowHint |
-    setWindowFlags(Qt::FramelessWindowHint | Qt::WindowShadeButtonHint |Qt::WindowStaysOnTopHint);
+    setWindowFlags(Qt::FramelessWindowHint | Qt::WindowShadeButtonHint |Qt::WindowStaysOnTopHint | Qt::Tool);
+    connect(ui->comboBox, SIGNAL(currentIndexChanged(QModelIndex)), this, SLOT(currentIndexChanged(QModelIndex)));
 }
 
 TrackControlWindow::~TrackControlWindow()
@@ -26,13 +27,17 @@ void TrackControlWindow::refreshProjects(std::vector<Project*>* projects) {
     ui->comboBox->setModel(_taskModel);
 }
 
+void TrackControlWindow::updateCurrentTime() {
+    ui->timeEdit->setTime(*_timeTracker->trackedTime().toQTime());
+}
+
 void TrackControlWindow::refresh(Task* task) {
     _currentTask = task;
     QModelIndex index = _taskModel->index(task->project(), task);
     if (index.isValid()) {
         ui->comboBox->setCurrentModelIndex(index);
     }
-    ui->timeEdit->setTime(*_timeTracker->trackedTime().toQTime());
+    updateCurrentTime();
 }
 
 void TrackControlWindow::trackerStateChanged(Task* task) {
@@ -41,7 +46,7 @@ void TrackControlWindow::trackerStateChanged(Task* task) {
     switch (status) {
     case RUNNING:
         ui->actionButton->setIcon(QIcon(":/img/stop.png"));
-        ui->comboBox->setReadOnly(true);
+//        ui->comboBox->setReadOnly(true);
         break;
     case STOPPED:
         ui->actionButton->setIcon(QIcon(":/img/start.png"));
@@ -92,4 +97,13 @@ void TrackControlWindow::on_actionButton_clicked()
 
 void TrackControlWindow::setCurrentTask(Task *task) {
     refresh(task);
+}
+
+void TrackControlWindow::currentIndexChanged(const QModelIndex &index) {
+    if (_timeTracker->status() == RUNNING) {
+        Task* task = _taskModel->task(index);
+        if (task != NULL) {
+            _timeTracker->startRecord(task);
+        }
+    }
 }

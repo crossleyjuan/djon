@@ -90,7 +90,7 @@ MainWindow::MainWindow() {
 
     _trackWindow = new TrackControlWindow(_projects, _timeTracker, NULL);
     _trackWindow->show();
-    connect(_timeTracker, SIGNAL(timeChanged(Task*,DTime&,DTime&)), _trackWindow, SLOT(refresh(Task*)));
+    connect(_timeTracker, SIGNAL(timeChanged(Task*,DTime&,DTime&)), _trackWindow, SLOT(updateCurrentTime()));
     connect(_timeTracker, SIGNAL(trackerStarted(Task*,TaskLog*)), _trackWindow, SLOT(trackerStateChanged(Task*)));
     connect(_timeTracker, SIGNAL(timeStopped(Task*,TaskLog*)), _trackWindow, SLOT(trackerStateChanged(Task*)));
 
