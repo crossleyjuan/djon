@@ -13,6 +13,7 @@ TimeTracker::TimeTracker(QObject *parent) :
     _timer = new QTimer();
     _ticksToSaveLog = 0;
     _lastLapTime = NULL;
+    _totalTaskTimeSecs = 0;
     connect(_timer, SIGNAL(timeout()), this, SLOT(timeOut()));
 }
 
@@ -36,7 +37,6 @@ void TimeTracker::startRecord(Task* task, TaskLog* taskLog, DateTime* startTime)
     }
     _taskLog->start = startTime;
     _status = RUNNING;
-    _secs = 0;
     _totalTaskTimeSecs = task->totalTime()->secs();
     _ticksToSaveLog = 0;
     _timer->start(1000);
@@ -68,21 +68,20 @@ void TimeTracker::changeTaskLog(Task* task, TaskLog* log) {
 }
 
 void TimeTracker::timeOut() {
-    _secs++;
-    _totalTaskTimeSecs++;
+    DateTime* stopTime = new DateTime();
+    _taskLog->end = stopTime;
 
-    DTime tm(_secs);
+    _totalTaskTimeSecs++;
 
     _ticksToSaveLog++;
 
     // Every minute save the current time, to avoid any failure
     if (_ticksToSaveLog > 60) {
-        DateTime* stopTime = new DateTime();
-        _taskLog->end = stopTime;
         updateTaskLog(_task, _taskLog);
         _ticksToSaveLog = 0;
     }
-    DTime totalTime(_totalTaskTimeSecs);
+    DTime totalTime(*_task->totalTime());
+    DTime tm = *_taskLog->totalTime();
     emit timeChanged(this->_task, tm, totalTime);
 }
 
@@ -165,5 +164,5 @@ void TimeTracker::dropRecordedTime() {
 }
 
 DTime TimeTracker::trackedTime() {
-    return DTime(_secs);
+    return *_taskLog->end - *_taskLog->start;
 }

@@ -349,10 +349,16 @@ int deleteTaskLog(Task* task, TaskLog* taskLog) {
     int posEnd = current->find(string("}}\n"), posStart) + 3;
 
     int size = posEnd - posStart;
-    string newFile = current->replace(posStart, size, string(""));
+    int res;
+    if (posStart != std::string::npos) {
+        string newFile = current->replace(posStart, size, string(""));
 
-    int res = writeFile(fileName.str(), newFile, false);
-
+        res = writeFile(fileName.str(), newFile, false);
+    } else {
+        qDebug("An error ocurred trying to remove the task log with id: %s", taskLog->id->c_str());
+        setLastError(6, "Error trying to remove a tasklog, the id: %s was not found", taskLog->id->c_str());
+        res = 1;
+    }
     free(ccurrent);
     delete(current);
     return res;

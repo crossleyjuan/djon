@@ -6,14 +6,18 @@
 #include <QMouseEvent>
 
 TrackControlWindow::TrackControlWindow(std::vector<Project*>* projects, TimeTracker* timeTracker, QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::TrackControlWindow)
+        QWidget(parent),
+        ui(new Ui::TrackControlWindow)
 {
     ui->setupUi(this);
     _timeTracker = timeTracker;
-    refreshProjects(projects); // Qt::FramelessWindowHint |
+    setProjects(projects);
     setWindowFlags(Qt::FramelessWindowHint | Qt::WindowShadeButtonHint |Qt::WindowStaysOnTopHint | Qt::Tool);
+    setAttribute(Qt::WA_Hover, true);
     connect(ui->comboBox, SIGNAL(currentIndexChanged(QModelIndex)), this, SLOT(currentIndexChanged(QModelIndex)));
+    installEventFilter(this);
+    ui->comboBox->installEventFilter(this);
+    this->setWindowOpacity(0.4);
 }
 
 TrackControlWindow::~TrackControlWindow()
@@ -21,21 +25,34 @@ TrackControlWindow::~TrackControlWindow()
     delete ui;
 }
 
-void TrackControlWindow::refreshProjects(std::vector<Project*>* projects) {
+void TrackControlWindow::setProjects(std::vector<Project*>* projects) {
     _projects = projects;
     _taskModel = new TaskModel(ONLY_TASKS, *_projects, this);
     ui->comboBox->setModel(_taskModel);
+    ui->timeEdit->setTime(QTime(0,0,0,0));
 }
 
 void TrackControlWindow::updateCurrentTime() {
-    ui->timeEdit->setTime(*_timeTracker->trackedTime().toQTime());
+    if (_timeTracker->status() == RUNNING) {
+        ui->timeEdit->setTime(*_timeTracker->trackedTime().toQTime());
+    } else {
+        if (_currentTask != NULL) {
+            ui->timeEdit->setTime(*_currentTask->totalTime()->toQTime());
+        } else {
+            ui->timeEdit->setTime(QTime(0, 0, 0, 0));
+        }
+    }
 }
 
 void TrackControlWindow::refresh(Task* task) {
     _currentTask = task;
-    QModelIndex index = _taskModel->index(task->project(), task);
-    if (index.isValid()) {
-        ui->comboBox->setCurrentModelIndex(index);
+    if (_currentTask != NULL) {
+        QModelIndex index = _taskModel->index(task->project(), task);
+        if (index.isValid()) {
+            ui->comboBox->setCurrentModelIndex(index);
+        }
+    } else {
+        ui->comboBox->setCurrentModelIndex(QModelIndex());
     }
     updateCurrentTime();
 }
@@ -46,7 +63,7 @@ void TrackControlWindow::trackerStateChanged(Task* task) {
     switch (status) {
     case RUNNING:
         ui->actionButton->setIcon(QIcon(":/img/stop.png"));
-//        ui->comboBox->setReadOnly(true);
+        //        ui->comboBox->setReadOnly(true);
         break;
     case STOPPED:
         ui->actionButton->setIcon(QIcon(":/img/start.png"));
@@ -65,12 +82,12 @@ void TrackControlWindow::on_pushButton_clicked()
 }
 
 void TrackControlWindow::mousePressEvent(QMouseEvent *event)
- {
-     if (event->button() == Qt::LeftButton) {
-         _dragPosition = event->globalPos() - frameGeometry().topLeft();
-         event->accept();
-     }
- }
+{
+    if (event->button() == Qt::LeftButton) {
+        _dragPosition = event->globalPos() - frameGeometry().topLeft();
+        event->accept();
+    }
+}
 
 void TrackControlWindow::mouseMoveEvent(QMouseEvent *event)
 {
@@ -106,4 +123,14 @@ void TrackControlWindow::currentIndexChanged(const QModelIndex &index) {
             _timeTracker->startRecord(task);
         }
     }
+}
+
+bool TrackControlWindow::eventFilter(QObject *obj, QEvent *evt) {
+    if (evt->type() == QEvent::HoverEnter) {
+        this->setWindowOpacity(1);
+    }
+    if (evt->type() == QEvent::HoverLeave) {
+        this->setWindowOpacity(0.4);
+    }
+    return QWidget::eventFilter(obj, evt);
 }

@@ -75,3 +75,7 @@ DTime DTime::operator +(const DTime& dtime) const {
     long secs = dtime.secs();
     return DTime(current.secs() + secs);
 }
+
+void DTime::operator ++(int secs) {
+    _secs += secs;
+}

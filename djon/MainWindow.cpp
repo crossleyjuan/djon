@@ -358,6 +358,7 @@ void MainWindow::reloadTasks() {
     qDebug("MainWindow::reloadTasks()");
     if (_taskModel != NULL) {
         _taskModel->setProjects(*_projects);
+        _trackWindow->setProjects(_projects);
         widget.ganttView->refresh();
     } else {
         _taskModel = new TaskModel(WITH_TIMES, *_projects);

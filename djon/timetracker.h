@@ -53,7 +53,6 @@ private:
     TaskLog* _taskLog;
     QTimer* _timer;
     DateTime* _lastLapTime;
-    long _secs;
     long _totalTaskTimeSecs;
     long _ticksToSaveLog; // This will record the ticks to save the current running log (avoid Failure)
 

@@ -21,6 +21,7 @@ class TrackControlWindow : public QWidget
 public:
     explicit TrackControlWindow(std::vector<Project*>* projects, TimeTracker* timeTracker, QWidget *parent = 0);
     ~TrackControlWindow();
+    void setProjects(std::vector<Project*>* projects);
 
 public slots:
     void refresh(Task* task);
@@ -31,9 +32,9 @@ public slots:
 protected:
     void mousePressEvent(QMouseEvent *);
     void mouseMoveEvent(QMouseEvent *);
+    bool eventFilter(QObject *, QEvent *);
 
 private:
-    void refreshProjects(std::vector<Project*>* projects);
 
     Ui::TrackControlWindow *ui;
     std::vector<Project*>* _projects;

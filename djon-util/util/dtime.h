@@ -20,6 +20,7 @@ public:
     void add(DTime& time);
 
     DTime operator +(const DTime& dtime) const;
+    void operator ++(int secs);
 
 
 private:

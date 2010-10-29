@@ -57,6 +57,8 @@ void TreeComboBox::setCurrentModelIndex(const QModelIndex& index) {
     QVariant data = _model->data(index, Qt::DisplayRole);
     if (data.isValid()) {
         ui->lineEdit->setText(data.toString());
+    } else {
+        ui->lineEdit->setText("");
     }
     if (_treeView->isVisible()) {
         _treeView->hide();
@@ -117,3 +119,4 @@ void TreeComboBox::clicked(const QModelIndex &index) {
     setCurrentModelIndex(index);
     emit currentIndexChanged(index);
 }
+
