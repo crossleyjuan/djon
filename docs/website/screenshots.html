@@ -30,53 +30,42 @@
     color: #444;
 }
 </style>
+<script>
+function show(picture) {
+   var div = document.getElementById('photozoom');
+   div.innerHTML="<img src='" + picture + "' />";
+   div.style.display = 'block';
+}
+</script>
 </head><body> 
+<div id="photozoom" align="center" valign="center" style="display:none;position:absolute;width:1000px;height:600px;" ></div>
 <div align="center">
 <img src="imgs/menu.jpg" usemap="#menumap" border="0"/>
 </div>
 <map name="menumap">
     <area shape="rect" coords="264,33,344,61" href="http://d-jon.com" />
-    <area shape="rect" coords="356,33,454,61" href="downloads.html" />
+    <area shape="rect" coords="356,33,454,61" href="http://d-jon.com/downloads.html" />
     <area shape="rect" coords="468,33,552,61" href="http://d-jon.com/forum" />
     <area shape="rect" coords="571,33,655,61" href="http://d-jon.com/news.html" />
     <area shape="rect" coords="668,33,780,61" href="http://d-jon.com/screenshots.html" />
     <area shape="rect" coords="792,33,860,61" href="http://d-jon.com/wiki" />
 </map>
-<div align="center"><img alt="" src="imgs/pres-back.jpg" usemap="#central" border="0"></div> 
- 
-<map name="central">
-   <area shape="rect" coords="109,301,309,342" href="downloads.html" />
-</map>
-<div id="features" align="center">
-<table><tr>
-<td style="padding:20px">
-<div style="background-image: url(imgs/box_bg.jpg);width:420px;height:300px;background-size:auto;background-repeat:norepeat">
-<div style="padding-right:20px;padding-top:20px;padding-bottom:20px;padding-left:20px"
-<span class="title">Features</span>
-<span class="normal">
-<ul style="spacing:10px">
-<li><span class="normal-bold">Multi project:</span><span class="normal"> You can manage multiple projects at the same time.</span></li>
-<li><span class="normal-bold">Time tracking:</span><span class="normal"> Track your time for every task in your project.</span></li>
-<li><span class="normal-bold">Manual time entries:</span><span class="normal"> You can create your own time logs, useful when you don't have your computer close to you.</span></li>
-<li><span class="normal-bold">Gantt View:</span><span class="normal"> You can see your tasks in a gantt chart.</span></li>
-<li><span class="normal-bold">Templates (EE):</span><span class="normal"> You can create templates for your tasks, every time you create a task using that template the subtasks will be automatically created for you</span></li>
-<li><span class="normal-bold">Export (EE):</span><span class="normal"> export your projects, tasks and time logs and use them in other applications, reports, etc.</span></li>
-</ul>
-</span>
+<br/>
+<div align="center">
+<div align="justify" style="width:850px">
+<h1 class="title">Screenshots</h1>
+<p class="normal">Here're some screenshots taken from d-jon 1.0, you can send yours using our forum.</p>
+<br/>
+<div align="center"><a href="imgs/Screenshot-d-jon.png" target="_blank"><img src="imgs/Screenshot-d-jon.png" width="501" height="326" border="0"/></a><br/>
+<scan class="normal">Main screen</scan>
+<br/><br/>
+<div align="center"><a href="imgs/MyProject-templateusage.jpg" target="_blank"><img src="imgs/MyProject-templateusage.jpg" width="450" height="368" border="0"/></a><br/>
+<scan class="normal">Task creation</scan>
+<br/>
+
 </div>
-</div></td>
-<td style="padding:20px">
-<div style="background-image: url(imgs/box_bg.jpg);width:420px;height:300px;background-size:auto;background-repeat:norepeat">
-<div style="padding-right:20px;padding-top:20px;padding-bottom:20px;padding-left:20px"
-<p class="title">News!</p>
-<p class="news-date">Oct 30 / 2010</p><span class="normal">
-d-jon 1.1 is near!, take a look of the new features <a href="djon_1.1.html">here</a></span>
-<p class="news-date">Oct 25 / 2010</p><span class="normal">
-d-jon 1.0 has reached 250 downloads in only one week!!! please don't forget to tell us your opinion in our <a href="http://d-jon.com/forum">forum</a></span>
+
 </div>
-</div></td>
-</tr>
-</table>
 </div>
 <div align="center">
 <div align="justify" style="width:850px"><p class="normal">If you have questions, suggestions, or just want to share with us some thoughts about d-jon please take a look of our <a href="http://d-jon/forum">forum</a>, also please take a look of the <a href="http://d-jon/wiki">d-jon wiki</a> where you might find useful information about d-jon like releases, user guides and more.</p>
@@ -100,5 +89,4 @@ class="statcounter"
 src="http://c.statcounter.com/6284484/0/73b30f93/0/"
 alt="tumblr site counter" ></a></div></noscript>
 <!-- End of StatCounter Code --><br/>
-</div>
-</body></html>
+</div></body></html>
