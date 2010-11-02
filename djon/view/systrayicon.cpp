@@ -13,14 +13,15 @@ SysTrayIcon::SysTrayIcon(QObject *parent)
 }
 
 void SysTrayIcon::trackerStarted() {
-    _timer->start(250);
+    setIcon(QIcon(":/img/djon_running.png"));
+//    _timer->start(250);
     _running = true;
 }
 
 void SysTrayIcon::trackerStopped() {
     setIcon(QIcon(":/img/djon.png"));
     if (_running) {
-        _timer->stop();
+//        _timer->stop();
         _running = false;
     }
 }

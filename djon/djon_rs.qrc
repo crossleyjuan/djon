@@ -7,7 +7,6 @@
         <file alias="new-task.png">img/insert-object.png</file>
         <file alias="edit-task.png">img/accessories-text-editor.png</file>
         <file alias="new-project.png">img/project.png</file>
-        <file alias="djon.png">img/djon.png</file>
         <file alias="delete-task.png">img/delete_big.png</file>
         <file alias="open-project.png">img/folderproject.png</file>
         <file alias="close-project.png">img/close-project.png</file>
@@ -25,5 +24,7 @@
         <file alias="djon_5.png">img/djon_5.png</file>
         <file alias="djon_6.png">img/djon_6.png</file>
         <file alias="play_running.png">img/Play_running.png</file>
+        <file alias="djon.png">img/djon_48x48.png</file>
+        <file alias="djon_running.png">img/djon_48x48_running.png</file>
     </qresource>
 </RCC>
