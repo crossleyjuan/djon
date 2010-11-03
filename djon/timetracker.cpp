@@ -45,7 +45,6 @@ void TimeTracker::startRecord(Task* task, TaskLog* taskLog, DateTime* startTime)
 
 void TimeTracker::stopRecord() {
     TIMERSTATUS currentStatus = _status;
-    currentStatus = _status;
     _status = STOPPED;
     _timer->stop();
     if (currentStatus == RUNNING) {
@@ -156,11 +155,13 @@ void TimeTracker::cleanLapTime() {
 }
 
 void TimeTracker::dropRecordedTime() {
-    if (_status == RUNNING) {
-        emit timeStopped(_task, _taskLog);
-    }
+    TIMERSTATUS currentStatus = _status;
+
     _status = STOPPED;
     _timer->stop();
+    if (currentStatus == RUNNING) {
+        emit timeStopped(_task, _taskLog);
+    }
 }
 
 DTime TimeTracker::trackedTime() {
