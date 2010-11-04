@@ -2,6 +2,7 @@
 #include "dialogsettings.h"
 #include "ui_dialogsettings.h"
 #include "util.h"
+#include "settings.h"
 #include <sstream>
 
 DialogSettings::DialogSettings(QWidget *parent) :
@@ -9,10 +10,10 @@ DialogSettings::DialogSettings(QWidget *parent) :
     ui(new Ui::DialogSettings)
 {
     ui->setupUi(this);
-    bool closeToSysTray = atoi(readConfValue("close-to-systray", "1"));
+    bool closeToSysTray = getSettings()->closeToTray();
     ui->cbCloseToSysTray->setChecked(closeToSysTray);
 
-    int idleTimeout = atoi(readConfValue("idle-timeout", "300"));
+    long idleTimeout = getSettings()->idleTimeOut();
     DTime t(idleTimeout);
     QTime* time = t.toQTime();
     ui->idleTimeOut->setTime(*time);
@@ -57,11 +58,9 @@ void DialogSettings::done(int res) {
             }
         }
         if (save) {
-            std::stringstream ss;
-            ss << idleTimeOut;
-            std::string sTimeOut = ss.str();
-            writeConfValue("idle-timeout", sTimeOut.c_str());
-            writeConfValue("close-to-systray", ui->cbCloseToSysTray->isChecked() ? "1": "0");
+            getSettings()->setIdleTimeOut(idleTimeOut);
+            getSettings()->setCloseToTray(ui->cbCloseToSysTray->isChecked());
+            getSettings()->save();
             std::string logSort = ui->logOrderBy->itemData(ui->logOrderBy->currentIndex()).toString().toStdString();
             writePreference("log-sort", logSort);
             QDialog::done(QDialog::Accepted);

@@ -1,6 +1,7 @@
 #include "data.h"
 #include "util.h"
 #include "config.h"
+#include "settings.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string>
@@ -13,7 +14,7 @@
 using namespace std;
 
 const char* getLastDir() {
-    return readConfValue("last-project-dir", std::string("").c_str());
+    return getSettings()->lastProjectDir().c_str();
 }
 
 void loadTasks(Project* project) {
@@ -106,21 +107,20 @@ std::vector<Project*>* loadProjects() {
 
     std::vector<Project*>* projects = new std::vector<Project*>();
 
-    const char* openProjects = readConfValue("open-projects", "");
-    vector<string*>* prjs = split(string(openProjects), string(","));
+    vector<string> prjs = getSettings()->openProjects();
 
-    for (vector<string*>::iterator it = prjs->begin(); it != prjs->end(); it++) {
-        string* fileName = (*it);
+    for (vector<string>::iterator it = prjs.begin(); it != prjs.end(); it++) {
+        string fileName = (*it);
         stringstream ss;
         ss << lastDir;
         ss << "/";
-        ss << *fileName;
+        ss << fileName;
         ss << ".djon";
         string fullPath = ss.str();
         char* projectDef = readFile(const_cast<char*>(fullPath.c_str()));
 
         Project* project = new Project(projectDef);
-        project->setProjectFileName(fileName);
+        project->setProjectFileName(new string(fileName));
         projects->push_back(project);
         loadTasks(project);
         if (errorOcurred()) {
@@ -405,47 +405,35 @@ int deleteTask(Task* task) {
 }
 
 void addProject(const char* fileName) {
-    string* openProjects = new string(readConfValue("open-projects", ""));
-    std::vector<string*>* currentProjects = split(*openProjects, ",");
+    std::vector<string> currentProjects = getSettings()->openProjects();
     bool found = false;
-    for (std::vector<string*>::iterator iter = currentProjects->begin(); iter != currentProjects->end(); iter++) {
-        string* item = *iter;
-        if (item->compare(fileName) == 0) {
+    for (std::vector<string>::iterator iter = currentProjects.begin(); iter != currentProjects.end(); iter++) {
+        string item = *iter;
+        if (item.compare(fileName) == 0) {
             found = true;
             break;
         }
     }
     if (!found) {
-        if (openProjects->length() > 0) {
-            openProjects->append(",");
-        } else {
-            openProjects = new string("");
-        }
-        openProjects->append(fileName);
-        writeConfValue("open-projects", *openProjects);
+        Settings* settings = getSettings();
+        vector<string> projects = settings->openProjects();
+        projects.push_back(fileName);
+        settings->setOpenProjects(projects);
+        settings->save();
     }
 }
 
 void removeProject(const char* fileName) {
-    string* openProjects = new string(readConfValue("open-projects", ""));
-    vector<string*>* projects = split(*openProjects, ",");
-    vector<string*> newProjects;
-    for (vector<string*>::iterator iter = projects->begin(); iter != projects->end(); iter++) {
-        string* project = *iter;
-        if (project->compare(fileName) != 0) {
+    vector<string> openProjects = getSettings()->openProjects();
+    vector<string> newProjects;
+    for (vector<string>::iterator iter = openProjects.begin(); iter != openProjects.end(); iter++) {
+        string project = *iter;
+        if (project.compare(fileName) != 0) {
             newProjects.push_back(project);
         }
     }
-    string result;
-    for (vector<string*>::iterator i = newProjects.begin(); i != newProjects.end(); ) {
-        string* file = *i;
-        result = result.append(*file);
-        i++;
-        if (i != newProjects.end()) {
-            result = result.append(",");
-        }
-    }
-    writeConfValue("open-projects", result);
+    getSettings()->setOpenProjects(newProjects);
+    getSettings()->save();
 }
 
 Project* searchProject(vector<Project*> projects, string name) {

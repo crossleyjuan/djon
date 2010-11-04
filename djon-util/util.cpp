@@ -239,9 +239,9 @@ const char* readConfValue(const string& name, const char* def) {
 
 string replaceValue(string cont, string key, string value) {
     int pos = cont.find(key + ":");
-    string newValue = key + ":" + value + ";";
+    string newValue = key + ":" + value + ";\n";
     if (pos != cont.npos) {
-        int end = cont.find(";", pos) + 1;
+        int end = cont.find(";", pos) + 3; //; and \n
         cont = cont.replace(pos, end - pos, newValue);
     } else {
         cont = cont.append(newValue);

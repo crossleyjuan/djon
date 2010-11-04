@@ -1,6 +1,7 @@
 #include "idledetector.h"
 #include "config.h"
 #include "util.h"
+#include "settings.h"
 #include <stdlib.h>
 
 IdleDetector::IdleDetector()
@@ -27,5 +28,5 @@ void IdleDetector::timeout() {
 }
 
 void IdleDetector::refreshIdleMaxSecs() {
-    m_idleMaxSecs = atoi(readConfValue("idle-timeout", "300"));
+    m_idleMaxSecs = getSettings()->idleTimeOut();
 }

@@ -62,7 +62,9 @@ HEADERS += data.h \
     workingdetector.h \
     view/workingdetectionwindow.h \
     view/trackcontrolwindow.h \
-    view/treecombobox.h
+    view/treecombobox.h \
+    data/settings.h \
+    preferences.h
 FORMS += MainWindow.ui \
     taskdialog.ui \
     tasklogwindow.ui \
@@ -120,7 +122,9 @@ SOURCES += data.cpp \
     workingdetector.cpp \
     view/workingdetectionwindow.cpp \
     view/trackcontrolwindow.cpp \
-    view/treecombobox.cpp
+    view/treecombobox.cpp \
+    data/settings.cpp \
+    preferences.cpp
 OTHER_FILES += djon.rc
 RESOURCES += djon_rs.qrc
 RC_FILE = djon.rc

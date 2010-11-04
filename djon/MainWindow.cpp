@@ -29,6 +29,7 @@
 #include "releasenotesview.h"
 #include "workingdetector.h"
 #include "trackcontrolwindow.h"
+#include "settings.h"
 
 #include "updatemanager.h"
 #include <sstream>
@@ -433,16 +434,15 @@ void MainWindow::closeEvent(QCloseEvent *event)
 {
     qDebug("MainWindow::closeEvent");
     if (_trayIcon->isVisible()) {
-        int closeToSysTray = atoi(readConfValue("close-to-systray", "1"));
-        if (closeToSysTray) {
-            int warning = atoi(readConfValue("show-systray-warning", "1"));
-            if (warning) {
+        if (getSettings()->closeToTray()) {
+            if (getSettings()->showSysTrayWarning()) {
                 QMessageBox::information(this, tr("d-jon"),
                                          tr("The program will keep running in the "
                                             "system tray. To terminate the program, "
                                             "choose <b>Quit</b> in the context menu "
                                             "of the system tray entry."));
-                writeConfValue("show-systray-warning", "0");
+                getSettings()->setShowSysTrayWarning(false);
+                getSettings()->save();
             }
             hide();
             event->ignore();
@@ -574,7 +574,10 @@ void MainWindow::initialize() {
 
 void MainWindow::openProject() {
     qDebug("MainWindow::openProject()");
-    QString selectedFileName = QFileDialog::getOpenFileName(this, tr("Open Project"), tr(readConfValue("last-project-dir")), tr("djon files (*.djon)"));
+    QString selectedFileName = QFileDialog::getOpenFileName(this,
+                                                            tr("Open Project"),
+                                                            tr(getSettings()->lastProjectDir().c_str()),
+                                                            tr("djon files (*.djon)"));
     if (selectedFileName.size() > 0){
         QFile file(selectedFileName);
         string fileName = file.fileName().toStdString();
@@ -725,10 +728,11 @@ void MainWindow::restoreSavedWindowState() {
 }
 
 void MainWindow::checkReleaseNotes() {
-    const char* relVersion = readConfValue(string("last-release-notes"), "");
-    if ((strlen(relVersion) == 0) || (strcmp(relVersion, VERSION) != 0)) {
+    std::string relVersion = getSettings()->lastReleaseNotes();
+    if ((relVersion.length() == 0) || (relVersion.compare(VERSION) != 0)) {
         showReleaseNotes();
-        writeConfValue(string("last-release-notes"), string(VERSION));
+        getSettings()->setLastReleaseNotes(string(VERSION));
+        getSettings()->save();
     }
 }
 
