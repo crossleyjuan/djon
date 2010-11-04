@@ -21,6 +21,7 @@ TaskDialog::TaskDialog(Project* project, string* id, QWidget *parent) :
     populateTemplate();
     populateStatus();
     m_ui->tabWidget->setCurrentIndex(0);
+    m_ui->cboTemplate->setFocus();
 }
 
 TaskDialog::TaskDialog(Project* project, Task* task, QWidget *parent) :
@@ -59,6 +60,7 @@ TaskDialog::TaskDialog(Project* project, Task* task, QWidget *parent) :
     m_ui->tabWidget->setCurrentIndex(0);
     m_ui->cboTemplate->setVisible(false);
     m_ui->lblTemplate->setVisible(false);
+    m_ui->shortDescription->setFocus();
 }
 
 TaskDialog::~TaskDialog()
