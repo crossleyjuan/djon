@@ -65,7 +65,7 @@ MainWindow::MainWindow() {
     createCurrentTimeWindow();
 
     _updateManager = new UpdateManager(this);
-    _updateManager->startCheck(240);
+    _updateManager->startCheck();
 
     setupActions();
 
@@ -472,6 +472,7 @@ void MainWindow::taskContextMenuRequested(QPoint pos) {
 
 void MainWindow::settings() {
     qDebug("MainWindow::settings");
+    int previousUpdateChek = getSettings()->checkUpdate();
     DialogSettings settings;
     int res = settings.exec();
     if (res == QDialog::Accepted) {
@@ -479,6 +480,10 @@ void MainWindow::settings() {
             _logWindow->refresh(_activeTask);
         }
         _idleDetector->refreshIdleMaxSecs();
+        if (previousUpdateChek != getSettings()->checkUpdate()) {
+            _updateManager->startCheck();
+        }
+        _trackWindow->refreshSettings();
     }
 }
 

@@ -72,6 +72,24 @@ void Settings::setIdleTimeOut(long idleTimeOut) {
     _idleTimeOutChanged = true;
 }
 
+int Settings::checkUpdate() {
+    return _checkUpdate;
+}
+
+void Settings::setCheckUpdate(int checkUpdate) {
+    _checkUpdate = checkUpdate;
+    _checkUpdateChanged = true;
+}
+
+int Settings::transparency() {
+    return _transparency;
+}
+
+void Settings::setTransparency(int transparency) {
+    _transparency = transparency;
+    _transparencyChanged = true;
+}
+
 void Settings::load() {
     const char* close = readConfValue("close-to-systray", "1");
     setCloseToTray(strcmp(close, "1") == 0);
@@ -90,12 +108,18 @@ void Settings::load() {
         openProjects.push_back(*prj);
     }
     setOpenProjects(openProjects);
+
+    setCheckUpdate(atoi(readConfValue("check-update", "240")));
+    setTransparency(atoi(readConfValue("track-transparency", "40")));
+
     _closeToTrayChanged = false;
     _showSysTrayWarningChanged = false;
     _lastProjectDirChanged = false;
     _lastReleaseNotesChanged = false;
     _openProjectsChanged = false;
     _idleTimeOutChanged = false;
+    _checkUpdateChanged = false;
+    _transparencyChanged = false;
 }
 
 void Settings::save() {
@@ -128,10 +152,24 @@ void Settings::save() {
         writeConfValue("idle-timeout", ssIdle.str());
     }
 
+    if (_checkUpdateChanged) {
+        std::stringstream ssCheck;
+        ssCheck << _checkUpdate;
+        writeConfValue("check-update", ssCheck.str());
+    }
+
+    if (_transparencyChanged) {
+        std::stringstream ssTrans;
+        ssTrans << _transparency;
+        writeConfValue("track-transparency", ssTrans.str());
+    }
+
     _closeToTrayChanged = false;
     _showSysTrayWarningChanged = false;
     _lastProjectDirChanged = false;
     _lastReleaseNotesChanged = false;
     _openProjectsChanged = false;
     _idleTimeOutChanged = false;
+    _checkUpdateChanged = false;
+    _transparencyChanged = false;
 }

@@ -25,6 +25,7 @@ public:
 
 public slots:
     void refresh(Task* task);
+    void refreshSettings();
     void trackerStateChanged(Task* task);
     void setCurrentTask(Task* task);
     void updateCurrentTime();
@@ -35,7 +36,6 @@ protected:
     bool eventFilter(QObject *, QEvent *);
 
 private:
-
     Ui::TrackControlWindow *ui;
     std::vector<Project*>* _projects;
     TimeTracker* _timeTracker;

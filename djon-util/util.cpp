@@ -241,7 +241,7 @@ string replaceValue(string cont, string key, string value) {
     int pos = cont.find(key + ":");
     string newValue = key + ":" + value + ";\n";
     if (pos != cont.npos) {
-        int end = cont.find(";", pos) + 3; //; and \n
+        int end = cont.find(";", pos) + 2; //; and \n
         cont = cont.replace(pos, end - pos, newValue);
     } else {
         cont = cont.append(newValue);

@@ -1,6 +1,7 @@
 #include "updatemanager.h"
 #include "util.h"
 #include "config.h"
+#include "settings.h"
 #include <QMessageBox>
 #include <QProcess>
 #ifdef WINDOWS
@@ -19,7 +20,7 @@ UpdateManager::UpdateManager(QObject *parent) :
     _httpRequestAborted = false;
     _http = new QHttp(this);
     _file = NULL;
-    _mins = 0;
+    _mins = getSettings()->checkUpdate();
     _downloading = false;
     _isLastVersion = false;
     connect(_timer, SIGNAL(timeout()), this, SLOT(check()));
@@ -34,11 +35,13 @@ UpdateManager::UpdateManager(QObject *parent) :
     //            this, SLOT(slotAuthenticationRequired(QString,quint16,QAuthenticator*)));
 }
 
-void UpdateManager::startCheck(int mins) {
+void UpdateManager::startCheck() {
 #ifdef WINDOWS
-    _mins = mins;
-    _timer->start(_mins * 60000);
-    check();
+    // zero will deactivate the check
+    if (_mins > 0) {
+        _timer->start(_mins * 60000);
+        check();
+    }
 #endif
 }
 
@@ -181,5 +184,5 @@ void UpdateManager::pause() {
 }
 
 void UpdateManager::resume() {
-    startCheck(_mins);
+    startCheck();
 }

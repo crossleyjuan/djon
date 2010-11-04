@@ -19,6 +19,11 @@ DialogSettings::DialogSettings(QWidget *parent) :
     ui->idleTimeOut->setTime(*time);
 
     populateLogOrderBy();
+    populateCheckUpdate();
+
+    int updateCheck = getSettings()->checkUpdate();
+    ui->cboUpdate->setCurrentIndex(ui->cboUpdate->findData(updateCheck));
+    ui->transparency->setValue(getSettings()->transparency());
 }
 
 DialogSettings::~DialogSettings()
@@ -60,6 +65,8 @@ void DialogSettings::done(int res) {
         if (save) {
             getSettings()->setIdleTimeOut(idleTimeOut);
             getSettings()->setCloseToTray(ui->cbCloseToSysTray->isChecked());
+            getSettings()->setCheckUpdate(ui->cboUpdate->itemData(ui->cboUpdate->currentIndex()).toInt());
+            getSettings()->setTransparency(ui->transparency->value());
             getSettings()->save();
             std::string logSort = ui->logOrderBy->itemData(ui->logOrderBy->currentIndex()).toString().toStdString();
             writePreference("log-sort", logSort);
@@ -90,4 +97,11 @@ void DialogSettings::populateLogOrderBy() {
             }
         }
     }
+}
+
+void DialogSettings::populateCheckUpdate() {
+    ui->cboUpdate->addItem("every 4 hours", 240);
+    ui->cboUpdate->addItem("every 8 hours", 480);
+    ui->cboUpdate->addItem("every 24 hours", 1440);
+    ui->cboUpdate->addItem("Never", 0);
 }

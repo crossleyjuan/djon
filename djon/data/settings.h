@@ -20,6 +20,10 @@ public:
     void setOpenProjects(std::vector<std::string>);
     long idleTimeOut();
     void setIdleTimeOut(long);
+    int checkUpdate();
+    void setCheckUpdate(int);
+    int transparency();
+    void setTransparency(int);
     void load();
     void save();
 
@@ -30,6 +34,8 @@ private:
     std::string _lastReleaseNotes;
     std::vector<std::string> _openProjects;
     long _idleTimeOut;
+    int _checkUpdate;
+    int _transparency;// 0-100
 
     bool _closeToTrayChanged;
     bool _showSysTrayWarningChanged;
@@ -37,6 +43,8 @@ private:
     bool _lastReleaseNotesChanged;
     bool _openProjectsChanged;
     bool _idleTimeOutChanged;
+    bool _checkUpdateChanged;
+    bool _transparencyChanged;
 };
 
 Settings* getSettings();

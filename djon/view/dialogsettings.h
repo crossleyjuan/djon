@@ -21,6 +21,7 @@ protected:
 
 private:
     void populateLogOrderBy();
+    void populateCheckUpdate();
     Ui::DialogSettings *ui;
 
 

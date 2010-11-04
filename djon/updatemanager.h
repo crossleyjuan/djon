@@ -13,7 +13,7 @@ class UpdateManager : public QObject
     Q_OBJECT
 public:
     explicit UpdateManager(QObject *parent = 0);
-    void startCheck(int mins);
+    void startCheck();
     void pause();
     void resume();
 

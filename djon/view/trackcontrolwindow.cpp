@@ -3,6 +3,7 @@
 #include "TaskModel.h"
 #include "data.h"
 #include "timetracker.h"
+#include "settings.h"
 #include <QMouseEvent>
 
 TrackControlWindow::TrackControlWindow(std::vector<Project*>* projects, TimeTracker* timeTracker, QWidget *parent) :
@@ -13,11 +14,12 @@ TrackControlWindow::TrackControlWindow(std::vector<Project*>* projects, TimeTrac
     _timeTracker = timeTracker;
     setProjects(projects);
     setWindowFlags(Qt::FramelessWindowHint | Qt::WindowShadeButtonHint |Qt::WindowStaysOnTopHint | Qt::Tool);
+//    setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowShadeButtonHint |Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_Hover, true);
     connect(ui->comboBox, SIGNAL(currentIndexChanged(QModelIndex)), this, SLOT(currentIndexChanged(QModelIndex)));
     installEventFilter(this);
     ui->comboBox->installEventFilter(this);
-    this->setWindowOpacity(0.4);
+    refreshSettings();
 }
 
 TrackControlWindow::~TrackControlWindow()
@@ -130,7 +132,11 @@ bool TrackControlWindow::eventFilter(QObject *obj, QEvent *evt) {
         this->setWindowOpacity(1);
     }
     if (evt->type() == QEvent::HoverLeave) {
-        this->setWindowOpacity(0.4);
+        refreshSettings();
     }
     return QWidget::eventFilter(obj, evt);
+}
+
+void TrackControlWindow::refreshSettings() {
+    this->setWindowOpacity((double)getSettings()->transparency() / (double)100);
 }
