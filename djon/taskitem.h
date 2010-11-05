@@ -26,7 +26,7 @@ public:
     TaskItem *child(int row);
     int childCount() const;
     int columnCount() const;
-    QVariant data(int column) const;
+    QVariant data(int column, int role) const;
     int row() const;
     TaskItem *parent();
     Task* task();

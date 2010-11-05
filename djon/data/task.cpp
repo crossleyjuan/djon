@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   Task.cpp
  * Author: cross
  * 
@@ -251,6 +251,14 @@ Task::Task(Project* project, const std::string taskDef) {
     _templateName = new string(READ_ELEMENT(values, "template-name"));
     _status = new string(READ_ELEMENT(values, "status"));
 
+    Template* tpl = readTemplate(*_templateName);
+    // Check the current template existance
+    if (tpl == NULL) {
+        qDebug("Warning: The task with id: %s contains an invalid template: %s", _id->c_str(), _templateName->c_str());
+        _templateName = defaultTemplate()->name();
+        _status = *defaultTemplate()->statusList()->begin();
+    }
+
     delete(values);
     qDebug("out Task::Task(Project* project, std::string* taskDef)");
 }
@@ -369,5 +377,22 @@ Task* Task::parent() const {
         return _project->task(id);
     } else {
         return NULL;
+    }
+}
+
+bool Task::isClosed() const {
+    Template* tpl = readTemplate(*this->templateName());
+    if (tpl != NULL) {
+        return (tpl->closedStatus()->compare(*_status) == 0);
+    } else {
+        return false;
+    }
+}
+
+void Task::setClosed(bool closed) {
+    if (closed) {
+        setStatus(readTemplate(*_templateName)->closedStatus());
+    } else {
+        setStatus(defaultTemplate()->name());
     }
 }

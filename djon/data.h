@@ -18,6 +18,8 @@ Project* searchProject(vector<Project*> projects, string name);
 
 vector<Template*>* readTemplates();
 Template* readTemplate(const string& templateName);
+Template* defaultTemplate();
+
 int createProject(Project* project);
 void addProject(const char* fileName);
 void removeProject(const char* fileName);

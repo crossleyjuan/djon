@@ -16,12 +16,6 @@ bool TaskCloseFilterModel::filterAcceptsRow(int source_row, const QModelIndex &s
     if (task == NULL) {
         return true;
     } else {
-        Template* tpl = readTemplate(*task->templateName());
-        // is closed
-        if (tpl->closedStatus()->compare(*task->status()) == 0) {
-            return false;
-        } else {
-            return true;
-        }
+        return task->isClosed();
     }
 }

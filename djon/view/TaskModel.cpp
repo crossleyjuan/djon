@@ -29,15 +29,10 @@ int TaskModel::columnCount(const QModelIndex &parent) const
         case ONLY_TASKS:
             return 1;
         case WITH_TIMES:
-            return 4;
+            return 5;
     default:
             return 0;
     }
-
-//    if (parent.isValid())
-//        return static_cast<TaskItem*>(parent.internalPointer())->columnCount();
-//    else
-//        return rootItem->columnCount();
 }
 
 QVariant TaskModel::data(const QModelIndex &index, int role) const
@@ -66,24 +61,26 @@ QVariant TaskModel::data(const QModelIndex &index, int role) const
         return QSize(10, 15);
     }
 
-    if (role != Qt::DisplayRole)
-        return QVariant();
 
     TaskItem *item = static_cast<TaskItem*>(index.internalPointer());
 
-    return item->data(index.column());
+    return item->data(index.column(), role);
 }
 
 Qt::ItemFlags TaskModel::flags(const QModelIndex &index) const
 {
-    return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
+    Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
+    if (index.column() == 1) {
+        flags = flags | Qt::ItemIsUserCheckable;
+    }
+    return flags;
 }
 
 QVariant TaskModel::headerData(int section, Qt::Orientation orientation,
                                int role) const
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
-        return rootItem->data(section);
+        return rootItem->data(section, role);
 
 //    if (role == Qt::SizeHintRole)
 //        return QSize(50, 20);
@@ -191,14 +188,27 @@ Project* TaskModel::project(const QModelIndex &index) const {
 }
 
 bool TaskModel::setData(const QModelIndex &index, const QVariant &value, int role) {
-    if (value.canConvert<QString>()) {
-        QString s = value.toString();
-        TaskItem *item = static_cast<TaskItem*>(index.internalPointer());
-        if (item->task() != NULL) {
-            item->task()->setShortDescription(new string(s.toStdString()));
-        }
+    Task* tsk = task(index);
+    if (tsk == NULL) {
+        return false;
     }
-    return false;
+    bool modified = false;
+    switch (index.column()) {
+    case 0: // Description
+        tsk->setShortDescription(new std::string(value.toString().toStdString()));
+        modified = true;
+        break;
+    case 1:
+        tsk->setClosed(value.toBool());
+        modified = true;
+        break;
+    }
+    // Saves the change
+    if (modified) {
+        updateTask(tsk);
+    }
+    return modified;
+
 }
 
 void TaskModel::setTrackedTask(Task *task) {
@@ -219,7 +229,7 @@ void TaskModel::refreshData() {
     if (_type == ONLY_TASKS) {
         rootData << "Description";
     } else {
-        rootData << "Description" << "Total Time" << "Week" << "Day";
+        rootData << "Description" << "" << "Total Time" << "Week" << "Day";
     }
     rootItem = new TaskItem(rootData);
     TaskItem* summary = new TaskItem(_projects, rootItem);

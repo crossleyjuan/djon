@@ -64,7 +64,9 @@ HEADERS += data.h \
     view/trackcontrolwindow.h \
     view/treecombobox.h \
     data/settings.h \
-    preferences.h
+    preferences.h \
+    view/taskclosefiltermodel.h \
+    view/taskeditordelegate.h
 FORMS += MainWindow.ui \
     taskdialog.ui \
     tasklogwindow.ui \
@@ -124,7 +126,9 @@ SOURCES += data.cpp \
     view/trackcontrolwindow.cpp \
     view/treecombobox.cpp \
     data/settings.cpp \
-    preferences.cpp
+    preferences.cpp \
+    view/taskclosefiltermodel.cpp \
+    view/taskeditordelegate.cpp
 OTHER_FILES += djon.rc
 RESOURCES += djon_rs.qrc
 RC_FILE = djon.rc

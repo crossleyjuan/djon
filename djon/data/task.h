@@ -64,6 +64,8 @@ public:
     void setId(string* _id);
     string* id() const;
     Task* parent() const;
+    bool isClosed() const;
+    void setClosed(bool);
 
     void processTemplate();
 

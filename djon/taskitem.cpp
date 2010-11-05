@@ -53,11 +53,20 @@
 
  int TaskItem::columnCount() const
  {
-     return 3;
+     return 4;
  }
 
- QVariant TaskItem::data(int column) const
+ QVariant TaskItem::data(int column, int role) const
  {
+     if (column == 1) {
+         if (role == Qt::DisplayRole) {
+             return QVariant();
+         }
+     } else {
+         if (role != Qt::DisplayRole) {
+             return QVariant();
+         }
+     }
      switch(column) {
      case 0:
          if (_type == PROJECT) {
@@ -73,6 +82,17 @@
              return "Projects";
          }
      case 1:
+         // Closed
+         switch (_type) {
+         case PROJECT:
+         case NONE:
+         case SUMMARY:
+             return QVariant();
+         case TASK:
+             return QVariant(_task->isClosed() ? Qt::Checked : Qt::Unchecked);
+             return false;
+         }
+     case 2:
          if (_type == PROJECT) {
              return QString(_project->totalTime()->toChar());
          }
@@ -90,7 +110,7 @@
              }
              return QString(totalTime.toChar());
          }
-     case 2:
+     case 3:
          if (_type == PROJECT) {
              return QString(_project->totalTimeCurrentWeek()->toChar());
          }
@@ -108,7 +128,7 @@
              }
              return QString(totalTime.toChar());
          }
-     case 3:
+     case 4:
          if (_type == PROJECT) {
              return QString(_project->totalTimeCurrentDay()->toChar());
          }

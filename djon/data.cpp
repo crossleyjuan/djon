@@ -190,6 +190,14 @@ Template* readTemplate(const string& name) {
     return NULL;
 }
 
+Template* defaultTemplate() {
+    if (readTemplates()->size() > 0) {
+        return *readTemplates()->begin();
+    } else {
+        return NULL;
+    }
+}
+
 int createTask(Task* task) {
     std::stringstream ssTaskDef;
     const char* taskDef = task->toChar();
