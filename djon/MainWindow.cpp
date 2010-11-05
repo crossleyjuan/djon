@@ -30,7 +30,7 @@
 #include "workingdetector.h"
 #include "trackcontrolwindow.h"
 #include "settings.h"
-
+#include "taskclosefiltermodel.h"
 #include "updatemanager.h"
 #include <sstream>
 #include <QGraphicsView>
@@ -363,12 +363,18 @@ void MainWindow::reloadTasks() {
         widget.ganttView->refresh();
     } else {
         _taskModel = new TaskModel(WITH_TIMES, *_projects);
+        TaskCloseFilterModel* closed = new TaskCloseFilterModel();
+        closed->setSourceModel(_taskModel);
+        QTreeView* v = new QTreeView();
+        v->setModel(closed);
+        v->show();
         widget.taskView->setModel(_taskModel);
         widget.ganttView->setModel(_taskModel);
 
         widget.taskView->setAlternatingRowColors(true);
         widget.taskView->setSelectionBehavior(QAbstractItemView::SelectRows);
     }
+
     widget.ganttView->scrollToday();
     connect(widget.taskView, SIGNAL(collapsed(QModelIndex)), widget.ganttView, SLOT(collapse(QModelIndex)));
     connect(widget.taskView, SIGNAL(expanded(QModelIndex)), widget.ganttView, SLOT(expand(QModelIndex)));
