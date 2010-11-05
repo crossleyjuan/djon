@@ -4,7 +4,7 @@ Name "d-jon updater"
 ; SilentInstall silent
 
 ; The file to write
-OutFile "shared\update_djon.exe"
+OutFile "update_djon.exe"
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\djon

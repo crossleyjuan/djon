@@ -2,7 +2,7 @@
 Name "D-Jon"
 
 ; The file to write
-OutFile "shared\setup_djon.exe"
+OutFile "setup_djon.exe"
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\djon
