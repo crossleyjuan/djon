@@ -66,7 +66,8 @@ HEADERS += data.h \
     data/settings.h \
     preferences.h \
     view/taskclosefiltermodel.h \
-    view/taskeditordelegate.h
+    view/taskeditordelegate.h \
+    view/tasktreeview.h
 FORMS += MainWindow.ui \
     taskdialog.ui \
     tasklogwindow.ui \
@@ -128,7 +129,8 @@ SOURCES += data.cpp \
     data/settings.cpp \
     preferences.cpp \
     view/taskclosefiltermodel.cpp \
-    view/taskeditordelegate.cpp
+    view/taskeditordelegate.cpp \
+    view/tasktreeview.cpp
 OTHER_FILES += djon.rc
 RESOURCES += djon_rs.qrc
 RC_FILE = djon.rc

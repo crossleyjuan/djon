@@ -30,7 +30,7 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QTreeView" name="taskView">
+      <widget class="TaskTreeView" name="taskView">
        <property name="verticalScrollBarPolicy">
         <enum>Qt::ScrollBarAlwaysOff</enum>
        </property>
@@ -58,7 +58,7 @@
      <x>0</x>
      <y>0</y>
      <width>396</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
@@ -70,6 +70,11 @@
    <extends>QWidget</extends>
    <header>ganttview.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TaskTreeView</class>
+   <extends>QTreeView</extends>
+   <header>tasktreeview.h</header>
   </customwidget>
  </customwidgets>
  <resources>
