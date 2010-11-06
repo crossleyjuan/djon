@@ -85,7 +85,7 @@
 			<Application_Info_URL>http://d-jon.com</Application_Info_URL>
 			<Application_Order_URL />
 			<Application_Screenshot_URL>http://d-jon.com/imgs/Screenshot-d-jon.png</Application_Screenshot_URL>
-			<Application_Icon_URL />
+			<Application_Icon_URL>http://d-jon.com/imgs/djon_16x16.png</Application_Icon_URL>
 			<Application_XML_File_URL>http://d-jon.com/downloads/pad_file.xml</Application_XML_File_URL>
 		</APPLICATION_URLS>
 		<DOWNLOAD_URLS>
