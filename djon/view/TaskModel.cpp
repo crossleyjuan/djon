@@ -138,8 +138,10 @@ int TaskModel::rowCount(const QModelIndex &parent) const
 
 void TaskModel::setupModelData(TaskItem *parent)
 {
+    parent->clear();
     QHash<QString, TaskItem*> hash;
 
+    Task* lastTask = NULL;
     for (vector<Project*>::iterator iter = _projects.begin(); iter != _projects.end(); iter++) {
         Project* project = *iter;
         vector<Task*>* tasks = project->tasks();
@@ -150,12 +152,20 @@ void TaskModel::setupModelData(TaskItem *parent)
 
         for (vector<Task*>::iterator iterTask = tasks->begin(); iterTask != tasks->end(); iterTask++) {
             Task* task = *iterTask;
+            if (!acceptFilter(task)) {
+                continue;
+            }
             QString taskId(task->id()->c_str());
 
             int lastDot = taskId.lastIndexOf(".");
             TaskItem* root;
             if (lastDot > -1) {
-                root = hash[taskId.left(lastDot)];
+                QString tskId = taskId.left(lastDot);
+                root = hash[tskId];
+                Task* tsk = project->task(tskId.toStdString());
+                if (!acceptFilter(tsk)) {
+                    continue;
+                }
             } else {
                 root = projectItem;
             }
@@ -164,7 +174,12 @@ void TaskModel::setupModelData(TaskItem *parent)
             TaskItem* item = new TaskItem(project, task, root);
             root->appendChild(item);
             hash[taskId] = item;
+            lastTask = task;
         }
+    }
+    if (lastTask != NULL) {
+        QModelIndex lastIndex = index(lastTask->project(), lastTask);
+        emit this->dataChanged(QModelIndex(), lastIndex);
     }
 }
 
@@ -225,6 +240,7 @@ void TaskModel::setProjects(const vector<Project*> projects) {
 }
 
 void TaskModel::refreshData() {
+    beginResetModel();
     QList<QVariant> rootData;
     if (_type == ONLY_TASKS) {
         rootData << "Description";
@@ -235,6 +251,7 @@ void TaskModel::refreshData() {
     TaskItem* summary = new TaskItem(_projects, rootItem);
     rootItem->appendChild(summary);
     setupModelData(summary);
+    endResetModel();
     // resets the views states (invalidate previously sent data)
 //    reset();
 }
@@ -287,4 +304,25 @@ void TaskModel::timeChanged(Task* task) {
 
 //    QModelIndex timeIndex = index(taskIndex.row(), 1, taskIndex.parent());
 //    emit dataChanged(timeIndex, timeIndex);
+}
+
+void TaskModel::addFilter(const AbstractTaskFilter* filter) {
+    filters.push_back(filter);
+    refreshData();
+}
+
+void TaskModel::removeFilter(const AbstractTaskFilter* filter) {
+    // TO BE IMPLEMENTED
+}
+
+bool TaskModel::acceptFilter(Task *task) {
+    bool accepted = true;
+    for (std::vector<const AbstractTaskFilter*>::iterator iter = filters.begin(); iter != filters.end(); iter++) {
+        const AbstractTaskFilter* filter = *iter;
+        accepted = accepted && filter->acceptTask(task);
+        if (!accepted) {
+            break;
+        }
+    }
+    return accepted;
 }

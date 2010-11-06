@@ -37,6 +37,7 @@
 #include "ganttscene.h"
 #include "systrayicon.h"
 #include "taskeditordelegate.h"
+#include "closedtaskfilter.h"
 
 std::vector<Project*>* _projects;
 
@@ -146,10 +147,11 @@ void MainWindow::setupActions() {
 
     setMenuBar(menuBar);
 
-    QMenu* prjMenu = menuBar->addMenu(tr("Project"));
-    QMenu* trcMenu = menuBar->addMenu(tr("Tracker"));
-    QMenu* optMenu = menuBar->addMenu(tr("Options"));
-    QMenu* helpMenu = menuBar->addMenu(tr("Help"));
+    QMenu* prjMenu = menuBar->addMenu(tr("&Project"));
+    QMenu* prjView = menuBar->addMenu("&View");
+    QMenu* trcMenu = menuBar->addMenu(tr("&Tracker"));
+    QMenu* optMenu = menuBar->addMenu(tr("&Options"));
+    QMenu* helpMenu = menuBar->addMenu(tr("&Help"));
 
     QAction* newProject = bar->addAction(QIcon(":/img/new-project.png"), tr("Create Project"));
     QAction* openProject = bar->addAction(QIcon(":/img/open-project.png"), tr("Open Existing Project"));
@@ -187,10 +189,14 @@ void MainWindow::setupActions() {
     _taskPopUpMenu->addAction(closeProject);
     //    prjMenu->addAction(completeTask);
     prjMenu->addSeparator();
+
     QAction* import = prjMenu->addAction(QIcon(":/img/import-project.png"), tr("Import Projects"));
     QAction* expAction = prjMenu->addAction(QIcon(":/img/export-project.png"), tr("Export project information"));
     prjMenu->addSeparator();
     QAction* quit = prjMenu->addAction(QIcon(":/img/exit.png"), tr("Quit"));
+
+    _filterClosedAction = prjView->addAction(QIcon(":/img/filter-closed.png"), "Only show &open tasks");
+    _filterClosedAction->setCheckable(true);
 
     QAction* settings = optMenu->addAction(QIcon(":/img/settings.png"), tr("Settings"));
 
@@ -203,6 +209,8 @@ void MainWindow::setupActions() {
     connect(editTask, SIGNAL(triggered()), this, SLOT(editNewTask()));
     connect(deleteTask, SIGNAL(triggered()), this, SLOT(deleteTask()));
     connect(quit, SIGNAL(triggered()), qApp, SLOT(quit()));
+    connect(_filterClosedAction, SIGNAL(triggered()), this, SLOT(filterClosedTasks()));
+
     //    connect(completeTask, SIGNAL(triggered()), this, SLOT(completeTask()));
     connect(_recordButton, SIGNAL(triggered()), this, SLOT(startRecord()));
     connect(stop, SIGNAL(triggered()), this, SLOT(stopRecord()));
@@ -344,6 +352,7 @@ int MainWindow::createNewProject() {
             _taskModel = new TaskModel(WITH_TIMES, *_projects);
             widget.taskView->setModel(_taskModel);
             connect(widget.taskView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(selectTaskChanged(QModelIndex,QModelIndex)));
+            connect(_taskModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), widget.taskView, SLOT(reset()));
         }
     }
     delete(wizard);
@@ -772,4 +781,14 @@ void MainWindow::trackerStarted(Task* task, TaskLog* taskLog) {
     _trayIcon->trackerStarted();
     _recordButton->setIcon(QIcon(":/img/play_running.png"));
     _workingDetector->stopDetection();
+}
+
+void MainWindow::filterClosedTasks() {
+    ClosedTaskFilter* filter = new ClosedTaskFilter();
+    _taskModel->addFilter(filter);
+    _filterClosedAction->setChecked(true);
+    widget.taskView->setAnimated(false);
+    widget.taskView->expandAll();
+    refreshCollapsedState();
+    widget.taskView->setAnimated(true);
 }

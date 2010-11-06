@@ -18,6 +18,7 @@ void GanttScene::initialize() {
     this->_totalDays = 0;
     this->_viewSizeHeight = 0;
     this->_viewSizeWidth = 0;
+    clear();
 }
 
 void GanttScene::setModel(TaskModel* model) {

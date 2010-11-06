@@ -22,6 +22,7 @@ public:
     ~TaskItem();
 
     void appendChild(TaskItem *child);
+    void clear();
 
     TaskItem *child(int row);
     int childCount() const;

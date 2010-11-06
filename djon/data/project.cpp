@@ -80,7 +80,7 @@ void Project::addTask(Task* task) {
     _tasksMap->insert(pair<string, Task*>(*task->id(), task));
 }
 
-Task* Project::task(string& id) {
+Task* Project::task(string id) {
     map<string, Task*>::iterator iter = _tasksMap->find(id);
     if (iter != _tasksMap->end()) {
         return iter->second;

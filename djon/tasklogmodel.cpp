@@ -59,11 +59,14 @@ bool TaskLogModel::setData(const QModelIndex &index, const QVariant &value, int 
 
     bool newTaskLog = false;
     if (log == NULL) {
+        beginResetModel();
         log = createTaskLog(_task);
         QDateTime dte(QDateTime::currentDateTime());
         log->start = new DateTime(dte.date().year(), dte.date().month(), dte.date().day(), dte.time().hour(), dte.time().minute(), dte.time().second());
         log->end = new DateTime(dte.date().year(), dte.date().month(), dte.date().day(), dte.time().hour(), dte.time().minute(), dte.time().second());
         newTaskLog = true;
+        endResetModel();
+        emit dataChanged(QModelIndex(), index);
     }
     if (index.column() == 0) {
         QString descr = value.toString();

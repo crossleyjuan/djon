@@ -45,7 +45,7 @@ public:
     DTime* totalTimeCurrentWeek();
     DTime* totalTimeCurrentDay();
 
-    Task* task(string& id);
+    Task* task(string id);
     std::string* nextChildId();
     char* toChar();
     bool operator==(const Project& prj) const;

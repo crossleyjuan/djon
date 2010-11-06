@@ -57,7 +57,11 @@ private:
     CurrentTime* _timeWindow;
     TaskModel* _taskModel;
     UserPreferencesController* _userPreferencesController;
+
+    // Actions
     QAction* _recordButton;
+    QAction* _filterClosedAction;
+
     TrackControlWindow *_trackWindow;
 
     SysTrayIcon* _trayIcon;
@@ -92,6 +96,7 @@ public slots:
     void saveWindowState();
     void restoreSavedWindowState();
     void showReleaseNotes();
+    void filterClosedTasks();
 
     void setActiveTask(Task* task);
     void setActiveTaskLog(Task* task, TaskLog* taskLog);

@@ -12,6 +12,7 @@
 #include "taskitem.h"
 #include <QAbstractTableModel>
 #include <vector>
+#include "abstracttaskfilter.h"
 
 enum MODELTYPE {
     WITH_TIMES,
@@ -48,6 +49,8 @@ public:
     void setProjects(const vector<Project*> projects);
     QModelIndex index(Project* project);
     QModelIndex index(Project* project, Task* task);
+    void addFilter(const AbstractTaskFilter* filter);
+    void removeFilter(const AbstractTaskFilter* filter);
 
 public slots:
     void timeChanged(Task* task);
@@ -56,12 +59,14 @@ private:
     void setupModelData(TaskItem *parent);
     void refreshData();
     QModelIndex search(QModelIndex root, Task* task);
+    bool acceptFilter(Task* task);
 
     TaskItem *rootItem;
     std::vector<Project*> _projects;
     MODELTYPE _type;
     Task* _trackedTask;
     QModelIndex _trackedIndex;
+    std::vector<const AbstractTaskFilter*> filters;
 };
 
 #endif

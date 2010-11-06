@@ -171,3 +171,7 @@
  Project* TaskItem::project() {
      return _project;
  }
+
+ void TaskItem::clear() {
+     childItems.clear();
+ }
