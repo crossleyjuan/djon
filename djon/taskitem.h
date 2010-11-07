@@ -22,6 +22,7 @@ public:
     ~TaskItem();
 
     void appendChild(TaskItem *child);
+    void removeChild(TaskItem *child);
     void clear();
 
     TaskItem *child(int row);

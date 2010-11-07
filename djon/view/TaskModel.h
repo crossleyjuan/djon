@@ -49,8 +49,8 @@ public:
     void setProjects(const vector<Project*> projects);
     QModelIndex index(Project* project);
     QModelIndex index(Project* project, Task* task);
-    void addFilter(const AbstractTaskFilter* filter);
-    void removeFilter(const AbstractTaskFilter* filter);
+    void addFilter(TASKFILTER_TYPE filter);
+    void removeFilter(TASKFILTER_TYPE filterType);
 
 public slots:
     void timeChanged(Task* task);
@@ -66,7 +66,7 @@ private:
     MODELTYPE _type;
     Task* _trackedTask;
     QModelIndex _trackedIndex;
-    std::vector<const AbstractTaskFilter*> filters;
+    std::vector<const AbstractTaskFilter*> _filters;
 };
 
 #endif

@@ -3,6 +3,7 @@
 #include "data.h"
 
 ClosedTaskFilter::ClosedTaskFilter()
+    : AbstractTaskFilter(CLOSED_FILTER)
 {
 }
 

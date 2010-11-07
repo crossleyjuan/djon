@@ -6,13 +6,12 @@
 #include "settings.h"
 #include <QMouseEvent>
 
-TrackControlWindow::TrackControlWindow(std::vector<Project*>* projects, TimeTracker* timeTracker, QWidget *parent) :
+TrackControlWindow::TrackControlWindow(TimeTracker* timeTracker, QWidget *parent) :
         QWidget(parent),
         ui(new Ui::TrackControlWindow)
 {
     ui->setupUi(this);
     _timeTracker = timeTracker;
-    setProjects(projects);
     setWindowFlags(Qt::FramelessWindowHint | Qt::WindowShadeButtonHint |Qt::WindowStaysOnTopHint | Qt::Tool);
 //    setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowShadeButtonHint |Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_Hover, true);
@@ -27,9 +26,8 @@ TrackControlWindow::~TrackControlWindow()
     delete ui;
 }
 
-void TrackControlWindow::setProjects(std::vector<Project*>* projects) {
-    _projects = projects;
-    _taskModel = new TaskModel(ONLY_TASKS, *_projects, this);
+void TrackControlWindow::setModel(TaskModel* model) {
+    _taskModel = model;
     ui->comboBox->setModel(_taskModel);
     ui->timeEdit->setTime(QTime(0,0,0,0));
 }

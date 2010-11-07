@@ -43,6 +43,10 @@ const TaskModel* TreeComboBox::model() const {
 
 void TreeComboBox::initialize() {
     _treeView->setModel(const_cast<TaskModel*>(_model));
+    _treeView->setColumnHidden(1, true);
+    _treeView->setColumnHidden(2, true);
+    _treeView->setColumnHidden(3, true);
+    _treeView->setColumnHidden(4, true);
     setCurrentModelIndex(QModelIndex());
 //    populate(root);
 }

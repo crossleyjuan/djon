@@ -6,6 +6,7 @@
  */
 
 #include "TaskModel.h"
+#include "closedtaskfilter.h"
 #include <QtGui>
 
 TaskModel::TaskModel(MODELTYPE type, const vector<Project*> projects, QObject *parent)
@@ -221,9 +222,16 @@ bool TaskModel::setData(const QModelIndex &index, const QVariant &value, int rol
     // Saves the change
     if (modified) {
         updateTask(tsk);
+        if (!acceptFilter(tsk)) {
+            beginRemoveRows(index.parent(), index.row(), index.row());
+            TaskItem* item = (TaskItem*)index.internalPointer();
+            TaskItem* parentItem = item->parent();
+            parentItem->removeChild(item);
+            endRemoveRows();
+        }
+        emit dataChanged(index, index);
     }
     return modified;
-
 }
 
 void TaskModel::setTrackedTask(Task *task) {
@@ -306,18 +314,39 @@ void TaskModel::timeChanged(Task* task) {
 //    emit dataChanged(timeIndex, timeIndex);
 }
 
-void TaskModel::addFilter(const AbstractTaskFilter* filter) {
-    filters.push_back(filter);
+void TaskModel::addFilter(TASKFILTER_TYPE filterType) {
+    AbstractTaskFilter* filter;
+    switch (filterType) {
+    case CLOSED_FILTER:
+        filter = new ClosedTaskFilter();
+        break;
+    }
+
+    _filters.push_back(filter);
     refreshData();
 }
 
-void TaskModel::removeFilter(const AbstractTaskFilter* filter) {
-    // TO BE IMPLEMENTED
+void TaskModel::removeFilter(TASKFILTER_TYPE filterType) {
+    switch (filterType) {
+    case CLOSED_FILTER:
+        vector<const AbstractTaskFilter*>::iterator iter;
+        for (iter = _filters.begin(); iter != _filters.end(); iter++) {
+            const AbstractTaskFilter* filter = *iter;
+            if (filter->type() == filterType) {
+                break;
+            }
+        }
+        if (iter != _filters.end()) {
+            _filters.erase(iter);
+        }
+        break;
+    }
+    refreshData();
 }
 
 bool TaskModel::acceptFilter(Task *task) {
     bool accepted = true;
-    for (std::vector<const AbstractTaskFilter*>::iterator iter = filters.begin(); iter != filters.end(); iter++) {
+    for (std::vector<const AbstractTaskFilter*>::iterator iter = _filters.begin(); iter != _filters.end(); iter++) {
         const AbstractTaskFilter* filter = *iter;
         accepted = accepted && filter->acceptTask(task);
         if (!accepted) {

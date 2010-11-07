@@ -175,3 +175,7 @@
  void TaskItem::clear() {
      childItems.clear();
  }
+
+ void TaskItem::removeChild(TaskItem *child) {
+     childItems.removeOne(child);
+ }

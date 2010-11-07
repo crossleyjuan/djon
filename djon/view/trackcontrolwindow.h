@@ -19,9 +19,9 @@ class TrackControlWindow : public QWidget
     Q_OBJECT
 
 public:
-    explicit TrackControlWindow(std::vector<Project*>* projects, TimeTracker* timeTracker, QWidget *parent = 0);
+    explicit TrackControlWindow(TimeTracker* timeTracker, QWidget *parent = 0);
     ~TrackControlWindow();
-    void setProjects(std::vector<Project*>* projects);
+    void setModel(TaskModel* model);
 
 public slots:
     void refresh(Task* task);
@@ -37,7 +37,7 @@ protected:
 
 private:
     Ui::TrackControlWindow *ui;
-    std::vector<Project*>* _projects;
+//    std::vector<Project*>* _projects;
     TimeTracker* _timeTracker;
     Task* _currentTask;
     TaskModel* _taskModel;

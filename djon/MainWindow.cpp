@@ -72,11 +72,11 @@ MainWindow::MainWindow() {
     setupActions();
 
     widget.taskView->setColumnWidth(0, 250);
-    widget.taskView->setColumnWidth(1, 20);
+    widget.taskView->setColumnWidth(1, 30);
     widget.taskView->setColumnWidth(2, 70);
     widget.taskView->setColumnWidth(3, 70);
     widget.taskView->setColumnWidth(4, 70);
-    widget.taskView->setMinimumWidth(410);
+    widget.taskView->setMinimumWidth(420);
     widget.taskView->setItemDelegate(new TaskEditorDelegate(this));
 //    _idleDetector = new IdleDetector(5*60);// 5*60
     _idleDetector = new IdleDetector();// 5*60
@@ -93,7 +93,8 @@ MainWindow::MainWindow() {
     connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()));
 
 
-    _trackWindow = new TrackControlWindow(_projects, _timeTracker, NULL);
+    _trackWindow = new TrackControlWindow(_timeTracker, NULL);
+    _trackWindow->setModel(_taskModel);
     _trackWindow->show();
     connect(_timeTracker, SIGNAL(timeChanged(Task*,DTime&,DTime&)), _trackWindow, SLOT(updateCurrentTime()));
     connect(_timeTracker, SIGNAL(trackerStarted(Task*,TaskLog*)), _trackWindow, SLOT(trackerStateChanged(Task*)));
@@ -371,15 +372,9 @@ void MainWindow::reloadTasks() {
     qDebug("MainWindow::reloadTasks()");
     if (_taskModel != NULL) {
         _taskModel->setProjects(*_projects);
-        _trackWindow->setProjects(_projects);
         widget.ganttView->refresh();
     } else {
         _taskModel = new TaskModel(WITH_TIMES, *_projects);
-//        TaskCloseFilterModel* closed = new TaskCloseFilterModel();
-//        closed->setSourceModel(_taskModel);
-//        QTreeView* v = new QTreeView();
-//        v->setModel(closed);
-//        v->show();
         widget.taskView->setModel(_taskModel);
         widget.ganttView->setModel(_taskModel);
 
@@ -784,9 +779,11 @@ void MainWindow::trackerStarted(Task* task, TaskLog* taskLog) {
 }
 
 void MainWindow::filterClosedTasks() {
-    ClosedTaskFilter* filter = new ClosedTaskFilter();
-    _taskModel->addFilter(filter);
-    _filterClosedAction->setChecked(true);
+    if (_filterClosedAction->isChecked()) {
+        _taskModel->addFilter(CLOSED_FILTER);
+    } else {
+        _taskModel->removeFilter(CLOSED_FILTER);
+    }
     widget.taskView->setAnimated(false);
     widget.taskView->expandAll();
     refreshCollapsedState();
