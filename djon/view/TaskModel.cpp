@@ -309,8 +309,8 @@ QModelIndex TaskModel::index(Project* project, Task* task) {
 
 void TaskModel::timeChanged(Task* task) {
 //    QModelIndex taskIndex = index(task->project(), task);
-
-//    QModelIndex timeIndex = index(taskIndex.row(), 1, taskIndex.parent());
+//
+//    QModelIndex timeIndex = index(taskIndex.row(), 3, taskIndex.parent());
 //    emit dataChanged(timeIndex, timeIndex);
 }
 
@@ -354,4 +354,15 @@ bool TaskModel::acceptFilter(Task *task) {
         }
     }
     return accepted;
+}
+
+void TaskModel::removeTask(Task* tsk) {
+    QModelIndex idx = index(tsk->project(), tsk);
+
+    beginRemoveRows(idx.parent(), idx.row(), idx.row());
+
+    TaskItem* item = (TaskItem*)idx.parent().internalPointer();
+    item->removeChild((TaskItem*)idx.internalPointer());
+
+    endRemoveRows();
 }

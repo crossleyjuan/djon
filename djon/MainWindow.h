@@ -37,6 +37,7 @@ private:
     void createCurrentTimeWindow();
     void createTray();
     void setupActions();
+    void setupTemplateMenu(QMenu* menu);
     void reloadProjects();
     void reloadTasks();
     void showErrorMessage(int errorCode, const char* errorMessage, QWidget* parent);
@@ -57,6 +58,7 @@ private:
     CurrentTime* _timeWindow;
     TaskModel* _taskModel;
     UserPreferencesController* _userPreferencesController;
+    QSignalMapper* _templateMapper;
 
     // Actions
     QAction* _recordButton;
@@ -102,6 +104,7 @@ public slots:
     void setActiveTaskLog(Task* task, TaskLog* taskLog);
     void restoreWindowState();
     void trackerStarted(Task* task, TaskLog* taskLog);
+    void applyTemplate(QString templateName);
 
     void settings();
 };

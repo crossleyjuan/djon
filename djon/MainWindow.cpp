@@ -138,6 +138,18 @@ void MainWindow::selectTaskChanged(QModelIndex current, QModelIndex previous) {
     }
 }
 
+void MainWindow::setupTemplateMenu(QMenu* menu) {
+    std::vector<Template*>* templates = readTemplates();
+    _templateMapper = new QSignalMapper(this);
+    connect(_templateMapper, SIGNAL(mapped(QString)), this, SLOT(applyTemplate(QString)));
+    for (std::vector<Template*>::iterator iter = templates->begin(); iter != templates->end(); iter++) {
+        Template* tpl = *iter;
+        QAction* act = menu->addAction(tpl->description()->c_str());
+        _templateMapper->setMapping(act, QString(tpl->name()->c_str()));
+        connect(act, SIGNAL(triggered()), _templateMapper, SLOT(map()));
+    }
+}
+
 void MainWindow::setupActions() {
     qDebug("MainWindow::setupActions()");
     QToolBar* bar = new QToolBar("Options");
@@ -181,9 +193,12 @@ void MainWindow::setupActions() {
     prjMenu->addAction(newTask);
     prjMenu->addAction(editTask);
     prjMenu->addAction(deleteTask);
+    QMenu* applyTemplate = prjMenu->addMenu("Apply Template");
+    setupTemplateMenu(applyTemplate);
     _taskPopUpMenu->addAction(newTask);
     _taskPopUpMenu->addAction(editTask);
     _taskPopUpMenu->addAction(deleteTask);
+    _taskPopUpMenu->addMenu(applyTemplate);
     _taskPopUpMenu->addSeparator();
     _taskPopUpMenu->addAction(newProject);
     _taskPopUpMenu->addAction(editProject);
@@ -272,6 +287,11 @@ void MainWindow::setActiveTask(Task* task) {
         if (_activeTask != NULL) {
             _logWindow->refresh(_activeTask);
         }
+        QModelIndex index = _taskModel->index(_activeProject, _activeTask);
+        if (index.isValid()) {
+            widget.taskView->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
+            _trackWindow->setCurrentTask(_activeTask);
+        }
     }
 }
 
@@ -303,13 +323,17 @@ void MainWindow::createNewTask() {
     } else {
         taskId = QString(_activeProject->nextChildId()->c_str());
     }
-    TaskDialog* dialog = new TaskDialog(_activeProject, new std::string(taskId.toStdString()), this);
+    Project* currentProject = _activeProject;
+    TaskDialog* dialog = new TaskDialog(currentProject, new std::string(taskId.toStdString()), this);
     if (dialog->exec() == QDialog::Accepted) {
         if (errorOcurred()) {
             showErrorMessage(lastErrorCode(), lastErrorDescription(), this);
             return;
         }
-        reloadTasks();
+        Task* createdTask = currentProject->task(taskId.toStdString());
+
+        reloadProjects();
+        setActiveTask(createdTask);
     }
 }
 
@@ -370,6 +394,7 @@ void MainWindow::reloadProjects() {
 
 void MainWindow::reloadTasks() {
     qDebug("MainWindow::reloadTasks()");
+    widget.taskView->setAnimated(false);
     if (_taskModel != NULL) {
         _taskModel->setProjects(*_projects);
         widget.ganttView->refresh();
@@ -392,7 +417,6 @@ void MainWindow::reloadTasks() {
     connect(widget.ganttView->verticalScrollBar(), SIGNAL(valueChanged(int)), widget.taskView->verticalScrollBar(), SLOT(setValue(int)));
     connect(widget.taskView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(selectTaskChanged(QModelIndex,QModelIndex)));
 
-    widget.taskView->setAnimated(false);
     widget.taskView->expandAll();
     refreshCollapsedState();
     widget.taskView->setAnimated(true);
@@ -423,13 +447,14 @@ void MainWindow::deleteTask() {
                 }
             }
 
+            _taskModel->removeTask(_activeTask);
+
             Project* project = _activeTask->project();
             project->removeTask(_activeTask);
             //_taskModel->reset();
 
             _activeTask = NULL;
 
-            reloadTasks();
         }
     }
 }
@@ -609,14 +634,22 @@ void MainWindow::openProject() {
 
 void MainWindow::closeProject() {
     qDebug("MainWindow::closeProject()");
-    string* projectFileName = _activeProject->projectFileName();
-    removeProject(projectFileName->c_str());
-    _projects = loadProjects();
-    if (errorOcurred()) {
-        showErrorMessage(lastErrorDescription(), this);
+    if (_activeProject != NULL) {
+        string* projectFileName = _activeProject->projectFileName();
+        removeProject(projectFileName->c_str());
+        _projects = loadProjects();
+        if (errorOcurred()) {
+            showErrorMessage(lastErrorDescription(), this);
+            return;
+        }
+        reloadProjects();
+    } else {
+        QMessageBox box;
+        box.setText("You don't have an active project, select one project and try again.");
+        box.setWindowTitle("d-jon");
+        box.exec();
         return;
     }
-    reloadProjects();
 }
 
 void MainWindow::collapse(const QModelIndex& index) {
@@ -788,4 +821,20 @@ void MainWindow::filterClosedTasks() {
     widget.taskView->expandAll();
     refreshCollapsedState();
     widget.taskView->setAnimated(true);
+}
+
+void MainWindow::applyTemplate(QString templateName) {
+    qDebug("MainWindow::applyTemplate: %s", templateName.toStdString().c_str());
+
+    Template* tpl = readTemplate(templateName.toStdString());
+    if (_activeTask != NULL) {
+        Task* currentTask = _activeTask;
+        currentTask->setTemplateName(tpl->name());
+        updateTask(currentTask);
+        currentTask->processTemplate();
+        reloadProjects();
+        setActiveTask(currentTask);
+    }
+//    QObject* wid = QObject::sender();
+//    qDebug("pressed: %s", wid->name());
 }

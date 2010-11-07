@@ -51,6 +51,7 @@ public:
     QModelIndex index(Project* project, Task* task);
     void addFilter(TASKFILTER_TYPE filter);
     void removeFilter(TASKFILTER_TYPE filterType);
+    void removeTask(Task* tsk);
 
 public slots:
     void timeChanged(Task* task);
