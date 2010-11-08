@@ -98,7 +98,7 @@ void Settings::load() {
     const char* lastProjectDir = readConfValue("last-project-dir");
     setLastProjectDir(strcpy(lastProjectDir));
     setLastReleaseNotes(std::string(readConfValue("last-release-notes", "")));
-    long idleTimeOut = atoi(readConfValue("idle-timeout"));
+    long idleTimeOut = atoi(readConfValue("idle-timeout", "300"));
     setIdleTimeOut(idleTimeOut);
     const char* cProjects = readConfValue("open-projects", "");
     std::vector<std::string*>* projects = split(std::string(cProjects), ",");

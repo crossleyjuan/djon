@@ -20,6 +20,13 @@
 #include <direct.h>
 #endif
 
+std::string getConfigFileName() {
+    std::string* homeDir = getHomeDir();
+    std::string confFileName = *homeDir + "/.djon/djon.conf";
+    delete (homeDir);
+    return confFileName;
+}
+
 std::string toString(double a) {
     std::stringstream ss;
 
@@ -224,15 +231,13 @@ const char* readValue(std::string cont, std::string key) {
 }
 
 const char* readConfValue(const string& name, const char* def) {
-    std::string* homeDir = getHomeDir();
-    std::string confFileName = *homeDir + "/.djon/djon.conf";
+    std::string confFileName = getConfigFileName();
     char* conf = readFile(const_cast<char*> (confFileName.c_str()));
 
     const char* res = readValue(string(conf), name);
     if (strlen(res) == 0) {
         res = def;
     }
-    delete (homeDir);
     free(conf);
     return res;
 }
@@ -251,15 +256,13 @@ string replaceValue(string cont, string key, string value) {
 }
 
 int writeConfValue(const string& name, const string& value) {
-    std::string* homeDir = getHomeDir();
-    std::string confFileName = *homeDir + "/.djon/djon.conf";
+    std::string confFileName = getConfigFileName();
     std::string conf = std::string(readFile(const_cast<char*> (confFileName.c_str())));
 
     conf = replaceValue(conf, name, value);
 
     int res = writeFile(confFileName, conf, false);
 
-    delete(homeDir);
     return res;
 }
 
@@ -373,4 +376,38 @@ long idleTime() {
 
 #endif
     return idlesecs;
+}
+
+void checkConfigFile() {
+    std::string confFileName = getConfigFileName();
+    if (!existFile(confFileName.c_str())) {
+        std::string* homeDir = getHomeDir();
+        std::string djonDir = *homeDir + "/.djon";
+
+        if (!existDir(djonDir.c_str())) {
+            if (!makedir(djonDir.c_str())) {
+                setLastError(9, "d-jon home directory cannot be created, please check you have permissions to create: %s", djonDir.c_str());
+                return;
+            }
+        }
+        std::string prjDir = djonDir + "/Projects";
+
+        if (!existDir(prjDir.c_str())) {
+            if (!makedir(prjDir.c_str())) {
+                setLastError(7, "Project directory cannot be created, please check you have permissions to create: %s", prjDir.c_str());
+                return;
+            }
+        }
+        std::string tplDir = djonDir + "/templates";
+        if (!existDir(tplDir.c_str())) {
+            if (!makedir(tplDir.c_str())) {
+                setLastError(8, "Templates directory cannot be created, please check you have permissions to create: %s", tplDir.c_str());
+                return;
+            }
+            qDebug("Creating default template");
+            std::string commonTemplate = "template-name: CommonTask*;\ntemplate-description: Common Task;\nstatus: NEW,IN PROGRESS,CLOSED*;\n";
+            writeFile(tplDir + "/CommonTask.pl", commonTemplate, false);
+        }
+        writeConfValue("last-project-dir", prjDir);
+    }
 }

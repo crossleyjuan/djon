@@ -59,6 +59,7 @@ MainWindow::MainWindow() {
     _taskPopUpMenu = NULL;
     _updateManager = NULL;
     _recordButton = NULL;
+
     _userPreferencesController = new UserPreferencesController(_taskModel);
 
     checkReleaseNotes();
@@ -447,10 +448,11 @@ void MainWindow::deleteTask() {
                 }
             }
 
+            Task* tsk = _activeTask;
             _taskModel->removeTask(_activeTask);
 
-            Project* project = _activeTask->project();
-            project->removeTask(_activeTask);
+            Project* project = tsk->project();
+            project->removeTask(tsk);
             //_taskModel->reset();
 
             _activeTask = NULL;

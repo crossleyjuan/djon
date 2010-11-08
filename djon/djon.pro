@@ -10,7 +10,9 @@ DESTDIR = ../libs
 INCLUDEPATH += . \
     data \
     view \
+    ../djon-util \
     ../includes
+
 include(../qtsingleapplication-2.6_1-opensource/src/qtsingleapplication.pri)
 QT += xml \
     webkit

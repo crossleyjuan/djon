@@ -8,9 +8,8 @@
 #include <QtSingleApplication>
 #include <QtGui>
 #include "MainWindow.h"
-#include "data.h"
-#include "TaskModel.h"
 #include "config.h"
+#include "util.h"
 
 int main(int argc, char *argv[]) {
     // initialize resources, if needed
@@ -24,6 +23,12 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 #endif
+    checkConfigFile();
+    if (errorOcurred()) {
+        QMessageBox::critical(NULL, "d-jon", lastErrorDescription(), QMessageBox::Ok, QMessageBox::Cancel);
+        qApp->quit();
+        return 1;
+    }
 
     MainWindow mainWindow;
 

@@ -59,6 +59,7 @@ std::string* getHomeDir();
 std::string* getTempDir();
 hashmap* parseTextFormat(std::string text);
 
+void checkConfigFile();
 const char* readConfValue(const string& name, const char* def = 0);
 int writeConfValue(const string& name, const string& value);
 

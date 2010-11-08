@@ -83,3 +83,25 @@ int getdir (const char* dir, vector<char*> &files, const char* extension)
     return 0;
 }
 
+bool existFile(const char* fileName) {
+    ifstream ifs;
+
+    ifs.open(fileName, ifstream::in);
+
+    bool exists = true;
+    if (ifs.fail()) {
+        exists = false;
+    }
+    ifs.close();
+    return exists;
+}
+
+bool existDir(const char* dir) {
+    DIR *dp;
+    struct dirent *dirp;
+    bool exists = true;
+    if((dp  = opendir(dir)) == NULL) {
+        exists = false;
+    }
+    return exists;
+}
