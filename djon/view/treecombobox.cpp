@@ -76,20 +76,16 @@ void TreeComboBox::on_toolButton_clicked()
     QRect frmGeometry = frameGeometry();
     QWidget* parentWindow = this;
     QPoint pos = this->pos();
-    int x = 0;
-    int y = 0;
-    while (parentWindow != NULL) { // && (
-        x += parentWindow->geometry().x();
-        y += parentWindow->geometry().y();
-        parentWindow = (QWidget*)parentWindow->parentWidget();
-    }
+    pos = this->parentWidget()->mapToGlobal(pos);
+    int posx = pos.x();
+    int posy = pos.y();
     QRect rect;
-    rect.setX(x);
-    y = y + height();
-    if ((y+200) > qApp->desktop()->height()) {
-        y = y - height() - 200;
+    rect.setX(posx);
+    posy = posy + height();
+    if ((posy+200) > qApp->desktop()->height()) {
+        posy = posy - height() - 200;
     }
-    rect.setY(y);
+    rect.setY(posy);
     rect.setHeight(200);
     rect.setWidth(ui->lineEdit->width());
 

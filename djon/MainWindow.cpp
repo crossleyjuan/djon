@@ -103,7 +103,7 @@ MainWindow::MainWindow() {
 
     createTray();
     setLastSelectedTask();
-    restoreSavedWindowState();
+    restoreUserSessionState();
 
     _workingDetector->startDetection();
 
@@ -704,10 +704,10 @@ void MainWindow::setLastSelectedTask() {
 
 void MainWindow::aboutToQuit() {
     _timeTracker->stopRecord();
-    saveWindowState();
+    saveUserSessionState();
 }
 
-void MainWindow::saveWindowState() {
+void MainWindow::saveUserSessionState() {
     int wState = windowState();
     std::stringstream state;
     state << wState << "++";
@@ -737,9 +737,12 @@ void MainWindow::saveWindowState() {
     std::string strackState = trackState.str();
     writePreference("last-track-window-state", strackState);
 
+    std::stringstream ssFilters;
+    ssFilters << _filterClosedAction->isChecked();
+    writePreference("filters", ssFilters.str());
 }
 
-void MainWindow::restoreSavedWindowState() {
+void MainWindow::restoreUserSessionState() {
     std::string state(readPreference("last-window-state", ""));
 
     if (state.length() > 0) {
@@ -778,6 +781,11 @@ void MainWindow::restoreSavedWindowState() {
         _trackWindow->setGeometry(left, top, width, height);
     }
 
+    std::string filters = readPreference("filters", "0");
+    if (filters.compare("1") == 0) {
+        _filterClosedAction->setChecked(true);
+        filterClosedTasks();
+    }
 }
 
 void MainWindow::checkReleaseNotes() {

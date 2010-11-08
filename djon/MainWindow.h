@@ -95,15 +95,15 @@ public slots:
     void collapse(const QModelIndex& index);
     void expand(const QModelIndex& index);
     void aboutToQuit();
-    void saveWindowState();
-    void restoreSavedWindowState();
+    void saveUserSessionState();
+    void restoreUserSessionState();
     void showReleaseNotes();
     void filterClosedTasks();
 
     void setActiveTask(Task* task);
     void setActiveTaskLog(Task* task, TaskLog* taskLog);
-    void restoreWindowState();
     void trackerStarted(Task* task, TaskLog* taskLog);
+    void restoreWindowState();
     void applyTemplate(QString templateName);
 
     void settings();
