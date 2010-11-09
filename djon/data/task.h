@@ -24,7 +24,7 @@ public:
     DateTime* lastLap; //YYYYMMDD.HHMMSS
     std::string* logDescription;
 
-    DTime* totalTime();
+    DTime totalTime() const;
 };
 
 class Task {
@@ -39,9 +39,9 @@ public:
 
     int childCount();
     void setTotalTime(DTime* _totalTime);
-    DTime* totalTime();
-    DTime* totalTimeCurrentWeek();
-    DTime* totalTimeCurrentDay();
+    DTime totalTime() const;
+    DTime totalTimeCurrentWeek() const;
+    DTime totalTimeCurrentDay() const;
 
     void setStatus(std::string* _status);
     std::string* status() const;
@@ -72,7 +72,7 @@ public:
     void addLog(TaskLog* log);
     bool removeLog(TaskLog* log);
     std::vector<TaskLog*>* logs();
-    std::vector<Task*>* subTasks();
+    std::vector<Task*>* subTasks() const;
     std::string* nextChildId();
 
     bool operator==(const Task& task) const;

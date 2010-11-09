@@ -6,6 +6,7 @@
 #include "data.h"
 
 enum ELEMENT_TYPE {
+    BLANK,
     NONE,
     TASK,
     PROJECT,

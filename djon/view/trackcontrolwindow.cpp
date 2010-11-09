@@ -34,10 +34,10 @@ void TrackControlWindow::setModel(TaskModel* model) {
 
 void TrackControlWindow::updateCurrentTime() {
     if (_timeTracker->status() == RUNNING) {
-        ui->timeEdit->setTime(*_timeTracker->trackedTime().toQTime());
+        ui->timeEdit->setTime(_timeTracker->trackedTime().toQTime());
     } else {
         if (_currentTask != NULL) {
-            ui->timeEdit->setTime(*_currentTask->totalTime()->toQTime());
+            ui->timeEdit->setTime(_currentTask->totalTime().toQTime());
         } else {
             ui->timeEdit->setTime(QTime(0, 0, 0, 0));
         }

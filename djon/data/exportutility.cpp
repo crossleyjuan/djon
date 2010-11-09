@@ -24,7 +24,7 @@ void ExportUtility::executeExport(std::string fileName, DateTime* logsFrom, Date
         Project* proj = *iterProj;
         result << "<project ";
         result << "name=\"" << *proj->name() << "\" ";
-        result << "totalTime=\"" << proj->totalTime()->toChar() << "\" ";
+        result << "totalTime=\"" << proj->totalTime().toChar() << "\" ";
 
         DTime totalProjectLogTime;
         stringstream ssTasks;
@@ -40,7 +40,7 @@ void ExportUtility::executeExport(std::string fileName, DateTime* logsFrom, Date
             ssTask << "start=\"" << task->startDate()->toQDateTime()->toString(Qt::ISODate).toStdString() << "\" ";
             ssTask << "end=\"" << task->endDate()->toQDateTime()->toString(Qt::ISODate).toStdString() << "\" ";
             ssTask << "duration=\"" << task->duration().toChar() << "\" ";
-            ssTask << "timelength=\"" << task->totalTime()->toChar() << "\" ";
+            ssTask << "timelength=\"" << task->totalTime().toChar() << "\" ";
 
             stringstream periods;
             vector<TaskLog*>* logs = task->logs();
@@ -65,7 +65,7 @@ void ExportUtility::executeExport(std::string fileName, DateTime* logsFrom, Date
                     periods << "id=\"" << *log->id << "\" ";
                     periods << "start=\"" << log->start->toQDateTime()->toString(Qt::ISODate).toStdString() << "\" ";
                     periods << "finish=\"" << log->end->toQDateTime()->toString(Qt::ISODate).toStdString() << "\" ";
-                    periods << "timelength=\"" << log->totalTime()->toChar() << "\" />\n";
+                    periods << "timelength=\"" << log->totalTime().toChar() << "\" />\n";
                     int logSecs = *log->end - *log->start;
                     totalLogTime.add(logSecs);
                     if (logSecs < 0) {

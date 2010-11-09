@@ -13,11 +13,11 @@ public:
     ~DTime();
 
     long secs() const;
-    QTime* toQTime();
+    QTime toQTime();
     const char* toChar();
 
     void add(long secs);
-    void add(DTime& time);
+    void add(const DTime time);
 
     DTime operator +(const DTime& dtime) const;
     void operator ++(int secs);

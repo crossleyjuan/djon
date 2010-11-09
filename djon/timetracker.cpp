@@ -37,7 +37,7 @@ void TimeTracker::startRecord(Task* task, TaskLog* taskLog, DateTime* startTime)
     }
     _taskLog->start = startTime;
     _status = RUNNING;
-    _totalTaskTimeSecs = task->totalTime()->secs();
+    _totalTaskTimeSecs = task->totalTime().secs();
     _ticksToSaveLog = 0;
     _timer->start(1000);
     emit trackerStarted(_task, _taskLog);
@@ -79,8 +79,8 @@ void TimeTracker::timeOut() {
         updateTaskLog(_task, _taskLog);
         _ticksToSaveLog = 0;
     }
-    DTime totalTime(*_task->totalTime());
-    DTime tm = *_taskLog->totalTime();
+    DTime totalTime(_task->totalTime());
+    DTime tm = _taskLog->totalTime();
     emit timeChanged(this->_task, tm, totalTime);
 }
 

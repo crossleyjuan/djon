@@ -111,9 +111,9 @@ void CurrentTime::setActiveTask(Task* activeTask) {
         description.insert(0, *proj->name() + " / ");
 
         ui->currentTask->setText(QString(description.c_str()));
-        DTime* totalTime = _activeTask->totalTime();
+        DTime totalTime = _activeTask->totalTime();
         DTime tm;
-        ui->totalTime->setText(totalTime->toChar());
+        ui->totalTime->setText(totalTime.toChar());
         ui->currentTime->setText(tm.toChar());
     } else {
         ui->currentTask->setText(tr(""));

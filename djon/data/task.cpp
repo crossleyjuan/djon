@@ -53,70 +53,68 @@ int Task::childCount() {
     return subTasks()->size();
 }
 
-DTime* Task::totalTime() {
+DTime Task::totalTime() const {
     vector<Task*>* child = subTasks();
-    DTime* tm = new DTime();
+    DTime result;
     for (vector<TaskLog*>::iterator iterLog = _logs->begin(); iterLog != _logs->end(); iterLog++) {
         TaskLog* log = *iterLog;
-        tm->add((*log->end) - (*log->start));
+        result.add((*log->end) - (*log->start));
     }
     for (vector<Task*>::iterator iter = child->begin(); iter != child->end(); iter++) {
         Task* sub = *iter;
-        tm->add(*sub->totalTime());
+        result.add(sub->totalTime());
     }
-    return tm;
+    delete(child);
+    return result;
 }
 
-DTime* Task::totalTimeCurrentWeek() {
+DTime Task::totalTimeCurrentWeek() const {
     vector<Task*>* child = subTasks();
     DateTime startDayWeek = DateTime::startDayOfWeek();
     DateTime startDayOfNextWeek = DateTime::startDayOfNextWeek();
+    DTime totalTime;
     if (child->size() == 0) {
-        long totalTime = 0;
         for (vector<TaskLog*>::iterator iterLog = _logs->begin(); iterLog != _logs->end(); iterLog++) {
             TaskLog* log = *iterLog;
             if ((*(log->start) >= startDayWeek) &&
                 (*(log->end) < startDayOfNextWeek)) {
-                totalTime += ((*log->end) - (*log->start));
+                totalTime.add((*log->end) - (*log->start));
             }
         }
-        return new DTime(totalTime);
     } else {
-        DTime* tm = new DTime();
         for (vector<Task*>::iterator iter = child->begin(); iter != child->end(); iter++) {
             Task* sub = *iter;
-            tm->add(*sub->totalTimeCurrentWeek());
+            totalTime.add(sub->totalTimeCurrentWeek());
         }
-        return tm;
     }
-
+    delete (child);
+    return totalTime;
 }
 
-DTime* Task::totalTimeCurrentDay() {
+DTime Task::totalTimeCurrentDay() const {
     vector<Task*>* child = subTasks();
     DateTime today = DateTime::today();
     DateTime tomorrow = today.addDays(1);
+    DTime totalTime;
     if (child->size() == 0) {
-        long totalTime = 0;
         for (vector<TaskLog*>::iterator iterLog = _logs->begin(); iterLog != _logs->end(); iterLog++) {
             TaskLog* log = *iterLog;
             if (*log->start >= today) {
                 if (*log->end < tomorrow) {
-                    totalTime += ((*log->end) - (*log->start));
+                    totalTime.add((*log->end) - (*log->start));
                 } else {
-                    totalTime += ((*log->end) - tomorrow);
+                    totalTime.add((*log->end) - tomorrow);
                 }
             }
         }
-        return new DTime(totalTime);
     } else {
-        DTime* tm = new DTime();
         for (vector<Task*>::iterator iter = child->begin(); iter != child->end(); iter++) {
             Task* sub = *iter;
-            tm->add(*sub->totalTimeCurrentDay());
+            totalTime.add(sub->totalTimeCurrentDay());
         }
-        return tm;
     }
+    delete (child);
+    return totalTime;
 
 }
 void Task::setStatus(std::string* _status) {
@@ -285,7 +283,7 @@ char* Task::toChar() {
     return res;
 }
 
-std::vector<Task*>* Task::subTasks() {
+std::vector<Task*>* Task::subTasks() const {
     return _project->subTasks(id());
 }
 
@@ -366,8 +364,8 @@ void Task::processTemplate() {
     }
 }
 
-DTime* TaskLog::totalTime() {
-    return new DTime(*end - *start);
+DTime TaskLog::totalTime() const {
+    return DTime(*end - *start);
 }
 
 Task* Task::parent() const {

@@ -33,17 +33,17 @@ public:
     void setProjectFileName(string* projectFileName);
 //    int getLastTaskId();
 
-    std::vector<Task*>* tasks();
+    std::vector<Task*>* tasks() const;
     void addTask(Task* task);
-    std::vector<Task*>* subTasks(string* prefix); // prefix should be 1, 2.1, etc.
-    std::vector<Task*>* subTasks(); // return the direct sub tasks
+    std::vector<Task*>* subTasks(string* prefix) const; // prefix should be 1, 2.1, etc.
+    std::vector<Task*>* subTasks() const; // return the direct sub tasks
     int removeTask(Task* task);
 
     DateTime* startDate();
     DateTime* endDate();
-    DTime* totalTime();
-    DTime* totalTimeCurrentWeek();
-    DTime* totalTimeCurrentDay();
+    DTime totalTime() const;
+    DTime totalTimeCurrentWeek() const;
+    DTime totalTimeCurrentDay() const;
 
     Task* task(string id);
     std::string* nextChildId();

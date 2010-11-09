@@ -94,10 +94,10 @@
          }
      case 2:
          if (_type == PROJECT) {
-             return QString(_project->totalTime()->toChar());
+             return QString(_project->totalTime().toChar());
          }
          if (_type == TASK) {
-             return QString(_task->totalTime()->toChar());
+             return QString(_task->totalTime().toChar());
          }
          if (_type == NONE) {
              return itemData.at(column);
@@ -106,16 +106,16 @@
              DTime totalTime;
              for (std::vector<Project*>::const_iterator iter = _allprojects.begin(); iter != _allprojects.end(); iter++) {
                  Project *prj = *iter;
-                 totalTime = totalTime + *prj->totalTime();
+                 totalTime = totalTime + prj->totalTime();
              }
              return QString(totalTime.toChar());
          }
      case 3:
          if (_type == PROJECT) {
-             return QString(_project->totalTimeCurrentWeek()->toChar());
+             return QString(_project->totalTimeCurrentWeek().toChar());
          }
          if (_type == TASK) {
-             return QString(_task->totalTimeCurrentWeek()->toChar());
+             return QString(_task->totalTimeCurrentWeek().toChar());
          }
          if (_type == NONE) {
              return itemData.at(column);
@@ -124,16 +124,16 @@
              DTime totalTime;
              for (vector<Project*>::const_iterator iter = _allprojects.begin(); iter != _allprojects.end(); iter++) {
                  Project* prj = *iter;
-                 totalTime = totalTime + *prj->totalTimeCurrentWeek();
+                 totalTime = totalTime + prj->totalTimeCurrentWeek();
              }
              return QString(totalTime.toChar());
          }
      case 4:
          if (_type == PROJECT) {
-             return QString(_project->totalTimeCurrentDay()->toChar());
+             return QString(_project->totalTimeCurrentDay().toChar());
          }
          if (_type == TASK) {
-             return QString(_task->totalTimeCurrentDay()->toChar());
+             return QString(_task->totalTimeCurrentDay().toChar());
          }
          if (_type == NONE) {
              return itemData.at(column);
@@ -142,7 +142,7 @@
              DTime totalTime;
              for (vector<Project*>::const_iterator iter = _allprojects.begin(); iter != _allprojects.end(); iter++) {
                  Project* prj = *iter;
-                 totalTime = totalTime + *prj->totalTimeCurrentDay();
+                 totalTime = totalTime + prj->totalTimeCurrentDay();
              }
              return QString(totalTime.toChar());
          }

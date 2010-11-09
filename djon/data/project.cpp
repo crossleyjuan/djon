@@ -65,7 +65,7 @@ string* Project::description() {
     return _description;
 }
 
-std::vector<Task*>* Project::tasks() {
+std::vector<Task*>* Project::tasks() const {
     return _tasks;
 }
 
@@ -90,7 +90,7 @@ Task* Project::task(string id) {
 }
 
 // prefix should be 1, 2.1, etc.
-std::vector<Task*>* Project::subTasks(string* prefix) {
+std::vector<Task*>* Project::subTasks(string* prefix) const {
     std::vector<Task*>* res = new std::vector<Task*>();
 
     for (std::vector<Task*>::iterator iterTask = _tasks->begin(); iterTask != _tasks->end(); iterTask++) {
@@ -112,7 +112,7 @@ std::vector<Task*>* Project::subTasks(string* prefix) {
     return res;
 }
 
-std::vector<Task*>* Project::subTasks() {
+std::vector<Task*>* Project::subTasks() const {
     return subTasks(new std::string(""));
 }
 
@@ -144,40 +144,40 @@ DateTime* Project::endDate() {
     return endDate;
 }
 
-DTime* Project::totalTime() {
+DTime Project::totalTime() const {
     vector<Task*>* tasks = _tasks;
-    DTime* result = new DTime();
+    DTime result;
     for (vector<Task*>::iterator iter = tasks->begin(); iter != tasks->end(); iter++) {
         Task* task = *iter;
         if (task->childCount() == 0) {
-            result->add(*task->totalTime());
+            result = result + task->totalTime();
         }
     }
 
     return result;
 }
 
-DTime* Project::totalTimeCurrentWeek() {
+DTime Project::totalTimeCurrentWeek() const {
     vector<Task*>* tasks = _tasks;
 
-    DTime* result = new DTime();
+    DTime result;
     for (vector<Task*>::iterator iter = tasks->begin(); iter != tasks->end(); iter++) {
         Task* task = *iter;
         if (task->childCount() == 0) {
-            result->add(*task->totalTimeCurrentWeek());
+            result.add(task->totalTimeCurrentWeek());
         }
     }
 
     return result;
 }
 
-DTime* Project::totalTimeCurrentDay() {
+DTime Project::totalTimeCurrentDay() const {
     vector<Task*>* tasks = _tasks;
-    DTime* result = new DTime();
+    DTime result;
     for (vector<Task*>::iterator iter = tasks->begin(); iter != tasks->end(); iter++) {
         Task* task = *iter;
         if (task->childCount() == 0) {
-            result->add(*task->totalTimeCurrentDay());
+            result.add(task->totalTimeCurrentDay());
         }
     }
 

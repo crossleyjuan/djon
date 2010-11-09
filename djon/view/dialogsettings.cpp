@@ -15,8 +15,8 @@ DialogSettings::DialogSettings(QWidget *parent) :
 
     long idleTimeout = getSettings()->idleTimeOut();
     DTime t(idleTimeout);
-    QTime* time = t.toQTime();
-    ui->idleTimeOut->setTime(*time);
+    QTime time = t.toQTime();
+    ui->idleTimeOut->setTime(time);
 
     populateLogOrderBy();
     populateCheckUpdate();

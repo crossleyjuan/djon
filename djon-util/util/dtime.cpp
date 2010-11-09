@@ -28,14 +28,14 @@ long DTime::secs() const {
     return _secs;
 }
 
-QTime* DTime::toQTime() {
+QTime DTime::toQTime() {
     int secs = _secs;
 
     int hour = (secs / 3600);
     secs -= (hour * 3600);
     int min = (secs / 60);
     secs -= (min * 60);
-    QTime* res = new QTime(hour, min, secs);
+    QTime res(hour, min, secs);
     return res;
 }
 
@@ -66,7 +66,7 @@ void DTime::add(long secs) {
     _secs += secs;
 }
 
-void DTime::add(DTime& time) {
+void DTime::add(const DTime time) {
     _secs += time.secs();
 }
 

@@ -134,7 +134,8 @@ int TaskModel::rowCount(const QModelIndex &parent) const
     else
         parentItem = static_cast<TaskItem*>(parent.internalPointer());
 
-    return parentItem->childCount();
+    int irows = parentItem->childCount();
+    return irows;
 }
 
 void TaskModel::setupModelData(TaskItem *parent)
