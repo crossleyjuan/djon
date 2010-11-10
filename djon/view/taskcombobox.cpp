@@ -30,6 +30,7 @@ void TaskComboBox::initialize() {
             Task* task = *iterTask;
             insertTask(task, id, indent);
         }
+        delete(tasks);
     }
 }
 

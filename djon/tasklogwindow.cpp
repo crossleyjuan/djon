@@ -45,6 +45,10 @@ void TaskLogWindow::changeEvent(QEvent *e)
 
 void TaskLogWindow::refresh(Task* task) {
     _task = task;
+    TaskLogModel* current = (TaskLogModel*)m_ui->tableView->model();
+    if (current != NULL) {
+        delete(current);
+    }
     TaskLogModel* model = new TaskLogModel(task);
     m_ui->tableView->setModel(model);
     m_ui->tableView->setItemDelegate(new TaskLogDelegate());

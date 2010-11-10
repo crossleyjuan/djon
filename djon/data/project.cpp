@@ -218,6 +218,7 @@ std::string* Project::nextChildId() {
     ss << lastId;
     std::string* res = new std::string(ss.str());
 
+    delete(tasks);
     return res;
 }
 
@@ -243,6 +244,7 @@ int Project::removeTask(Task* task) {
         _tasksMap->erase(iter);
     }
 
+    delete(subTasks);
     if (deleteTask(task) != 0) {
         return 1;
     }

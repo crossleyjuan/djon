@@ -169,6 +169,7 @@ void TaskDelegate::drawTasks(QPainter* p, const QStyleOptionViewItem & option, c
         } else {
             drawGroupBar(p, task->startDate(), task->endDate(), dayWidth, option);
         }
+        delete(subTasks);
     } else {
         // If the project doesn't have tasks the dates will be NULL
         if (project->startDate() && project->endDate()) {

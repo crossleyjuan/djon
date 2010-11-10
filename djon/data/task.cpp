@@ -155,8 +155,9 @@ void Task::setEndDate(DateTime* _endDate) {
 
 DateTime* Task::endDate() {
     vector<Task*>* child = subTasks();
+    DateTime* result;
     if (child->size() == 0) {
-        return _endDate;
+        result = _endDate;
     } else {
         DateTime* endDate = NULL;
         for (vector<Task*>::iterator iter = child->begin(); iter != child->end(); iter++) {
@@ -167,8 +168,10 @@ DateTime* Task::endDate() {
                 endDate = sub->endDate();
             }
         }
-        return endDate;
+        result = endDate;
     }
+    delete(child);
+    return result;
 }
 
 void Task::setStartDate(DateTime* _startDate) {
@@ -177,8 +180,9 @@ void Task::setStartDate(DateTime* _startDate) {
 
 DateTime* Task::startDate() {
     vector<Task*>* child = subTasks();
+    DateTime* result;
     if (child->size() == 0) {
-        return _startDate;
+        result = _startDate;
     } else {
         DateTime* startDate = NULL;
         for (vector<Task*>::iterator iter = child->begin(); iter != child->end(); iter++) {
@@ -189,8 +193,10 @@ DateTime* Task::startDate() {
                 startDate = sub->startDate();
             }
         }
-        return startDate;
+        result = startDate;
     }
+    delete(child);
+    return result;
 }
 
 void Task::setDuration(Duration _duration) {
@@ -307,6 +313,7 @@ string* Task::nextChildId() {
     lastId++;
     ss << *id() << "." << lastId;
 
+    delete(tasks);
     return new string(ss.str());
 }
 
