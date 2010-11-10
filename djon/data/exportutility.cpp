@@ -37,8 +37,8 @@ void ExportUtility::executeExport(std::string fileName, DateTime* logsFrom, Date
             ssTask << "<task ";
             ssTask << "number=\"" << *task->id() << "\" ";
             ssTask << "name=\"" << *task->shortDescription() << "\" ";
-            ssTask << "start=\"" << task->startDate()->toQDateTime()->toString(Qt::ISODate).toStdString() << "\" ";
-            ssTask << "end=\"" << task->endDate()->toQDateTime()->toString(Qt::ISODate).toStdString() << "\" ";
+            ssTask << "start=\"" << task->startDate()->toQDateTime().toString(Qt::ISODate).toStdString() << "\" ";
+            ssTask << "end=\"" << task->endDate()->toQDateTime().toString(Qt::ISODate).toStdString() << "\" ";
             ssTask << "duration=\"" << task->duration().toChar() << "\" ";
             ssTask << "timelength=\"" << task->totalTime().toChar() << "\" ";
 
@@ -63,8 +63,8 @@ void ExportUtility::executeExport(std::string fileName, DateTime* logsFrom, Date
                     includeTask = true;
                     periods << "<period ";
                     periods << "id=\"" << *log->id << "\" ";
-                    periods << "start=\"" << log->start->toQDateTime()->toString(Qt::ISODate).toStdString() << "\" ";
-                    periods << "finish=\"" << log->end->toQDateTime()->toString(Qt::ISODate).toStdString() << "\" ";
+                    periods << "start=\"" << log->start->toQDateTime().toString(Qt::ISODate).toStdString() << "\" ";
+                    periods << "finish=\"" << log->end->toQDateTime().toString(Qt::ISODate).toStdString() << "\" ";
                     periods << "timelength=\"" << log->totalTime().toChar() << "\" />\n";
                     int logSecs = *log->end - *log->start;
                     totalLogTime.add(logSecs);

@@ -41,14 +41,14 @@ void TaskLogDelegate::setEditorData(QWidget *editor,
     case 1: {
             QDateTimeEdit* dedit = static_cast<QDateTimeEdit*>(editor);
             if (log != NULL) {
-                dedit->setDateTime(*log->start->toQDateTime());
+                dedit->setDateTime(log->start->toQDateTime());
             }
             break;
         }
     case 2: {
             QDateTimeEdit* dedit = static_cast<QDateTimeEdit*>(editor);
             if (log != NULL) {
-                dedit->setDateTime(*log->end->toQDateTime());
+                dedit->setDateTime(log->end->toQDateTime());
             }
             break;
         }

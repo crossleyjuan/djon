@@ -309,10 +309,12 @@ QModelIndex TaskModel::index(Project* project, Task* task) {
 }
 
 void TaskModel::timeChanged(Task* task) {
-//    QModelIndex taskIndex = index(task->project(), task);
-//
-//    QModelIndex timeIndex = index(taskIndex.row(), 3, taskIndex.parent());
-//    emit dataChanged(timeIndex, timeIndex);
+    QModelIndex taskIndex = index(task->project(), task);
+
+    QModelIndex timeWeek1 = index(taskIndex.row(), 0, taskIndex.parent());
+    QModelIndex timeWeek2 = index(taskIndex.row(), 2, taskIndex.parent());
+
+    emit dataChanged(timeWeek1, timeWeek2);
 }
 
 void TaskModel::addFilter(TASKFILTER_TYPE filterType) {

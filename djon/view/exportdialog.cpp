@@ -24,10 +24,10 @@ ExportDialog::ExportDialog(std::vector<Project*> projects, QWidget *parent) :
         }
     }
     if (_minDate != NULL) {
-        ui->dteFrom->setDateTime(*_minDate->toQDateTime());
+        ui->dteFrom->setDateTime(_minDate->toQDateTime());
     }
     if (_maxDate != NULL) {
-        ui->dteTo->setDateTime(*_maxDate->toQDateTime());
+        ui->dteTo->setDateTime(_maxDate->toQDateTime());
     }
     connect(this, SIGNAL(accepted()), this, SLOT(on_ExportDialog_accepted()));
 }

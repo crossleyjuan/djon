@@ -29,7 +29,7 @@ public:
     int daysTo(const DateTime& dt) const;
 
     char* toChar() const;
-    QDateTime* toQDateTime() const;
+    QDateTime toQDateTime() const;
     double toDouble() const;
     void setSecs(int _secs);
     int getSecs() const;

@@ -50,7 +50,10 @@ Task::~Task() {
 }
 
 int Task::childCount() {
-    return subTasks()->size();
+    vector<Task*>* tasks = subTasks();
+    int size = tasks->size();
+    delete(tasks);
+    return size;
 }
 
 DTime Task::totalTime() const {

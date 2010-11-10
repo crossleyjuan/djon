@@ -153,10 +153,10 @@ char* DateTime::toChar() const {
     return buffer;
 }
 
-QDateTime* DateTime::toQDateTime() const {
+QDateTime DateTime::toQDateTime() const {
     QDate date(_year, _month, _day);
     QTime tim(_hour, _min, _secs);
-    QDateTime* dateTime = new QDateTime(date, tim);
+    QDateTime dateTime(date, tim);
     return dateTime;
 }
 
@@ -196,7 +196,7 @@ bool DateTime::operator ==(const DateTime& dateTime) const {
 long DateTime::operator -(const DateTime& dateTimeRight) const {
     DateTime left = *this; // Copy this
     DateTime right = dateTimeRight; // copy the argument
-    int secs = right.toQDateTime()->secsTo(*left.toQDateTime());
+    int secs = right.toQDateTime().secsTo(left.toQDateTime());
 
     return secs;
 }
@@ -227,21 +227,18 @@ DateTime DateTime::today() {
 }
 
 DateTime DateTime::addDays(int days) const {
-    QDateTime* date = toQDateTime();
-    QDateTime newDate = date->addDays(days);
+    QDateTime date = toQDateTime();
+    QDateTime newDate = date.addDays(days);
     DateTime dtNew(newDate);
-    delete(date);
+
     return dtNew;
 }
 
 int DateTime::daysTo(const DateTime& dt) const {
-    QDateTime* thisDate = toQDateTime();
-    QDateTime* qdt = dt.toQDateTime();
+    QDateTime thisDate = toQDateTime();
+    QDateTime qdt = dt.toQDateTime();
 
-    int days = thisDate->daysTo(*qdt);
-
-    delete(thisDate);
-    delete(qdt);
+    int days = thisDate.daysTo(qdt);
 
     return days;
 }

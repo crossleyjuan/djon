@@ -39,8 +39,8 @@ TaskDialog::TaskDialog(Project* project, Task* task, QWidget *parent) :
         m_ui->description->setPlainText(QString(task->longDescription()->c_str()));
     }
     m_ui->duration->setDuration(task->duration());
-    m_ui->startDate->setDateTime(*m_task->startDate()->toQDateTime());
-    m_ui->endDate->setDateTime(*m_task->endDate()->toQDateTime());
+    m_ui->startDate->setDateTime(m_task->startDate()->toQDateTime());
+    m_ui->endDate->setDateTime(m_task->endDate()->toQDateTime());
 
     for (int x = 0; x < m_ui->cboTemplate->count(); x++) {
         if (m_task->templateName()->compare(m_ui->cboTemplate->itemText(x).toStdString()) == 0) {

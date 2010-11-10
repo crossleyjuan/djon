@@ -22,7 +22,7 @@ WorkingDetectionWindow::WorkingDetectionWindow(std::vector<Project*>* projects, 
     std::stringstream ssMessage;
 
     ssMessage << "d-jon detected that you have been working since: ";
-    ssMessage << _since->toQDateTime()->toString(tr("hh:mm:ss AP")).toStdString();
+    ssMessage << _since->toQDateTime().toString(tr("hh:mm:ss AP")).toStdString();
     ssMessage << ", what do you want to do with the detected time?";
 
     std::string mess = ssMessage.str();

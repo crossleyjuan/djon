@@ -88,7 +88,7 @@ MainWindow::MainWindow() {
 
     _timeTracker = new TimeTracker();
     connect(_timeTracker, SIGNAL(timeChanged(Task*, DTime&, DTime&)), _timeWindow, SLOT(updateTime(Task*, DTime&, DTime&)));
-    //connect(_timeTracker, SIGNAL(timeChanged(Task*, DTime&, DTime&)), _taskModel, SLOT(timeChanged(Task*)));
+    connect(_timeTracker, SIGNAL(timeChanged(Task*, DTime&, DTime&)), _taskModel, SLOT(timeChanged(Task*)));
     connect(_timeTracker, SIGNAL(timeStopped(Task*,TaskLog*)), this, SLOT(timeStopped(Task*, TaskLog*)));
     connect(_timeTracker, SIGNAL(trackerStarted(Task*,TaskLog*)), this, SLOT(trackerStarted(Task*,TaskLog*)));
     connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()));

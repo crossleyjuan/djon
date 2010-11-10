@@ -25,7 +25,7 @@ void TaskHeaderView::paintSection ( QPainter * painter, const QRect & rect, int 
     int columnSize = textSize + margin;
     const int HEADER_HEIGHT = 21;
 
-    QDateTime startDate = *_startDate->toQDateTime();
+    QDateTime startDate = _startDate->toQDateTime();
     int days = 1;//startDate.daysTo(*_endDate->toQDateTime()) / cols;
 
     p->setFont(QFont("Arial", 9));
@@ -85,7 +85,7 @@ void TaskHeaderView::refresh() {
     _startDate = startDate;
     _endDate = endDate;
     if (_startDate && _endDate) {
-        int days = startDate->toQDateTime()->daysTo(*endDate->toQDateTime());
+        int days = startDate->toQDateTime().daysTo(endDate->toQDateTime());
         setDefaultSectionSize( (days+2) * 45);
     }
 }

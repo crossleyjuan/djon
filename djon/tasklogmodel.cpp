@@ -43,9 +43,9 @@ QVariant TaskLogModel::data(const QModelIndex &index, int role) const {
                 return QString();
             }
         } else if (index.column() == 1) {
-            return *log->start->toQDateTime();
+            return log->start->toQDateTime();
         } else if (index.column() == 2) {
-            return *log->end->toQDateTime();
+            return log->end->toQDateTime();
         } else if (index.column() == 3) {
             return QString(DTime(*log->end - *log->start).toChar());
         }

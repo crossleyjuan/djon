@@ -115,16 +115,16 @@ void TaskDelegate::drawTaskBar(QPainter *p, DateTime* barStartDate, DateTime* ba
 }
 
 void TaskDelegate::drawGroupBar(QPainter *p, DateTime* barStartDate, DateTime* barEndDate, int dayWidth, const QStyleOptionViewItem & option) const {
-    QDateTime* startDate = barStartDate->toQDateTime();
-    QDateTime* endDate = barEndDate->toQDateTime();
-    int days = startDate->daysTo(*endDate) + 1;
+    QDateTime startDate = barStartDate->toQDateTime();
+    QDateTime endDate = barEndDate->toQDateTime();
+    int days = startDate.daysTo(endDate) + 1;
 
     p->setPen(QPen(QColor("black")));
     p->setBrush(QBrush(QColor("black")));
 
     int height = 3;
 
-    int daysToStart = _startDate->daysTo(startDate->date());
+    int daysToStart = _startDate->daysTo(startDate.date());
     int x1 = daysToStart*dayWidth;
     int y1 = option.rect.height() - height -5;
 
