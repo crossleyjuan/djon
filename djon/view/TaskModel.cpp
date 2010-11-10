@@ -70,7 +70,7 @@ QVariant TaskModel::data(const QModelIndex &index, int role) const
 
 Qt::ItemFlags TaskModel::flags(const QModelIndex &index) const
 {
-    Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
+    Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable;// | Qt::ItemIsEditable;
     if (index.column() == 1) {
         flags = flags | Qt::ItemIsUserCheckable;
     }
