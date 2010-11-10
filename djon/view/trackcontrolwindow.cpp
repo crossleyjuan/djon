@@ -5,6 +5,7 @@
 #include "timetracker.h"
 #include "settings.h"
 #include <QMouseEvent>
+#include <QDesktopWidget>
 
 TrackControlWindow::TrackControlWindow(TimeTracker* timeTracker, QWidget *parent) :
         QWidget(parent),
@@ -137,4 +138,18 @@ bool TrackControlWindow::eventFilter(QObject *obj, QEvent *evt) {
 
 void TrackControlWindow::refreshSettings() {
     this->setWindowOpacity((double)getSettings()->transparency() / (double)100);
+}
+
+void TrackControlWindow::showIn(TRACK_POSITION position) {
+    switch (position) {
+    case BOTTOM_RIGHT_CORNER:
+        int x1 = qApp->desktop()->width() - this->width();
+        int y1 = qApp->desktop()->height() - this->height() - 30; // taskbar size
+        QRect rect = geometry();
+        rect.setX(x1);
+        rect.setY(y1);
+        rect.setWidth(geometry().width());
+        rect.setHeight(geometry().height());
+        this->setGeometry(rect);
+    }
 }

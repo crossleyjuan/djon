@@ -779,6 +779,8 @@ void MainWindow::restoreUserSessionState() {
         int width = atoi(values->at(2)->c_str());
         int height = atoi(values->at(3)->c_str());
         _trackWindow->setGeometry(left, top, width, height);
+    } else {
+        _trackWindow->showIn(BOTTOM_RIGHT_CORNER);
     }
 
     std::string filters = readPreference("filters", "0");

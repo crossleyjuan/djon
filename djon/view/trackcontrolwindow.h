@@ -14,6 +14,10 @@ namespace Ui {
     class TrackControlWindow;
 }
 
+enum TRACK_POSITION {
+    BOTTOM_RIGHT_CORNER
+};
+
 class TrackControlWindow : public QWidget
 {
     Q_OBJECT
@@ -22,6 +26,7 @@ public:
     explicit TrackControlWindow(TimeTracker* timeTracker, QWidget *parent = 0);
     ~TrackControlWindow();
     void setModel(TaskModel* model);
+    void showIn(TRACK_POSITION position);
 
 public slots:
     void refresh(Task* task);
