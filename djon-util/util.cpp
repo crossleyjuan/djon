@@ -456,7 +456,7 @@ void checkConfigFile() {
             }
             qDebug("Creating default template");
             std::string commonTemplate = "template-name: CommonTask*;\ntemplate-description: Common Task;\nstatus: NEW,IN PROGRESS,CLOSED*;\n";
-            writeFile(tplDir + "/CommonTask.pl", commonTemplate, false);
+            writeFile(tplDir + "/CommonTask.tpl", commonTemplate, false);
         }
         writeConfValue("last-project-dir", prjDir);
     }
