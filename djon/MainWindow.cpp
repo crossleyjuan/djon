@@ -212,7 +212,7 @@ void MainWindow::setupActions() {
     prjMenu->addSeparator();
     QAction* quit = prjMenu->addAction(QIcon(":/img/exit.png"), tr("Quit"));
 
-    _filterClosedAction = prjView->addAction(QIcon(":/img/filter-closed.png"), "Only show &open tasks");
+    _filterClosedAction = prjView->addAction("Only show &open tasks");
     _filterClosedAction->setCheckable(true);
 
     QAction* settings = optMenu->addAction(QIcon(":/img/settings.png"), tr("Settings"));

@@ -101,8 +101,10 @@ bool TreeComboBox::eventFilter(QObject *obj, QEvent *event) {
     if (obj == _treeView) {
         if (event->type() == QEvent::FocusOut) {
             _treeView->hide();
+            return true;
         }
     }
+    return QObject::eventFilter(obj, event);
 }
 
 bool TreeComboBox::isReadOnly() {
