@@ -7,6 +7,7 @@ TARGET = djon-util
 TEMPLATE = lib
 
 linux-g++:LIBS += -lXss
+LIBS += -L/usr/X11R6/lib -lXss -lX11 -framework IOKit -framework Carbon
 
 DESTDIR = ../libs
 DEFINES += DJONUTIL_LIBRARY
