@@ -157,14 +157,42 @@ void GanttScene::createBackground() {
     QBrush brush(QColor("white"));
     QPen pen(QColor("white"));
     // Background color
-    this->addRect(0, 0, _viewSizeWidth, _viewSizeHeight, pen, brush);
+    QList<QGraphicsView*> views = this->views();
+    int maxWidth;
+    int maxHeight;
+    for (QList<QGraphicsView*>::iterator iter = views.begin(); iter != views.end(); iter++) {
+        QGraphicsView* view = *iter;
+        int viewHeight = view->height();
+        int viewWidth = view->width();
+        if (viewHeight > maxHeight) {
+            maxHeight = viewHeight;
+        }
+        if (viewWidth > maxWidth) {
+            maxWidth = viewWidth;
+        }
+    }
+    if (_viewSizeHeight > maxHeight) {
+        maxHeight = _viewSizeHeight;
+    }
+    if (_viewSizeWidth > maxWidth) {
+        maxWidth = _viewSizeWidth;
+    }
+    _viewSizeHeight = maxHeight;
+    _viewSizeWidth = maxWidth;
+
+    this->addRect(0, 0, maxWidth, maxHeight, pen, brush);
 
     //    int columnSize = geometry().width() / NU_COLS;
     int textSize = 30;
     int margin = 15;
     int cols = _totalDays;
+
     int columnSize = textSize + margin;
 
+    if ((cols * columnSize) < maxWidth) {
+        cols = (maxWidth / columnSize) + 10;
+        _totalDays = cols;
+    }
     DateTime startDate = this->_startDate;
     DateTime today;
     today.setHour(0);
@@ -181,7 +209,7 @@ void GanttScene::createBackground() {
         QPen penBar(barcolor);
         int left = (x*columnSize) + 0;
         int top = 0;
-        int heigth = _viewSizeHeight;
+        int heigth = maxHeight;
         addRect(left, top, columnSize, heigth, penBar, brushBar);
 
         QPen pen(QColor(200, 200, 200));
@@ -222,7 +250,8 @@ void GanttScene::calcZoom() {
     for (int x = 0; x < projCount; x++) {
         QModelIndex pIndex = _model->index(x, 0, summaryIndex);
         Project* proj = _model->project(pIndex);
-        if (pIndex.isValid()) {
+
+        if ((proj != NULL) && pIndex.isValid()) {
             DateTime* pStart = proj->startDate();
             if (pStart != NULL) {
                 DateTime* pEnd = proj->endDate();

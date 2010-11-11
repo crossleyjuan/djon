@@ -20,6 +20,7 @@ public:
     TaskItem(Project* project, Task* task, TaskItem *parent = 0);
     TaskItem(Project* project, TaskItem *parent = 0);
     TaskItem(std::vector<Project*> projects, TaskItem *parent = 0);
+    TaskItem(TaskItem *parent = 0);
     ~TaskItem();
 
     void appendChild(TaskItem *child);
@@ -34,6 +35,7 @@ public:
     TaskItem *parent();
     Task* task();
     Project* project();
+    ELEMENT_TYPE type();
 
 private:
     QList<TaskItem*> childItems;

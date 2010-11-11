@@ -16,6 +16,13 @@
     _type = SUMMARY;
  }
 
+ TaskItem::TaskItem(TaskItem *parent) {
+     parentItem = parent;
+     _task = NULL;
+    _project = NULL;
+    _type = BLANK;
+ }
+
  TaskItem::TaskItem(const QList<QVariant> &data, TaskItem *parent) {
      parentItem = parent;
      itemData = data;
@@ -58,6 +65,9 @@
 
  QVariant TaskItem::data(int column, int role) const
  {
+     if (_type == BLANK) {
+         return QVariant();
+     }
      if (column == 1) {
          if (role == Qt::DisplayRole) {
              return QVariant();
@@ -178,4 +188,8 @@
 
  void TaskItem::removeChild(TaskItem *child) {
      childItems.removeOne(child);
+ }
+
+ ELEMENT_TYPE TaskItem::type() {
+     return _type;
  }

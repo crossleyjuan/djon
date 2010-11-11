@@ -70,6 +70,10 @@ QVariant TaskModel::data(const QModelIndex &index, int role) const
 
 Qt::ItemFlags TaskModel::flags(const QModelIndex &index) const
 {
+    TaskItem* item = (TaskItem*)index.internalPointer();
+    if (item->type() == BLANK) {
+        return Qt::ItemIsEnabled;
+    }
     Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable;// | Qt::ItemIsEditable;
     if (index.column() == 1) {
         flags = flags | Qt::ItemIsUserCheckable;
@@ -143,6 +147,7 @@ void TaskModel::setupModelData(TaskItem *parent)
     parent->clear();
     QHash<QString, TaskItem*> hash;
 
+    int minRows = 30;
     Task* lastTask = NULL;
     for (vector<Project*>::iterator iter = _projects.begin(); iter != _projects.end(); iter++) {
         Project* project = *iter;
@@ -151,6 +156,7 @@ void TaskModel::setupModelData(TaskItem *parent)
         TaskItem* projectItem = new TaskItem(project, parent);
         hash[QString(project->name()->c_str())] = projectItem;
         parent->appendChild(projectItem);
+        minRows--;
 
         for (vector<Task*>::iterator iterTask = tasks->begin(); iterTask != tasks->end(); iterTask++) {
             Task* task = *iterTask;
@@ -175,9 +181,15 @@ void TaskModel::setupModelData(TaskItem *parent)
             // Append a new item to the current parent's list of children.
             TaskItem* item = new TaskItem(project, task, root);
             root->appendChild(item);
+            minRows--;
             hash[taskId] = item;
             lastTask = task;
         }
+    }
+    parent = parent->parent();
+    for (int x = 0; x < minRows; x++) {
+        TaskItem* blank = new TaskItem(parent);
+        parent->appendChild(blank);
     }
     if (lastTask != NULL) {
         QModelIndex lastIndex = index(lastTask->project(), lastTask);

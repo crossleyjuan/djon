@@ -507,6 +507,10 @@ void MainWindow::createTray() {
 
 void MainWindow::taskContextMenuRequested(QPoint pos) {
     qDebug("MainWindow::taskContextMenuRequested");
+//    QModelIndex index = widget.taskView->indexAt(pos);
+//    Task* task = _taskModel->task(index);
+//    Project* project = _taskModel->project(index);
+//
     _taskPopUpMenu->popup(QCursor::pos());
 }
 
