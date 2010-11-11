@@ -137,7 +137,12 @@ bool TrackControlWindow::eventFilter(QObject *obj, QEvent *evt) {
 }
 
 void TrackControlWindow::refreshSettings() {
-    this->setWindowOpacity((double)getSettings()->transparency() / (double)100);
+    if (getSettings()->transparency() == 0) {
+        hide();
+    } else {
+        this->setWindowOpacity((double)getSettings()->transparency() / (double)100);
+        show();
+    }
 }
 
 void TrackControlWindow::showIn(TRACK_POSITION position) {

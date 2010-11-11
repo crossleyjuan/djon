@@ -158,8 +158,8 @@ void GanttScene::createBackground() {
     QPen pen(QColor("white"));
     // Background color
     QList<QGraphicsView*> views = this->views();
-    int maxWidth;
-    int maxHeight;
+    int maxWidth = 0;
+    int maxHeight = 0;
     for (QList<QGraphicsView*>::iterator iter = views.begin(); iter != views.end(); iter++) {
         QGraphicsView* view = *iter;
         int viewHeight = view->height();

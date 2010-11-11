@@ -62,18 +62,8 @@ Section "djon (required)"
   
   ; Put file there
   File "djon.exe"
-  ; File "djon.nsi"
   File "djon-util.dll"
   File "updater.exe"
-  File "libgcc_s_dw2-1.dll"
-  File "mingwm10.dll"
-  File "QtCore4.dll"
-  File "QtGui4.dll"
-  File "QtXml4.dll"
-  File "QtNetwork4.dll"
-  File "QtWebKit4.dll"
-  File "QtXmlPatterns4.dll"
-  File "phonon4.dll"
   
   ; if the conf file exists, remove it and replace with the new one
 ;  Delete $PROFILE\.djon\djon.conf
