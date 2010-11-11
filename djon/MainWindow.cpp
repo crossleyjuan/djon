@@ -553,8 +553,8 @@ void MainWindow::importProjects() {
     QString selectedFileName = QFileDialog::getOpenFileName(this, tr("Import Projects"), tr(""), tr("XML Files (*.xml)"));
     if (selectedFileName.size() > 0){
         Template* tem = readTemplates()->at(0);
-        string* status = tem->statusList()->at(0);
-        vector<Project*>* imported = import(tem, status, new string(selectedFileName.toStdString()), ALLNETIC_FILE);
+        string status = tem->statusList().at(0);
+        vector<Project*>* imported = import(tem, &status, new string(selectedFileName.toStdString()), ALLNETIC_FILE);
 
         if (imported) {
             for (vector<Project*>::iterator iter = imported->begin(); iter != imported->end(); iter++) {
@@ -750,25 +750,25 @@ void MainWindow::restoreUserSessionState() {
     std::string state(readPreference("last-window-state", ""));
 
     if (state.length() > 0) {
-        std::vector<string*>* values = split(state, "++");
-        Qt::WindowState wState = static_cast<Qt::WindowState>(atoi(values->at(0)->c_str()));
+        std::vector<string> values = split(state, "++");
+        Qt::WindowState wState = static_cast<Qt::WindowState>(atoi(values.at(0).c_str()));
         setWindowState(wState);
-        string* visible = new string("1");
+        string visible = "1";
         if (windowState() != Qt::WindowMaximized) {
-            int left = atoi(values->at(1)->c_str());
-            int top = atoi(values->at(2)->c_str());
-            int width = atoi(values->at(3)->c_str());
-            int height = atoi(values->at(4)->c_str());
+            int left = atoi(values.at(1).c_str());
+            int top = atoi(values.at(2).c_str());
+            int width = atoi(values.at(3).c_str());
+            int height = atoi(values.at(4).c_str());
             setGeometry(left, top, width, height);
-            if (values->size() > 5) {
-                visible = values->at(5);
+            if (values.size() > 5) {
+                visible = values.at(5);
             }
         } else {
-            if (values->size() > 1) {
-                visible = values->at(1);
+            if (values.size() > 1) {
+                visible = values.at(1);
             }
         }
-        if (visible->compare("0")) {
+        if (visible.compare("0")) {
             hide();
         }
     } else {
@@ -777,11 +777,11 @@ void MainWindow::restoreUserSessionState() {
 
     std::string trackState(readPreference("last-track-window-state", ""));
     if (trackState.length() > 0) {
-        std::vector<string*>* values = split(trackState, "++");
-        int left = atoi(values->at(0)->c_str());
-        int top = atoi(values->at(1)->c_str());
-        int width = atoi(values->at(2)->c_str());
-        int height = atoi(values->at(3)->c_str());
+        std::vector<string> values = split(trackState, "++");
+        int left = atoi(values.at(0).c_str());
+        int top = atoi(values.at(1).c_str());
+        int width = atoi(values.at(2).c_str());
+        int height = atoi(values.at(3).c_str());
         _trackWindow->setGeometry(left, top, width, height);
     } else {
         _trackWindow->showIn(BOTTOM_RIGHT_CORNER);
@@ -796,7 +796,16 @@ void MainWindow::restoreUserSessionState() {
 
 void MainWindow::checkReleaseNotes() {
     std::string relVersion = getSettings()->lastReleaseNotes();
-    if ((relVersion.length() == 0) || (relVersion.compare(VERSION) != 0)) {
+    bool show = true;
+    if (relVersion.length() != 0) {
+        Version lastRelease = getVersion(relVersion.c_str());
+        Version currentVersion = getCurrentVersion();
+        if (lastRelease == currentVersion) {
+            show = false;
+        }
+    }
+
+    if (show) {
         showReleaseNotes();
         getSettings()->setLastReleaseNotes(string(VERSION));
         getSettings()->save();

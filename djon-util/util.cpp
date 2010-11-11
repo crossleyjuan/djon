@@ -125,18 +125,18 @@ bool endsWith(const char* text, const char* end) {
     return true;
 }
 
-std::vector<string*>* split(const string str, string token) {
+std::vector<string> split(const string str, string token) {
 //    char* s = (char*) malloc(str.size());
     const char* delim = token.c_str();
 
     //strcpy(s, str.c_str());
     char* s = strcpy((char*)str.c_str());
 
-    vector<string*>* res = new vector<string*>();
+    vector<string> res;
     char* ptr;
     ptr = strtok(s, delim);
     while (ptr != NULL) {
-        res->push_back(new string(ptr));
+        res.push_back(string(ptr));
         ptr = strtok(NULL, delim);
     }
 
@@ -460,4 +460,12 @@ void checkConfigFile() {
         }
         writeConfValue("last-project-dir", prjDir);
     }
+}
+
+Version getCurrentVersion() {
+    return getVersion(VERSION);
+}
+
+Version getVersion(const char* version) {
+    return Version(std::string(version));
 }

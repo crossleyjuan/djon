@@ -101,11 +101,11 @@ void Settings::load() {
     long idleTimeOut = atoi(readConfValue("idle-timeout", "300"));
     setIdleTimeOut(idleTimeOut);
     const char* cProjects = readConfValue("open-projects", "");
-    std::vector<std::string*>* projects = split(std::string(cProjects), ",");
+    std::vector<std::string> projects = split(std::string(cProjects), ",");
     std::vector<std::string> openProjects;
-    for (std::vector<std::string*>::iterator iter = projects->begin(); iter != projects->end(); iter++) {
-        string* prj = *iter;
-        openProjects.push_back(*prj);
+    for (std::vector<std::string>::iterator iter = projects.begin(); iter != projects.end(); iter++) {
+        string prj = *iter;
+        openProjects.push_back(prj);
     }
     setOpenProjects(openProjects);
 

@@ -162,8 +162,8 @@ vector<Template*>* readTemplates() {
             string statusList = READ_ELEMENT(conf, "status");
             string subTaskList = READ_ELEMENT(conf, "subtasks");
 
-            vector<string*>* vecStatus = split(statusList, ",");
-            vector<string*>* vecSubTaskList = split(subTaskList, ",");
+            vector<string> vecStatus = split(statusList, ",");
+            vector<string> vecSubTaskList = split(subTaskList, ",");
 
             Template* tpl = new Template(templateName, templateDescription, vecStatus, vecSubTaskList);
             if ((*templateName)[templateName->length() - 1] == '*') {

@@ -13,6 +13,7 @@
 #include "util/fileutil.h"
 #include "util/stringfunctions.h"
 #include "util/errorHandle.h"
+#include "util/version.h"
 
 #include <string>
 #include <QtCore/QDate>
@@ -33,7 +34,7 @@ String functions
 std::string toString(double a);
 std::string toString(double a, int fixedPrecision);
 std::string toString(int a);
-std::vector<string*>* split(string str, string token);
+std::vector<string> split(string str, string token);
 long countChar(const char* s, const char c);
 /*****************************************************************/
 
@@ -65,6 +66,9 @@ int writeConfValue(const string& name, const string& value);
 
 int writePreference(const std::string& key, const std::string& value);
 const char* readPreference(const std::string& key, const char* def);
+
+Version getCurrentVersion();
+Version getVersion(const char* version);
 
 /***********************************************************************
 * Memory functions

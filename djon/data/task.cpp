@@ -263,7 +263,7 @@ Task::Task(Project* project, const std::string taskDef) {
     if (tpl == NULL) {
         qDebug("Warning: The task with id: %s contains an invalid template: %s", _id->c_str(), _templateName->c_str());
         _templateName = defaultTemplate()->name();
-        _status = *defaultTemplate()->statusList()->begin();
+        _status = new string(*defaultTemplate()->statusList().begin());
     }
 
     delete(values);
@@ -344,10 +344,10 @@ bool Task::operator==(const Task& task) const {
 
 void Task::processTemplate() {
     Template* temp = readTemplate(*_templateName);
-    std::vector<string*>* subtasks = temp->subTaskList();
+    std::vector<string> subtasks = temp->subTaskList();
     int subId = 1;
-    for (std::vector<string*>::iterator iterSub = subtasks->begin(); iterSub != subtasks->end(); iterSub++) {
-        string subtask = **iterSub;
+    for (std::vector<string>::iterator iterSub = subtasks.begin(); iterSub != subtasks.end(); iterSub++) {
+        string subtask = *iterSub;
         int posPar = subtask.find('(');
         int posFin = subtask.find(')');
 

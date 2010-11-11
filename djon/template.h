@@ -10,19 +10,19 @@ class Template
 private:
     std::string* _name;
     std::string* _description;
-    std::vector<string*>* _statusList;
+    std::vector<string> _statusList;
     std::string* _closedStatus;
-    std::vector<string*>* _subTaskList;
+    std::vector<string> _subTaskList;
     bool _default;
 
 public:
-    Template(std::string* name, std::string* description, std::vector<string*>* statusList, std::vector<string*>* subTaskList);
+    Template(std::string* name, std::string* description, std::vector<string> statusList, std::vector<string> subTaskList);
 
     std::string* name();
     std::string* description();
     std::string* closedStatus();
-    std::vector<string*>* statusList();
-    std::vector<string*>* subTaskList();
+    std::vector<string> statusList();
+    std::vector<string> subTaskList();
     bool isDefault() const;
 };
 

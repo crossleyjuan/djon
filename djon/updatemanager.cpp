@@ -170,9 +170,12 @@ void UpdateManager::processNextStep() {
 }
 
 void UpdateManager::checkVersion() {
-    char* version = readFile(const_cast<char*>(std::string(*getTempDir() + "/version.conf").c_str()));
+    char* cwebLastVersion = readFile(const_cast<char*>(std::string(*getTempDir() + "/version.conf").c_str()));
 
-    if (QString(version).trimmed().compare(QString(VERSION)) != 0) {
+    Version webVersion = getVersion(cwebLastVersion);
+    Version currentVersion = getCurrentVersion();
+
+    if (webVersion > currentVersion) {
         _isLastVersion = false;
     } else {
         _isLastVersion = true;

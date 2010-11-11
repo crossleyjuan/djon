@@ -51,6 +51,18 @@ QVariant TaskModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
+    if (role == Qt::FontRole) {
+        Project* prj = project(index);
+        Task* tsk = task(index);
+        if ((prj == NULL) && (tsk == NULL)) {
+            return QFont("Segoe UI", 10, QFont::Bold);
+        } else if (tsk == NULL) {
+            return QFont("Segoe UI", 9, QFont::Bold);
+        } else {
+            return QVariant();
+        }
+    }
+
     if (role == Qt::TextAlignmentRole) {
         if (index.column() > 0) {
             return Qt::AlignRight;
@@ -147,7 +159,7 @@ void TaskModel::setupModelData(TaskItem *parent)
     parent->clear();
     QHash<QString, TaskItem*> hash;
 
-    int minRows = 30;
+//    int minRows = 30;
     Task* lastTask = NULL;
     for (vector<Project*>::iterator iter = _projects.begin(); iter != _projects.end(); iter++) {
         Project* project = *iter;
@@ -156,7 +168,7 @@ void TaskModel::setupModelData(TaskItem *parent)
         TaskItem* projectItem = new TaskItem(project, parent);
         hash[QString(project->name()->c_str())] = projectItem;
         parent->appendChild(projectItem);
-        minRows--;
+//        minRows--;
 
         for (vector<Task*>::iterator iterTask = tasks->begin(); iterTask != tasks->end(); iterTask++) {
             Task* task = *iterTask;
@@ -181,16 +193,16 @@ void TaskModel::setupModelData(TaskItem *parent)
             // Append a new item to the current parent's list of children.
             TaskItem* item = new TaskItem(project, task, root);
             root->appendChild(item);
-            minRows--;
+//            minRows--;
             hash[taskId] = item;
             lastTask = task;
         }
     }
-    parent = parent->parent();
-    for (int x = 0; x < minRows; x++) {
-        TaskItem* blank = new TaskItem(parent);
-        parent->appendChild(blank);
-    }
+//    parent = parent->parent();
+//    for (int x = 0; x < minRows; x++) {
+//        TaskItem* blank = new TaskItem(parent);
+//        parent->appendChild(blank);
+//    }
     if (lastTask != NULL) {
         QModelIndex lastIndex = index(lastTask->project(), lastTask);
         emit this->dataChanged(QModelIndex(), lastIndex);

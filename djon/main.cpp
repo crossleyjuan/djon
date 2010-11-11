@@ -23,10 +23,10 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 #endif
-    QPixmap pixmap(":/img/splash.png");
-    QSplashScreen splash(pixmap);
-    splash.show();
-    app.processEvents();
+//    QPixmap pixmap(":/img/splash.png");
+//    QSplashScreen splash(pixmap);
+//    splash.show();
+//    app.processEvents();
     checkConfigFile();
     if (errorOcurred()) {
         QMessageBox::critical(NULL, "d-jon", lastErrorDescription(), QMessageBox::Ok, QMessageBox::Cancel);
@@ -40,10 +40,10 @@ int main(int argc, char *argv[]) {
 
     mainWindow.show();
 
-    qApp->processEvents();
+//    qApp->processEvents();
 
-    splash.showMessage("Loading...");
+//    splash.showMessage("Loading...");
 
-    splash.finish(&mainWindow);
+//    splash.finish(&mainWindow);
     return app.exec();
 }

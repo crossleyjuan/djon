@@ -81,10 +81,10 @@ void TaskDialog::populateTemplate() {
 void TaskDialog::populateStatus() {
     m_ui->status->clear();
     Template* tpl = (Template*)m_templates->at(m_ui->cboTemplate->currentIndex());
-    vector<string*>* statusList = tpl->statusList();
-    for (vector<string*>::iterator iter = statusList->begin(); iter != statusList->end(); iter++) {
-        string* status = *iter;
-        m_ui->status->addItem(QString(status->c_str()).trimmed());
+    vector<string> statusList = tpl->statusList();
+    for (vector<string>::iterator iter = statusList.begin(); iter != statusList.end(); iter++) {
+        string status = *iter;
+        m_ui->status->addItem(QString(status.c_str()).trimmed());
     }
 
 }

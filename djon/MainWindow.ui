@@ -43,9 +43,6 @@
        <property name="autoExpandDelay">
         <number>-1</number>
        </property>
-       <property name="indentation">
-        <number>10</number>
-       </property>
       </widget>
       <widget class="GanttView" name="ganttView" native="true"/>
      </widget>
