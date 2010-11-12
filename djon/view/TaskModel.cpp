@@ -54,10 +54,15 @@ QVariant TaskModel::data(const QModelIndex &index, int role) const
     if (role == Qt::FontRole) {
         Project* prj = project(index);
         Task* tsk = task(index);
+        QFont defaultFont;
         if ((prj == NULL) && (tsk == NULL)) {
-            return QFont("Segoe UI", 10, QFont::Bold);
+            defaultFont.setPointSize(defaultFont.pointSize() + 1);
+            defaultFont.setBold(true);
+            return defaultFont;
         } else if (tsk == NULL) {
-            return QFont("Segoe UI", 9, QFont::Bold);
+            defaultFont.setPointSize(defaultFont.pointSize() + 1);
+            defaultFont.setBold(true);
+            return defaultFont;
         } else {
             return QVariant();
         }

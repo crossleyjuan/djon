@@ -16,8 +16,8 @@ INCLUDEPATH += . \
 include(../qtsingleapplication-2.6_1-opensource/src/qtsingleapplication.pri)
 QT += xml \
     webkit
-LIBS += -L../libs \
-    -ldjon-util
+LIBS += -L../libs
+LIBS += -ldjon-util
 CONFIG += static
 
 # LIBS += -lRpcrt4
