@@ -24,7 +24,7 @@
 		</Contact_Info>
 		<Support_Info>
 			<Sales_Email />
-			<Support_Email />
+			<Support_Email>contact@d-jon.com</Support_Email>
 			<General_Email>contact@d-jon.com</General_Email>
 			<Sales_Phone />
 			<Support_Phone />
@@ -34,9 +34,9 @@
 	</Company_Info>
 	<Program_Info>
 		<Program_Name>d-jon</Program_Name>
-		<Program_Version>1.0201010110</Program_Version>
-		<Program_Release_Month>10</Program_Release_Month>
-		<Program_Release_Day>01</Program_Release_Day>
+		<Program_Version>1.1.201011110</Program_Version>
+		<Program_Release_Month>11</Program_Release_Month>
+		<Program_Release_Day>11</Program_Release_Day>
 		<Program_Release_Year>2010</Program_Release_Year>
 		<Program_Cost_Dollars />
 		<Program_Cost_Other_Code />
@@ -51,9 +51,9 @@
 		<Program_Category_Class>Business::Project Management</Program_Category_Class>
 		<Program_System_Requirements />
 		<File_Info>
-			<File_Size_Bytes>100917250</File_Size_Bytes>
-			<File_Size_K>98552</File_Size_K>
-			<File_Size_MB>96.24</File_Size_MB>
+			<File_Size_Bytes>14778976</File_Size_Bytes>
+			<File_Size_K>14430</File_Size_K>
+			<File_Size_MB>14.4</File_Size_MB>
 		</File_Info>
 		<Expire_Info>
 			<Has_Expire_Info>N</Has_Expire_Info>
@@ -68,16 +68,18 @@
 	<Program_Descriptions>
 		<English>
 			<Keywords>project manager time tracking gantt</Keywords>
-			<Char_Desc_45>Project manager with time tracking</Char_Desc_45>
+			<Char_Desc_45>Project manager with real time tracking</Char_Desc_45>
 			<Char_Desc_80 />
-			<Char_Desc_250>d-jon is a complete project management system that implements time tracking, templates, multi-project and other features that will help you to keep control of your project.</Char_Desc_250>
+			<Char_Desc_250>d-jon is a complete project management system which implements a real time tracking model, templates, multiproject and other features that will help you to keep control of your project</Char_Desc_250>
 			<Char_Desc_450 />
-			<Char_Desc_2000>- Multi project: You can manage multiple projects at the same time.
-- Time tracking: Track your time for every task in your project.
-- Manual time entries: You can create your own time logs, useful when you don't have your computer close to you.
-- Gantt View: You can see your tasks in a gantt chart.
-- Templates (EE): You can create templates for your tasks, every time you create a task using that template the subtasks will be automatically created for you, example: Development Cycles includes several task that you should create every time you add a new development cycle to your project.
-- Export (EE): export your projects, tasks and time logs and use them in other applications, reports, etc.</Char_Desc_2000>
+			<Char_Desc_2000>Multi project: You can manage multiple projects at the same time.
+Time tracking: Track your time for every task in your project.
+Idle detection: djon detects when you are away from your computer and let you decide what to do with the recorded time.
+Working detection: If you started to work but forgot to start the tracking tool djon will inform you about this. You will never forget to track your work again.
+Manual log entries: You can create your own time logs, useful when you don't have your computer close to you.
+Gantt View: You can see your tasks in a gantt chart.
+Templates: You can create templates for your tasks, every time you create a task using that template the subtasks will be automatically created for you, example: Development Cycles includes several task that you should create every time you add a new development cycle to your project.
+Export: export your projects, tasks and time logs and use them in other applications, reports, etc.</Char_Desc_2000>
 		</English>
 	</Program_Descriptions>
 	<WEB_INFO>
@@ -89,7 +91,7 @@
 			<Application_XML_File_URL>http://d-jon.com/downloads/pad_file.xml</Application_XML_File_URL>
 		</APPLICATION_URLS>
 		<DOWNLOAD_URLS>
-			<PRIMARY_DOWNLOAD_URL>http://d-jon.com/downloads/setup_djon.exe</PRIMARY_DOWNLOAD_URL>
+			<PRIMARY_DOWNLOAD_URL>http://d-jon.com/downloads/download.php?file=0</PRIMARY_DOWNLOAD_URL>
 			<Secondary_Download_URL />
 			<Additional_Download_URL_1 />
 			<Additional_Download_URL_2 />
