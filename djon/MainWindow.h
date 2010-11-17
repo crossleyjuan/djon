@@ -45,6 +45,7 @@ private:
     void refreshCollapsedState();
     void setLastSelectedTask();
     void checkReleaseNotes();
+    void showPopup();
 
     Ui::MainWindow widget;
     TaskLogWindow* _logWindow;

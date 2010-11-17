@@ -196,6 +196,9 @@ void MainWindow::setupActions() {
     prjMenu->addAction(deleteTask);
     QMenu* applyTemplate = prjMenu->addMenu("Apply Template");
     setupTemplateMenu(applyTemplate);
+
+    //***********************************************************
+    // Popup actions should be registered in showPopup function
     _taskPopUpMenu->addAction(newTask);
     _taskPopUpMenu->addAction(editTask);
     _taskPopUpMenu->addAction(deleteTask);
@@ -204,6 +207,8 @@ void MainWindow::setupActions() {
     _taskPopUpMenu->addAction(newProject);
     _taskPopUpMenu->addAction(editProject);
     _taskPopUpMenu->addAction(closeProject);
+    //***********************************************************
+
     //    prjMenu->addAction(completeTask);
     prjMenu->addSeparator();
 
@@ -507,11 +512,10 @@ void MainWindow::createTray() {
 
 void MainWindow::taskContextMenuRequested(QPoint pos) {
     qDebug("MainWindow::taskContextMenuRequested");
-//    QModelIndex index = widget.taskView->indexAt(pos);
-//    Task* task = _taskModel->task(index);
-//    Project* project = _taskModel->project(index);
-//
-    _taskPopUpMenu->popup(QCursor::pos());
+    QModelIndex index = widget.taskView->indexAt(pos);
+    _activeTask = _taskModel->task(index);
+    _activeProject = _taskModel->project(index);
+    showPopup();
 }
 
 void MainWindow::settings() {
@@ -862,4 +866,27 @@ void MainWindow::applyTemplate(QString templateName) {
     }
 //    QObject* wid = QObject::sender();
 //    qDebug("pressed: %s", wid->name());
+}
+
+void MainWindow::showPopup() {
+    QList<QAction*> actions = _taskPopUpMenu->actions();
+    for (QList<QAction*>::iterator iter = actions.begin(); iter != actions.end(); iter++) {
+        QAction* act = (*iter);
+        act->setVisible(false);
+    }
+    actions.at(5)->setVisible(true); // Create project is always visible
+    if (_activeProject != NULL) {
+        for (int x = 4; x < actions.size(); x++) {
+            QAction* act = actions.at(x);
+            act->setVisible(true);
+        }
+        actions.at(0)->setVisible(true); // New task
+    }
+    if (_activeTask != NULL) {
+        for (int x = 1; x < 4; x++) {
+            QAction* act = actions.at(x);
+            act->setVisible(true);
+        }
+    }
+    _taskPopUpMenu->popup(QCursor::pos());
 }
