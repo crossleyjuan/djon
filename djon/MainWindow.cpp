@@ -128,7 +128,15 @@ MainWindow::~MainWindow() {
 
 void MainWindow::selectTaskChanged(QModelIndex current, QModelIndex previous) {
     qDebug("MainWindow::selectTaskChanged");
-    TaskModel* model = (TaskModel*)current.model();
+    TaskModel* model = NULL;
+    if (current.isValid()) {
+        model = (TaskModel*)current.model();
+    }
+    if (model == NULL) {
+        setActiveTask(NULL);
+        _activeProject = NULL;
+        return;
+    }
     Task* task = model->task(current);
     if (task != NULL) {
         setActiveTask(task);
