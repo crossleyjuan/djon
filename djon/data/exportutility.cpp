@@ -65,6 +65,7 @@ void ExportUtility::executeExport(std::string fileName, DateTime* logsFrom, Date
                     periods << "id=\"" << *log->id << "\" ";
                     periods << "start=\"" << log->start->toQDateTime().toString(Qt::ISODate).toStdString() << "\" ";
                     periods << "finish=\"" << log->end->toQDateTime().toString(Qt::ISODate).toStdString() << "\" ";
+                    periods << "description=\"" << *log->logDescription << "\" ";
                     periods << "timelength=\"" << log->totalTime().toChar() << "\" />\n";
                     int logSecs = *log->end - *log->start;
                     totalLogTime.add(logSecs);
