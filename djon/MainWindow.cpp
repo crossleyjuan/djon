@@ -304,7 +304,6 @@ void MainWindow::setActiveTask(Task* task) {
         QModelIndex index = _taskModel->index(_activeProject, _activeTask);
         if (index.isValid()) {
             widget.taskView->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
-            _trackWindow->setCurrentTask(_activeTask);
         }
     }
 }
