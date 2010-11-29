@@ -219,7 +219,9 @@ Task* TaskModel::task(const QModelIndex &index) const {
     if (index.isValid()) {
         TaskItem *item = static_cast<TaskItem*>(index.internalPointer());
 
-        return item->task();
+        if (item != NULL) {
+            return item->task();
+        }
     }
     return NULL;
 }
