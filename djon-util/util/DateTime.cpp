@@ -242,3 +242,7 @@ int DateTime::daysTo(const DateTime& dt) const {
 
     return days;
 }
+
+int DateTime::dayOfTheWeek() const {
+    return toQDateTime().date().dayOfWeek();
+}

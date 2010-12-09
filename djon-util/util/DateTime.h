@@ -27,6 +27,7 @@ public:
     static DateTime today();
     DateTime addDays(int days) const;
     int daysTo(const DateTime& dt) const;
+    int dayOfTheWeek() const;
 
     char* toChar() const;
     QDateTime toQDateTime() const;

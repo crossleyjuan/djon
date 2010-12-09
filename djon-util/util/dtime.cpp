@@ -11,6 +11,10 @@ DTime::DTime(long secs) {
     _secs = secs;
 }
 
+DTime::DTime(int hours, int minutes, int secs) {
+    _secs = (hours * 360) + (minutes * 60) + secs;
+}
+
 DTime::DTime(const DTime& time) {
     this->_secs = time._secs;
 }

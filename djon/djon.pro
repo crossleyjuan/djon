@@ -12,7 +12,6 @@ INCLUDEPATH += . \
     view \
     ../djon-util \
     ../includes
-
 include(../qtsingleapplication-2.6_1-opensource/src/qtsingleapplication.pri)
 QT += xml \
     webkit
@@ -73,7 +72,8 @@ HEADERS += data.h \
     view/abstracttaskfilter.h \
     view/closedtaskfilter.h \
     view/logworkreportview.h \
-    view/logworkreportscence.h
+    view/logworkreportscence.h \
+    data/calendar.h
 FORMS += MainWindow.ui \
     taskdialog.ui \
     tasklogwindow.ui \
@@ -139,7 +139,8 @@ SOURCES += data.cpp \
     view/tasktreeview.cpp \
     view/closedtaskfilter.cpp \
     view/logworkreportview.cpp \
-    view/logworkreportscence.cpp
+    view/logworkreportscence.cpp \
+    data/calendar.cpp
 OTHER_FILES += djon.rc
 RESOURCES += djon_rs.qrc
 RC_FILE = djon.rc
