@@ -23,7 +23,7 @@
 #include "view/projectdialog.h"
 #include "import/import.h"
 #include "config.h"
-#include "ganttscene.h"
+#include "logview.h"
 #include "userpreferencescontroller.h"
 #include "djonpreferences.h"
 #include "releasenotesview.h"
@@ -34,7 +34,6 @@
 #include "updatemanager.h"
 #include <sstream>
 #include <QGraphicsView>
-#include "ganttscene.h"
 #include "systrayicon.h"
 #include "taskeditordelegate.h"
 #include "closedtaskfilter.h"
@@ -420,6 +419,10 @@ void MainWindow::reloadTasks() {
         widget.taskView->setAlternatingRowColors(true);
         widget.taskView->setSelectionBehavior(QAbstractItemView::SelectRows);
     }
+
+    LogView* view = new LogView();
+    view->setModel(_taskModel);
+    view->show();
 
     widget.ganttView->scrollToday();
     connect(widget.taskView, SIGNAL(collapsed(QModelIndex)), widget.ganttView, SLOT(collapse(QModelIndex)));

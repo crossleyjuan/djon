@@ -8,8 +8,11 @@
 #ifndef _DATETIME_H
 #define	_DATETIME_H
 
+#include "dtime.h"
+
 #include <string>
 #include <QDate>
+
 
 using namespace std;
 
@@ -47,6 +50,8 @@ public:
     int getMonth() const;
     void setYear(int _year);
     int getYear() const;
+    DTime time() const;
+
     bool operator >(const DateTime& dateTime) const;
     bool operator <(const DateTime& dateTime) const;
     bool operator >=(const DateTime& dateTime) const;

@@ -44,8 +44,40 @@ DTime::~DTime() {
     _secs = 0;
 }
 
-long DTime::secs() const {
+long DTime::totalSecs() const {
     return _secs;
+}
+
+long DTime::totalMinutes() const {
+    int minutes = _secs / 60;
+    return minutes;
+}
+
+int DTime::hour() const {
+    int secs = _secs;
+
+    int hour = (secs / 3600);
+    return hour;
+}
+
+int DTime::minutes() const {
+    int secs = _secs;
+
+    int hour = (secs / 3600);
+    secs -= (hour * 3600);
+    int min = (secs / 60);
+    return min;
+
+}
+
+int DTime::seconds() const {
+    int secs = _secs;
+
+    int hour = (secs / 3600);
+    secs -= (hour * 3600);
+    int min = (secs / 60);
+    secs -= (min * 60);
+    return secs;
 }
 
 QTime DTime::toQTime() {
@@ -87,13 +119,13 @@ void DTime::add(long secs) {
 }
 
 void DTime::add(const DTime time) {
-    _secs += time.secs();
+    _secs += time.totalSecs();
 }
 
 DTime DTime::operator +(const DTime& dtime) const {
     DTime current = *this;
-    long secs = dtime.secs();
-    return DTime(current.secs() + secs);
+    long secs = dtime.totalSecs();
+    return DTime(current.totalSecs() + secs);
 }
 
 void DTime::operator ++(int secs) {

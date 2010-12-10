@@ -121,3 +121,11 @@ DTime Calendar::startHour(const DateTime date) const {
 DTime Calendar::endHour(const DateTime date) const {
     return _normalEndHour;
 }
+
+DTime Calendar::startHour() const {
+    return _normalStartHour;
+}
+
+DTime Calendar::endHour() const {
+    return _normalEndHour;
+}

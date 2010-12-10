@@ -259,3 +259,10 @@ int DateTime::daysTo(const DateTime& dt) const {
 int DateTime::dayOfTheWeek() const {
     return toQDateTime().date().dayOfWeek();
 }
+
+DTime DateTime::time() const {
+    int hour = getHour();
+    int minute = getMin();
+    int secs = getSecs();
+    return DTime(hour, minute, secs);
+}

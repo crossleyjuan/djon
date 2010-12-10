@@ -16,7 +16,9 @@ public:
     string name() const;
     bool isWorkingDay(const DateTime date) const;
     DTime startHour(const DateTime date) const;
+    DTime startHour() const;
     DTime endHour(const DateTime date) const;
+    DTime endHour() const;
 
 private:
     std::string _name;

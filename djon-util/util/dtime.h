@@ -14,7 +14,13 @@ public:
     DTime(std::string time); // HHMMSS
     ~DTime();
 
-    long secs() const;
+    long totalSecs() const;
+    long totalMinutes() const;
+
+    int hour() const;
+    int minutes() const;
+    int seconds() const;
+
     QTime toQTime();
     const char* toChar();
 
