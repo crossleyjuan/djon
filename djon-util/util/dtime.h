@@ -11,6 +11,7 @@ public:
     DTime(int hours, int minutes, int secs);
     DTime(const QTime& time);
     DTime(const DTime& time);
+    DTime(std::string time); // HHMMSS
     ~DTime();
 
     long secs() const;

@@ -13,6 +13,8 @@
 
 using namespace std;
 
+class Calendar;
+
 class DateTime {
 public:
     DateTime();
@@ -26,6 +28,7 @@ public:
     static DateTime startDayOfNextWeek();
     static DateTime today();
     DateTime addDays(int days) const;
+    DateTime addDays(int days, const Calendar calendar) const;
     int daysTo(const DateTime& dt) const;
     int dayOfTheWeek() const;
 

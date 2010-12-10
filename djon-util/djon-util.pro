@@ -18,7 +18,8 @@ SOURCES += util.cpp \
     util/errorHandle.cpp \
     util/dtime.cpp \
     util/DateTime.cpp \
-    util/version.cpp
+    util/version.cpp \
+    util/calendar.cpp
 HEADERS += djon-util_global.h \
     util.h \
     util/fileutil.h \
@@ -26,4 +27,5 @@ HEADERS += djon-util_global.h \
     util/dtime.h \
     util/DateTime.h \
     util/stringfunctions.h \
-    util/version.h
+    util/version.h \
+    util/calendar.h

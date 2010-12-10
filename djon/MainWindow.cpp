@@ -124,6 +124,7 @@ TaskDelegate* MainWindow::createTaskDelegate() {
 }
 
 MainWindow::~MainWindow() {
+    releaseCalendars();
 }
 
 void MainWindow::selectTaskChanged(QModelIndex current, QModelIndex previous) {

@@ -11,11 +11,12 @@ public:
     Calendar();
     ~Calendar();
     Calendar(const Calendar& orig);
+    Calendar(char* calDef);
 
-    string name();
-    bool isWorkingDay(const DateTime date);
-    DTime startHour(const DateTime date);
-    DTime endHour(const DateTime date);
+    string name() const;
+    bool isWorkingDay(const DateTime date) const;
+    DTime startHour(const DateTime date) const;
+    DTime endHour(const DateTime date) const;
 
 private:
     std::string _name;
@@ -27,5 +28,11 @@ private:
 
     std::vector<DateTime> _holidays;
 };
+
+
+// Public functions
+Calendar* calendar(std::string name);
+Calendar* defaultCalendar();
+void releaseCalendars();
 
 #endif // CALENDAR_H

@@ -24,6 +24,22 @@ DTime::DTime(const QTime& time) {
     _secs = secs;
 }
 
+DTime::DTime(std::string time) {
+    _secs = 0;
+    if (time.length() > 0) {
+        std::string hour = time.substr(0, 2);
+        _secs += (atoi(hour.c_str()) * 360);
+    }
+    if (time.length() > 2) {
+        std::string min = time.substr(2, 2);
+        _secs += (atoi(min.c_str()) * 60);
+    }
+    if (time.length() > 4) {
+        std::string secs = time.substr(4, 2);
+        _secs += atoi(secs.c_str());
+    }
+}
+
 DTime::~DTime() {
     _secs = 0;
 }
