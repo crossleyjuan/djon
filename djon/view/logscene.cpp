@@ -154,6 +154,17 @@ QGraphicsItem* LogScene::getTaskItem(const QModelIndex &index) {
         QPen pen(QColor(0, 0, 150));
 
         QGraphicsItem* item = this->addRect(x1, y1, (x2 - x1), (y2 - y1), pen, b);
+        QGraphicsSimpleTextItem* text = this->addSimpleText(tr(task->shortDescription()->c_str()));
+        text->rotate(90);
+        text->setPos(x1 + (_dayWidth / 2), y1);
+        text->setVisible(true);
+        QFont f("Arial", 8);
+        f.setWeight(QFont::Light);
+
+        QBrush brush(QColor(Qt::red));
+        text->setBrush(brush);
+        text->setFont(f);
+        text->setZValue(2);
         item->setZValue(1);
         _currentY += sizeHint(index).height();
         return item;
