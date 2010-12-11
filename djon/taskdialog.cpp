@@ -22,6 +22,8 @@ TaskDialog::TaskDialog(Project* project, string* id, QWidget *parent) :
     populateStatus();
     m_ui->tabWidget->setCurrentIndex(0);
     m_ui->cboTemplate->setFocus();
+    connect(m_ui->duration, SIGNAL(editingFinished()), this, SLOT(refreshEndDate()));
+    connect(m_ui->startDate, SIGNAL(dateChanged(QDate)), this, SLOT(refreshEndDate()));
 }
 
 TaskDialog::TaskDialog(Project* project, Task* task, QWidget *parent) :
@@ -61,6 +63,9 @@ TaskDialog::TaskDialog(Project* project, Task* task, QWidget *parent) :
     m_ui->cboTemplate->setVisible(false);
     m_ui->lblTemplate->setVisible(false);
     m_ui->shortDescription->setFocus();
+
+    connect(m_ui->duration, SIGNAL(editingFinished()), this, SLOT(refreshEndDate()));
+    connect(m_ui->startDate, SIGNAL(dateChanged(QDate)), this, SLOT(refreshEndDate()));
 }
 
 TaskDialog::~TaskDialog()
@@ -169,3 +174,13 @@ void TaskDialog::on_buttonBox_rejected()
 Task* TaskDialog::task() {
     return m_task;
 }
+
+void TaskDialog::refreshEndDate() {
+    Duration duration = m_ui->duration->duration();
+    if (duration.days() > 0) {
+        DateTime* startDate = new DateTime(m_ui->startDate->dateTime());
+        DateTime endDate = startDate->addDays(duration.days() - 1, *m_project->projectDefaultCalendar());
+        m_ui->endDate->setDateTime(endDate.toQDateTime());
+    }
+}
+

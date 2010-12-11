@@ -27,7 +27,12 @@ Project::Project(string projDef) {
 
     _name = new string(READ_ELEMENT(values, "project-name"));
     _description = new string(READ_ELEMENT(values, "project-description"));
-
+    std::string calendarName = std::string(READ_ELEMENT(values, "project-calendar"));
+    if (calendarName.length() == 0) {
+        _projectDefaultCalendar = defaultCalendar();
+    } else {
+        _projectDefaultCalendar = calendar(calendarName);
+    }
     _tasks = new vector<Task*>();
     _tasksMap = new std::map<string, Task*>();
     delete(values);
@@ -261,4 +266,8 @@ void Project::setProjectFileName(string* projectFileName) {
 
 bool Project::operator ==(const Project& prj) const {
     return (prj._projectFileName->compare(*_projectFileName) == 0);
+}
+
+Calendar* Project::projectDefaultCalendar() const {
+    return _projectDefaultCalendar;
 }

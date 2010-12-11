@@ -17,6 +17,7 @@ using namespace std;
 class Task;
 class DateTime;
 class DTime;
+class Calendar;
 
 class Project {
 public:
@@ -44,6 +45,7 @@ public:
     DTime totalTime() const;
     DTime totalTimeCurrentWeek() const;
     DTime totalTimeCurrentDay() const;
+    Calendar* projectDefaultCalendar() const;
 
     Task* task(string id);
     std::string* nextChildId();
@@ -54,6 +56,7 @@ private:
     string* _name;
     string* _description;
     string* _projectFileName;
+    Calendar* _projectDefaultCalendar;
 //    int _lastTaskId;
 
     std::vector<Task*>* _tasks;

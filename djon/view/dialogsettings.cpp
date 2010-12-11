@@ -50,7 +50,7 @@ void DialogSettings::on_DialogSettings_accepted()
 void DialogSettings::done(int res) {
     if (res == QDialog::Accepted) {
         DTime timeOut(ui->idleTimeOut->time());
-        int idleTimeOut = timeOut.secs();
+        int idleTimeOut = timeOut.totalSecs();
         bool save = true;
         if (idleTimeOut == 0) {
             QMessageBox box;

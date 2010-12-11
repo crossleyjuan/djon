@@ -37,7 +37,7 @@ void TimeTracker::startRecord(Task* task, TaskLog* taskLog, DateTime* startTime)
     }
     _taskLog->start = startTime;
     _status = RUNNING;
-    _totalTaskTimeSecs = task->totalTime().secs();
+    _totalTaskTimeSecs = task->totalTime().totalSecs();
     _ticksToSaveLog = 0;
     _timer->start(1000);
     emit trackerStarted(_task, _taskLog);

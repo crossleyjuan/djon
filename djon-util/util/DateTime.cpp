@@ -7,6 +7,7 @@
 
 #include "DateTime.h"
 #include "util.h"
+#include "calendar.h"
 #include <string.h>
 #include <stdlib.h>
 #include <sstream>
@@ -234,6 +235,18 @@ DateTime DateTime::addDays(int days) const {
     return dtNew;
 }
 
+DateTime DateTime::addDays(int days, const Calendar calendar) const {
+    DateTime res = *(this);
+    while (days > 0) {
+        res = res.addDays(1);
+        while (!calendar.isWorkingDay(res)) {
+            res = res.addDays(1);
+        }
+        days--;
+    }
+    return res;
+}
+
 int DateTime::daysTo(const DateTime& dt) const {
     QDateTime thisDate = toQDateTime();
     QDateTime qdt = dt.toQDateTime();
@@ -241,4 +254,15 @@ int DateTime::daysTo(const DateTime& dt) const {
     int days = thisDate.daysTo(qdt);
 
     return days;
+}
+
+int DateTime::dayOfTheWeek() const {
+    return toQDateTime().date().dayOfWeek();
+}
+
+DTime DateTime::time() const {
+    int hour = getHour();
+    int minute = getMin();
+    int secs = getSecs();
+    return DTime(hour, minute, secs);
 }

@@ -40,6 +40,7 @@ private slots:
     void on_buttonBox_rejected();
     void on_buttonBox_accepted();
     void populateStatus();
+    void refreshEndDate();
 };
 
 #endif // TASKDIALOG_H

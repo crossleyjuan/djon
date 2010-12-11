@@ -8,10 +8,15 @@
 #ifndef _DATETIME_H
 #define	_DATETIME_H
 
+#include "dtime.h"
+
 #include <string>
 #include <QDate>
 
+
 using namespace std;
+
+class Calendar;
 
 class DateTime {
 public:
@@ -26,7 +31,9 @@ public:
     static DateTime startDayOfNextWeek();
     static DateTime today();
     DateTime addDays(int days) const;
+    DateTime addDays(int days, const Calendar calendar) const;
     int daysTo(const DateTime& dt) const;
+    int dayOfTheWeek() const;
 
     char* toChar() const;
     QDateTime toQDateTime() const;
@@ -43,6 +50,8 @@ public:
     int getMonth() const;
     void setYear(int _year);
     int getYear() const;
+    DTime time() const;
+
     bool operator >(const DateTime& dateTime) const;
     bool operator <(const DateTime& dateTime) const;
     bool operator >=(const DateTime& dateTime) const;
