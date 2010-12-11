@@ -422,6 +422,7 @@ void MainWindow::reloadTasks() {
 
     LogView* view = new LogView();
     view->setModel(_taskModel);
+    view->scrollToday();
     view->show();
 
     widget.ganttView->scrollToday();

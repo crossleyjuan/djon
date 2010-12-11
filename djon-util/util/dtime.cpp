@@ -12,7 +12,7 @@ DTime::DTime(long secs) {
 }
 
 DTime::DTime(int hours, int minutes, int secs) {
-    _secs = (hours * 360) + (minutes * 60) + secs;
+    _secs = (hours * 3600) + (minutes * 60) + secs;
 }
 
 DTime::DTime(const DTime& time) {
@@ -28,7 +28,7 @@ DTime::DTime(std::string time) {
     _secs = 0;
     if (time.length() > 0) {
         std::string hour = time.substr(0, 2);
-        _secs += (atoi(hour.c_str()) * 360);
+        _secs += (atoi(hour.c_str()) * 3600);
     }
     if (time.length() > 2) {
         std::string min = time.substr(2, 2);
