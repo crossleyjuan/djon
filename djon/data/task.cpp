@@ -7,6 +7,7 @@
 
 #include "task.h"
 #include "data.h"
+#include "djonpreferences.h"
 
 #include <stdlib.h>
 #include <sstream>
@@ -268,9 +269,9 @@ Task::Task(Project* project, const std::string taskDef) {
         _status = new string(*defaultTemplate()->statusList().begin());
     }
 
-    int red = (rand() % 255);
-    int green = (rand() % 255);
-    int blue = (rand() % 255);
+    int red = (rand() % 205) + 50;
+    int green = (rand() % 205) + 50;
+    int blue = (rand() % 205) + 50;
     _taskColor = QColor(red, green, blue);
     delete(values);
     qDebug("out Task::Task(Project* project, std::string* taskDef)");
@@ -414,3 +415,16 @@ void Task::setClosed(bool closed) {
 QColor Task::taskColor() const {
     return _taskColor;
 }
+
+Task* lastTrackedTask(vector<Project*> projects) {
+    Element* element = lastTrackedTaskId();
+    if (element != NULL) {
+        Project* project = searchProject(projects, *element->project());
+        if (project != NULL) {
+            Task* task = project->task(*element->task());
+            return task;
+        }
+    }
+    return NULL;
+}
+

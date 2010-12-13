@@ -127,9 +127,9 @@ void LogScene::getTaskItem(const QModelIndex &index) {
     Calendar* calendar = task->project()->projectDefaultCalendar();
     int hoursInDay = calendar->endHour().hour() - calendar->startHour().hour();
     std::vector<TaskLog*>* logs =task->logs();
-    double startHour = calendar->startHour().hour();
-    double endHour = calendar->endHour().hour() + 1;
-    double minuteSize = (double)500 / (double)((endHour - startHour) * 60);
+    double startHour = 0;//calendar->startHour().hour();
+    double endHour = 24;//calendar->endHour().hour() + 1;
+    double minuteSize = (double)24*100 / (double)((endHour - startHour) * 60);
     int red = 0;
     for (std::vector<TaskLog*>::iterator iter = logs->begin(); iter != logs->end(); iter++) {
         TaskLog* log = *iter;
@@ -156,7 +156,7 @@ void LogScene::getTaskItem(const QModelIndex &index) {
 //        grad.setColorAt(1, QColor(200, 200, 255));
         QBrush b(task->taskColor());//QImage(":/img/task_bar.png"));//(QPixmap(":/img/task_bar.png"));
         red += 20;
-        QColor penColor(task->taskColor().red() - 20, task->taskColor().green() - 20, task->taskColor().blue() - 20);
+        QColor penColor(task->taskColor().red() - 100, task->taskColor().green() - 100, task->taskColor().blue() - 100);
         QPen pen(penColor);
 
         QGraphicsItem* item = this->addRect(x1, y1, (x2 - x1), (y2 - y1), pen, b);
@@ -164,7 +164,7 @@ void LogScene::getTaskItem(const QModelIndex &index) {
         if ((y2 - y1) > 20) {
             QFont f("Arial", 8);
             f.setWeight(QFont::Light);
-            QBrush brush(QColor(Qt::red));
+            QBrush brush(penColor);
 
             std::string description = *task->shortDescription();
             int textY = y1 + 5;
@@ -185,8 +185,8 @@ void LogScene::getTaskItem(const QModelIndex &index) {
                     label = description;
                     description = "";
                 }
-                label = label.erase(s.find_last_not_of(" \n\r\t")+1);
-                description = description.erase(s.find_last_not_of(" \n\r\t")+1);
+                label = label.erase(label.find_last_not_of(" \n\r\t")+1);
+                description = description.erase(description.find_last_not_of(" \n\r\t")+1);
                 if ((textY + 20) < y2) {
                     QGraphicsSimpleTextItem* text = this->addSimpleText(tr(label.c_str()));
                     text->setPos(x1 + 10, textY);
@@ -229,7 +229,7 @@ void LogScene::createBackground() {
     if (_viewSizeWidth > maxWidth) {
         maxWidth = _viewSizeWidth;
     }
-    _viewSizeHeight = maxHeight;
+    _viewSizeHeight = 100*25;
     _viewSizeWidth = maxWidth;
 
     this->addRect(0, 0, maxWidth, maxHeight, pen, brush);

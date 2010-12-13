@@ -27,6 +27,9 @@ private:
     QSize headerSizeHint();
 
     QGraphicsView _headerView;
+    QGraphicsView _hourView;
+    QWidget _separator;
+    QGraphicsScene* _hourScene;
     QGraphicsView _logView;
     TaskModel* _model;
     LogScene* _logScene;

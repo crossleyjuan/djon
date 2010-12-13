@@ -99,5 +99,8 @@ private:
 
 };
 
+/*** Global Task Related functions **/
+Task* lastTrackedTask(vector<Project*> projects);
+
 #endif	/* _TASK_H */
 

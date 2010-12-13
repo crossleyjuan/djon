@@ -422,10 +422,6 @@ void MainWindow::reloadTasks() {
         widget.taskView->setSelectionBehavior(QAbstractItemView::SelectRows);
     }
 
-    LogView* view = new LogView();
-    view->setModel(_taskModel);
-    view->show();
-
     ((LogView*)_currentView)->scrollToday();
 //    connect(widget.taskView, SIGNAL(collapsed(QModelIndex)), ((LogView*)_currentView), SLOT(collapse(QModelIndex)));
 //    connect(widget.taskView, SIGNAL(expanded(QModelIndex)), ((LogView*)_currentView), SLOT(expand(QModelIndex)));
@@ -708,16 +704,12 @@ void MainWindow::refreshCollapsedState() {
 
 void MainWindow::setLastSelectedTask() {
     widget.taskView->setAnimated(false);
-    Element* element = lastTrackedTaskId();
-    if (element != NULL) {
-        Project* project = searchProject(*_projects, *element->project());
-        if (project != NULL) {
-            Task* task = project->task(*element->task());
-            QModelIndex index = _taskModel->index(project, task);
-            if (index.isValid()) {
-                widget.taskView->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
-                _trackWindow->setCurrentTask(task);
-            }
+    Task* task = lastTrackedTask(*_projects);
+    if (task != NULL) {
+        QModelIndex index = _taskModel->index(task->project(), task);
+        if (index.isValid()) {
+            widget.taskView->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
+            _trackWindow->setCurrentTask(task);
         }
     }
     widget.taskView->setAnimated(true);

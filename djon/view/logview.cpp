@@ -1,26 +1,49 @@
 #include "logview.h"
 #include "TaskModel.h"
+#include <QHBoxLayout>
+#include <sstream>
 
 LogView::LogView(QWidget *parent) :
     QWidget(parent)
 {
-    QLayout* lay = new QVBoxLayout();
     _model = NULL;
     _logScene = NULL;
     _headerScene = NULL;
     _headerView.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     _headerView.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    _hourView.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    _hourView.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     _todayPos = 0;
     connect(_logView.horizontalScrollBar(), SIGNAL(valueChanged(int)), _headerView.horizontalScrollBar(), SLOT(setValue(int)));
-    lay->addWidget(&_headerView);
-    lay->addWidget(&_logView);
+    connect(_logView.verticalScrollBar(), SIGNAL(valueChanged(int)), _hourView.verticalScrollBar(), SLOT(setValue(int)));
+
+    QVBoxLayout* lay = new QVBoxLayout();
+    setLayout(lay);
+
+    QHBoxLayout* hbox1 = new QHBoxLayout();
+    hbox1->addWidget(&_separator);
+    hbox1->addWidget(&_headerView);
+    hbox1->setSpacing(0);
+    hbox1->setContentsMargins(0, 0, 0, 0);
+
+    lay->addLayout(hbox1);
+
+    QHBoxLayout* hbox2 = new QHBoxLayout();
+    lay->addLayout(hbox2);
     lay->setSpacing(0);
     lay->setContentsMargins(0, 0, 0, 0);
-    setLayout(lay);
+
+    hbox2->addWidget(&_hourView);
+    hbox2->addWidget(&_logView);
+    hbox2->setSpacing(0);
+    hbox2->setContentsMargins(0, 0, 0, 0);
+
+//    _hourView.setGeometry(_hourView.geometry().x(), _hourView.geometry().y(), 60, _hourView.geometry().height());
 }
 
 void LogView::createHeader() {
     _headerScene->clear();
+    _hourScene->clear();
 
     QSize size = headerSizeHint();
 
@@ -34,8 +57,6 @@ void LogView::createHeader() {
     QSize sizeHint = _logScene->viewSizeHint();
     _headerScene->addRect(0, 0, sizeHint.width() + verticalScrollBar()->width() + 200, size.height() + 1, pen, background)->setZValue(0);
 
-    int textSize = 30;
-    int margin = 15;
     int columnSize = _logScene->dayWidth();
 
     DateTime startDate = _logScene->startDate().addDays(-1);
@@ -46,7 +67,7 @@ void LogView::createHeader() {
     for (int x = 0; x < _logScene->totalDays(); x++) {
         QPen textPen(Qt::black);
         QGraphicsSimpleTextItem* text = _headerScene->addSimpleText(startDate.addDays(1).toQDateTime().toString("dd-MMM"), QFont("Arial", 8));
-        text->setPos(x * columnSize + 2, 3);
+        text->setPos((x * columnSize + 2) + 50, 3);
         text->setVisible(true);
 //        text->setPen(textPen);
         text->setZValue(1);
@@ -56,6 +77,19 @@ void LogView::createHeader() {
         startDate = startDate.addDays(1);
     }
     _headerView.setMaximumHeight(headerSizeHint().height());
+
+    for (int x = 0; x < 24; x++) {
+        _hourScene->addRect(0, x*100, 50, 100, pen, background)->setZValue(0);
+        std::stringstream ss;
+        ss << x << ":00";
+        QGraphicsSimpleTextItem* text = _hourScene->addSimpleText(ss.str().c_str());
+        text->setPos(10, (x * 100) + 10);
+        text->setVisible(true);
+//        text->setPen(textPen);
+        text->setZValue(1);
+    }
+    _hourView.setScene(_hourScene);
+    _hourView.setMaximumWidth(50);
 }
 
 QSize LogView::headerSizeHint() {
@@ -73,6 +107,8 @@ void LogView::setModel(TaskModel *taskModel) {
     _logScene = new LogScene(this);
     _headerScene = new QGraphicsScene(this);
     _headerView.setScene(_headerScene);
+    _hourScene = new QGraphicsScene(this);
+    _hourView.setScene(_hourScene);
     _headerView.setAlignment(Qt::AlignLeft | Qt::AlignTop);
     _logView.setScene(_logScene);
     _logView.setAlignment(Qt::AlignLeft | Qt::AlignTop);
@@ -106,6 +142,7 @@ void LogView::scrollToday() {
     if (_todayPos > 0) {
         QPoint currentPos = this->_logView.pos();
         currentPos.setX(_todayPos);
+        currentPos.setY(10*100);
         this->_logView.centerOn(currentPos);
     }
 }
