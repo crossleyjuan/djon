@@ -86,6 +86,9 @@ Calendar::Calendar(char* calDef) {
 Calendar::Calendar()
 {
     for (int x = 0; x < 7; x++) {
+        _normalWorkingDays[x] = false;
+    }
+    for (int x = 0; x < 5; x++) {
         _normalWorkingDays[x] = true;
     }
     _normalStartHour = DTime(8, 0, 0);

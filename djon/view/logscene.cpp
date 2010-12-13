@@ -121,15 +121,16 @@ QGraphicsItem* LogScene::getGroupItem(const QModelIndex &index) {
     }
 }
 
-QGraphicsItem* LogScene::getTaskItem(const QModelIndex &index) {
+void LogScene::getTaskItem(const QModelIndex &index) {
     Task* task = _model->task(index);
 
     Calendar* calendar = task->project()->projectDefaultCalendar();
     int hoursInDay = calendar->endHour().hour() - calendar->startHour().hour();
     std::vector<TaskLog*>* logs =task->logs();
-    int startHour = calendar->startHour().hour();
-    int endHour = calendar->endHour().hour() + 1;
-    int minuteSize = 1000 / ((endHour - startHour) * 60);
+    double startHour = calendar->startHour().hour();
+    double endHour = calendar->endHour().hour() + 1;
+    double minuteSize = (double)500 / (double)((endHour - startHour) * 60);
+    int red = 0;
     for (std::vector<TaskLog*>::iterator iter = logs->begin(); iter != logs->end(); iter++) {
         TaskLog* log = *iter;
 
@@ -138,36 +139,69 @@ QGraphicsItem* LogScene::getTaskItem(const QModelIndex &index) {
         int bordermargin = (size.height() * .4) / 2;
 
         int daysToStart = _startDate.daysTo(*log->start);
-        int x1 = daysToStart * _dayWidth;
+        double x1 = (double)daysToStart * (double)_dayWidth;
         DTime logStartTime = log->start->time();
-        int y1 = logStartTime.minutes() * minuteSize;
+        double y1 = (double)(logStartTime.totalMinutes() - (startHour*60)) * minuteSize;
 
-        int x2 = (daysToStart + 1) * _dayWidth;
+        double x2 = (daysToStart + 1) * (double)_dayWidth;
         DTime logEndTime = log->end->time();
-        int y2 = logEndTime.minutes() * minuteSize;
+        if (log->end->getDay() != log->start->getDay()) {
+            logEndTime = DTime(23, 59, 59);
+        }
+        double y2 = (double)(logEndTime.totalMinutes() - (startHour*60)) * minuteSize;
 
-        QLinearGradient grad(QPointF(x1, y1), QPointF(x1, y2));
-        grad.setColorAt(0, QColor(0, 0, 150));
-        grad.setColorAt(0.4, QColor(0, 0, 180));
-        grad.setColorAt(1, QColor(200, 200, 255));
-        QBrush b(grad);//QImage(":/img/task_bar.png"));//(QPixmap(":/img/task_bar.png"));
-        QPen pen(QColor(0, 0, 150));
+//        QLinearGradient grad(QPointF(x1, y1), QPointF(x1, y2));
+//        grad.setColorAt(0, QColor(0, 0, 150));
+//        grad.setColorAt(0.9, QColor(0, 0, 180));
+//        grad.setColorAt(1, QColor(200, 200, 255));
+        QBrush b(task->taskColor());//QImage(":/img/task_bar.png"));//(QPixmap(":/img/task_bar.png"));
+        red += 20;
+        QColor penColor(task->taskColor().red() - 20, task->taskColor().green() - 20, task->taskColor().blue() - 20);
+        QPen pen(penColor);
 
         QGraphicsItem* item = this->addRect(x1, y1, (x2 - x1), (y2 - y1), pen, b);
-        QGraphicsSimpleTextItem* text = this->addSimpleText(tr(task->shortDescription()->c_str()));
-        text->rotate(90);
-        text->setPos(x1 + (_dayWidth / 2), y1);
-        text->setVisible(true);
-        QFont f("Arial", 8);
-        f.setWeight(QFont::Light);
-
-        QBrush brush(QColor(Qt::red));
-        text->setBrush(brush);
-        text->setFont(f);
-        text->setZValue(2);
         item->setZValue(1);
+        if ((y2 - y1) > 20) {
+            QFont f("Arial", 8);
+            f.setWeight(QFont::Light);
+            QBrush brush(QColor(Qt::red));
+
+            std::string description = *task->shortDescription();
+            int textY = y1 + 5;
+            while (description.length() > 0) {
+                std::string label;
+                if (description.length() > 15) {
+                    label = description.substr(0, 15);
+                    description = description.substr(15);
+                    if ((label.at(label.length() - 1) != ' ') &&
+                        (description.at(0) != ' ')) {
+                        int pos;
+                        if ((pos = label.rfind(' ')) != std::string::npos) {
+                            description = label.substr(pos) + description;
+                            label = label.substr(0, pos);
+                        }
+                    }
+                } else {
+                    label = description;
+                    description = "";
+                }
+                label = label.erase(s.find_last_not_of(" \n\r\t")+1);
+                description = description.erase(s.find_last_not_of(" \n\r\t")+1);
+                if ((textY + 20) < y2) {
+                    QGraphicsSimpleTextItem* text = this->addSimpleText(tr(label.c_str()));
+                    text->setPos(x1 + 10, textY);
+                    //text->rotate(90);
+                    text->setVisible(true);
+                    text->setBrush(brush);
+                    text->setFont(f);
+                    text->setZValue(2);
+                    textY += 15;
+                } else {
+                    break;
+                }
+            }
+        }
         _currentY += sizeHint(index).height();
-        return item;
     }
 }
 
@@ -205,10 +239,8 @@ void LogScene::createBackground() {
     int margin = 15;
     int cols = _totalDays;
 
-    int columnSize = textSize + margin;
-
-    if ((cols * columnSize) < maxWidth) {
-        cols = (maxWidth / columnSize) + 10;
+    if ((cols * dayWidth()) < maxWidth) {
+        cols = (maxWidth / dayWidth()) + 10;
         _totalDays = cols;
     }
     DateTime startDate = this->_startDate;
@@ -225,18 +257,18 @@ void LogScene::createBackground() {
         }
         QBrush brushBar(barcolor);
         QPen penBar(barcolor);
-        int left = (x*columnSize) + 0;
+        int left = (x* dayWidth()) + 0;
         int top = 0;
         int heigth = maxHeight;
-        addRect(left, top, columnSize, heigth, penBar, brushBar);
+        addRect(left, top, dayWidth(), heigth, penBar, brushBar);
 
         QPen pen(QColor(200, 200, 200));
         pen.setStyle(Qt::DashLine);
 
-        addLine(x*columnSize, 0 , x*columnSize, heigth, pen);
+        addLine(x*dayWidth(), 0 , x*dayWidth(), heigth, pen);
         if (startDate == today) {
             barcolor = QColor(230, 230, 250);
-            addRect(left, top, columnSize, heigth, penBar, QBrush(barcolor));
+            addRect(left, top, dayWidth(), heigth, penBar, QBrush(barcolor));
         }
         startDate = startDate.addDays(1);
     }
@@ -264,7 +296,7 @@ void LogScene::calcZoom() {
     DateTime* end = NULL;
     _viewSizeHeight = 0;
     _viewSizeWidth = 0;
-    _dayWidth = 45;
+    _dayWidth = 100;
     for (int x = 0; x < projCount; x++) {
         QModelIndex pIndex = _model->index(x, 0, summaryIndex);
         Project* proj = _model->project(pIndex);

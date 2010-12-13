@@ -70,6 +70,7 @@ private:
     SysTrayIcon* _trayIcon;
     QMenu* _taskPopUpMenu;
     UpdateManager* _updateManager;
+    QWidget* _currentView;
 
 public:
     void closeEvent(QCloseEvent *event);

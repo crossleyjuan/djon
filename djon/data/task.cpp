@@ -12,6 +12,8 @@
 #include <sstream>
 #include <string>
 
+int __currentColor;
+
 Task::Task(const Task& orig) {
     _id = orig._id;
     _shortDescription = orig._shortDescription;
@@ -266,6 +268,10 @@ Task::Task(Project* project, const std::string taskDef) {
         _status = new string(*defaultTemplate()->statusList().begin());
     }
 
+    int red = (rand() % 255);
+    int green = (rand() % 255);
+    int blue = (rand() % 255);
+    _taskColor = QColor(red, green, blue);
     delete(values);
     qDebug("out Task::Task(Project* project, std::string* taskDef)");
 }
@@ -403,4 +409,8 @@ void Task::setClosed(bool closed) {
     } else {
         setStatus(defaultTemplate()->name());
     }
+}
+
+QColor Task::taskColor() const {
+    return _taskColor;
 }

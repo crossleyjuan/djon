@@ -36,7 +36,7 @@ void LogView::createHeader() {
 
     int textSize = 30;
     int margin = 15;
-    int columnSize = 45;
+    int columnSize = _logScene->dayWidth();
 
     DateTime startDate = _logScene->startDate().addDays(-1);
     DateTime today;
@@ -46,12 +46,12 @@ void LogView::createHeader() {
     for (int x = 0; x < _logScene->totalDays(); x++) {
         QPen textPen(Qt::black);
         QGraphicsSimpleTextItem* text = _headerScene->addSimpleText(startDate.addDays(1).toQDateTime().toString("dd-MMM"), QFont("Arial", 8));
-        text->setPos(x * 45 + 2, 3);
+        text->setPos(x * columnSize + 2, 3);
         text->setVisible(true);
 //        text->setPen(textPen);
         text->setZValue(1);
         if (startDate == today) {
-            _todayPos = (x * 45 + 2);
+            _todayPos = (x * columnSize + 2);
         }
         startDate = startDate.addDays(1);
     }

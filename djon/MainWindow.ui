@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>274</width>
+    <height>253</height>
+   </rect>
+  </property>
   <property name="windowTitle">
    <string>d-jon</string>
   </property>
@@ -30,7 +38,6 @@
         <number>-1</number>
        </property>
       </widget>
-      <widget class="GanttView" name="ganttView" native="true"/>
      </widget>
     </item>
    </layout>
@@ -40,20 +47,14 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>714</width>
-     <height>22</height>
+     <width>274</width>
+     <height>21</height>
     </rect>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>GanttView</class>
-   <extends>QWidget</extends>
-   <header>ganttview.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>TaskTreeView</class>
    <extends>QTreeView</extends>

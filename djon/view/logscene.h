@@ -29,7 +29,7 @@ public slots:
     void refresh();
 
 protected:
-    QGraphicsItem* getTaskItem(const QModelIndex& index);
+    void getTaskItem(const QModelIndex& index);
     QGraphicsItem* getGroupItem(const QModelIndex& index);
     void createBackground();
     void drawIndex(const QModelIndex& index);
