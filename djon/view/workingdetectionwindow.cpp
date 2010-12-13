@@ -30,6 +30,25 @@ WorkingDetectionWindow::WorkingDetectionWindow(std::vector<Project*>* projects, 
     m_ui->idleMessage->setText(text);
     setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
     m_ui->comboBox->setEnabled(false);
+    _lastTrackedTask = lastTrackedTask(*projects);
+    if (_lastTrackedTask != NULL) {
+        std::stringstream ssLastActivity;
+        ssLastActivity << _lastTrackedTask->shortDescription();
+        Task* parent = _lastTrackedTask->parent();
+        while (parent != NULL) {
+            ssLastActivity << " - " << parent->shortDescription();
+            parent = parent->parent();
+        }
+        ssLastActivity << " - " << _lastTrackedTask->project()->name();
+
+        m_ui->lblLastActivity->setText(ssLastActivity.str().c_str());
+        m_ui->lblLastActivity->setVisible(true);
+        m_ui->countToLastTask->setVisible(true);
+    } else {
+        m_ui->lblLastActivity->setVisible(false);
+        m_ui->countToLastTask->setVisible(false);
+    }
+
     connect(this, SIGNAL(accepted()), this, SLOT(on_accepted()));
     connect(m_ui->countToTask, SIGNAL(toggled(bool)), m_ui->comboBox, SLOT(setEnabled(bool)));
 }
@@ -63,6 +82,12 @@ void WorkingDetectionWindow::on_accepted()
         log->end = new DateTime();
         createTaskLog(task, log);
         _timeTracker->startRecord(task, log, _since);
+    } else if (m_ui->countToLastTask->isChecked()) {
+        TaskLog* log = createTaskLog(_lastTrackedTask);
+        log->start = _since;
+        log->end = new DateTime();
+        createTaskLog(_lastTrackedTask, log);
+        _timeTracker->startRecord(_lastTrackedTask, log, _since);
     } else if (m_ui->dontCount->isChecked()) {
         _workingDetector->startDetection();
     }

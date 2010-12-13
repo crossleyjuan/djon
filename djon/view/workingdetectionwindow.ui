@@ -44,22 +44,36 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item row="2" column="0">
         <widget class="QRadioButton" name="countToTask">
          <property name="text">
           <string>Count the time in</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item row="3" column="0">
         <widget class="QLabel" name="label">
          <property name="text">
           <string>Register the detected time in:</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
+       <item row="3" column="1">
         <widget class="TreeComboBox" name="comboBox"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QRadioButton" name="countToLastTask">
+         <property name="text">
+          <string>Count time in last recorded task:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLabel" name="lblLastActivity">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>

@@ -32,6 +32,7 @@ private:
     DateTime* _since;
     TimeTracker* _timeTracker;
     WorkingDetector* _workingDetector;
+    Task* _lastTrackedTask;
 
 signals:
     void currentTaskChanged(Task* task);
