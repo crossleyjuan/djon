@@ -410,29 +410,26 @@ void MainWindow::reloadTasks() {
     widget.taskView->setAnimated(false);
     if (_taskModel != NULL) {
         _taskModel->setProjects(*_projects);
-        widget.ganttView->refresh();
+        ((LogView*)_currentView)->refresh();
     } else {
         _taskModel = new TaskModel(WITH_TIMES, *_projects);
         widget.taskView->setModel(_taskModel);
-        widget.ganttView->setModel(_taskModel);
+        _currentView = new LogView(this);
+        widget.splitter->addWidget(_currentView);
+        ((LogView*)_currentView)->setModel(_taskModel);
 
         widget.taskView->setAlternatingRowColors(true);
         widget.taskView->setSelectionBehavior(QAbstractItemView::SelectRows);
     }
 
-    LogView* view = new LogView();
-    view->setModel(_taskModel);
-    view->scrollToday();
-    view->show();
-
-    widget.ganttView->scrollToday();
-    connect(widget.taskView, SIGNAL(collapsed(QModelIndex)), widget.ganttView, SLOT(collapse(QModelIndex)));
-    connect(widget.taskView, SIGNAL(expanded(QModelIndex)), widget.ganttView, SLOT(expand(QModelIndex)));
+    ((LogView*)_currentView)->scrollToday();
+//    connect(widget.taskView, SIGNAL(collapsed(QModelIndex)), ((LogView*)_currentView), SLOT(collapse(QModelIndex)));
+//    connect(widget.taskView, SIGNAL(expanded(QModelIndex)), ((LogView*)_currentView), SLOT(expand(QModelIndex)));
     connect(widget.taskView, SIGNAL(collapsed(QModelIndex)), _userPreferencesController, SLOT(collapsed(QModelIndex)));
     connect(widget.taskView, SIGNAL(expanded(QModelIndex)), _userPreferencesController, SLOT(expanded(QModelIndex)));
 
-    connect(widget.taskView->verticalScrollBar(), SIGNAL(valueChanged(int)), widget.ganttView->verticalScrollBar(), SLOT(setValue(int)));
-    connect(widget.ganttView->verticalScrollBar(), SIGNAL(valueChanged(int)), widget.taskView->verticalScrollBar(), SLOT(setValue(int)));
+//    connect(widget.taskView->verticalScrollBar(), SIGNAL(valueChanged(int)), ((LogView*)_currentView)->verticalScrollBar(), SLOT(setValue(int)));
+//    connect(((LogView*)_currentView)->verticalScrollBar(), SIGNAL(valueChanged(int)), widget.taskView->verticalScrollBar(), SLOT(setValue(int)));
     connect(widget.taskView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(selectTaskChanged(QModelIndex,QModelIndex)));
 
     widget.taskView->expandAll();

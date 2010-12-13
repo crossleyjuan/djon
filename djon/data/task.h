@@ -12,6 +12,7 @@
 #include "duration.h"
 #include <vector>
 #include <string>
+#include <QColor>
 
 class Project;
 class Job;
@@ -66,6 +67,7 @@ public:
     Task* parent() const;
     bool isClosed() const;
     void setClosed(bool);
+    QColor taskColor() const;
 
     void processTemplate();
 
@@ -90,6 +92,7 @@ private:
     std::string* _status;
     DTime* _totalTime; // Time in secs
     int _childCount;
+    QColor _taskColor;
 
     std::vector<TaskLog*>* _logs;
     std::vector<Task*>* _subTasks;
