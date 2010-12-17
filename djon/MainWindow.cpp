@@ -23,7 +23,6 @@
 #include "view/projectdialog.h"
 #include "import/import.h"
 #include "config.h"
-#include "logview.h"
 #include "userpreferencescontroller.h"
 #include "djonpreferences.h"
 #include "releasenotesview.h"
@@ -37,6 +36,10 @@
 #include "systrayicon.h"
 #include "taskeditordelegate.h"
 #include "closedtaskfilter.h"
+
+// Views
+#include "logview.h"
+#include "ganttview.h"
 
 std::vector<Project*>* _projects;
 
@@ -58,10 +61,13 @@ MainWindow::MainWindow() {
     _taskPopUpMenu = NULL;
     _updateManager = NULL;
     _recordButton = NULL;
+    _currentView = NULL;
 
     _userPreferencesController = new UserPreferencesController(_taskModel);
 
     checkReleaseNotes();
+    setupActions();
+
     initialize();
     createTaskLogWindow();
     createCurrentTimeWindow();
@@ -69,14 +75,14 @@ MainWindow::MainWindow() {
     _updateManager = new UpdateManager(this);
     _updateManager->startCheck();
 
-    setupActions();
 
     widget.taskView->setColumnWidth(0, 250);
     widget.taskView->setColumnWidth(1, 30);
     widget.taskView->setColumnWidth(2, 70);
     widget.taskView->setColumnWidth(3, 70);
     widget.taskView->setColumnWidth(4, 70);
-    widget.taskView->setMinimumWidth(420);
+    widget.taskView->setMinimumWidth(250);
+    widget.taskView->setMaximumWidth(490);
     widget.taskView->setItemDelegate(new TaskEditorDelegate(this));
 //    _idleDetector = new IdleDetector(5*60);// 5*60
     _idleDetector = new IdleDetector();// 5*60
@@ -227,6 +233,20 @@ void MainWindow::setupActions() {
 
     _filterClosedAction = prjView->addAction("Only show &open tasks");
     _filterClosedAction->setCheckable(true);
+
+    /***** Views ******/
+    QMenu* views = prjView->addMenu(QIcon(":/img/views.png"), tr("Views"));
+    QActionGroup* group = new QActionGroup(this);
+    _ganttViewAction = views->addAction(tr("Gantt View"));
+    _ganttViewAction->setCheckable(true);
+    _ganttViewAction->setActionGroup(group);
+    _ganttViewAction->setData(0);
+    _logViewAction = views->addAction(tr("Log View"));
+    _logViewAction->setCheckable(true);
+    _logViewAction->setActionGroup(group);
+    _logViewAction->setData(1);
+    connect(group, SIGNAL(triggered(QAction*)), this, SLOT(onMenuChangeView(QAction*)));
+    /*****************/
 
     QAction* settings = optMenu->addAction(QIcon(":/img/settings.png"), tr("Settings"));
 
@@ -414,22 +434,16 @@ void MainWindow::reloadTasks() {
     } else {
         _taskModel = new TaskModel(WITH_TIMES, *_projects);
         widget.taskView->setModel(_taskModel);
-        _currentView = new LogView(this);
-        widget.splitter->addWidget(_currentView);
-        ((LogView*)_currentView)->setModel(_taskModel);
+        changeCurrentView(Log_View);
 
         widget.taskView->setAlternatingRowColors(true);
         widget.taskView->setSelectionBehavior(QAbstractItemView::SelectRows);
     }
 
-    ((LogView*)_currentView)->scrollToday();
-//    connect(widget.taskView, SIGNAL(collapsed(QModelIndex)), ((LogView*)_currentView), SLOT(collapse(QModelIndex)));
-//    connect(widget.taskView, SIGNAL(expanded(QModelIndex)), ((LogView*)_currentView), SLOT(expand(QModelIndex)));
+    _currentView->scrollToday();
     connect(widget.taskView, SIGNAL(collapsed(QModelIndex)), _userPreferencesController, SLOT(collapsed(QModelIndex)));
     connect(widget.taskView, SIGNAL(expanded(QModelIndex)), _userPreferencesController, SLOT(expanded(QModelIndex)));
 
-//    connect(widget.taskView->verticalScrollBar(), SIGNAL(valueChanged(int)), ((LogView*)_currentView)->verticalScrollBar(), SLOT(setValue(int)));
-//    connect(((LogView*)_currentView)->verticalScrollBar(), SIGNAL(valueChanged(int)), widget.taskView->verticalScrollBar(), SLOT(setValue(int)));
     connect(widget.taskView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(selectTaskChanged(QModelIndex,QModelIndex)));
 
     widget.taskView->expandAll();
@@ -753,6 +767,10 @@ void MainWindow::saveUserSessionState() {
     std::stringstream ssFilters;
     ssFilters << _filterClosedAction->isChecked();
     writePreference("filters", ssFilters.str());
+
+    std::stringstream ssCurrentView;
+    ssCurrentView << (int)_currentViewType;
+    writePreference("current-view", ssCurrentView.str());
 }
 
 void MainWindow::restoreUserSessionState() {
@@ -801,6 +819,10 @@ void MainWindow::restoreUserSessionState() {
         _filterClosedAction->setChecked(true);
         filterClosedTasks();
     }
+
+    std::string currentView = readPreference("current-view", "0");
+    VIEW_TYPE type = (VIEW_TYPE)atoi(currentView.c_str());
+    changeCurrentView(type);
 }
 
 void MainWindow::checkReleaseNotes() {
@@ -894,4 +916,33 @@ void MainWindow::showPopup() {
         }
     }
     _taskPopUpMenu->popup(QCursor::pos());
+}
+
+void MainWindow::changeCurrentView(VIEW_TYPE type) {
+    if (_currentView != NULL) {
+        delete _currentView;
+        _currentView = 0;
+    }
+    _currentViewType = type;
+    if (type == Gantt_View) {
+        _currentView = new GanttView(this);
+        connect(widget.taskView->verticalScrollBar(), SIGNAL(valueChanged(int)), ((LogView*)_currentView)->verticalScrollBar(), SLOT(setValue(int)));
+        (((LogView*)_currentView)->verticalScrollBar(), SIGNAL(valueChanged(int)), widget.taskView->verticalScrollBar(), SLOT(setValue(int)));
+        _ganttViewAction->setChecked(true);
+    } else {
+        _currentView = new LogView(this);
+        _logViewAction->setChecked(true);
+    }
+    widget.splitter->addWidget(_currentView);
+    _currentView->setModel(_taskModel);
+
+    connect(widget.taskView, SIGNAL(collapsed(QModelIndex)), ((LogView*)_currentView), SLOT(collapse(QModelIndex)));
+    connect(widget.taskView, SIGNAL(expanded(QModelIndex)), ((LogView*)_currentView), SLOT(expand(QModelIndex)));
+    _currentView->scrollToday();
+    widget.taskView->resize(420, widget.taskView->size().height());
+}
+
+void MainWindow::onMenuChangeView(QAction* action) {
+    int view = action->data().toInt();
+    changeCurrentView((VIEW_TYPE)view);
 }

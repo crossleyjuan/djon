@@ -4,7 +4,7 @@
 #include <sstream>
 
 LogView::LogView(QWidget *parent) :
-    QWidget(parent)
+    AbstractViewer(parent)
 {
     _model = NULL;
     _logScene = NULL;

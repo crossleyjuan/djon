@@ -2,10 +2,11 @@
 #define LOGVIEW_H
 
 #include "logscene.h"
+#include "AbstractViewer.h"
 #include <QWidget>
 #include <QtGui>
 
-class LogView : public QWidget
+class LogView : public AbstractViewer
 {
 Q_OBJECT
 public:

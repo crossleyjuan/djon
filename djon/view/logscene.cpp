@@ -333,7 +333,7 @@ void LogScene::calcZoom() {
         _startDate = DateTime::today();
         _endDate = _startDate.addDays(1);
     }
-    _totalDays = _startDate.daysTo(_endDate) + 5;
+    _totalDays = _startDate.daysTo(_endDate);
     this->_viewSizeWidth = _totalDays * _dayWidth;
 }
 

@@ -25,6 +25,12 @@ class UpdateManager;
 class UserPreferencesController;
 class SysTrayIcon;
 class TrackControlWindow;
+class AbstractViewer;
+
+enum VIEW_TYPE {
+    Gantt_View,
+    Log_View
+};
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -46,6 +52,7 @@ private:
     void setLastSelectedTask();
     void checkReleaseNotes();
     void showPopup();
+    void changeCurrentView(VIEW_TYPE type);
 
     Ui::MainWindow widget;
     TaskLogWindow* _logWindow;
@@ -64,16 +71,22 @@ private:
     // Actions
     QAction* _recordButton;
     QAction* _filterClosedAction;
+    QAction* _ganttViewAction;
+    QAction* _logViewAction;
 
     TrackControlWindow *_trackWindow;
 
     SysTrayIcon* _trayIcon;
     QMenu* _taskPopUpMenu;
     UpdateManager* _updateManager;
-    QWidget* _currentView;
+    AbstractViewer* _currentView;
+    VIEW_TYPE _currentViewType;
 
 public:
     void closeEvent(QCloseEvent *event);
+
+private slots:
+    void onMenuChangeView(QAction* action);
 
 public slots:
     void initialize();

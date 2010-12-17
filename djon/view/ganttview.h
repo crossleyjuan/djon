@@ -2,10 +2,11 @@
 #define GANTTVIEW_H
 
 #include "ganttscene.h"
+#include "AbstractViewer.h"
 #include <QWidget>
 #include <QtGui>
 
-class GanttView : public QWidget
+class GanttView : public AbstractViewer
 {
 Q_OBJECT
 public:
@@ -13,7 +14,7 @@ public:
     void setModel(TaskModel* taskModel);
     QScrollBar* horizontalScrollBar();
     QScrollBar* verticalScrollBar();
-    void refresh();
+    virtual void refresh();
 
 signals:
 

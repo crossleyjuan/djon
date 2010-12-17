@@ -2,7 +2,7 @@
 #include "TaskModel.h"
 
 GanttView::GanttView(QWidget *parent) :
-    QWidget(parent)
+    AbstractViewer(parent)
 {
     QLayout* lay = new QVBoxLayout();
     _model = NULL;

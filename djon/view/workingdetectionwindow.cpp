@@ -33,13 +33,13 @@ WorkingDetectionWindow::WorkingDetectionWindow(std::vector<Project*>* projects, 
     _lastTrackedTask = lastTrackedTask(*projects);
     if (_lastTrackedTask != NULL) {
         std::stringstream ssLastActivity;
-        ssLastActivity << _lastTrackedTask->shortDescription();
+        ssLastActivity << *_lastTrackedTask->shortDescription();
         Task* parent = _lastTrackedTask->parent();
         while (parent != NULL) {
-            ssLastActivity << " - " << parent->shortDescription();
+            ssLastActivity << " - " << *parent->shortDescription();
             parent = parent->parent();
         }
-        ssLastActivity << " - " << _lastTrackedTask->project()->name();
+        ssLastActivity << " - " << *_lastTrackedTask->project()->name();
 
         m_ui->lblLastActivity->setText(ssLastActivity.str().c_str());
         m_ui->lblLastActivity->setVisible(true);
