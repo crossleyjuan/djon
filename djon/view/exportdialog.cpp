@@ -2,6 +2,7 @@
 #include "exportdialog.h"
 #include "ui_exportdialog.h"
 #include "exportutility.h"
+#include "excelexportutility.h"
 #include "data.h"
 
 ExportDialog::ExportDialog(std::vector<Project*> projects, QWidget *parent) :
@@ -51,7 +52,13 @@ void ExportDialog::changeEvent(QEvent *e)
 
 void ExportDialog::on_pushButton_clicked()
 {
-    QString selectedFileName = QFileDialog::getSaveFileName(this, tr("Export Project As"), tr(""), tr("XML Files (*.xml)"));
+    std::string fileFormats;
+    if (ui->cmbType->currentIndex() == 0) {
+        fileFormats = "XML Files (*.xml)";
+    } else {
+        fileFormats = "Excel Files (*.xls)";
+    }
+    QString selectedFileName = QFileDialog::getSaveFileName(this, tr("Export Project As"), tr(""), tr(fileFormats.c_str()));
     if (selectedFileName.size() > 0){
         ui->fileName->setText(selectedFileName);
     }
@@ -76,13 +83,24 @@ void ExportDialog::done(int res) {
 
 void ExportDialog::on_ExportDialog_accepted()
 {
-    ExportUtility utility(_projects);
-    if (ui->cbFilter->isChecked()) {
-        DateTime* from = new DateTime(ui->dteFrom->dateTime());
-        DateTime* to = new DateTime(ui->dteTo->dateTime());
-        utility.executeExport(ui->fileName->text().toStdString(), from, to);
+    if (ui->cmbType->currentIndex() == 0) {
+        ExportUtility utility(_projects);
+        if (ui->cbFilter->isChecked()) {
+            DateTime* from = new DateTime(ui->dteFrom->dateTime());
+            DateTime* to = new DateTime(ui->dteTo->dateTime());
+            utility.executeExport(ui->fileName->text().toStdString(), from, to);
+        } else {
+            utility.executeExport(ui->fileName->text().toStdString());
+        }
     } else {
-        utility.executeExport(ui->fileName->text().toStdString());
+        ExcelExportUtility utility(_projects);
+        if (ui->cbFilter->isChecked()) {
+            DateTime* from = new DateTime(ui->dteFrom->dateTime());
+            DateTime* to = new DateTime(ui->dteTo->dateTime());
+            utility.executeExport(ui->fileName->text().toStdString(), from, to);
+        } else {
+            utility.executeExport(ui->fileName->text().toStdString());
+        }
     }
 }
 

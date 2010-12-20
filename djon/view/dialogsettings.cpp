@@ -24,6 +24,8 @@ DialogSettings::DialogSettings(QWidget *parent) :
     int updateCheck = getSettings()->checkUpdate();
     ui->cboUpdate->setCurrentIndex(ui->cboUpdate->findData(updateCheck));
     ui->transparency->setValue(getSettings()->transparency());
+
+    loadCalendars();
 }
 
 DialogSettings::~DialogSettings()
@@ -104,4 +106,15 @@ void DialogSettings::populateCheckUpdate() {
     ui->cboUpdate->addItem("every 8 hours", 480);
     ui->cboUpdate->addItem("every 24 hours", 1440);
     ui->cboUpdate->addItem("Never", 0);
+}
+
+void DialogSettings::loadCalendars() {
+    map<string, Calendar*> cals = calendars();
+
+    ui->calendarList->addItem("Default"); // Precreated calendar
+
+    qDebug("Calendars size: %d", cals.size());
+    for (map<string, Calendar*>::iterator iter = cals.begin(); iter != cals.end(); iter++) {
+        ui->calendarList->addItem(QString(iter->first.c_str()));
+    }
 }

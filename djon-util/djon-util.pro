@@ -19,7 +19,8 @@ SOURCES += util.cpp \
     util/dtime.cpp \
     util/DateTime.cpp \
     util/version.cpp \
-    util/calendar.cpp
+    util/calendar.cpp \
+    util/excel.cpp
 HEADERS += djon-util_global.h \
     util.h \
     util/fileutil.h \
@@ -28,4 +29,5 @@ HEADERS += djon-util_global.h \
     util/DateTime.h \
     util/stringfunctions.h \
     util/version.h \
-    util/calendar.h
+    util/calendar.h \
+    util/excel.h

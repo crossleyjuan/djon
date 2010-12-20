@@ -18,14 +18,24 @@ void loadCalendars() {
     if (getdir(const_cast<char*>(calDir.c_str()), files, "cal") == 0) {
         for (std::vector<char*>::iterator filesIter = files.begin(); filesIter != files.end(); filesIter++) {
             std::string calFile = calDir + "/" + std::string(*filesIter);
+            qDebug("Loading calendar: %s", calFile.c_str());
             char* calDef = readFile(const_cast<char*>(calFile.c_str()));
             Calendar* cal = new Calendar(calDef);
+            //qDebug("Calendar %s loaded", cal->name());
             __calendars.insert(pair<std::string, Calendar*>(cal->name(), cal));
         }
     }
+    qDebug("Calendar size: %d", __calendars.size());
     __calendarsLoaded = true;
 
     delete(homeDir);
+}
+
+map<std::string, Calendar*> calendars() {
+    if (!__calendarsLoaded) {
+        loadCalendars();
+    }
+    return __calendars;
 }
 
 Calendar* calendar(std::string name) {

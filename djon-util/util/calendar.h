@@ -2,6 +2,7 @@
 #define CALENDAR_H
 
 #include "util.h"
+#include <map>
 #include <string>
 #include <vector>
 
@@ -33,6 +34,7 @@ private:
 
 
 // Public functions
+std::map<std::string, Calendar*> calendars();
 Calendar* calendar(std::string name);
 Calendar* defaultCalendar();
 void releaseCalendars();

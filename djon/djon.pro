@@ -73,7 +73,8 @@ HEADERS += data.h \
     view/closedtaskfilter.h \
     view/logview.h \
     view/logscene.h \
-    view/AbstractViewer.h
+    view/AbstractViewer.h \
+    data/excelexportutility.h
 FORMS += MainWindow.ui \
     taskdialog.ui \
     tasklogwindow.ui \
@@ -140,7 +141,8 @@ SOURCES += data.cpp \
     view/closedtaskfilter.cpp \
     view/logview.cpp \
     view/logscene.cpp \
-    view/AbstractViewer.cpp
+    view/AbstractViewer.cpp \
+    data/excelexportutility.cpp
 OTHER_FILES += djon.rc
 RESOURCES += djon_rs.qrc
 RC_FILE = djon.rc
