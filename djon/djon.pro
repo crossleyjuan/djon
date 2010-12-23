@@ -10,8 +10,7 @@ DESTDIR = ../libs
 INCLUDEPATH += . \
     data \
     view \
-    ../djon-util \
-    ../includes
+    ../djon-util
 include(../qtsingleapplication-2.6_1-opensource/src/qtsingleapplication.pri)
 QT += xml \
     webkit
@@ -74,7 +73,8 @@ HEADERS += data.h \
     view/logview.h \
     view/logscene.h \
     view/AbstractViewer.h \
-    data/excelexportutility.h
+    data/excelexportutility.h \
+    data/excel.h
 FORMS += MainWindow.ui \
     taskdialog.ui \
     tasklogwindow.ui \
@@ -142,7 +142,8 @@ SOURCES += data.cpp \
     view/logview.cpp \
     view/logscene.cpp \
     view/AbstractViewer.cpp \
-    data/excelexportutility.cpp
+    data/excelexportutility.cpp \
+    data/excel.cpp
 OTHER_FILES += djon.rc
 RESOURCES += djon_rs.qrc
 RC_FILE = djon.rc

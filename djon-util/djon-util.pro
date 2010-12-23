@@ -11,7 +11,6 @@ macx-g++:LIBS += -L/usr/X11R6/lib -lXss -lX11 -framework IOKit -framework Carbon
 
 DESTDIR = ../libs
 DEFINES += DJONUTIL_LIBRARY
-INCLUDEPATH += ../includes
 SOURCES += util.cpp \
     util/stringfunctions.cpp \
     util/fileutil.cpp \
@@ -19,8 +18,7 @@ SOURCES += util.cpp \
     util/dtime.cpp \
     util/DateTime.cpp \
     util/version.cpp \
-    util/calendar.cpp \
-    util/excel.cpp
+    util/calendar.cpp
 HEADERS += djon-util_global.h \
     util.h \
     util/fileutil.h \
@@ -30,4 +28,4 @@ HEADERS += djon-util_global.h \
     util/stringfunctions.h \
     util/version.h \
     util/calendar.h \
-    util/excel.h
+    config.h

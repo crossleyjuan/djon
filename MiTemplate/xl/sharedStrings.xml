@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="146" uniqueCount="146">
+	<si>
+		<t>PROJECT</t>
+	</si>
+	<si>
+		<t>Tasks</t>
+	</si>
+	<si>
+		<t>Total Time</t>
+	</si>
+	<si>
+		<t>Expected Time</t>
+	</si>
+<si><t>Tareas Adicionales</t></si>
+<si><t>Soporte Josea</t></si>
+<si><t>Soporte Juan Pastrana</t></si>
+<si><t>Soporte Mario</t></si>
+<si><t>Reunion Seguimiento</t></si>
+<si><t>Soporte Lucho</t></si>
+<si><t>Soporte Soporte</t></si>
+<si><t>Soporte Jaime</t></si>
+<si><t>Instalacion WebDav</t></si>
+<si><t>Jboss</t></si>
+<si><t>Soporte Manuel</t></si>
+<si><t>Tasks de Redmine</t></si>
+<si><t> Clasificacion</t></si>
+<si><t> Administracion de Entidades</t></si>
+<si><t> Implementacion de Excepciones</t></si>
+<si><t>    Planeacion</t></si>
+<si><t>    Desarrollo BR</t></si>
+<si><t>    Analisis BR</t></si>
+<si><t>    Analisis</t></si>
+<si><t>    Inspeccion Analisis</t></si>
+<si><t>    Comite Analisis</t></si>
+<si><t>    Dise o</t></si>
+<si><t>    Inspeccion Dise o</t></si>
+<si><t>    Comite Dise o</t></si>
+<si><t>    DB Build</t></si>
+<si><t>    Inspeccion DB Build</t></si>
+<si><t>    Implementacion</t></si>
+<si><t>    Pruebas</t></si>
+<si><t>    Actualizacion Documentos</t></si>
+<si><t>    Inspeccion Calidad</t></si>
+<si><t>    Merge</t></si>
+<si><t>    Release Notes</t></si>
+<si><t>    Inspeccion Release Notes</t></si>
+<si><t>Reunion Jesus</t></si>
+<si><t>Varios</t></si>
+<si><t>Soporte SergioArteaga</t></si>
+<si><t>Revision PoC SL vs Pojo</t></si>
+<si><t>Ciclo de Pruebas QA  Version     </t></si>
+<si><t> QA Bug      Error al ejecutar proceso que ejecuta interface</t></si>
+<si><t> QA Bug      Se crea caso y es ejecutada la interface pero los datos no son seteados</t></si>
+<si><t> Bug de MultiInstance respecto a Grupos</t></si>
+<si><t> QA BUG      Error al ejecutar interface que retorna un objeto con tipos de datos primitivos</t></si>
+<si><t> QA Bug      Formas  Se presenta error al ingresar a un caso cerrado para que muestre la forma global</t></si>
+<si><t> QA BUG      Wizard  Las formas tipo wizard no se muestran por pasos  todo se muestra en la misma forma </t></si>
+<si><t> QA BUG      NET  TRansaccionales   al ejecutar en web un transaccional se comporta como subproceso</t></si>
+<si><t> Reproduccion</t></si>
+<si><t> Correccion</t></si>
+<si><t> Deploy</t></si>
+<si><t> QA Bug      NET  Cuando se configuran subprocesos m ltiples para que se ejecuten en secuencia  luego de finalizar el primero generado  se selecciona el segundo pero no puede avanzarse en  l</t></si>
+<si><t> QA Bug      NET  No funcionan las configuraciones de salida de los m ltiples subprocesos  Cada token  y  Un token </t></si>
+<si><t> QA BUG      NET  Flujo desconectado</t></si>
+<si><t> QA Bug      NET  subprocesos m ltiples con filtro en la colecci n</t></si>
+<si><t> QA Bug      NET  Busqueda del caso no arroja resultado</t></si>
+<si><t> QA BUG      NET  Fase de Radicacion</t></si>
+<si><t> QA Bug      Error al ejecutar proceso que invoca web service por medio de regla donde se emplea el shape  Web Service </t></si>
+<si><t> Reproduccion</t></si>
+<si><t> Correccion</t></si>
+<si><t> Deploy</t></si>
+<si><t> QA Bug      No se observan flujos de salida en una compuerta compleja</t></si>
+<si><t> Reproduccion</t></si>
+<si><t> Correccion</t></si>
+<si><t> Deploy</t></si>
+<si><t> QA Bug      Fallo En Timer Event  Temporizadores </t></si>
+<si><t> Reproduccion</t></si>
+<si><t> Correccion</t></si>
+<si><t> Deploy</t></si>
+<si><t> QA Bug      NET  Transaccional   Evento de error</t></si>
+<si><t> Test</t></si>
+<si><t> Fix</t></si>
+<si><t> Deploy</t></si>
+<si><t> QA Bug      NET  Error al realizar una busqueda en un Join Search Field</t></si>
+<si><t> Test</t></si>
+<si><t> Fix</t></si>
+<si><t> Deploy</t></si>
+<si><t> QA Bug      Net  Rendering   No muestra validacion en web cuando un booleano es requerido</t></si>
+<si><t> Test</t></si>
+<si><t> Fix</t></si>
+<si><t> Deploy</t></si>
+<si><t> QA Bug      Net  Cuando se configura la salida de m ltiples instancias a trav s de expresi n  solo sale el primer token y los dem s subprocesos no se pueden finalizar</t></si>
+<si><t> Test</t></si>
+<si><t> Fix</t></si>
+<si><t> Deploy</t></si>
+<si><t> QA Bug      Net  Se presenta error al cargar un upload Normal en un nuevo registro de un JoinSearch Dialog </t></si>
+<si><t> Test</t></si>
+<si><t> Fix</t></si>
+<si><t> Deploy</t></si>
+<si><t> TestTestTest</t></si>
+<si><t> Test</t></si>
+<si><t> Fix</t></si>
+<si><t> Deploy</t></si>
+<si><t> QA Bug      NET  upload Normal en un nuevo registro de un JoinSearch Dialog</t></si>
+<si><t> Test</t></si>
+<si><t> Fix</t></si>
+<si><t> Deploy</t></si>
+<si><t> QA Bug      NET  Transaccionales   Se presenta error al dar click para adicionar registros en una grilla que se encuentra en un proceso transaccional </t></si>
+<si><t> Test</t></si>
+<si><t> Fix</t></si>
+<si><t> Deploy</t></si>
+<si><t> QA Bug      Net  Compuertas</t></si>
+<si><t> QA Bug      Net  FormasWizard   Al cumplir los pasos de la forma wizard No pasa al evento de fin que se tiene asociado </t></si>
+<si><t> Test</t></si>
+<si><t> Fix</t></si>
+<si><t> Deploy</t></si>
+<si><t> QA Bug       Transaccionales</t></si>
+<si><t> Test</t></si>
+<si><t> Fix</t></si>
+<si><t> Deploy</t></si>
+<si><t> QA Bug      Net  Salida Complex en multiinstance</t></si>
+<si><t> Test</t></si>
+<si><t> Fix</t></si>
+<si><t> Deploy</t></si>
+<si><t>Reunion de Revision Ciclo I</t></si>
+<si><t>Soporte Raul</t></si>
+<si><t>Post mortem Ciclo I</t></si>
+<si><t>JBoss</t></si>
+<si><t>Soporte Varios</t></si>
+<si><t>Soporte AirFrance</t></si>
+<si><t>Resume</t></si>
+<si><t>Problemas referentes a Scopes en Masivo</t></si>
+<si><t>Task      Net  Copia y movida de uploads</t></si>
+<si><t>Mapping de parametros</t></si>
+<si><t>Investigacion del tema</t></si>
+<si><t>Ciclo I</t></si>
+<si><t> Planning</t></si>
+<si><t> Requirements</t></si>
+<si><t> Interview</t></si>
+<si><t> Document</t></si>
+<si><t> Presentation</t></si>
+<si><t> Mockups</t></si>
+<si><t> Design</t></si>
+<si><t> Implementation</t></si>
+<si><t> Tests</t></si>
+<si><t>Render jQuery</t></si>
+<si><t>Ciclo I</t></si>
+<si><t> Planning</t></si>
+<si><t> Requirements</t></si>
+<si><t> Interview</t></si>
+<si><t> Document</t></si>
+<si><t> Presentation</t></si>
+<si><t> Design</t></si>
+<si><t> Implementation</t></si>
+<si><t> Tests</t></si>
+
+</sst>

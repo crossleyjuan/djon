@@ -26,5 +26,7 @@
         <file alias="play_running.png">img/Play_running.png</file>
         <file alias="djon.png">img/djon_48x48.png</file>
         <file alias="djon_running.png">img/djon_48x48_running.png</file>
+        <file alias="sheet.xml">data/sheet1.xml</file>
+        <file alias="sharedStrings.xml">data/sharedStrings.xml</file>
     </qresource>
 </RCC>
