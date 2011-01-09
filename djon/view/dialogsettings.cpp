@@ -3,6 +3,7 @@
 #include "ui_dialogsettings.h"
 #include "util.h"
 #include "settings.h"
+#include "data.h"
 #include <sstream>
 
 DialogSettings::DialogSettings(QWidget *parent) :
@@ -26,6 +27,8 @@ DialogSettings::DialogSettings(QWidget *parent) :
     ui->transparency->setValue(getSettings()->transparency());
 
     loadCalendars();
+    loadTemplates();
+    ui->tab->setCurrentIndex(0);
 }
 
 DialogSettings::~DialogSettings()
@@ -117,4 +120,15 @@ void DialogSettings::loadCalendars() {
     for (map<string, Calendar*>::iterator iter = cals.begin(); iter != cals.end(); iter++) {
         ui->calendarList->addItem(QString(iter->first.c_str()));
     }
+}
+
+void DialogSettings::loadTemplates() {
+    vector<Template*>* templates = readTemplates();
+    QStringList list;
+    for (vector<Template*>::iterator iter = templates->begin(); iter != templates->end(); iter++) {
+        Template* tpl = *iter;
+        QString description(tpl->description()->c_str());
+        list.append(description);
+    }
+    ui->templatesList->addItems(list);
 }

@@ -4,6 +4,8 @@ Template::Template(std::string* name, std::string* description, std::vector<stri
     if (name->at(name->length() - 1) == '*') {
         _default = true;
         name = new string(name->substr(0, name->length() - 1));
+    } else {
+        _default = false;
     }
     _name = name;
     _description = description;
