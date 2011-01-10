@@ -24,6 +24,7 @@ public:
     DateTime(int year, int month, int day, int hour = 0, int min = 0, int secs = 0);
     DateTime(const QDateTime& dateTime);
     DateTime(string dateTime);
+    DateTime(double value);
     DateTime(const DateTime& orig);
     virtual ~DateTime();
 

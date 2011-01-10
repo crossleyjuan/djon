@@ -155,11 +155,9 @@ void TaskDialog::save() {
         if (errorOcurred()) {
             return;
         }
-        createTask(m_task);
         m_task->processTemplate();
-    } else {
-        updateTask(m_task);
     }
+    saveProject(m_project);
 }
 
 void TaskDialog::on_buttonBox_accepted()

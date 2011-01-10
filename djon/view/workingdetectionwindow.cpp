@@ -80,13 +80,13 @@ void WorkingDetectionWindow::on_accepted()
         TaskLog* log = createTaskLog(task);
         log->start = _since;
         log->end = new DateTime();
-        createTaskLog(task, log);
+        saveProject(task->project());
         _timeTracker->startRecord(task, log, _since);
     } else if (m_ui->countToLastTask->isChecked()) {
         TaskLog* log = createTaskLog(_lastTrackedTask);
         log->start = _since;
         log->end = new DateTime();
-        createTaskLog(_lastTrackedTask, log);
+        saveProject(_lastTrackedTask->project());
         _timeTracker->startRecord(_lastTrackedTask, log, _since);
     } else if (m_ui->dontCount->isChecked()) {
         _workingDetector->startDetection();

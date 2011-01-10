@@ -80,11 +80,7 @@ bool TaskLogModel::setData(const QModelIndex &index, const QVariant &value, int 
         QDateTime time = value.toDateTime();
         log->end = new DateTime(time);
     }
-    if (newTaskLog) {
-        createTaskLog(_task, log);
-    } else {
-        updateTaskLog(_task, log);
-    }
+    saveProject(this->_task->project());
     return true;
 }
 

@@ -24,7 +24,7 @@ void TimeTracker::startRecord(Task* task) {
     TaskLog* taskLog = createTaskLog(task);
     taskLog->start = new DateTime();
     taskLog->end = new DateTime();
-    createTaskLog(task, taskLog);
+    saveProject(task->project());
     startRecord(task, taskLog);
 }
 
@@ -50,7 +50,7 @@ void TimeTracker::stopRecord() {
     if (currentStatus == RUNNING) {
         DateTime* stopTime = new DateTime();
         _taskLog->end = stopTime;
-        updateTaskLog(_task, _taskLog);
+        saveProject(_task->project());
         emit timeStopped(_task, _taskLog);
     }
 }
@@ -76,7 +76,7 @@ void TimeTracker::timeOut() {
 
     // Every minute save the current time, to avoid any failure
     if (_ticksToSaveLog > 60) {
-        updateTaskLog(_task, _taskLog);
+        saveProject(_task->project());
         _ticksToSaveLog = 0;
     }
     DTime totalTime(_task->totalTime());
@@ -98,11 +98,10 @@ TaskLog* TimeTracker::taskLog() {
 
 void TimeTracker::moveCurrentRecordToTask(Task* newTask) {
     _task->removeLog(_taskLog);
-    deleteTaskLog(_task, _taskLog);
 
     _task = newTask;
     _task->addLog(_taskLog);
-    createTaskLog(_task, _taskLog);
+    saveProject(_task->project());
 }
 
 void TimeTracker::moveLappedRecordToTask(Task* newTask) {
@@ -113,21 +112,21 @@ void TimeTracker::moveLappedRecordToTask(Task* newTask) {
     newLog->lastLap = NULL;
     newLog->logDescription = NULL;
     newTask->addLog(newLog);
-    createTaskLog(newTask, newLog);
 
     _taskLog->end = _taskLog->lastLap;
     _taskLog->lastLap = NULL;
-    updateTaskLog(_task, _taskLog);
 
     _taskLog = newLog;
     _task = newTask;
+
+    saveProject(newTask->project());
 }
 
 void TimeTracker::destroyCurrentRecord() {
     stopRecord();
     _task->removeLog(_taskLog);
-    deleteTaskLog(_task, _taskLog);
     _taskLog = NULL;
+    saveProject(_task->project());
 }
 
 void TimeTracker::removeLapTime() {
@@ -136,7 +135,7 @@ void TimeTracker::removeLapTime() {
             _taskLog->end = _taskLog->lastLap;
         }
         _taskLog->lastLap = NULL;
-        updateTaskLog(_task, _taskLog);
+        saveProject(_task->project());
     }
 }
 
@@ -150,7 +149,7 @@ void TimeTracker::cleanLapTime() {
             delete _taskLog->lastLap;
         }
         _taskLog->lastLap = NULL;
-        updateTaskLog(_task, _taskLog);
+        saveProject(_task->project());
     }
 }
 

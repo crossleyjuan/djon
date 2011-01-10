@@ -1,7 +1,7 @@
 #include "idledetector.h"
 #include "config.h"
 #include "util.h"
-#include "settings.h"
+#include "data.h"
 #include <stdlib.h>
 
 IdleDetector::IdleDetector()

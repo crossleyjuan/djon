@@ -41,6 +41,7 @@ void ProjectWizard::changeEvent(QEvent *e)
 void ProjectWizard::on_ProjectWizard_finished(int result)
 {
     _project = new Project();
+    _project->setId(uuid());
     QString projectName = field("projectName").toString();
     QString projectDescription = field("projectDescription").toString();
     _project->setName(new string(projectName.toStdString()));

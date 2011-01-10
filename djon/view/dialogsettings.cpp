@@ -2,7 +2,6 @@
 #include "dialogsettings.h"
 #include "ui_dialogsettings.h"
 #include "util.h"
-#include "settings.h"
 #include "data.h"
 #include <sstream>
 

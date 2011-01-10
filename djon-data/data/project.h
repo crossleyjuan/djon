@@ -26,11 +26,13 @@ public:
     Project(const Project& orig);
     virtual ~Project();
 
-    string* name();
+    string* id() const;
+    void setId(string* id);
+    string* name() const;
     void setName(string* name);
-    string* description();
+    string* description() const;
     void setDescription(string* description);
-    string* projectFileName();
+    string* projectFileName() const;
     void setProjectFileName(string* projectFileName);
 //    int getLastTaskId();
 
@@ -46,6 +48,7 @@ public:
     DTime totalTimeCurrentWeek() const;
     DTime totalTimeCurrentDay() const;
     Calendar* projectDefaultCalendar() const;
+    int taskCount() const;
 
     Task* task(string id);
     std::string* nextChildId();
@@ -53,6 +56,7 @@ public:
     bool operator==(const Project& prj) const;
 
 private:
+    string* _id;
     string* _name;
     string* _description;
     string* _projectFileName;

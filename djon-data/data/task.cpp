@@ -159,7 +159,7 @@ void Task::setEndDate(DateTime* _endDate) {
     this->_endDate = _endDate;
 }
 
-DateTime* Task::endDate() {
+DateTime* Task::endDate() const {
     vector<Task*>* child = subTasks();
     DateTime* result;
     if (child->size() == 0) {
@@ -184,7 +184,7 @@ void Task::setStartDate(DateTime* _startDate) {
     this->_startDate = _startDate;
 }
 
-DateTime* Task::startDate() {
+DateTime* Task::startDate() const {
     vector<Task*>* child = subTasks();
     DateTime* result;
     if (child->size() == 0) {
@@ -237,7 +237,7 @@ string* Task::id() const {
     return _id;
 }
 
-std::vector<TaskLog*>* Task::logs() {
+std::vector<TaskLog*>* Task::logs() const {
     return _logs;
 }
 
@@ -376,7 +376,6 @@ void Task::processTemplate() {
         if (errorOcurred()) {
             return;
         }
-        createTask(sub);
         sub->processTemplate();
     }
 }

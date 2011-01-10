@@ -1,7 +1,7 @@
 #include "updatemanager.h"
 #include "util.h"
 #include "config.h"
-#include "settings.h"
+#include "data.h"
 #include <QMessageBox>
 #include <QProcess>
 #ifdef WINDOWS

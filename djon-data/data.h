@@ -12,6 +12,8 @@
 #include "data/project.h"
 #include "data/task.h"
 #include "template.h"
+#include "data/djonpreferences.h"
+#include "data/settings.h"
 
 std::vector<Project*>* loadProjects();
 Project* searchProject(vector<Project*> projects, string name);
@@ -20,17 +22,19 @@ vector<Template*>* readTemplates();
 Template* readTemplate(const string& templateName);
 Template* defaultTemplate();
 
-int createProject(Project* project);
+int saveProject(Project* project);
+
+//int createProject(Project* project);
 void addProject(const char* fileName);
 void removeProject(const char* fileName);
-int updateProject(Project* project);
-int createTask(Task* task);
-int updateTask(Task* task);
-int deleteTask(Task* task);
+//int updateProject(Project* project);
+//int createTask(Task* task);
+//int updateTask(Task* task);
+//int deleteTask(Task* task);
 TaskLog* createTaskLog(Task* task);
-int createTaskLog(Task* task, TaskLog* taskLog);
-int updateTaskLog(Task* task, TaskLog* taskLog);
-int deleteTaskLog(Task* task, TaskLog* taskLog);
+//int createTaskLog(Task* task, TaskLog* taskLog);
+//int updateTaskLog(Task* task, TaskLog* taskLog);
+//int deleteTaskLog(Task* task, TaskLog* taskLog);
 
 #endif	/* _DATA_H */
 

@@ -253,7 +253,7 @@ bool TaskModel::setData(const QModelIndex &index, const QVariant &value, int rol
     }
     // Saves the change
     if (modified) {
-        updateTask(tsk);
+        saveProject(tsk->project());
         if (!acceptFilter(tsk)) {
             beginRemoveRows(index.parent(), index.row(), index.row());
             TaskItem* item = (TaskItem*)index.internalPointer();

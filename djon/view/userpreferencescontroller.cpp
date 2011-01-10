@@ -1,7 +1,6 @@
 #include "userpreferencescontroller.h"
 #include "data.h"
 #include "TaskModel.h"
-#include "djonpreferences.h"
 
 using namespace std;
 

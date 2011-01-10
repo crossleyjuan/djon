@@ -2,14 +2,20 @@
 #include "util.h"
 #include "config.h"
 #include "settings.h"
+#include "data/projectwriter.h"
+#include "data/outputstream.h"
+#include "data/inputstream.h"
+#include "data/projectreader.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string>
 #include <map>
 #include <vector>
 #include <iostream>
+#include <fstream>
 #include <sstream>
 #include <algorithm>
+
 
 using namespace std;
 
@@ -101,7 +107,42 @@ void loadTaskLogs(Project* project) {
     qDebug("out loadTaskLogs(Project* project)");
 }
 
+
 std::vector<Project*>* loadProjects() {
+    qDebug("loadProjects()");
+    const char* lastDir = getLastDir();
+
+    std::vector<Project*>* projects = new std::vector<Project*>();
+
+    vector<string> prjs = getSettings()->openProjects();
+
+    for (vector<string>::iterator it = prjs.begin(); it != prjs.end(); it++) {
+        string fileName = (*it);
+
+        FILE* pFile;
+
+        pFile = fopen(fileName.c_str(), "rb");
+
+        if (pFile != NULL) {
+            InputStream is(pFile);
+            ProjectReader reader(&is);
+            Project* project = reader.readProject();
+
+            project->setProjectFileName(new string(fileName));
+            projects->push_back(project);
+
+            if (errorOcurred()) {
+                return NULL;
+            }
+            fclose(pFile);
+        }
+
+    }
+    qDebug("out loadProjects()");
+    return projects;
+}
+
+std::vector<Project*>* loadProjects2() {
     qDebug("loadProjects()");
     const char* lastDir = getLastDir();
 
@@ -117,9 +158,10 @@ std::vector<Project*>* loadProjects() {
         ss << fileName;
         ss << ".djon";
         string fullPath = ss.str();
-        char* projectDef = readFile(const_cast<char*>(fullPath.c_str()));
 
-        Project* project = new Project(projectDef);
+        char* projDef = readFile((char*)fileName.c_str());
+        Project* project = new Project(string(projDef));
+
         project->setProjectFileName(new string(fileName));
         projects->push_back(project);
         loadTasks(project);
@@ -130,12 +172,11 @@ std::vector<Project*>* loadProjects() {
         if (errorOcurred()) {
             return NULL;
         }
-        free(projectDef);
+        free(projDef);
     }
     qDebug("out loadProjects()");
     return projects;
 }
-
 
 vector<Template*>* m_templates;
 
@@ -210,6 +251,7 @@ int createTask(Task* task) {
     stringstream fileName;
     fileName << lastDir << "/" << *projName << ".tsk";
     int res = writeFile(fileName.str(), ssTaskDef.str(), true);
+
     return res;
 }
 
@@ -454,4 +496,23 @@ Project* searchProject(vector<Project*> projects, string name) {
         }
     }
     return NULL;
+}
+
+int saveProject(Project *project) {
+
+    stringstream fileName;
+    const char* lastDir = getLastDir();
+    fileName << lastDir << "/" << *project->name() << ".djon";
+
+    FILE* pFile;
+    pFile = fopen(fileName.str().c_str(), "wb");
+
+    OutputStream os(pFile);
+    ProjectWriter writer(&os);
+    writer.writeProject(*project);
+    project->setProjectFileName(new string(fileName.str()));
+
+    fclose(pFile);
+
+    return 0;
 }

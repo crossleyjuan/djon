@@ -10,27 +10,26 @@ DESTDIR = ../libs
 INCLUDEPATH += . \
     data \
     view \
-    ../djon-util
+    ../djon-util \
+    ../djon-data
+
 include(../qtsingleapplication-2.6_1-opensource/src/qtsingleapplication.pri)
 QT += xml \
     webkit
 LIBS += -L../libs
 LIBS += -ldjon-util
+LIBS += -ldjon-data
 CONFIG += static
 
 # LIBS += -lRpcrt4
 # Input
-HEADERS += data.h \
-    globaldefs.h \
+HEADERS += globaldefs.h \
     MainWindow.h \
     taskdelegate.h \
     taskdialog.h \
     taskitem.h \
     tasklogmodel.h \
     tasklogwindow.h \
-    template.h \
-    data/project.h \
-    data/task.h \
     view/TaskModel.h \
     view/taskheaderview.h \
     idledetector.h \
@@ -54,8 +53,6 @@ HEADERS += data.h \
     view/ganttscene.h \
     view/ganttview.h \
     view/userpreferencescontroller.h \
-    data/djonpreferences.h \
-    data/duration.h \
     view/durationcontrol.h \
     view/releasenotesview.h \
     view/systrayicon.h \
@@ -63,7 +60,6 @@ HEADERS += data.h \
     view/workingdetectionwindow.h \
     view/trackcontrolwindow.h \
     view/treecombobox.h \
-    data/settings.h \
     preferences.h \
     view/taskclosefiltermodel.h \
     view/taskeditordelegate.h \
@@ -91,17 +87,13 @@ FORMS += MainWindow.ui \
     view/workingdetectionwindow.ui \
     view/trackcontrolwindow.ui \
     view/treecombobox.ui
-SOURCES += data.cpp \
-    main.cpp \
+SOURCES += main.cpp \
     MainWindow.cpp \
     taskdelegate.cpp \
     taskdialog.cpp \
     taskitem.cpp \
     tasklogmodel.cpp \
     tasklogwindow.cpp \
-    template.cpp \
-    data/project.cpp \
-    data/task.cpp \
     view/TaskModel.cpp \
     view/taskheaderview.cpp \
     idledetector.cpp \
@@ -124,8 +116,6 @@ SOURCES += data.cpp \
     view/ganttscene.cpp \
     view/ganttview.cpp \
     view/userpreferencescontroller.cpp \
-    data/djonpreferences.cpp \
-    data/duration.cpp \
     view/durationcontrol.cpp \
     view/releasenotesview.cpp \
     view/systrayicon.cpp \
@@ -133,7 +123,6 @@ SOURCES += data.cpp \
     view/workingdetectionwindow.cpp \
     view/trackcontrolwindow.cpp \
     view/treecombobox.cpp \
-    data/settings.cpp \
     preferences.cpp \
     view/taskclosefiltermodel.cpp \
     view/taskeditordelegate.cpp \

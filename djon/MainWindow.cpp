@@ -24,11 +24,9 @@
 #include "import/import.h"
 #include "config.h"
 #include "userpreferencescontroller.h"
-#include "djonpreferences.h"
 #include "releasenotesview.h"
 #include "workingdetector.h"
 #include "trackcontrolwindow.h"
-#include "settings.h"
 #include "taskclosefiltermodel.h"
 #include "updatemanager.h"
 #include <sstream>
@@ -390,7 +388,7 @@ int MainWindow::createNewProject() {
     ProjectWizard* wizard = new ProjectWizard();
     int res = 1;
     if (wizard->exec() == QWizard::Accepted) {
-        res = createProject(wizard->project());
+        res = saveProject(wizard->project());
         if (res != 0) {
             QMessageBox box;
             box.setWindowTitle(tr("d-Jon"));
@@ -484,7 +482,7 @@ void MainWindow::deleteTask() {
             //_taskModel->reset();
 
             _activeTask = NULL;
-
+            saveProject(project);
         }
     }
 }
@@ -571,7 +569,7 @@ void MainWindow::editProject() {
     ProjectDialog* dialog = new ProjectDialog(_activeProject, this);
     int res = dialog->exec();
     if (res == QDialog::Accepted) {
-        updateProject(dialog->project());
+        saveProject(dialog->project());
     }
 }
 
@@ -587,18 +585,9 @@ void MainWindow::importProjects() {
             for (vector<Project*>::iterator iter = imported->begin(); iter != imported->end(); iter++) {
                 Project* proj = *iter;
                 _projects->push_back(proj);
-                createProject(proj);
-                vector<Task*>* tasks = proj->tasks();
-                for (vector<Task*>::iterator iterTask = tasks->begin(); iterTask != tasks->end(); iterTask++ ) {
-                    Task* task = *iterTask;
-                    createTask(task);
-                    vector<TaskLog*>* logs = task->logs();
-                    for (vector<TaskLog*>::iterator iterTaskLog = logs->begin(); iterTaskLog != logs->end(); iterTaskLog++) {
-                        TaskLog* log = *iterTaskLog;
-                        createTaskLog(task, log);
-                    }
-                }
+                saveProject(proj);
             }
+
             reloadProjects();
         } else if (errorOcurred()) {
             showErrorMessage(lastErrorCode(), lastErrorDescription(), this);
@@ -635,10 +624,11 @@ void MainWindow::initialize() {
     if (_projects->size() == 0) {
         ProjectWizard* wizard = new ProjectWizard();
         if (wizard->exec() == QWizard::Accepted) {
-            int res = createProject(wizard->project());
+            int res = saveProject(wizard->project());
             if (res != 0) {
                 exit(0);
             }
+            addProject(wizard->project()->projectFileName()->c_str());
             _projects = loadProjects();
             if (errorOcurred()) {
                 showErrorMessage(lastErrorDescription(), this);
@@ -657,8 +647,6 @@ void MainWindow::openProject() {
     if (selectedFileName.size() > 0){
         QFile file(selectedFileName);
         string fileName = file.fileName().toStdString();
-        fileName = fileName.substr(fileName.find_last_of("/") + 1);
-        fileName = fileName.substr(0, fileName.length() - 5);
         addProject(fileName.c_str());
         _projects = loadProjects();
         reloadProjects();
@@ -886,8 +874,9 @@ void MainWindow::applyTemplate(QString templateName) {
     if (_activeTask != NULL) {
         Task* currentTask = _activeTask;
         currentTask->setTemplateName(tpl->name());
-        updateTask(currentTask);
+        //updateTask(currentTask);
         currentTask->processTemplate();
+        saveProject(currentTask->project());
         reloadProjects();
         setActiveTask(currentTask);
     }

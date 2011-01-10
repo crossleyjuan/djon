@@ -53,9 +53,9 @@ public:
     void setProject(Project* _project);
     Project* project() const;
     void setEndDate(DateTime* _endDate);
-    DateTime* endDate();
+    DateTime* endDate() const;
     void setStartDate(DateTime* _startDate);
-    DateTime* startDate();
+    DateTime* startDate() const;
     void setDuration(Duration _duration);
     Duration duration() const;
     void setLongDescription(std::string* _longDescription);
@@ -73,7 +73,7 @@ public:
 
     void addLog(TaskLog* log);
     bool removeLog(TaskLog* log);
-    std::vector<TaskLog*>* logs();
+    std::vector<TaskLog*>* logs() const;
     std::vector<Task*>* subTasks() const;
     std::string* nextChildId();
 

@@ -18,6 +18,8 @@ Project::Project() {
     _name = NULL;
     _description = NULL;
     _projectFileName = NULL;
+    _id = NULL;
+    _projectDefaultCalendar = defaultCalendar();
 }
 
 Project::Project(string projDef) {
@@ -25,6 +27,10 @@ Project::Project(string projDef) {
     Project();
     hashmap* values = parseTextFormat((char*)projDef.c_str());
 
+    _id = new string(READ_ELEMENT(values, "project-id"));
+    if (_id->length() == 0) {
+        _id = uuid();
+    }
     _name = new string(READ_ELEMENT(values, "project-name"));
     _description = new string(READ_ELEMENT(values, "project-description"));
     std::string calendarName = std::string(READ_ELEMENT(values, "project-calendar"));
@@ -40,21 +46,32 @@ Project::Project(string projDef) {
 }
 
 Project::Project(const Project& orig) {
+    this->_id = orig._id;
     this->_description = orig._description;
     this->_name = orig._name;
     this->_tasks = orig._tasks;
     this->_tasksMap = orig._tasksMap;
     this->_projectFileName = orig._projectFileName;
+    this->_projectDefaultCalendar = orig._projectDefaultCalendar;
 }
 
 Project::~Project() {
+    delete(_id);
     delete(_name);
     delete(_description);
     delete(_tasks);
     delete(_tasksMap);
 }
 
-string* Project::name() {
+string* Project::id() const {
+    return _id;
+}
+
+void Project::setId(string* id) {
+    _id = id;
+}
+
+string* Project::name() const {
     return _name;
 }
 
@@ -66,7 +83,7 @@ void Project::setDescription(string* description) {
     _description = description;
 }
 
-string* Project::description() {
+string* Project::description() const {
     return _description;
 }
 
@@ -250,13 +267,10 @@ int Project::removeTask(Task* task) {
     }
 
     delete(subTasks);
-    if (deleteTask(task) != 0) {
-        return 1;
-    }
     return 0;
 }
 
-string* Project::projectFileName() {
+string* Project::projectFileName() const {
     return _projectFileName;
 }
 
@@ -270,4 +284,8 @@ bool Project::operator ==(const Project& prj) const {
 
 Calendar* Project::projectDefaultCalendar() const {
     return _projectDefaultCalendar;
+}
+
+int Project::taskCount() const {
+    return _tasks->size();
 }

@@ -92,7 +92,7 @@ void TaskLogWindow::deleteSelectedLogs() {
                 if (log != NULL) {
                     qDebug("Removing log id: %s", log->id->c_str());
                     _task->removeLog(log);
-                    int res = deleteTaskLog(_task, log);
+                    int res = saveProject(_task->project());
                     if (res != 0) {
                         const char* err = lastErrorDescription();
                         QMessageBox box;

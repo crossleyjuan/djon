@@ -2,7 +2,7 @@
 #define DURATIONCONTROL_H
 
 #include <QLineEdit>
-#include "duration.h"
+#include "data.h"
 
 class DurationControl : public QLineEdit
 {

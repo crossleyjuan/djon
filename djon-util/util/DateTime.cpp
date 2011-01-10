@@ -22,6 +22,18 @@ DateTime::DateTime(const QDateTime& dateTime) {
     initialize(dateTime);
 }
 
+DateTime::DateTime(double value) {
+    _year = value / 10000;
+    value -= (_year * 10000);
+    _month = value / 100;
+    value -= (_month * 100);
+    _day = value;
+    value -= _day;
+    _hour = value * 100;
+    _min = value * 10000;
+    _secs = value * 1000000;
+}
+
 void DateTime::initialize(const QDateTime& dateTime) {
     _year = dateTime.date().year();
     _month = dateTime.date().month();

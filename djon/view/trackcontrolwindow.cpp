@@ -3,7 +3,6 @@
 #include "TaskModel.h"
 #include "data.h"
 #include "timetracker.h"
-#include "settings.h"
 #include <QMouseEvent>
 #include <QDesktopWidget>
 
