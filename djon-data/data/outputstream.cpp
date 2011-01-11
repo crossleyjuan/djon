@@ -40,9 +40,7 @@ void OutputStream::writeDoubleIEEE (double v)
 
 void OutputStream::writeChars(const char *text, int len) {
     writeInt(len);
-    for (int x = 0; x < len; x++) {
-        writeChar(text[x]);
-    }
+    fwrite(text, 1, len, _pFile);
 }
 
 void OutputStream::writeString(const std::string* text) {

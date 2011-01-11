@@ -8,7 +8,7 @@
 class InputStream
 {
 public:
-    InputStream(FILE* pFile);
+    InputStream(std::string fileName, FILE* pFile);
     char readChar();
     /* Reads 2 bytes in the input (little endian order) */
     int readInt ();
@@ -20,10 +20,15 @@ public:
     double readDoubleIEEE ();
     /* Read a chars */
     char* readChars();
+    char* readChars(int length);
+    const char* readFull();
+
     std::string* readString();
+    std::string fileName();
 
 private:
     FILE* _pFile;
+    std::string _fileName;
 };
 
 #endif // INPUTSTREAM_H

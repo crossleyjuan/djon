@@ -5,10 +5,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <sstream>
 
-InputStream::InputStream(FILE *pFile)
+InputStream::InputStream(std::string fileName, FILE *pFile)
 {
     _pFile = pFile;
+    _fileName = fileName;
 }
 
 char InputStream::readChar() {
@@ -49,12 +51,7 @@ double InputStream::readDoubleIEEE () {
 /* Read a chars */
 char* InputStream::readChars() {
     int len = readInt();
-    char* res = (char*)malloc(len + 1);
-    memset(res, 0, len + 1);
-    for (int x = 0; x < len; x++) {
-        char c = readChar();
-        res[x] = c;
-    }
+    char* res = readChars(len);
     return res;
 }
 
@@ -63,3 +60,26 @@ std::string* InputStream::readString() {
     return new std::string(c);
 }
 
+std::string InputStream::fileName() {
+    return _fileName;
+}
+
+char* InputStream::readChars(int length) {
+    char* res = (char*)malloc(length+1);
+    memset(res, 0, length+1);
+    fread(res, 1, length, _pFile);
+    return res;
+}
+
+const char* InputStream::readFull() {
+    fseek(_pFile, 0, SEEK_SET);
+    std::stringstream ss;
+    char buffer[1024];
+    int readed = 0;
+    while (!feof(_pFile)) {
+        readed = fread(&buffer, 1, 1024, _pFile);
+        ss << buffer;
+    }
+    std::string str = ss.str();
+    return str.c_str();
+}

@@ -65,3 +65,7 @@ bool Version::operator==(const Version& version) {
     Version* current = this;
     return ((current->_mayor == version._mayor) && (current->_minor == version._minor) && (current->_revision == version._revision));
 }
+
+Version::operator std::string() {
+    return _version;
+}

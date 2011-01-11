@@ -13,6 +13,7 @@ public:
     bool operator>(const Version& version);
     bool operator<(const Version& version);
     bool operator==(const Version& version);
+    operator std::string();
 private:
     std::string _version;
 

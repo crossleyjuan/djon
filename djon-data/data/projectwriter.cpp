@@ -2,6 +2,7 @@
 
 #include "project.h"
 #include "task.h"
+#include "util.h"
 
 ProjectWriter::ProjectWriter(OutputStream* output)
 {
