@@ -163,6 +163,10 @@ Project* ProjectReader::readProject() {
 Task* ProjectReader::readTask(Project* project) {
     Task* task = new Task(project);
     task->setId(_inputStream->readString());
+    qDebug("Loading task id: %s", task->id()->c_str());
+    if (task->id()->compare("17.8") == 0) {
+        qDebug("Aqui estoy");
+    }
     task->setShortDescription(_inputStream->readString());
     task->setLongDescription(_inputStream->readString());
     string* startDate = _inputStream->readString();

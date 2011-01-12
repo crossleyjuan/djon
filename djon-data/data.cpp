@@ -212,7 +212,8 @@ int saveProject(Project *project) {
     FILE* pFile;
     pFile = fopen(fileName.str().c_str(), "wb");
 
-    const char* version = ((std::string)getCurrentVersion()).c_str();
+    string sversion = getCurrentVersion();
+    const char* version = sversion.c_str();
     fwrite(version, 1, 13, pFile);
 
     OutputStream os(pFile);

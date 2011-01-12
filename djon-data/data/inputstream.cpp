@@ -77,9 +77,10 @@ const char* InputStream::readFull() {
     char buffer[1024];
     int readed = 0;
     while (!feof(_pFile)) {
-        readed = fread(&buffer, 1, 1024, _pFile);
+        memset(buffer, 0, 1024);
+        readed = fread(buffer, 1, 1023, _pFile);
         ss << buffer;
     }
     std::string str = ss.str();
-    return str.c_str();
+    return strdup(str.c_str());
 }

@@ -12,6 +12,9 @@ TEMPLATE = lib
 
 DESTDIR = ../libs
 
+LIBS += -L../libs
+LIBS += -ldjon-util
+
 INCLUDEPATH += . \
     data \
     ../djon-util

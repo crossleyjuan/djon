@@ -24,6 +24,9 @@ void ProjectWriter::writeProject(const Project& project) {
 
 void ProjectWriter::writeTask(const Task &task) {
     _outStream->writeChars(task.id()->c_str(), task.id()->length());
+    if (task.id()->compare("17.8") == 0) {
+        qDebug("Aqui estoy");
+    }
     _outStream->writeString(task.shortDescription());
     _outStream->writeString(task.longDescription());
     char* startDate = task.startDate()->toChar();
