@@ -10,7 +10,7 @@ class OutputStream
 {
 public:
     OutputStream(FILE* pFile);
-    void writeChar (char v);
+    void writeChar (unsigned char v);
     /* Write 2 bytes in the output (little endian order) */
     void writeInt (int v);
     /* Write 4 bytes in the output (little endian order) */

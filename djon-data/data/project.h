@@ -15,6 +15,7 @@
 using namespace std;
 
 class Task;
+class TaskLog;
 class DateTime;
 class DTime;
 class Calendar;
@@ -37,6 +38,7 @@ public:
 //    int getLastTaskId();
 
     std::vector<Task*>* tasks() const;
+    std::vector<TaskLog*>* logs() const;
     void addTask(Task* task);
     std::vector<Task*>* subTasks(string* prefix) const; // prefix should be 1, 2.1, etc.
     std::vector<Task*>* subTasks() const; // return the direct sub tasks

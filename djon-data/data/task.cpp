@@ -15,6 +15,12 @@
 
 int __currentColor;
 
+int randColor() {
+    int color = 0;
+    color = (rand() % 205) + 50;
+    return color;
+}
+
 Task::Task(const Task& orig) {
     _id = orig._id;
     _shortDescription = orig._shortDescription;
@@ -31,6 +37,7 @@ Task::Task(const Task& orig) {
 
     _logs = orig._logs;
     _subTasks = orig._subTasks;
+    _taskColor = orig._taskColor;
 }
 
 Task::Task(Project* project) {
@@ -47,6 +54,10 @@ Task::Task(Project* project) {
 
     _logs = new std::vector<TaskLog*>();
     _subTasks = new std::vector<Task*>();
+    int red = randColor();
+    int green = randColor();
+    int blue = randColor();
+    _taskColor = QColor(red, green, blue);
 }
 
 Task::~Task() {
@@ -269,9 +280,9 @@ Task::Task(Project* project, const std::string taskDef) {
         _status = new string(*defaultTemplate()->statusList().begin());
     }
 
-    int red = (rand() % 205) + 50;
-    int green = (rand() % 205) + 50;
-    int blue = (rand() % 205) + 50;
+    int red = randColor();
+    int green = randColor();
+    int blue = randColor();
     _taskColor = QColor(red, green, blue);
     delete(values);
     qDebug("out Task::Task(Project* project, std::string* taskDef)");

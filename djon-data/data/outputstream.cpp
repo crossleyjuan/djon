@@ -7,7 +7,7 @@ OutputStream::OutputStream(FILE *pFile)
 }
 
 /* Write 1 byte in the output */
-void OutputStream::writeChar (char v)
+void OutputStream::writeChar (unsigned char v)
 {
     fwrite(&v, 1, 1, _pFile);
 }
@@ -15,8 +15,10 @@ void OutputStream::writeChar (char v)
 /* Write 2 bytes in the output (little endian order) */
 void OutputStream::writeInt (int v)
 {
-    writeChar ((v) & 0xff);
-    writeChar ((v >> 8) & 0xff);
+    unsigned char c = (v & 255);
+    unsigned char c2= ((v >> 8) & 255);
+    writeChar (c);
+    writeChar (c2);
 }
 
 /* Write 4 bytes in the output (little endian order) */

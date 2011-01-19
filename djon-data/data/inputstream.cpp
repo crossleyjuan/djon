@@ -13,8 +13,8 @@ InputStream::InputStream(std::string fileName, FILE *pFile)
     _fileName = fileName;
 }
 
-char InputStream::readChar() {
-    char v;
+unsigned char InputStream::readChar() {
+    unsigned char v;
     fread(&v, 1, 1, _pFile);
     return v;
 }

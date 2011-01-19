@@ -302,12 +302,30 @@ void LogScene::calcZoom() {
         Project* proj = _model->project(pIndex);
 
         if ((proj != NULL) && pIndex.isValid()) {
+            vector<TaskLog*>* logs = proj->logs();
+            // Check the logs and get the minimum and maximum
+            for (vector<TaskLog*>::iterator iterLogs = logs->begin(); iterLogs != logs->end(); iterLogs++) {
+                TaskLog* log = *iterLogs;
+                if (log->start != NULL) {
+                    if ((start == NULL) || (*log->start < *start)) {
+                        start = log->start;
+                    }
+                }
+                if (log->end != NULL) {
+                    if ((end == NULL) || (*log->end > *end)) {
+                        end = log->end;
+                    }
+                }
+            }
+            // Now check against the project definition
             DateTime* pStart = proj->startDate();
             if (pStart != NULL) {
-                DateTime* pEnd = proj->endDate();
                 if ((start == NULL) || (*pStart < *start)) {
                     start = pStart;
                 }
+            }
+            DateTime* pEnd = proj->endDate();
+            if (pEnd != NULL) {
                 if ((end == NULL) || (*pEnd > *end)) {
                     end = pEnd;
                 }

@@ -289,3 +289,14 @@ Calendar* Project::projectDefaultCalendar() const {
 int Project::taskCount() const {
     return _tasks->size();
 }
+
+std::vector<TaskLog*>* Project::logs() const {
+    vector<TaskLog*>* logs = new vector<TaskLog*>();
+    vector<Task*>* tsks = tasks();
+    for (vector<Task*>::iterator iter = tsks->begin(); iter != tsks->end(); iter++) {
+        Task* task = *iter;
+        vector<TaskLog*>* logs = task->logs();
+        logs->insert(logs->end(), logs->begin(), logs->end());
+    }
+    return logs;
+}

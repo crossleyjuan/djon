@@ -9,7 +9,7 @@ class InputStream
 {
 public:
     InputStream(std::string fileName, FILE* pFile);
-    char readChar();
+    unsigned char readChar();
     /* Reads 2 bytes in the input (little endian order) */
     int readInt ();
     /* Reads 4 bytes in the input (little endian order) */
