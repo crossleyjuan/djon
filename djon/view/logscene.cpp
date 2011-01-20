@@ -37,13 +37,9 @@ void LogScene::drawIndex(const QModelIndex &index) {
     if (!index.isValid()) {
         return;
     }
-    if (_model->rowCount(index) > 0) {
-        getGroupItem(index);
-    } else {
-        Task* task = _model->task(index);
-        if (task != NULL) {
-            getTaskItem(index);
-        }
+    Task* task = _model->task(index);
+    if (task != NULL) {
+        getTaskItem(index);
     }
 }
 
@@ -131,6 +127,9 @@ void LogScene::getTaskItem(const QModelIndex &index) {
     double endHour = 24;//calendar->endHour().hour() + 1;
     double minuteSize = (double)24*100 / (double)((endHour - startHour) * 60);
     int red = 0;
+    if (task->childCount() > 0) {
+        qDebug("Aqui");
+    }
     for (std::vector<TaskLog*>::iterator iter = logs->begin(); iter != logs->end(); iter++) {
         TaskLog* log = *iter;
 
@@ -306,6 +305,9 @@ void LogScene::calcZoom() {
             // Check the logs and get the minimum and maximum
             for (vector<TaskLog*>::iterator iterLogs = logs->begin(); iterLogs != logs->end(); iterLogs++) {
                 TaskLog* log = *iterLogs;
+                if (log->id->compare("0ad2b963-b022-413a-a5ed-f2bb150b2883") == 1) {
+                    qDebug("Aqui");
+                }
                 if (log->start != NULL) {
                     if ((start == NULL) || (*log->start < *start)) {
                         start = log->start;
@@ -330,6 +332,7 @@ void LogScene::calcZoom() {
                     end = pEnd;
                 }
             }
+            delete(logs);
         }
     }
     /*

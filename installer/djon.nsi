@@ -60,6 +60,7 @@ Section "djon (required)"
   ; Put file there
   File "djon.exe"
   ; File "djon.nsi"
+  File "djon-data.dll"
   File "djon-util.dll"
   File "updater.exe"
   File "libgcc_s_dw2-1.dll"
@@ -122,6 +123,8 @@ Section "Uninstall"
 
   ; Remove files and uninstaller
   Delete $INSTDIR\djon.exe
+  Delete $INSTDIR\djon-data.dll
+  Delete $INSTDIR\djon-util.dll
   Delete $INSTDIR\libgcc_s_dw2-1.dll
   Delete $INSTDIR\uninstall.exe
   Delete $INSTDIR\mingwm10.dll

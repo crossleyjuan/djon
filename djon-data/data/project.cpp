@@ -295,8 +295,10 @@ std::vector<TaskLog*>* Project::logs() const {
     vector<Task*>* tsks = tasks();
     for (vector<Task*>::iterator iter = tsks->begin(); iter != tsks->end(); iter++) {
         Task* task = *iter;
-        vector<TaskLog*>* logs = task->logs();
-        logs->insert(logs->end(), logs->begin(), logs->end());
+        vector<TaskLog*>* taskLogs = task->logs();
+        for (vector<TaskLog*>::iterator iterLog = taskLogs->begin(); iterLog != taskLogs->end(); iterLog++) {
+            logs->push_back(*iterLog);
+        }
     }
     return logs;
 }
