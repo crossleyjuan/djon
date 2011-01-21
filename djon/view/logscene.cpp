@@ -37,9 +37,13 @@ void LogScene::drawIndex(const QModelIndex &index) {
     if (!index.isValid()) {
         return;
     }
-    Task* task = _model->task(index);
-    if (task != NULL) {
-        getTaskItem(index);
+    if (_model->rowCount(index) > 0) {
+        getGroupItem(index);
+    } else {
+        Task* task = _model->task(index);
+        if (task != NULL) {
+            getTaskItem(index);
+        }
     }
 }
 
@@ -106,6 +110,10 @@ QGraphicsItem* LogScene::getGroupItem(const QModelIndex &index) {
 //        item->setZValue(1);
 
 //    }
+    Task* task = _model->task(index);
+    if (task != NULL) {
+        getTaskItem(index);
+    }
     _currentY += sizeHint(index).height();
     if (!isCollapsed(index)) {
         for (int x = 0; x < _model->rowCount(index); x++) {
@@ -127,9 +135,6 @@ void LogScene::getTaskItem(const QModelIndex &index) {
     double endHour = 24;//calendar->endHour().hour() + 1;
     double minuteSize = (double)24*100 / (double)((endHour - startHour) * 60);
     int red = 0;
-    if (task->childCount() > 0) {
-        qDebug("Aqui");
-    }
     for (std::vector<TaskLog*>::iterator iter = logs->begin(); iter != logs->end(); iter++) {
         TaskLog* log = *iter;
 
