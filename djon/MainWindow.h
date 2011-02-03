@@ -70,6 +70,7 @@ private:
 
     // Actions
     QAction* _recordButton;
+    QAction* _stopButton;
     QAction* _filterClosedAction;
     QAction* _ganttViewAction;
     QAction* _logViewAction;

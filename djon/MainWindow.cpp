@@ -64,13 +64,15 @@ MainWindow::MainWindow() {
     _userPreferencesController = new UserPreferencesController(_taskModel);
 
     checkReleaseNotes();
+
+    _updateManager = new UpdateManager(this);
+
     setupActions();
 
     initialize();
     createTaskLogWindow();
     createCurrentTimeWindow();
 
-    _updateManager = new UpdateManager(this);
     _updateManager->startCheck();
 
 
@@ -188,10 +190,11 @@ void MainWindow::setupActions() {
     //    QAction* completeTask = bar->addAction(QIcon(":/img/complete-task.png"), tr("Complete Task"));
     bar->addSeparator();
     _recordButton = bar->addAction(QIcon(":/img/start.png"), tr("Start New Record"));
-    QAction* stop = bar->addAction(QIcon(":/img/stop.png"), tr("Stop Current Record"));
+    _stopButton = bar->addAction(QIcon(":/img/stop.png"), tr("Stop Current Record"));
+    _stopButton->setEnabled(false);
 
     trcMenu->addAction(_recordButton);
-    trcMenu->addAction(stop);
+    trcMenu->addAction(_stopButton);
     prjMenu->addAction(newProject);
     prjMenu->addAction(openProject);
     QAction* editProject = prjMenu->addAction(QIcon(":/img/edit-project.png"), tr("Edit Project Information"));
@@ -261,7 +264,7 @@ void MainWindow::setupActions() {
 
     //    connect(completeTask, SIGNAL(triggered()), this, SLOT(completeTask()));
     connect(_recordButton, SIGNAL(triggered()), this, SLOT(startRecord()));
-    connect(stop, SIGNAL(triggered()), this, SLOT(stopRecord()));
+    connect(_stopButton, SIGNAL(triggered()), this, SLOT(stopRecord()));
     connect(expAction, SIGNAL(triggered()), this, SLOT(exportProjects()));
 #ifdef WINDOWS
     connect(checkUpdate, SIGNAL(triggered()), _updateManager, SLOT(check()));
@@ -397,6 +400,7 @@ int MainWindow::createNewProject() {
             box.setText(tr(errorDescription.c_str()));
             box.exec();
         } else {
+            addProject(wizard->project()->projectFileName()->c_str());
             _projects = loadProjects();
             if (errorOcurred()) {
                 showErrorMessage(lastErrorCode(), lastErrorDescription(), this);
@@ -409,6 +413,10 @@ int MainWindow::createNewProject() {
             widget.taskView->setModel(_taskModel);
             connect(widget.taskView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(selectTaskChanged(QModelIndex,QModelIndex)));
             connect(_taskModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), widget.taskView, SLOT(reset()));
+            widget.taskView->setAnimated(false);
+            widget.taskView->expandAll();
+            refreshCollapsedState();
+            widget.taskView->setAnimated(true);
         }
     }
     delete(wizard);
@@ -455,6 +463,7 @@ void MainWindow::timeStopped(Task* task, TaskLog* taskLog) {
     _trayIcon->trackerStopped();
     _recordButton->setIcon(QIcon(":/img/start.png"));
     _workingDetector->startDetection();
+    _stopButton->setEnabled(false);
 }
 
 void MainWindow::deleteTask() {
@@ -650,6 +659,10 @@ void MainWindow::openProject() {
         addProject(fileName.c_str());
         _projects = loadProjects();
         reloadProjects();
+        widget.taskView->setAnimated(false);
+        widget.taskView->expandAll();
+        refreshCollapsedState();
+        widget.taskView->setAnimated(true);
     }
 }
 
@@ -853,6 +866,7 @@ void MainWindow::trackerStarted(Task* task, TaskLog* taskLog) {
     _trayIcon->trackerStarted();
     _recordButton->setIcon(QIcon(":/img/play_running.png"));
     _workingDetector->stopDetection();
+    _stopButton->setEnabled(true);
 }
 
 void MainWindow::filterClosedTasks() {
