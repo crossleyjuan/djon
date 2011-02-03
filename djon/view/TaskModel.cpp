@@ -159,59 +159,74 @@ int TaskModel::rowCount(const QModelIndex &parent) const
     return irows;
 }
 
-void TaskModel::setupModelData(TaskItem *parent)
-{
-    parent->clear();
-    QHash<QString, TaskItem*> hash;
+QModelIndex TaskModel::addProject(Project *project) {
+    vector<Task*>* tasks = project->tasks();
 
-//    int minRows = 30;
-    Task* lastTask = NULL;
-    for (vector<Project*>::iterator iter = _projects.begin(); iter != _projects.end(); iter++) {
-        Project* project = *iter;
-        vector<Task*>* tasks = project->tasks();
-
-        TaskItem* projectItem = new TaskItem(project, parent);
-        hash[QString(project->name()->c_str())] = projectItem;
-        parent->appendChild(projectItem);
+    QModelIndex rootIndex = index(0, 0);
+    QModelIndex summaryIndex = rootIndex.child(0, 0);
+    int count = rowCount(summaryIndex);
+    beginInsertRows(summaryIndex, count, count + 1);
+    TaskItem* projectItem = new TaskItem(project, _summary);
+    _hash[QString(project->name()->c_str())] = projectItem;
+    _summary->appendChild(projectItem);
 //        minRows--;
 
-        for (vector<Task*>::iterator iterTask = tasks->begin(); iterTask != tasks->end(); iterTask++) {
-            Task* task = *iterTask;
-            if (!acceptFilter(task)) {
-                continue;
-            }
-            QString taskId(task->id()->c_str());
+    for (vector<Task*>::iterator iterTask = tasks->begin(); iterTask != tasks->end(); iterTask++) {
+        Task* task = *iterTask;
+        addTask(task);
+//            lastTask = task;
+    }
 
-            int lastDot = taskId.lastIndexOf(".");
-            TaskItem* root;
-            if (lastDot > -1) {
-                QString tskId = taskId.left(lastDot);
-                root = hash[tskId];
-                Task* tsk = project->task(tskId.toStdString());
-                if (!acceptFilter(tsk)) {
-                    continue;
-                }
-            } else {
-                root = projectItem;
-            }
+    endInsertRows();
+    return index(project);
+}
 
-            // Append a new item to the current parent's list of children.
-            TaskItem* item = new TaskItem(project, task, root);
-            root->appendChild(item);
-//            minRows--;
-            hash[taskId] = item;
-            lastTask = task;
+QModelIndex TaskModel::addTask(Task* task) {
+    if (!acceptFilter(task)) {
+        return QModelIndex();
+    }
+    QString taskId(task->id()->c_str());
+
+    int lastDot = taskId.lastIndexOf(".");
+    TaskItem* root;
+    if (lastDot > -1) {
+        QString tskId = taskId.left(lastDot);
+        root = _hash[tskId];
+        Task* tsk = task->project()->task(tskId.toStdString());
+        if (!acceptFilter(tsk)) {
+            return QModelIndex();
         }
+    } else {
+        root = _hash[QString(task->project()->name()->c_str())];
     }
-//    parent = parent->parent();
-//    for (int x = 0; x < minRows; x++) {
-//        TaskItem* blank = new TaskItem(parent);
-//        parent->appendChild(blank);
+
+    QModelIndex parentIndex = index(task->project(), task->parent());
+    int currentCount = rowCount(parentIndex);
+    beginInsertRows(parentIndex, currentCount, currentCount + 1);
+    // Append a new item to the current parent's list of children.
+    TaskItem* item = new TaskItem(task->project(), task, root);
+    root->appendChild(item);
+//            minRows--;
+    _hash[taskId] = item;
+    endInsertRows();
+    return index(task->project(), task);
+}
+
+void TaskModel::setupModelData()
+{
+    _summary->clear();
+    _hash.clear();
+
+//    int minRows = 30;
+//    Task* lastTask = NULL;
+    for (vector<Project*>::iterator iter = _projects.begin(); iter != _projects.end(); iter++) {
+        Project* project = *iter;
+        addProject(project);
+    }
+//    if (lastTask != NULL) {
+//        QModelIndex lastIndex = index(lastTask->project(), lastTask);
+//        emit this->dataChanged(QModelIndex(), lastIndex);
 //    }
-    if (lastTask != NULL) {
-        QModelIndex lastIndex = index(lastTask->project(), lastTask);
-        emit this->dataChanged(QModelIndex(), lastIndex);
-    }
 }
 
 
@@ -288,9 +303,9 @@ void TaskModel::refreshData() {
         rootData << "Description" << "" << "Total Time" << "Week" << "Day";
     }
     rootItem = new TaskItem(rootData);
-    TaskItem* summary = new TaskItem(_projects, rootItem);
-    rootItem->appendChild(summary);
-    setupModelData(summary);
+    _summary = new TaskItem(_projects, rootItem);
+    rootItem->appendChild(_summary);
+    setupModelData();
     endResetModel();
     // resets the views states (invalidate previously sent data)
 //    reset();

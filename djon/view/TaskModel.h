@@ -37,7 +37,8 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
-
+    QModelIndex addTask(Task* task);
+    QModelIndex addProject(Project* project);
 
     Task* task(const QModelIndex &index) const;
     Project* project(const QModelIndex &index) const;
@@ -57,12 +58,14 @@ public slots:
     void timeChanged(Task* task);
 
 private:
-    void setupModelData(TaskItem *parent);
+    void setupModelData();
     void refreshData();
     QModelIndex search(QModelIndex root, Task* task);
     bool acceptFilter(Task* task);
 
     TaskItem *rootItem;
+    TaskItem* _summary;
+    QHash<QString, TaskItem*> _hash; // Contains all the loaded items
     std::vector<Project*> _projects;
     MODELTYPE _type;
     Task* _trackedTask;

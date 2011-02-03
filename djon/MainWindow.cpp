@@ -366,7 +366,8 @@ void MainWindow::createNewTask() {
         }
         Task* createdTask = currentProject->task(taskId.toStdString());
 
-        reloadProjects();
+        _taskModel->addTask(createdTask);
+
         setActiveTask(createdTask);
     }
 }
