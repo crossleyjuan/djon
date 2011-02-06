@@ -315,6 +315,7 @@ void MainWindow::stopRecord() {
 void MainWindow::setActiveTask(Task* task) {
     qDebug("MainWindow::setActiveTask");
     _activeTask = task;
+    widget.taskView->selectionModel()->clearSelection();
     if (_activeTask == NULL) {
         _activeProject = NULL;
     } else {
@@ -324,7 +325,7 @@ void MainWindow::setActiveTask(Task* task) {
         }
         QModelIndex index = _taskModel->index(_activeProject, _activeTask);
         if (index.isValid()) {
-            widget.taskView->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
+            widget.taskView->selectionModel()->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
         }
     }
 }
