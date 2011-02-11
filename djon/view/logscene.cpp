@@ -215,21 +215,22 @@ void LogScene::createBackground() {
     // Background color
     QList<QGraphicsView*> views = this->views();
     int maxWidth = 0;
-    int maxHeight = 0;
+    double minuteSize = (double)100 / (double)60;
+    int maxHeight = minuteSize * 25 * 60;
     for (QList<QGraphicsView*>::iterator iter = views.begin(); iter != views.end(); iter++) {
         QGraphicsView* view = *iter;
-        int viewHeight = view->height();
+//        int viewHeight = view->height();
         int viewWidth = view->width();
-        if (viewHeight > maxHeight) {
-            maxHeight = viewHeight;
-        }
+//        if (viewHeight > maxHeight) {
+//            maxHeight = viewHeight;
+//        }
         if (viewWidth > maxWidth) {
             maxWidth = viewWidth;
         }
     }
-    if (_viewSizeHeight > maxHeight) {
-        maxHeight = _viewSizeHeight;
-    }
+//    if (_viewSizeHeight > maxHeight) {
+//        maxHeight = _viewSizeHeight;
+//    }
     if (_viewSizeWidth > maxWidth) {
         maxWidth = _viewSizeWidth;
     }
@@ -366,7 +367,6 @@ void LogScene::calcZoom() {
 
 void LogScene::collapse(const QModelIndex& index) {
     _collapsedIndexes.push_back(index);
-    refresh();
 }
 
 void LogScene::expand(const QModelIndex& index) {
@@ -382,7 +382,7 @@ void LogScene::expand(const QModelIndex& index) {
     }
     if (found) {
         _collapsedIndexes.erase(iter);
-        refresh();
+//        refresh();
     }
 }
 
