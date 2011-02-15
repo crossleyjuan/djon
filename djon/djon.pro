@@ -70,7 +70,9 @@ HEADERS += globaldefs.h \
     view/logscene.h \
     view/AbstractViewer.h \
     data/excelexportutility.h \
-    data/excel.h
+    data/excel.h \
+    view/timeview.h \
+    view/timescene.h
 FORMS += MainWindow.ui \
     taskdialog.ui \
     tasklogwindow.ui \
@@ -132,7 +134,9 @@ SOURCES += main.cpp \
     view/logscene.cpp \
     view/AbstractViewer.cpp \
     data/excelexportutility.cpp \
-    data/excel.cpp
+    data/excel.cpp \
+    view/timeview.cpp \
+    view/timescene.cpp
 OTHER_FILES += djon.rc
 RESOURCES += djon_rs.qrc
 RC_FILE = djon.rc

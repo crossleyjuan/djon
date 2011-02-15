@@ -38,6 +38,7 @@
 // Views
 #include "logview.h"
 #include "ganttview.h"
+#include "timeview.h"
 
 std::vector<Project*>* _projects;
 
@@ -246,6 +247,10 @@ void MainWindow::setupActions() {
     _logViewAction->setCheckable(true);
     _logViewAction->setActionGroup(group);
     _logViewAction->setData(1);
+    _timeViewAction = views->addAction(tr("Time by Date View"));
+    _timeViewAction->setCheckable(true);
+    _timeViewAction->setActionGroup(group);
+    _timeViewAction->setData(2);
     connect(group, SIGNAL(triggered(QAction*)), this, SLOT(onMenuChangeView(QAction*)));
     /*****************/
 
@@ -929,14 +934,23 @@ void MainWindow::changeCurrentView(VIEW_TYPE type) {
         _currentView = 0;
     }
     _currentViewType = type;
-    if (type == Gantt_View) {
+    switch (type) {
+    case Gantt_View:
         _currentView = new GanttView(this);
         connect(widget.taskView->verticalScrollBar(), SIGNAL(valueChanged(int)), ((LogView*)_currentView)->verticalScrollBar(), SLOT(setValue(int)));
         (((LogView*)_currentView)->verticalScrollBar(), SIGNAL(valueChanged(int)), widget.taskView->verticalScrollBar(), SLOT(setValue(int)));
         _ganttViewAction->setChecked(true);
-    } else {
+        break;
+    case Log_View:
         _currentView = new LogView(this);
         _logViewAction->setChecked(true);
+        break;
+    case Time_View:
+        _currentView = new TimeView(this);
+        connect(widget.taskView->verticalScrollBar(), SIGNAL(valueChanged(int)), ((LogView*)_currentView)->verticalScrollBar(), SLOT(setValue(int)));
+        (((LogView*)_currentView)->verticalScrollBar(), SIGNAL(valueChanged(int)), widget.taskView->verticalScrollBar(), SLOT(setValue(int)));
+        _logViewAction->setChecked(true);
+        break;
     }
     widget.splitter->addWidget(_currentView);
     _currentView->setModel(_taskModel);

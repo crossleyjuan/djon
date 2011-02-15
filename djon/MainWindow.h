@@ -29,7 +29,8 @@ class AbstractViewer;
 
 enum VIEW_TYPE {
     Gantt_View,
-    Log_View
+    Log_View,
+    Time_View
 };
 
 class MainWindow : public QMainWindow {
@@ -74,6 +75,7 @@ private:
     QAction* _filterClosedAction;
     QAction* _ganttViewAction;
     QAction* _logViewAction;
+    QAction* _timeViewAction;
 
     TrackControlWindow *_trackWindow;
 
