@@ -3,6 +3,7 @@
 #include "util.h"
 #include "data.h"
 #include "TaskModel.h"
+#include "graphicsrectitem.h"
 #include <algorithm>
 
 TimeScene::TimeScene(QObject *parent) :
@@ -65,12 +66,28 @@ bool TimeScene::compareTaskLog(TaskLog* log1, TaskLog* log2) {
     return result;
 }
 
-void TimeScene::drawTime(DateTime currentDay, DTime time, QModelIndex index) {
+void TimeScene::drawTime(DateTime currentDay, DTime time, QModelIndex index, int groupLevel) {
     QSize size = sizeHint(index);
     int bordermargin = (size.height() * .1) / 2;
 
-    QBrush b(Qt::white);
+    QBrush b;
     QPen pen(QColor(0, 0, 150));
+    QBrush textBrush;
+    if (groupLevel == 2) {
+        b = QBrush(Qt::white);
+        pen = QPen(QColor(0, 0, 150));
+        textBrush = QBrush(Qt::darkBlue);
+    }
+    if (groupLevel == 1) {
+        b = QBrush(Qt::lightGray);
+        pen = QPen(QColor(0, 0, 50));
+        textBrush = QBrush(Qt::blue);
+    }
+    if (groupLevel == 0) {
+        b = QBrush(Qt::darkGray);
+        pen = QPen(QColor(100, 100, 200));
+        textBrush = QBrush(Qt::white);
+    }
 
     int daysToStart = _startDate.daysTo(currentDay);
     int x1 = daysToStart * _dayWidth;
@@ -78,9 +95,25 @@ void TimeScene::drawTime(DateTime currentDay, DTime time, QModelIndex index) {
     int x2 = x1 + _dayWidth;
     int y2 = _currentY + size.height() - bordermargin;
 
-    QGraphicsItem* item = this->addRect(x1, y1, (x2 - x1), (y2 - y1), pen, b);
+//    QGraphicsRectItem* item = this->addRect(x1, y1, (x2 - x1), (y2 - y1), pen, b);
+    QRect rect(x1, y1, (x2 - x1), (y2 - y1));
+    GraphicsRectItem* item = new GraphicsRectItem(rect, index);
+    this->addItem(item);
+    item->setPen(pen);
+    item->setBrush(b);
     item->setZValue(1);
-    QGraphicsSimpleTextItem* text = addSimpleText(QString(time.toChar()), QFont("Arial", 8));
+    item->setAcceptHoverEvents(true);
+
+    connect(item, SIGNAL(itemHoverEnter(QModelIndex)), this, SLOT(receiveItemHoverEnter(QModelIndex)));
+    connect(item, SIGNAL(itemHoverLeave(QModelIndex)), this, SLOT(receiveItemHoverLeave(QModelIndex)));
+
+    QFont font("Arial", 8);
+
+    font.setBold((groupLevel <= 1));
+    font.setItalic((groupLevel == 0));
+
+    QGraphicsSimpleTextItem* text = addSimpleText(QString(time.toChar()), font);
+    text->setBrush(textBrush);
     text->setPos(x1 + 2, y1 + 1);
     text->setVisible(true);
     text->setZValue(1);
@@ -89,31 +122,40 @@ void TimeScene::drawTime(DateTime currentDay, DTime time, QModelIndex index) {
 void TimeScene::drawTimeLog(const QModelIndex &index) {
     Task* task = _model->task(index);
 
+    std::vector<TaskLog*> *logs = NULL;
+    int groupLevel = 2;
     if (task != NULL) {
-        std::vector<TaskLog*> *logs = task->logs();
-        if (logs->size() != 0) {
-            std::sort(logs->begin(), logs->end(), compareTaskLog);
+        logs = task->logs(true);
+        groupLevel = (task->childCount() > 0) ? 1 : 2;
+    } else {
+        Project* project = _model->project(index);
+        if (project != NULL) {
+            logs = project->logs();
+            groupLevel = 0;
+        }
+    }
+    if ((logs != NULL) && (logs->size() != 0)) {
+        std::sort(logs->begin(), logs->end(), compareTaskLog);
 
-            DateTime* currentDay = NULL;
-            DTime currentTime(0);
+        DateTime* currentDay = NULL;
+        DTime currentTime(0);
 
-            for (std::vector<TaskLog*>::iterator iter = logs->begin(); iter != logs->end(); iter++) {
-                TaskLog* log = *iter;
-                DateTime logDate(log->start->getYear(), log->start->getMonth(), log->start->getDay());
-                if (currentDay == NULL) {
-                    currentDay = new DateTime(logDate.toDouble());
-                    currentTime = (*log->end - *log->start);
-                } else if (logDate == *currentDay) {
-                    currentTime = currentTime + (*log->end - *log->start);
-                } else {
-                    drawTime(*currentDay, currentTime, index);
-                    currentDay = new DateTime(logDate.toDouble());
-                    currentTime = (*log->end - *log->start);
-                }
+        for (std::vector<TaskLog*>::iterator iter = logs->begin(); iter != logs->end(); iter++) {
+            TaskLog* log = *iter;
+            DateTime logDate(log->start->getYear(), log->start->getMonth(), log->start->getDay());
+            if (currentDay == NULL) {
+                currentDay = new DateTime(logDate.toDouble());
+                currentTime = (*log->end - *log->start);
+            } else if (logDate == *currentDay) {
+                currentTime = currentTime + (*log->end - *log->start);
+            } else {
+                drawTime(*currentDay, currentTime, index, groupLevel);
+                currentDay = new DateTime(logDate.toDouble());
+                currentTime = (*log->end - *log->start);
             }
-            if (currentTime.totalSecs() != 0) {
-                drawTime(*currentDay, currentTime, index);
-            }
+        }
+        if (currentTime.totalSecs() != 0) {
+            drawTime(*currentDay, currentTime, index, groupLevel);
         }
     }
     _currentY += sizeHint(index).height();
@@ -317,3 +359,10 @@ int TimeScene::totalDays() {
     return _totalDays;
 }
 
+void TimeScene::receiveItemHoverEnter(QModelIndex index) {
+    emit itemHoverEnter(index);
+}
+
+void TimeScene::receiveItemHoverLeave(QModelIndex index) {
+    emit itemHoverLeave(index);
+}

@@ -39,3 +39,7 @@ void TaskTreeView::drawRow(QPainter *painter,
 //        painter->drawImage(r, img);
 //    }
 }
+
+void TaskTreeView::dataIndexChanged(QModelIndex index) {
+    update(index);
+}

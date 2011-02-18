@@ -15,6 +15,7 @@ TaskModel::TaskModel(MODELTYPE type, const vector<Project*> projects, QObject *p
     _type = type;
     _projects = projects;
     _trackedTask = NULL;
+    _highlightTask = NULL;
 
     refreshData();
 }
@@ -42,13 +43,18 @@ QVariant TaskModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
     if (role == Qt::BackgroundRole) {
+        Task* indexTask = task(index);
         if (_trackedTask != NULL) {
-            Task* indexTask = task(index);
             if ((indexTask != NULL) && (*indexTask == *_trackedTask)) {
                 return qVariantFromValue(QColor(Qt::yellow));
             }
         }
-        return QVariant();
+        if (_highlightTask != NULL) {
+            if ((indexTask != NULL) && (*indexTask == *_highlightTask)) {
+                return qVariantFromValue(QColor(Qt::lightGray));
+            }
+        }
+        return qVariantFromValue(QColor(Qt::white));
     }
 
     if (role == Qt::FontRole) {
@@ -414,4 +420,12 @@ void TaskModel::removeTask(Task* tsk) {
     item->removeChild((TaskItem*)idx.internalPointer());
 
     endRemoveRows();
+}
+
+void TaskModel::receiveItemHoverEnter(QModelIndex index) {
+    _highlightTask = task(index);
+}
+
+void TaskModel::receiveItemHoverLeave(QModelIndex index) {
+    _highlightTask = NULL;
 }

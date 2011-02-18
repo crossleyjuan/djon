@@ -56,6 +56,8 @@ public:
 
 public slots:
     void timeChanged(Task* task);
+    void receiveItemHoverEnter(QModelIndex index);
+    void receiveItemHoverLeave(QModelIndex index);
 
 private:
     void setupModelData();
@@ -64,6 +66,7 @@ private:
     bool acceptFilter(Task* task);
 
     TaskItem *rootItem;
+    Task* _highlightTask; // Used when hover events should highlight a task
     TaskItem* _summary;
     QHash<QString, TaskItem*> _hash; // Contains all the loaded items
     std::vector<Project*> _projects;

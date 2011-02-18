@@ -6,6 +6,7 @@
 #include "timetracker.h"
 #include <sstream>
 #include <string>
+#include <QMessageBox>
 
 IdleTaskWindow::IdleTaskWindow(std::vector<Project*>* projects, TimeTracker* timeTracker, QWidget *parent) :
     QDialog(parent),
@@ -64,5 +65,28 @@ void IdleTaskWindow::on_accepted()
         emit currentTaskChanged(task);
     }
     _timeTracker->cleanLapTime();
+}
+
+void IdleTaskWindow::done(int res) {
+    bool valid = true;
+    if (res == QDialog::Accepted) {
+        if (m_ui->countToTask->isChecked()) {
+            TreeComboBox* box = m_ui->comboBox;
+            TaskModel* model = (TaskModel*)box->model();
+            QModelIndex index = box->currentModelIndex();
+            Task* task = model->task(index);
+            if (task == NULL) {
+                QMessageBox box(this);
+                box.setWindowTitle(tr("d-jon idle window"));
+                box.setText("You didn't select a destination task for the current time, please select a task from the list.");
+                box.setStandardButtons(QMessageBox::Ok);
+                box.exec();
+                valid = false;
+            }
+        }
+    }
+    if (valid) {
+        QDialog::done(res);
+    }
 }
 

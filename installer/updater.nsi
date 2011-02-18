@@ -50,6 +50,18 @@ FunctionEnd
 !macroend
 !define WriteToFile "!insertmacro WriteToFile"
 
+Function BackupFiles
+ Var /Global projectsDir
+ StrCpy $projectsDir "$PROFILE\.djon\Projects"
+ Var /Global backupDir
+ StrCpy $backupDir "$PROFILE\.djon\Backup"
+ 
+ IfFileExists $backupDir\*.*" +2
+  CreateDirectory $backupDir
+ 
+ CopyFiles $projectsDir\*.* $backupDir
+FunctionEnd
+
 ;--------------------------------
 
 ; The stuff to install
@@ -60,12 +72,14 @@ Section "djon (required)"
   ; Set output path to the installation directory.
   SetOutPath $INSTDIR
   
+  Call BackupFiles
+  
   ; Put file there
   File "djon.exe"
   ; File "djon.nsi"
   File "djon-util.dll"
   File "djon-data.dll"
-  File "updater.exe"
+;  File "updater.exe"
 ;   File "libgcc_s_dw2-1.dll"
 ;   File "mingwm10.dll"
 ;   File "QtCore4.dll"

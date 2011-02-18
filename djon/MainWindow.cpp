@@ -420,10 +420,7 @@ int MainWindow::createNewProject() {
             widget.taskView->setModel(_taskModel);
             connect(widget.taskView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(selectTaskChanged(QModelIndex,QModelIndex)));
             connect(_taskModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), widget.taskView, SLOT(reset()));
-            widget.taskView->setAnimated(false);
-            widget.taskView->expandAll();
             refreshCollapsedState();
-            widget.taskView->setAnimated(true);
         }
     }
     delete(wizard);
@@ -702,6 +699,8 @@ void MainWindow::expand(const QModelIndex& index) {
 }
 
 void MainWindow::refreshCollapsedState() {
+    widget.taskView->setAnimated(false);
+    widget.taskView->expandAll();
     vector<Element*>* elements = collapsedElements();
     Project* lastProject = NULL;
     for (vector<Element*>::iterator iter = elements->begin(); iter != elements->end(); iter++) {
@@ -722,6 +721,7 @@ void MainWindow::refreshCollapsedState() {
             }
         }
     }
+    widget.taskView->setAnimated(true);
 }
 
 void MainWindow::setLastSelectedTask() {
@@ -882,10 +882,7 @@ void MainWindow::filterClosedTasks() {
     } else {
         _taskModel->removeFilter(CLOSED_FILTER);
     }
-    widget.taskView->setAnimated(false);
-    widget.taskView->expandAll();
     refreshCollapsedState();
-    widget.taskView->setAnimated(true);
 }
 
 void MainWindow::applyTemplate(QString templateName) {
@@ -937,8 +934,7 @@ void MainWindow::changeCurrentView(VIEW_TYPE type) {
     switch (type) {
     case Gantt_View:
         _currentView = new GanttView(this);
-        connect(widget.taskView->verticalScrollBar(), SIGNAL(valueChanged(int)), ((LogView*)_currentView)->verticalScrollBar(), SLOT(setValue(int)));
-        (((LogView*)_currentView)->verticalScrollBar(), SIGNAL(valueChanged(int)), widget.taskView->verticalScrollBar(), SLOT(setValue(int)));
+        connect(((LogView*)_currentView)->verticalScrollBar(), SIGNAL(valueChanged(int)), widget.taskView->verticalScrollBar(), SLOT(setValue(int)));
         _ganttViewAction->setChecked(true);
         break;
     case Log_View:
@@ -946,10 +942,14 @@ void MainWindow::changeCurrentView(VIEW_TYPE type) {
         _logViewAction->setChecked(true);
         break;
     case Time_View:
-        _currentView = new TimeView(this);
-        connect(widget.taskView->verticalScrollBar(), SIGNAL(valueChanged(int)), ((LogView*)_currentView)->verticalScrollBar(), SLOT(setValue(int)));
-        (((LogView*)_currentView)->verticalScrollBar(), SIGNAL(valueChanged(int)), widget.taskView->verticalScrollBar(), SLOT(setValue(int)));
-        _logViewAction->setChecked(true);
+        TimeView* timeView = new TimeView(this);
+        connect(timeView->verticalScrollBar(), SIGNAL(valueChanged(int)), widget.taskView->verticalScrollBar(), SLOT(setValue(int)));
+        _timeViewAction->setChecked(true);
+        connect(timeView, SIGNAL(itemHoverEnter(QModelIndex)), _taskModel, SLOT(receiveItemHoverEnter(QModelIndex)));
+        connect(timeView, SIGNAL(itemHoverLeave(QModelIndex)), _taskModel, SLOT(receiveItemHoverLeave(QModelIndex)));
+        connect(timeView, SIGNAL(itemHoverEnter(QModelIndex)), widget.taskView, SLOT(dataIndexChanged(QModelIndex)));
+        connect(timeView, SIGNAL(itemHoverLeave(QModelIndex)), widget.taskView, SLOT(dataIndexChanged(QModelIndex)));
+        _currentView = timeView;
         break;
     }
     widget.splitter->addWidget(_currentView);
@@ -959,6 +959,7 @@ void MainWindow::changeCurrentView(VIEW_TYPE type) {
     connect(widget.taskView, SIGNAL(expanded(QModelIndex)), ((LogView*)_currentView), SLOT(expand(QModelIndex)));
     _currentView->scrollToday();
     widget.taskView->resize(420, widget.taskView->size().height());
+    refreshCollapsedState();
 }
 
 void MainWindow::onMenuChangeView(QAction* action) {

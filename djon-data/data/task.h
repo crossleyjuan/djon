@@ -74,6 +74,7 @@ public:
     void addLog(TaskLog* log);
     bool removeLog(TaskLog* log);
     std::vector<TaskLog*>* logs() const;
+    std::vector<TaskLog*>* logs(bool children) const;
     std::vector<Task*>* subTasks() const;
     std::string* nextChildId();
 
@@ -91,7 +92,6 @@ private:
     std::string* _templateName;
     std::string* _status;
     DTime* _totalTime; // Time in secs
-    int _childCount;
     QColor _taskColor;
 
     std::vector<TaskLog*>* _logs;

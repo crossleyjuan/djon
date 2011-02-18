@@ -33,7 +33,6 @@ Task::Task(const Task& orig) {
     _templateName = orig._templateName;
     _status = orig._status;
     _totalTime = orig._totalTime;
-    _childCount = orig._childCount;
 
     _logs = orig._logs;
     _subTasks = orig._subTasks;
@@ -49,7 +48,6 @@ Task::Task(Project* project) {
     _endDate = NULL;
     _templateName = NULL;
     _status = NULL;
-    _childCount = 0;
     _totalTime = 0;
 
     _logs = new std::vector<TaskLog*>();
@@ -248,15 +246,31 @@ string* Task::id() const {
     return _id;
 }
 
+std::vector<TaskLog*>* Task::logs(bool children) const {
+    std::vector<TaskLog*>* taskLogs = logs();
+    std::vector<Task*>* innerTasks = subTasks();
+    if (children && (innerTasks->size() > 0)) {
+        for (std::vector<Task*>::iterator iter = innerTasks->begin(); iter != innerTasks->end(); iter++) {
+            Task* child = *iter;
+            std::vector<TaskLog*>* childLogs = child->logs(true);
+            taskLogs->insert(taskLogs->end(), childLogs->begin(), childLogs->end());
+            delete childLogs;
+        }
+        delete innerTasks;
+    }
+    return taskLogs;
+}
+
 std::vector<TaskLog*>* Task::logs() const {
-    return _logs;
+    std::vector<TaskLog*>* result = new std::vector<TaskLog*>();
+    result->insert(result->end(), _logs->begin(), _logs->end());
+    return result;
 }
 
 Task::Task(Project* project, const std::string taskDef) {
     qDebug("Task::Task(Project* project, std::string* taskDef)");
     _project = project;
     _subTasks = NULL;
-    _childCount = 0;
     _totalTime = 0;
     _logs = new vector<TaskLog*>();
 

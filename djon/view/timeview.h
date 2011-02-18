@@ -17,11 +17,15 @@ public:
     virtual void refresh();
 
 signals:
+    void itemHoverEnter(QModelIndex index);
+    void itemHoverLeave(QModelIndex index);
 
 public slots:
     void collapse(const QModelIndex& index);
     void expand(const QModelIndex& index);
     void scrollToday();
+    void receiveItemHoverEnter(QModelIndex index);
+    void receiveItemHoverLeave(QModelIndex index);
 
 private:
     void createHeader();

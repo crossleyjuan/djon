@@ -12,6 +12,7 @@ public:
 signals:
 
 public slots:
+    virtual void dataIndexChanged(QModelIndex index);
 
 protected:
     virtual void drawBranches(QPainter *painter,

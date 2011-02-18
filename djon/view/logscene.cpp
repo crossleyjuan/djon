@@ -311,9 +311,6 @@ void LogScene::calcZoom() {
             // Check the logs and get the minimum and maximum
             for (vector<TaskLog*>::iterator iterLogs = logs->begin(); iterLogs != logs->end(); iterLogs++) {
                 TaskLog* log = *iterLogs;
-                if (log->id->compare("0ad2b963-b022-413a-a5ed-f2bb150b2883") == 1) {
-                    qDebug("Aqui");
-                }
                 if (log->start != NULL) {
                     if ((start == NULL) || (*log->start < *start)) {
                         start = log->start;

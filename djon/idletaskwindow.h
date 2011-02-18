@@ -29,9 +29,11 @@ private:
 
 public slots:
     void on_accepted();
+    virtual void done(int);
 
 signals:
     void currentTaskChanged(Task* task);
+
 
 };
 

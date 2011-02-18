@@ -60,7 +60,7 @@ void TimeView::createHeader() {
 
 QSize TimeView::headerSizeHint() {
     QVariant vSize = _model->headerData(0, Qt::Vertical, Qt::SizeHintRole);
-    QSize sizeHint = QSize(10, 19);
+    QSize sizeHint = QSize(10, 23);
     if (vSize.canConvert<QSize>()) {
         sizeHint = qvariant_cast<QSize>(vSize);
     }
@@ -71,6 +71,8 @@ QSize TimeView::headerSizeHint() {
 void TimeView::setModel(TaskModel *taskModel) {
     _model = taskModel;
     _timeScene = new TimeScene(this);
+    connect(_timeScene, SIGNAL(itemHoverEnter(QModelIndex)), this, SLOT(receiveItemHoverEnter(QModelIndex)));
+    connect(_timeScene, SIGNAL(itemHoverLeave(QModelIndex)), this, SLOT(receiveItemHoverLeave(QModelIndex)));
     _headerScene = new QGraphicsScene(this);
     _headerView.setScene(_headerScene);
     _headerView.setAlignment(Qt::AlignLeft | Qt::AlignTop);
@@ -108,4 +110,12 @@ void TimeView::scrollToday() {
         currentPos.setX(_todayPos);
         this->_timeView.centerOn(currentPos);
     }
+}
+
+void TimeView::receiveItemHoverEnter(QModelIndex index) {
+    emit itemHoverEnter(index);
+}
+
+void TimeView::receiveItemHoverLeave(QModelIndex index) {
+    emit itemHoverLeave(index);
 }
