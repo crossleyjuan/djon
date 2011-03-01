@@ -357,6 +357,10 @@ void LogScene::calcZoom() {
         _startDate = DateTime::today();
         _endDate = _startDate.addDays(1);
     }
+    // Ensures today will be shown in the graph
+    if (_endDate < DateTime::today()) {
+        _endDate = DateTime::today();
+    }
     _endDate = _endDate.addDays(3);
     _totalDays = _startDate.daysTo(_endDate);
     this->_viewSizeWidth = _totalDays * _dayWidth;

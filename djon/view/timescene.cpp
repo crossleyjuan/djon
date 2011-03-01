@@ -299,6 +299,10 @@ void TimeScene::calcZoom() {
         _startDate = DateTime::today();
         _endDate = _startDate.addDays(1);
     }
+    // Ensures today will be shown in the graph
+    if (_endDate < DateTime::today()) {
+        _endDate = DateTime::today();
+    }
     _totalDays = _startDate.daysTo(_endDate) + 5;
     this->_viewSizeWidth = _totalDays * _dayWidth;
 }
