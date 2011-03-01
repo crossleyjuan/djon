@@ -64,12 +64,13 @@ MainWindow::MainWindow() {
 
     _userPreferencesController = new UserPreferencesController(_taskModel);
 
-    checkReleaseNotes();
+//    checkReleaseNotes();
 
     _updateManager = new UpdateManager(this);
 
     setupActions();
 
+    _timeTracker = new TimeTracker();
     initialize();
     createTaskLogWindow();
     createCurrentTimeWindow();
@@ -92,9 +93,7 @@ MainWindow::MainWindow() {
     _workingDetector = new WorkingDetector();
     connect(_workingDetector, SIGNAL(workingDetected(DateTime)), this, SLOT(workingDetected(DateTime)));
 
-    _timeTracker = new TimeTracker();
     connect(_timeTracker, SIGNAL(timeChanged(Task*, DTime&, DTime&)), _timeWindow, SLOT(updateTime(Task*, DTime&, DTime&)));
-    connect(_timeTracker, SIGNAL(timeChanged(Task*, DTime&, DTime&)), _taskModel, SLOT(timeChanged(Task*)));
     connect(_timeTracker, SIGNAL(timeStopped(Task*,TaskLog*)), this, SLOT(timeStopped(Task*, TaskLog*)));
     connect(_timeTracker, SIGNAL(trackerStarted(Task*,TaskLog*)), this, SLOT(trackerStarted(Task*,TaskLog*)));
     connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()));
@@ -119,6 +118,7 @@ void MainWindow::createTaskLogWindow() {
     qDebug("MainWindow::createTaskLogWindow()");
     _logWindow = new TaskLogWindow();
     _logWindow->setAllowedAreas(Qt::BottomDockWidgetArea);
+    connect(_logWindow, SIGNAL(timeChanged(Task*)), _taskModel, SLOT(timeChanged(Task*)));
 
     addDockWidget(Qt::BottomDockWidgetArea, _logWindow);
 }
@@ -450,6 +450,7 @@ void MainWindow::reloadTasks() {
         widget.taskView->setSelectionBehavior(QAbstractItemView::SelectRows);
     }
 
+    connect(_timeTracker, SIGNAL(timeChanged(Task*, DTime&, DTime&)), _taskModel, SLOT(timeChanged(Task*)));
     _currentView->scrollToday();
     connect(widget.taskView, SIGNAL(collapsed(QModelIndex)), _userPreferencesController, SLOT(collapsed(QModelIndex)));
     connect(widget.taskView, SIGNAL(expanded(QModelIndex)), _userPreferencesController, SLOT(expanded(QModelIndex)));
