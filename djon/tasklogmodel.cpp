@@ -81,6 +81,7 @@ bool TaskLogModel::setData(const QModelIndex &index, const QVariant &value, int 
         log->end = new DateTime(time);
     }
     saveProject(this->_task->project());
+    emit timeChanged(_task);
     return true;
 }
 

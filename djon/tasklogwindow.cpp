@@ -55,6 +55,7 @@ void TaskLogWindow::refresh(Task* task) {
     m_ui->tableView->setColumnWidth(0, 300);
     m_ui->tableView->setColumnWidth(1, 150);
     m_ui->tableView->setColumnWidth(2, 150);
+    connect(model, SIGNAL(timeChanged(Task*)), this, SLOT(logTimeChanged(Task*)));
 
     string sort(readPreference("log-sort", ""));
     if (sort.length() > 0) {
@@ -110,4 +111,8 @@ void TaskLogWindow::deleteSelectedLogs() {
 
 void TaskLogWindow::contextMenuRequested(QPoint pos) {
     _popUpMenu.popup(QCursor::pos());
+}
+
+void TaskLogWindow::logTimeChanged(Task *task) {
+    emit timeChanged(task);
 }

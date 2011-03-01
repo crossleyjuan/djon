@@ -25,6 +25,12 @@ public slots:
     void deleteSelectedLogs();
     void contextMenuRequested(QPoint pos);
 
+private slots:
+    void logTimeChanged(Task* task);
+
+signals:
+    void timeChanged(Task* task);
+
 private:
     void setupMenuActions();
 

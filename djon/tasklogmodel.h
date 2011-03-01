@@ -9,6 +9,7 @@ class TaskLog;
 
 class TaskLogModel : public QAbstractTableModel
 {
+    Q_OBJECT
 public:
     TaskLogModel(Task* task);
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -19,6 +20,9 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
+
+signals:
+    void timeChanged(Task* task);
 
 private:
     Task* _task;
