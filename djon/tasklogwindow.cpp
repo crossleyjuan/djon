@@ -106,6 +106,7 @@ void TaskLogWindow::deleteSelectedLogs() {
             }
         }
         refresh(_task);
+        emit timeChanged(_task);
     }
 }
 
