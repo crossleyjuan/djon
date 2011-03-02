@@ -154,13 +154,11 @@ void LogScene::getTaskItem(const QModelIndex &index) {
         }
         double y2 = (double)(logEndTime.totalMinutes() - (startHour*60)) * minuteSize;
 
-//        QLinearGradient grad(QPointF(x1, y1), QPointF(x1, y2));
-//        grad.setColorAt(0, QColor(0, 0, 150));
-//        grad.setColorAt(0.9, QColor(0, 0, 180));
-//        grad.setColorAt(1, QColor(200, 200, 255));
         QBrush b(task->taskColor());//QImage(":/img/task_bar.png"));//(QPixmap(":/img/task_bar.png"));
         red += 20;
-        QColor penColor(task->taskColor().red() - 100, task->taskColor().green() - 100, task->taskColor().blue() - 100);
+        QColor penColor((task->taskColor().red() < 100) ? 0: (task->taskColor().red() - 100),
+                        (task->taskColor().green() < 100) ? 0: (task->taskColor().green() - 100),
+                        (task->taskColor().blue() < 100) ? 0: (task->taskColor().blue() - 100));
         QPen pen(penColor);
 
         QGraphicsItem* item = this->addRect(x1, y1, (x2 - x1), (y2 - y1), pen, b);
