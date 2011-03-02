@@ -283,8 +283,9 @@ void MainWindow::setupActions() {
 
 void MainWindow::idleTimeOut() {
     qDebug("MainWindow::idleTimeOut()");
-    // This will enforce the new TaskLog
-
+    // This is to enforce the idle detector to be stopped while the action is being shown.
+    _idleDetector->stop();
+    _workingDetector->stopDetection();
     _updateManager->pause();
 
     _timeTracker->startRecordLap();
