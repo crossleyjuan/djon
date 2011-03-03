@@ -29,6 +29,8 @@ public:
     void moveLappedRecordToTask(Task* newTask);
     void destroyCurrentRecord();
     DTime trackedTime();
+    // This will return the last record lap
+    DateTime* lastLapTime() const;
 
 signals:
     void timeStopped(Task* task, TaskLog* taskLog);
@@ -37,7 +39,7 @@ signals:
 
 public slots:
     void startRecord(Task* task);
-    void startRecordLap();
+    void startRecordLap(DateTime* since = 0);
     void startRecord(Task* task, TaskLog* taskLog, DateTime* startTime = 0);
     void removeLapTime();
     void cleanLapTime();

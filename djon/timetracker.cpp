@@ -139,8 +139,13 @@ void TimeTracker::removeLapTime() {
     }
 }
 
-void TimeTracker::startRecordLap() {
-    _taskLog->lastLap = new DateTime();
+void TimeTracker::startRecordLap(DateTime* since) {
+    if (since == NULL) {
+        _taskLog->lastLap = new DateTime();
+    } else {
+        _taskLog->lastLap = new DateTime(*since);
+    }
+    _lastLapTime = _taskLog->lastLap;
 }
 
 void TimeTracker::cleanLapTime() {
@@ -165,4 +170,8 @@ void TimeTracker::dropRecordedTime() {
 
 DTime TimeTracker::trackedTime() {
     return *_taskLog->end - *_taskLog->start;
+}
+
+DateTime* TimeTracker::lastLapTime() const {
+    return _lastLapTime;
 }

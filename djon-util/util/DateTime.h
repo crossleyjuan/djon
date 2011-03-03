@@ -11,7 +11,7 @@
 #include "dtime.h"
 
 #include <string>
-#include <QDate>
+#include <QDateTime>
 
 
 using namespace std;
@@ -30,7 +30,7 @@ public:
 
     static DateTime startDayOfWeek();
     static DateTime startDayOfNextWeek();
-    static DateTime today();
+    static DateTime today(bool includeTime = false);
     DateTime addDays(int days) const;
     DateTime addDays(int days, const Calendar calendar) const;
     int daysTo(const DateTime& dt) const;

@@ -4,6 +4,7 @@
 #include "data.h"
 #include "TaskModel.h"
 #include "timetracker.h"
+#include "util.h"
 #include <sstream>
 #include <string>
 #include <QMessageBox>
@@ -16,12 +17,11 @@ IdleTaskWindow::IdleTaskWindow(std::vector<Project*>* projects, TimeTracker* tim
     this->_projects = projects;
     m_ui->comboBox->setModel(new TaskModel(ONLY_TASKS, *projects));
 
-    QTime current = QTime::currentTime();
     std::stringstream ssMessage;
     ssMessage << "The timer was running and registering time to: ";
     ssMessage << *timeTracker->task()->shortDescription() << ".\n";
     ssMessage << "You have been idle since: ";
-    ssMessage << current.toString(tr("hh:mm:ss AP")).toStdString();
+    ssMessage << timeTracker->lastLapTime()->toQDateTime().toString(tr("hh:mm:ss AP")).toStdString();
     ssMessage << ", what do you want to do with the registered time?";
 
     std::string mess = ssMessage.str();

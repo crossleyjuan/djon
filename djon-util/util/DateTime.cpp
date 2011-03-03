@@ -233,9 +233,14 @@ DateTime DateTime::startDayOfNextWeek() {
     return result;
 }
 
-DateTime DateTime::today() {
-    QDate today = QDate::currentDate();
-    DateTime result(today.year(), today.month(), today.day());
+DateTime DateTime::today(bool includeTime) {
+    QDateTime today = QDateTime::currentDateTime();
+    DateTime result(today.date().year(), today.date().month(), today.date().day());
+    if (includeTime) {
+        result.setHour(today.time().hour());
+        result.setMin(today.time().minute());
+        result.setSecs(today.time().second());
+    }
     return result;
 }
 

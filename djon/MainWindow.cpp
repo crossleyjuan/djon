@@ -288,7 +288,7 @@ void MainWindow::idleTimeOut() {
     _workingDetector->stopDetection();
     _updateManager->pause();
 
-    _timeTracker->startRecordLap();
+    _timeTracker->startRecordLap(_idleDetector->idleSince());
     IdleTaskWindow* w = new IdleTaskWindow(_projects, _timeTracker);
     connect(w, SIGNAL(currentTaskChanged(Task*)), _timeWindow, SLOT(setActiveTask(Task*)));
     w->exec();

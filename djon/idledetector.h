@@ -1,6 +1,7 @@
 #ifndef IDLEDETECTOR_H
 #define IDLEDETECTOR_H
 
+#include "util.h"
 #include <QTimer>
 #include <QObject>
 
@@ -12,6 +13,7 @@ public:
     IdleDetector();
     void start();
     void stop();
+    DateTime* idleSince();
 
 signals:
     void idleTimeOut();
@@ -19,6 +21,7 @@ signals:
 private:
     int m_idleMaxSecs;
     QTimer* timer;
+    DateTime* _idleSince;
 
 public slots:
     void refreshIdleMaxSecs();
