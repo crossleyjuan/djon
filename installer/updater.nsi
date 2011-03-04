@@ -62,13 +62,21 @@ Function BackupFiles
  CopyFiles $projectsDir\*.* $backupDir
 FunctionEnd
 
+Function .onInit
+    FindProcDLL::FindProc "djon.exe"
+    IntCmp $R0 1 0 notRunning
+         MessageBox MB_OK|MB_ICONEXCLAMATION "d-jon is running. Please close it first" /SD IDOK
+    Abort
+notRunning:
+FunctionEnd
+ 
 ;--------------------------------
 
 ; The stuff to install
 Section "djon (required)"
 
   SectionIn RO
-  
+
   ; Set output path to the installation directory.
   SetOutPath $INSTDIR
   
