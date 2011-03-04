@@ -191,29 +191,27 @@ QModelIndex TaskModel::addTask(Task* task) {
     if (!acceptFilter(task)) {
         return QModelIndex();
     }
-    QString taskId(task->id()->c_str());
 
-    int lastDot = taskId.lastIndexOf(".");
+    Task* parentTask = task->parent();
     TaskItem* root;
-    if (lastDot > -1) {
-        QString tskId = taskId.left(lastDot);
-        root = _hash[tskId];
-        Task* tsk = task->project()->task(tskId.toStdString());
-        if (!acceptFilter(tsk)) {
-            return QModelIndex();
-        }
+    QModelIndex rootIndex;
+    if (parentTask != NULL) {
+        rootIndex = index(parentTask->project(), parentTask);
     } else {
-        root = _hash[QString(task->project()->name()->c_str())];
+        rootIndex = index(task->project());
+    }
+    root = (TaskItem*)rootIndex.internalPointer();
+    if ((parentTask != NULL) && (!acceptFilter(parentTask))) {
+        return QModelIndex();
     }
 
-    QModelIndex parentIndex = index(task->project(), task->parent());
-    int currentCount = rowCount(parentIndex);
-    beginInsertRows(parentIndex, currentCount, currentCount + 1);
+    int currentCount = rowCount(rootIndex);
+    beginInsertRows(rootIndex, currentCount, currentCount);
     // Append a new item to the current parent's list of children.
     TaskItem* item = new TaskItem(task->project(), task, root);
     root->appendChild(item);
 //            minRows--;
-    _hash[taskId] = item;
+    _hash[QString(task->id()->c_str())] = item;
     endInsertRows();
     return index(task->project(), task);
 }
