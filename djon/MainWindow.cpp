@@ -116,7 +116,7 @@ MainWindow::MainWindow() {
 
 void MainWindow::createTaskLogWindow() {
     qDebug("MainWindow::createTaskLogWindow()");
-    _logWindow = new TaskLogWindow();
+    _logWindow = new TaskLogWindow(_timeTracker);
     _logWindow->setAllowedAreas(Qt::BottomDockWidgetArea);
     connect(_logWindow, SIGNAL(timeChanged(Task*)), _taskModel, SLOT(timeChanged(Task*)));
 

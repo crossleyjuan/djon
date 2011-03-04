@@ -6,12 +6,15 @@
 
 #include "tasklogmodel.h"
 #include "tasklogdelegate.h"
+#include "timetracker.h"
 
-TaskLogWindow::TaskLogWindow(QWidget *parent) :
+TaskLogWindow::TaskLogWindow(TimeTracker* tracker, QWidget *parent) :
         QDockWidget(parent),
         m_ui(new Ui::TaskLogWindow)
 {
     m_ui->setupUi(this);
+    _tracker = tracker;
+    _model = NULL;
     QItemEditorFactory* factory = new QItemEditorFactory();
     QItemEditorCreatorBase *textEditorCreator = new QStandardItemEditorCreator<QLineEdit>();
     factory->registerEditor(QVariant::String, textEditorCreator);
@@ -28,6 +31,9 @@ TaskLogWindow::TaskLogWindow(QWidget *parent) :
 
 TaskLogWindow::~TaskLogWindow()
 {
+    if (_model != NULL) {
+        delete _model;
+    }
     delete m_ui;
 }
 
@@ -45,17 +51,16 @@ void TaskLogWindow::changeEvent(QEvent *e)
 
 void TaskLogWindow::refresh(Task* task) {
     _task = task;
-    TaskLogModel* current = (TaskLogModel*)m_ui->tableView->model();
-    if (current != NULL) {
-        delete(current);
+    if (_model != NULL) {
+        delete(_model);
     }
-    TaskLogModel* model = new TaskLogModel(task);
-    m_ui->tableView->setModel(model);
+    _model = new TaskLogModel(task);
+    m_ui->tableView->setModel(_model);
     m_ui->tableView->setItemDelegate(new TaskLogDelegate());
     m_ui->tableView->setColumnWidth(0, 300);
     m_ui->tableView->setColumnWidth(1, 150);
     m_ui->tableView->setColumnWidth(2, 150);
-    connect(model, SIGNAL(timeChanged(Task*)), this, SLOT(logTimeChanged(Task*)));
+    connect(_model, SIGNAL(timeChanged(Task*)), this, SLOT(logTimeChanged(Task*)));
 
     string sort(readPreference("log-sort", ""));
     if (sort.length() > 0) {
@@ -80,7 +85,6 @@ void TaskLogWindow::deleteSelectedLogs() {
     int confRes = confBox.exec();
 
     if (confRes == QMessageBox::Yes) {
-        TaskLogModel* model = (TaskLogModel*)m_ui->tableView->model();
         QModelIndexList list = m_ui->tableView->selectionModel()->selectedIndexes();
         for (int x = 0; x < list.count(); x++) {
             QModelIndex index = list.at(x);
@@ -111,7 +115,17 @@ void TaskLogWindow::deleteSelectedLogs() {
 }
 
 void TaskLogWindow::contextMenuRequested(QPoint pos) {
-    _popUpMenu.popup(QCursor::pos());
+    QModelIndex index = m_ui->tableView->indexAt(pos);
+    if (index.isValid()) {
+        TaskLog* log = (TaskLog*)index.internalPointer();
+        if ((log != NULL) && (_tracker->status() == RUNNING)) {
+            // If the log is the one that is being tracked the delete menu should not be shown
+            if (log->id->compare(*_tracker->taskLog()->id) == 0) {
+                return;
+            }
+        }
+        _popUpMenu.popup(QCursor::pos());
+    }
 }
 
 void TaskLogWindow::logTimeChanged(Task *task) {
