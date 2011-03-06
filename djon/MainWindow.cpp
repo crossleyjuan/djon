@@ -64,7 +64,7 @@ MainWindow::MainWindow() {
 
     _userPreferencesController = new UserPreferencesController(_taskModel);
 
-//    checkReleaseNotes();
+    checkReleaseNotes();
 
     _updateManager = new UpdateManager(this);
 
@@ -77,7 +77,6 @@ MainWindow::MainWindow() {
 
     _updateManager->startCheck();
 
-
     widget.taskView->setColumnWidth(0, 250);
     widget.taskView->setColumnWidth(1, 30);
     widget.taskView->setColumnWidth(2, 70);
@@ -86,7 +85,7 @@ MainWindow::MainWindow() {
     widget.taskView->setMinimumWidth(250);
     widget.taskView->setMaximumWidth(490);
     widget.taskView->setItemDelegate(new TaskEditorDelegate(this));
-//    _idleDetector = new IdleDetector(5*60);// 5*60
+
     _idleDetector = new IdleDetector();// 5*60
     connect(_idleDetector, SIGNAL(idleTimeOut()), this, SLOT(idleTimeOut()));
 
@@ -271,9 +270,7 @@ void MainWindow::setupActions() {
     connect(_recordButton, SIGNAL(triggered()), this, SLOT(startRecord()));
     connect(_stopButton, SIGNAL(triggered()), this, SLOT(stopRecord()));
     connect(expAction, SIGNAL(triggered()), this, SLOT(exportProjects()));
-#ifdef WINDOWS
     connect(checkUpdate, SIGNAL(triggered()), _updateManager, SLOT(check()));
-#endif
     connect(releaseNotes, SIGNAL(triggered()), this, SLOT(showReleaseNotes()));
     connect(settings, SIGNAL(triggered()), this, SLOT(settings()));
 
@@ -287,7 +284,6 @@ void MainWindow::idleTimeOut() {
     _idleDetector->stop();
     _workingDetector->stopDetection();
     _updateManager->pause();
-
     _timeTracker->startRecordLap(_idleDetector->idleSince());
     IdleTaskWindow* w = new IdleTaskWindow(_projects, _timeTracker);
 //    connect(w, SIGNAL(currentTaskChanged(Task*)), _timeWindow, SLOT(setActiveTask(Task*)));

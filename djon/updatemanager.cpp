@@ -36,32 +36,25 @@ UpdateManager::UpdateManager(QObject *parent) :
 }
 
 void UpdateManager::startCheck() {
-#ifdef WINDOWS
     // zero will deactivate the check
     if (_mins > 0) {
         _timer->start(_mins * 60000);
         check();
     }
-#endif
 }
 
 void UpdateManager::downloadUpdater() {
     std::string fileName;
-    const char* address;
+    std::string address;
     if (!_versionConfDownloaded) {
         fileName = string("version.conf");
-        address = "http://d-jon.com/downloads/version.php";// readConfValue("version-file", "");
-    } else {
-        if (_isLastVersion) {
-            return;
-        }
-        fileName = string("update_djon.exe");
-        address = "http://d-jon.com/downloads/update_djon.exe"; // readConfValue("updater-address", "");
+        std::string currentVersion = getCurrentVersion();
+        address = "http://d-jon.com/downloads/version.php?version=" + currentVersion;// readConfValue("version-file", "");
     }
     fileName = *getTempDir() + "/" + fileName;
     _file = new QFile(QString(fileName.c_str()));
 
-    QUrl url(address);
+    QUrl url(address.c_str());
     QHttp::ConnectionMode mode = url.scheme().toLower() == "https" ? QHttp::ConnectionModeHttps : QHttp::ConnectionModeHttp;
     _http->setHost(url.host(), mode, url.port() == -1 ? 0 : url.port());
     _httpRequestAborted = false;
@@ -99,10 +92,7 @@ void UpdateManager::httpRequestFinished(int requestId, bool error)
         if (!_versionConfDownloaded) {
             _versionConfDownloaded = true;
             checkVersion();
-        } else if (!_updateDownloaded) {
-            _updateDownloaded = true;
         }
-        processNextStep();
     }
 
 }
@@ -153,24 +143,15 @@ void UpdateManager::processNextStep() {
     if (_isLastVersion) {
         return;
     }
-    if (!_versionConfDownloaded || !_updateDownloaded) {
+    if (!_versionConfDownloaded) {
         downloadUpdater();
-    } else {
-        int res = QMessageBox::question(NULL, "d-jon update", "A new version of d-jon is available, do you want to update now?", QMessageBox::Yes, QMessageBox::No);
-        if (res == QMessageBox::Yes) {
-            char* cfile = "updater.exe";
-
-#ifdef WINDOWS
-            ShellExecuteA(NULL, "open", cfile, NULL, NULL, SW_SHOWNORMAL);
-            exit(0);
-#endif
-        }
-        _downloading = false;
     }
 }
 
 void UpdateManager::checkVersion() {
-    char* cwebLastVersion = readFile(const_cast<char*>(std::string(*getTempDir() + "/version.conf").c_str()));
+    char* versioncont = readFile(const_cast<char*>(std::string(*getTempDir() + "/version.conf").c_str()));
+
+    const char* cwebLastVersion = readValue(string(versioncont), "version");
 
     Version webVersion = getVersion(cwebLastVersion);
     Version currentVersion = getCurrentVersion();
@@ -179,6 +160,14 @@ void UpdateManager::checkVersion() {
         _isLastVersion = false;
     } else {
         _isLastVersion = true;
+    }
+    if (true || !_isLastVersion) {
+        QMessageBox box;
+        box.setWindowTitle("d-jon update available");
+        box.setTextFormat(Qt::RichText);
+        box.setText("<b>test</b> test");
+        box.setDetailedText("Test");
+        box.exec();
     }
 }
 
