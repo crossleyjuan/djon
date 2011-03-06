@@ -18,7 +18,7 @@
 
 class TaskLogWindow;
 class TimeTracker;
-class CurrentTime;
+//class CurrentTime;
 class TaskModel;
 class TaskHeaderView;
 class UpdateManager;
@@ -41,7 +41,7 @@ public:
 private:
     TaskDelegate* createTaskDelegate();
     void createTaskLogWindow();
-    void createCurrentTimeWindow();
+//    void createCurrentTimeWindow();
     void createTray();
     void setupActions();
     void setupTemplateMenu(QMenu* menu);
@@ -64,7 +64,7 @@ private:
     TaskLog* _activeLog;
     Project* _activeProject;
     Task* _activeTask;
-    CurrentTime* _timeWindow;
+//    CurrentTime* _timeWindow;
     TaskModel* _taskModel;
     UserPreferencesController* _userPreferencesController;
     QSignalMapper* _templateMapper;

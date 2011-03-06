@@ -13,7 +13,7 @@
 #include "workingdetectionwindow.h"
 #include "taskheaderview.h"
 #include "timetracker.h"
-#include "currenttime.h"
+//#include "currenttime.h"
 #include "taskdialog.h"
 #include "util.h"
 #include "view/projectwizard.h"
@@ -54,7 +54,7 @@ MainWindow::MainWindow() {
     _activeLog = NULL;
     _activeProject = NULL;
     _activeTask = NULL;
-    _timeWindow = NULL;
+//    _timeWindow = NULL;
     _taskModel = NULL;
     _trayIcon = NULL;
     _taskPopUpMenu = NULL;
@@ -73,7 +73,7 @@ MainWindow::MainWindow() {
     _timeTracker = new TimeTracker();
     initialize();
     createTaskLogWindow();
-    createCurrentTimeWindow();
+//    createCurrentTimeWindow();
 
     _updateManager->startCheck();
 
@@ -93,7 +93,7 @@ MainWindow::MainWindow() {
     _workingDetector = new WorkingDetector();
     connect(_workingDetector, SIGNAL(workingDetected(DateTime)), this, SLOT(workingDetected(DateTime)));
 
-    connect(_timeTracker, SIGNAL(timeChanged(Task*, DTime&, DTime&)), _timeWindow, SLOT(updateTime(Task*, DTime&, DTime&)));
+//    connect(_timeTracker, SIGNAL(timeChanged(Task*, DTime&, DTime&)), _timeWindow, SLOT(updateTime(Task*, DTime&, DTime&)));
     connect(_timeTracker, SIGNAL(timeStopped(Task*,TaskLog*)), this, SLOT(timeStopped(Task*, TaskLog*)));
     connect(_timeTracker, SIGNAL(trackerStarted(Task*,TaskLog*)), this, SLOT(trackerStarted(Task*,TaskLog*)));
     connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()));
@@ -290,7 +290,7 @@ void MainWindow::idleTimeOut() {
 
     _timeTracker->startRecordLap(_idleDetector->idleSince());
     IdleTaskWindow* w = new IdleTaskWindow(_projects, _timeTracker);
-    connect(w, SIGNAL(currentTaskChanged(Task*)), _timeWindow, SLOT(setActiveTask(Task*)));
+//    connect(w, SIGNAL(currentTaskChanged(Task*)), _timeWindow, SLOT(setActiveTask(Task*)));
     w->exec();
     if (_timeTracker->status() == RUNNING) {
         _idleDetector->start();
@@ -340,13 +340,13 @@ void MainWindow::setActiveTaskLog(Task* task, TaskLog* taskLog) {
 
 }
 
-void MainWindow::createCurrentTimeWindow() {
-    qDebug("MainWindow::createCurrentTimeWindow()");
-    _timeWindow = new CurrentTime(_projects);
-    //    _timeWindow->setAllowedAreas(Qt::BottomDockWidgetArea | Qt::BottomRightCorner);
+//void MainWindow::createCurrentTimeWindow() {
+//    qDebug("MainWindow::createCurrentTimeWindow()");
+//    _timeWindow = new CurrentTime(_projects);
+//    //    _timeWindow->setAllowedAreas(Qt::BottomDockWidgetArea | Qt::BottomRightCorner);
 
-    addDockWidget(Qt::BottomDockWidgetArea, _timeWindow);
-}
+//    addDockWidget(Qt::BottomDockWidgetArea, _timeWindow);
+//}
 
 void MainWindow::createNewTask() {
     qDebug("MainWindow::createNewTask()");
@@ -868,7 +868,7 @@ void MainWindow::trackerStarted(Task* task, TaskLog* taskLog) {
     _activeTask = task;
     _activeLog = taskLog;
     _taskModel->setTrackedTask(task);
-    _timeWindow->setActiveTask(task);
+//    _timeWindow->setActiveTask(task);
     _idleDetector->start();
     _logWindow->refresh(task);
     _userPreferencesController->setLastTrackedTask(_taskModel->index(task->project(), task));
