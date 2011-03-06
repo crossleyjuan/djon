@@ -31,26 +31,50 @@ QVariant TaskLogModel::data(const QModelIndex &index, int role) const {
     if (!index.isValid())
         return QVariant();
 
+    TaskLog* log = (TaskLog*)index.internalPointer();
+
+    // New record decoration tips
+    if ((role == Qt::FontRole) && (log == NULL))  {
+        QFont defaultFont;
+        defaultFont.setItalic(true);
+        return defaultFont;
+    }
+
     if (role != Qt::DisplayRole)
         return QVariant();
 
-    TaskLog* log = (TaskLog*)index.internalPointer();
-    if (log != NULL) {
-        if (index.column() == 0) {
-            if (log->logDescription != NULL) {
-                return QString(log->logDescription->c_str());
+    switch (index.column()) {
+        case 0:
+            if (log != NULL) {
+                if (log->logDescription != NULL) {
+                    return QString(log->logDescription->c_str());
+                } else {
+                    return QString();
+                }
             } else {
-                return QString();
+                return QString("<<Double click to create an empty Record>>");
             }
-        } else if (index.column() == 1) {
-            return log->start->toQDateTime();
-        } else if (index.column() == 2) {
-            return log->end->toQDateTime();
-        } else if (index.column() == 3) {
-            return QString(DTime(*log->end - *log->start).toChar());
-        }
+        case 1:
+            if (log != NULL) {
+               return log->start->toQDateTime();
+            } else {
+               return QVariant();
+            }
+        case 2:
+            if (log != NULL) {
+                return log->end->toQDateTime();
+            } else {
+                return QVariant();
+            }
+        case 3:
+            if (log != NULL) {
+                return QString(DTime(*log->end - *log->start).toChar());
+            } else {
+                return QVariant();
+            }
     }
-    return QString();
+
+    return QVariant();
 }
 
 bool TaskLogModel::setData(const QModelIndex &index, const QVariant &value, int role) {
@@ -59,14 +83,16 @@ bool TaskLogModel::setData(const QModelIndex &index, const QVariant &value, int 
 
     bool newTaskLog = false;
     if (log == NULL) {
-        beginResetModel();
+        beginInsertRows(index.parent(), index.row() + 1, index.row() + 1);
         log = createTaskLog(_task);
         QDateTime dte(QDateTime::currentDateTime());
         log->start = new DateTime(dte.date().year(), dte.date().month(), dte.date().day(), dte.time().hour(), dte.time().minute(), dte.time().second());
         log->end = new DateTime(dte.date().year(), dte.date().month(), dte.date().day(), dte.time().hour(), dte.time().minute(), dte.time().second());
         newTaskLog = true;
-        endResetModel();
-        emit dataChanged(QModelIndex(), index);
+        // This is required if this refresh is not called the logs will not contain the newly created element
+        _logs = _task->logs();
+        endInsertRows();
+//        emit dataChanged(QModelIndex(), index);
     }
     if (index.column() == 0) {
         QString descr = value.toString();
