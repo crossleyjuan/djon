@@ -933,15 +933,19 @@ void MainWindow::changeCurrentView(VIEW_TYPE type) {
     case Gantt_View:
         _currentView = new GanttView(this);
         connect(((LogView*)_currentView)->verticalScrollBar(), SIGNAL(valueChanged(int)), widget.taskView->verticalScrollBar(), SLOT(setValue(int)));
+        widget.taskView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         _ganttViewAction->setChecked(true);
         break;
     case Log_View:
         _currentView = new LogView(this);
         _logViewAction->setChecked(true);
+        widget.taskView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
         break;
     case Time_View:
         TimeView* timeView = new TimeView(this);
         connect(timeView->verticalScrollBar(), SIGNAL(valueChanged(int)), widget.taskView->verticalScrollBar(), SLOT(setValue(int)));
+        widget.taskView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+
         _timeViewAction->setChecked(true);
         connect(timeView, SIGNAL(itemHoverEnter(QModelIndex)), _taskModel, SLOT(receiveItemHoverEnter(QModelIndex)));
         connect(timeView, SIGNAL(itemHoverLeave(QModelIndex)), _taskModel, SLOT(receiveItemHoverLeave(QModelIndex)));
