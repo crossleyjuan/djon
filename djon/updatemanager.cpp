@@ -10,6 +10,7 @@
 #include <QUrl>
 #include <QByteArray>
 #include <string>
+#include <sstream>
 
 UpdateManager::UpdateManager(QObject *parent) :
         QObject(parent)
@@ -149,9 +150,12 @@ void UpdateManager::processNextStep() {
 }
 
 void UpdateManager::checkVersion() {
-    char* versioncont = readFile(const_cast<char*>(std::string(*getTempDir() + "/version.conf").c_str()));
+    std::string versioncont = std::string(readFile(const_cast<char*>(std::string(*getTempDir() + "/version.conf").c_str())));
 
-    const char* cwebLastVersion = readValue(string(versioncont), "version");
+    if (versioncont.find("version:") == -1) {
+        versioncont = "version:" + versioncont + ";\nreleaseNotesURL:http://d-jon.com/downloads/releasenotes.php?version=" + VERSION + ";";
+    }
+    const char* cwebLastVersion = readValue(versioncont, "version");
 
     Version webVersion = getVersion(cwebLastVersion);
     Version currentVersion = getCurrentVersion();
@@ -165,8 +169,13 @@ void UpdateManager::checkVersion() {
         QMessageBox box;
         box.setWindowTitle("d-jon update available");
         box.setTextFormat(Qt::RichText);
-        box.setText("<b>test</b> test");
-        box.setDetailedText("Test");
+        std::stringstream ss;
+        ss << "A new version of d-jon is available at <a href=\"http://d-jon.com/downloads.html\">http://d-jon.com/downloads.html</a><br/>";
+        ss << "please take a look of the <a href=\"";
+        std::string releaseNotesURL = readValue(versioncont, "releaseNotesURL");
+        ss << releaseNotesURL << "\">release notes</a> to know what is new in this release.";
+        std::string message = ss.str();
+        box.setText(message.c_str());
         box.exec();
     }
 }
