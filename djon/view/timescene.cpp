@@ -167,6 +167,9 @@ void TimeScene::drawTimeLog(const QModelIndex &index) {
             }
         }
     }
+    if (logs != NULL) {
+        delete(logs);
+    }
 }
 
 void TimeScene::createBackground() {
