@@ -68,7 +68,6 @@ private:
     TaskItem *rootItem;
     Task* _highlightTask; // Used when hover events should highlight a task
     TaskItem* _summary;
-    QHash<QString, TaskItem*> _hash; // Contains all the loaded items
     std::vector<Project*> _projects;
     MODELTYPE _type;
     Task* _trackedTask;

@@ -165,7 +165,7 @@ void UpdateManager::checkVersion() {
     } else {
         _isLastVersion = true;
     }
-    if (true || !_isLastVersion) {
+    if (!_isLastVersion) {
         QMessageBox box;
         box.setWindowTitle("d-jon update available");
         box.setTextFormat(Qt::RichText);

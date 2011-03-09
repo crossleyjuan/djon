@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   TaskModel.cpp
  * Author: cross
  * 
@@ -173,7 +173,6 @@ QModelIndex TaskModel::addProject(Project *project) {
     int count = rowCount(summaryIndex);
     beginInsertRows(summaryIndex, count, count + 1);
     TaskItem* projectItem = new TaskItem(project, _summary);
-    _hash[QString(project->name()->c_str())] = projectItem;
     _summary->appendChild(projectItem);
 //        minRows--;
 
@@ -201,17 +200,30 @@ QModelIndex TaskModel::addTask(Task* task) {
         rootIndex = index(task->project());
     }
     root = (TaskItem*)rootIndex.internalPointer();
+    if (root == NULL) {
+        // the parent task has not been added, maybe it's a filtered task
+        return QModelIndex();
+    }
     if ((parentTask != NULL) && (!acceptFilter(parentTask))) {
         return QModelIndex();
     }
 
     int currentCount = rowCount(rootIndex);
+
     beginInsertRows(rootIndex, currentCount, currentCount);
     // Append a new item to the current parent's list of children.
     TaskItem* item = new TaskItem(task->project(), task, root);
     root->appendChild(item);
 //            minRows--;
-    _hash[QString(task->id()->c_str())] = item;
+//    // Add all the children
+//    if (task->childCount() > 0) {
+//        vector<Task*>* subtasks = task->subTasks();
+//        for (vector<Task*>::iterator iterSub = subtasks->begin(); iterSub != subtasks->end(); iterSub++) {
+//            Task* child = *iterSub;
+//            addTask(child);
+//        }
+//        delete(subtasks);
+//    }
     endInsertRows();
     return index(task->project(), task);
 }
@@ -219,7 +231,6 @@ QModelIndex TaskModel::addTask(Task* task) {
 void TaskModel::setupModelData()
 {
     _summary->clear();
-    _hash.clear();
 
 //    int minRows = 30;
 //    Task* lastTask = NULL;
