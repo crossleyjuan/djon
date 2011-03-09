@@ -149,8 +149,11 @@ void UpdateManager::processNextStep() {
 }
 
 void UpdateManager::checkVersion() {
-    char* versioncont = readFile(const_cast<char*>(std::string(*getTempDir() + "/version.conf").c_str()));
+    std::string versioncont = std::string(readFile(const_cast<char*>(std::string(*getTempDir() + "/version.conf").c_str())));
 
+    if (versioncont.find("version:") == -1) {
+        versioncont = "version:" + versioncont;
+    }
     const char* cwebLastVersion = readValue(string(versioncont), "version");
 
     Version webVersion = getVersion(cwebLastVersion);

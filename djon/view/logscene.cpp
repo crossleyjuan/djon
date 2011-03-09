@@ -205,6 +205,7 @@ void LogScene::getTaskItem(const QModelIndex &index) {
         }
         _currentY += sizeHint(index).height();
     }
+    delete(logs);
 }
 
 void LogScene::createBackground() {

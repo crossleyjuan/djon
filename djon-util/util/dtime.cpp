@@ -111,7 +111,7 @@ const char* DTime::toChar() {
     time(hour, min, secs);
     sprintf(buffer, "%d:%02d:%02d", hour, min, secs);
 
-    return buffer;
+    return const_cast<const char*>(buffer);
 }
 
 void DTime::add(long secs) {

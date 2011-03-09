@@ -57,7 +57,9 @@ char* InputStream::readChars() {
 
 std::string* InputStream::readString() {
     char* c = readChars();
-    return new std::string(c);
+    std::string* res = new std::string(c);
+    free(c);
+    return res;
 }
 
 std::string InputStream::fileName() {

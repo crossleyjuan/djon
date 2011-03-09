@@ -140,6 +140,7 @@ std::vector<string> split(const string str, string token) {
         ptr = strtok(NULL, delim);
     }
 
+    free (s);
     return res;
 }
 
@@ -225,7 +226,7 @@ std::string* getHomeDir() {
     return home;
 }
 
-const char* readValue(std::string cont, std::string key) {
+char* readValue(std::string cont, std::string key) {
     hashmap* map = parseTextFormat(cont);
     std::string value = READ_ELEMENT(map, key);
 
@@ -238,13 +239,13 @@ const char* readValue(std::string cont, std::string key) {
     return res;
 }
 
-const char* readConfValue(const string& name, const char* def) {
+char* readConfValue(const string& name, const char* def) {
     std::string confFileName = getConfigFileName();
     char* conf = readFile(const_cast<char*> (confFileName.c_str()));
 
-    const char* res = readValue(string(conf), name);
+    char* res = readValue(string(conf), name);
     if (strlen(res) == 0) {
-        res = def;
+        res = const_cast<char*>(def);
     }
     free(conf);
     return res;
@@ -339,16 +340,16 @@ int writePreference(const std::string& key, const std::string& value) {
     return res;
 }
 
-const char* readPreference(const std::string& key, const char* def) {
+char* readPreference(const std::string& key, const char* def) {
     std::string* home = getHomeDir();
     std::string fileName = home->append("/.djon/djon.user");
 
     string cont = readFile(const_cast<char*>(fileName.c_str()));
 
-    const char* value = readValue(cont, key);
+    char* value = readValue(cont, key);
 
     if (strlen(value) == 0) {
-        value = def;
+        value = const_cast<char*>(def);
     }
 
     delete (home);

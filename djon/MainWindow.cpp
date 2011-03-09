@@ -200,9 +200,7 @@ void MainWindow::setupActions() {
     QAction* editProject = prjMenu->addAction(QIcon(":/img/edit-project.png"), tr("Edit Project Information"));
     QAction* closeProject = prjMenu->addAction(QIcon(":/img/close-project.png"), tr("Close Project"));
 
-#ifdef WINDOWS
     QAction* checkUpdate = helpMenu->addAction(QIcon(":/img/update.png"), tr("Check Updates"));
-#endif
     QAction* releaseNotes = helpMenu->addAction(QIcon(":/img/release-notes.png"), tr("Release Notes"));
 
     prjMenu->addSeparator();
@@ -719,6 +717,7 @@ void MainWindow::refreshCollapsedState() {
             }
         }
     }
+    delete(elements);
     widget.taskView->setAnimated(true);
 }
 
@@ -780,7 +779,9 @@ void MainWindow::saveUserSessionState() {
 }
 
 void MainWindow::restoreUserSessionState() {
-    std::string state(readPreference("last-window-state", ""));
+    char* cstate = readPreference("last-window-state", "");
+    std::string state(cstate);
+    free(cstate);
 
     if (state.length() > 0) {
         std::vector<string> values = split(state, "++");
@@ -820,14 +821,16 @@ void MainWindow::restoreUserSessionState() {
         _trackWindow->showIn(BOTTOM_RIGHT_CORNER);
     }
 
-    std::string filters = readPreference("filters", "0");
-    if (filters.compare("1") == 0) {
+    char* filters = readPreference("filters", "0");
+    if (strcmp(filters, "1") == 0) {
         _filterClosedAction->setChecked(true);
         filterClosedTasks();
     }
+    free(filters);
 
-    std::string currentView = readPreference("current-view", "0");
-    VIEW_TYPE type = (VIEW_TYPE)atoi(currentView.c_str());
+    char* currentView = readPreference("current-view", "0");
+    VIEW_TYPE type = (VIEW_TYPE)atoi(currentView);
+    free(currentView);
     changeCurrentView(type);
 }
 

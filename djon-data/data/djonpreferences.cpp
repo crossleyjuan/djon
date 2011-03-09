@@ -2,6 +2,7 @@
 #include "util.h"
 #include <sstream>
 #include <string>
+#include <stdlib.h>
 
 void addCollapsedElement(Project* project, Task* task) {
     string* projName = project->name();
@@ -20,13 +21,15 @@ void addCollapsedElement(Project* project, Task* task) {
 
     string collapsedElement = ss.str();
 
-    std::string currentPref = string(readPreference(string("collapsed"), ""));
+    char* pref = readPreference(string("collapsed"), "");
+    std::string currentPref = string(pref);
 
     size_t pos = currentPref.find(collapsedElement);
     if (pos == currentPref.npos) {
         currentPref.append(collapsedElement);
         writePreference(string("collapsed"), currentPref);
     }
+    free(pref);
 }
 
 void removeCollapsedElement(Project* project, Task* task) {
@@ -46,7 +49,8 @@ void removeCollapsedElement(Project* project, Task* task) {
 
     string collapsedElement = ss.str();
 
-    std::string currentPref = string(readPreference(string("collapsed"), ""));
+    char* pref = readPreference(string("collapsed"), "");
+    std::string currentPref = string(pref);
 
     int pos = currentPref.find(collapsedElement);
     if (pos != currentPref.npos) {
@@ -54,11 +58,13 @@ void removeCollapsedElement(Project* project, Task* task) {
         currentPref = currentPref.replace(pos, end, "");
         writePreference("collapsed", currentPref.c_str());
     }
+    free(pref);
 }
 
 std::vector<Element*>* collapsedElements() {
     std::vector<Element*>* result = new std::vector<Element*>();
-    std::string currentPref = string(readPreference(string("collapsed"), ""));
+    char* pref = readPreference(string("collapsed"), "");
+    std::string currentPref = string(pref);
 
     std::vector<string> elements = split(currentPref, "--");
 
@@ -76,6 +82,7 @@ std::vector<Element*>* collapsedElements() {
         Element* collapsed = new Element(project, task);
         result->push_back(collapsed);
     }
+    free(pref);
     return result;
 }
 
@@ -89,7 +96,9 @@ void saveLastTrackedTask(Task* task) {
 }
 
  Element* lastTrackedTaskId() {
-    std::string currentPref = string(readPreference(string("last-tracked-task"), ""));
+    char* pref = readPreference(string("last-tracked-task"), "");
+    std::string currentPref = string(pref);
+    free(pref);
 
     if (currentPref.length() > 0) {
         std::vector<string> elements = split(currentPref, "++");

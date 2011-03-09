@@ -10,6 +10,8 @@
 #include "MainWindow.h"
 #include "config.h"
 #include "util.h"
+#include <stdexcept>
+#include <iostream>
 
 int main(int argc, char *argv[]) {
     // initialize resources, if needed
@@ -45,5 +47,9 @@ int main(int argc, char *argv[]) {
 //    splash.showMessage("Loading...");
 
 //    splash.finish(&mainWindow);
-    return app.exec();
+    try {
+        return app.exec();
+    } catch (std::out_of_range& e) {
+        std::cout << "Out of range: " << e.what() << "\n";
+    }
 }

@@ -61,6 +61,7 @@ Project::~Project() {
     delete(_description);
     delete(_tasks);
     delete(_tasksMap);
+    delete(_projectFileName);
 }
 
 string* Project::id() const {
@@ -299,6 +300,7 @@ std::vector<TaskLog*>* Project::logs() const {
         for (vector<TaskLog*>::iterator iterLog = taskLogs->begin(); iterLog != taskLogs->end(); iterLog++) {
             logs->push_back(*iterLog);
         }
+        delete(taskLogs);
     }
     return logs;
 }

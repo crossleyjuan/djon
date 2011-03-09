@@ -62,12 +62,12 @@ std::string* getTempDir();
 hashmap* parseTextFormat(std::string text);
 
 void checkConfigFile();
-const char* readConfValue(const string& name, const char* def = 0);
+char* readConfValue(const string& name, const char* def = 0);
 int writeConfValue(const string& name, const string& value);
-const char* readValue(std::string cont, std::string key);
+char* readValue(std::string cont, std::string key);
 
 int writePreference(const std::string& key, const std::string& value);
-const char* readPreference(const std::string& key, const char* def);
+char* readPreference(const std::string& key, const char* def);
 
 Version getCurrentVersion();
 Version getVersion(const char* version);
