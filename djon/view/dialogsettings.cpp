@@ -89,7 +89,8 @@ void DialogSettings::populateLogOrderBy() {
     ui->logOrderBy->addItem(tr("End Date ASC"), "2++0");
     ui->logOrderBy->addItem(tr("End Date DES"), "2++1");
 
-    string sort(readPreference("log-sort", ""));
+    char* sortPref = readPreference("log-sort", "");
+    string sort(sortPref);
     if (sort.length() > 0) {
         QString pref(sort.c_str());
         int rows = ui->logOrderBy->count();
@@ -101,6 +102,7 @@ void DialogSettings::populateLogOrderBy() {
             }
         }
     }
+    free(sortPref);
 }
 
 void DialogSettings::populateCheckUpdate() {

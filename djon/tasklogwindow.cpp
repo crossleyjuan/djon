@@ -62,7 +62,8 @@ void TaskLogWindow::refresh(Task* task) {
     m_ui->tableView->setColumnWidth(2, 150);
     connect(_model, SIGNAL(timeChanged(Task*)), this, SLOT(logTimeChanged(Task*)));
 
-    string sort(readPreference("log-sort", ""));
+    char* sortPref = readPreference("log-sort", "");
+    string sort(sortPref);
     if (sort.length() > 0) {
         std::vector<string> options = split(sort, "++");
         int column = atoi(options.at(0).c_str());
@@ -70,6 +71,7 @@ void TaskLogWindow::refresh(Task* task) {
         Qt::SortOrder sortOrder = (order == 0) ? Qt::AscendingOrder: Qt::DescendingOrder;
         m_ui->tableView->sortByColumn(column, sortOrder);
     }
+    free(sortPref);
 }
 
 void TaskLogWindow::setupMenuActions() {
