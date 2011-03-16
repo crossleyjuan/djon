@@ -230,10 +230,12 @@ char* readValue(std::string cont, std::string key) {
     hashmap* map = parseTextFormat(cont);
     std::string value = READ_ELEMENT(map, key);
 
+    char* res = NULL;
     if (value.size() == 0) {
-        return "";
+        res = strcpy("");
+    } else {
+        res = strcpy(value);
     }
-    char* res = strcpy(value);
 
     delete(map);
     return res;
@@ -245,7 +247,8 @@ char* readConfValue(const string& name, const char* def) {
 
     char* res = readValue(string(conf), name);
     if (strlen(res) == 0) {
-        res = const_cast<char*>(def);
+        free(res);
+        res = strcpy(def);
     }
     free(conf);
     return res;
@@ -349,7 +352,8 @@ char* readPreference(const std::string& key, const char* def) {
     char* value = readValue(cont, key);
 
     if (strlen(value) == 0) {
-        value = const_cast<char*>(def);
+        free(value);
+        value = strcpy(def);
     }
 
     delete (home);
