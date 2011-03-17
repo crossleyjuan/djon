@@ -17,8 +17,8 @@ ExcelExportUtility::ExcelExportUtility(const ExcelExportUtility &orig) {
     _projects = orig._projects;
 }
 
-void ExcelExportUtility::exportSubTasks(Excel& excel, std::vector<Task*>* subTasks, int& row, int indent) {
-    for (std::vector<Task*>::iterator iterTask = subTasks->begin(); iterTask != subTasks->end(); iterTask++) {
+void ExcelExportUtility::exportSubTasks(Excel& excel, std::vector<Task*> subTasks, int& row, int indent) {
+    for (std::vector<Task*>::iterator iterTask = subTasks.begin(); iterTask != subTasks.end(); iterTask++) {
         Task* subTask = *iterTask;
         std::string description = *subTask->shortDescription();
         char strI[indent + 1];
@@ -31,10 +31,9 @@ void ExcelExportUtility::exportSubTasks(Excel& excel, std::vector<Task*>* subTas
         excel(row, 0) = description.c_str();
         row++;
         if (subTask->childCount() > 0) {
-            exportSubTasks(excel, subTask->subTasks(), row, 1);
+            exportSubTasks(excel, subTask->children(), row, 1);
         }
     }
-    delete(subTasks);
 }
 
 void ExcelExportUtility::executeExport(std::string fileName, DateTime *logsFrom, DateTime *logsTo) {
@@ -50,7 +49,7 @@ void ExcelExportUtility::executeExport(std::string fileName, DateTime *logsFrom,
         row++;
 
         std::vector<Task*>* subTasks = project->subTasks();
-        exportSubTasks(exc, subTasks, row, 0);
+        exportSubTasks(exc, *subTasks, row, 0);
     }
 
     exc.write();

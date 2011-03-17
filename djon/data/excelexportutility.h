@@ -19,7 +19,7 @@ public:
     void executeExport(std::string fileName, DateTime* logsFrom = 0, DateTime* logsTo = 0);
 
 private:
-    void exportSubTasks(Excel& excel, std::vector<Task*>* subTasks, int& row, int indent);
+    void exportSubTasks(Excel& excel, std::vector<Task*> subTasks, int& row, int indent);
 
     std::vector<Project*> _projects;
 };

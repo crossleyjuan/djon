@@ -33,10 +33,11 @@ Task::Task(const Task& orig) {
     _templateName = orig._templateName;
     _status = orig._status;
     _totalTime = orig._totalTime;
+    _parentTask = orig._parentTask;
 
     _logs = orig._logs;
-    _subTasks = orig._subTasks;
     _taskColor = orig._taskColor;
+    _childrenTasks = orig._childrenTasks;
 }
 
 Task::Task(Project* project) {
@@ -49,9 +50,9 @@ Task::Task(Project* project) {
     _templateName = NULL;
     _status = NULL;
     _totalTime = 0;
+    _parentTask = NULL;
 
     _logs = new std::vector<TaskLog*>();
-    _subTasks = new std::vector<Task*>();
     int red = randColor();
     int green = randColor();
     int blue = randColor();
@@ -59,36 +60,32 @@ Task::Task(Project* project) {
 }
 
 Task::~Task() {
+    delete(_logs);
 }
 
-int Task::childCount() {
-    vector<Task*>* tasks = subTasks();
-    int size = tasks->size();
-    delete(tasks);
-    return size;
+int Task::childCount() const {
+    return _childrenTasks.size();
 }
 
 DTime Task::totalTime() const {
-    vector<Task*>* child = subTasks();
     DTime result;
     for (vector<TaskLog*>::iterator iterLog = _logs->begin(); iterLog != _logs->end(); iterLog++) {
         TaskLog* log = *iterLog;
         result.add((*log->end) - (*log->start));
     }
-    for (vector<Task*>::iterator iter = child->begin(); iter != child->end(); iter++) {
+    vector<Task*> subtasks = children();
+    for (vector<Task*>::iterator iter = subtasks.begin(); iter != subtasks.end(); iter++) {
         Task* sub = *iter;
         result.add(sub->totalTime());
     }
-    delete(child);
     return result;
 }
 
 DTime Task::totalTimeCurrentWeek() const {
-    vector<Task*>* child = subTasks();
     DateTime startDayWeek = DateTime::startDayOfWeek();
     DateTime startDayOfNextWeek = DateTime::startDayOfNextWeek();
     DTime totalTime;
-    if (child->size() == 0) {
+    if (childCount() == 0) {
         for (vector<TaskLog*>::iterator iterLog = _logs->begin(); iterLog != _logs->end(); iterLog++) {
             TaskLog* log = *iterLog;
             if ((*(log->start) >= startDayWeek) &&
@@ -97,21 +94,20 @@ DTime Task::totalTimeCurrentWeek() const {
             }
         }
     } else {
-        for (vector<Task*>::iterator iter = child->begin(); iter != child->end(); iter++) {
+        vector<Task*> subtasks = children();
+        for (vector<Task*>::iterator iter = subtasks.begin(); iter != subtasks.end(); iter++) {
             Task* sub = *iter;
             totalTime.add(sub->totalTimeCurrentWeek());
         }
     }
-    delete (child);
     return totalTime;
 }
 
 DTime Task::totalTimeCurrentDay() const {
-    vector<Task*>* child = subTasks();
     DateTime today = DateTime::today();
     DateTime tomorrow = today.addDays(1);
     DTime totalTime;
-    if (child->size() == 0) {
+    if (childCount() == 0) {
         for (vector<TaskLog*>::iterator iterLog = _logs->begin(); iterLog != _logs->end(); iterLog++) {
             TaskLog* log = *iterLog;
             if (*log->start >= today) {
@@ -123,12 +119,12 @@ DTime Task::totalTimeCurrentDay() const {
             }
         }
     } else {
-        for (vector<Task*>::iterator iter = child->begin(); iter != child->end(); iter++) {
+        vector<Task*> subtasks = children();
+        for (vector<Task*>::iterator iter = subtasks.begin(); iter != subtasks.end(); iter++) {
             Task* sub = *iter;
             totalTime.add(sub->totalTimeCurrentDay());
         }
     }
-    delete (child);
     return totalTime;
 
 }
@@ -169,13 +165,13 @@ void Task::setEndDate(DateTime* _endDate) {
 }
 
 DateTime* Task::endDate() const {
-    vector<Task*>* child = subTasks();
+    vector<Task*> subtasks = children();
     DateTime* result;
-    if (child->size() == 0) {
+    if (childCount() == 0) {
         result = _endDate;
     } else {
         DateTime* endDate = NULL;
-        for (vector<Task*>::iterator iter = child->begin(); iter != child->end(); iter++) {
+        for (vector<Task*>::iterator iter = subtasks.begin(); iter != subtasks.end(); iter++) {
             Task* sub = *iter;
             if (endDate == NULL) {
                 endDate = sub->endDate();
@@ -185,7 +181,6 @@ DateTime* Task::endDate() const {
         }
         result = endDate;
     }
-    delete(child);
     return result;
 }
 
@@ -194,13 +189,13 @@ void Task::setStartDate(DateTime* _startDate) {
 }
 
 DateTime* Task::startDate() const {
-    vector<Task*>* child = subTasks();
     DateTime* result;
-    if (child->size() == 0) {
+    if (childCount() == 0) {
         result = _startDate;
     } else {
+        vector<Task*> subtasks = children();
         DateTime* startDate = NULL;
-        for (vector<Task*>::iterator iter = child->begin(); iter != child->end(); iter++) {
+        for (vector<Task*>::iterator iter = subtasks.begin(); iter != subtasks.end(); iter++) {
             Task* sub = *iter;
             if (startDate == NULL) {
                 startDate = sub->startDate();
@@ -210,7 +205,6 @@ DateTime* Task::startDate() const {
         }
         result = startDate;
     }
-    delete(child);
     return result;
 }
 
@@ -246,17 +240,16 @@ string* Task::id() const {
     return _id;
 }
 
-std::vector<TaskLog*>* Task::logs(bool children) const {
+std::vector<TaskLog*>* Task::logs(bool includeChildren) const {
     std::vector<TaskLog*>* taskLogs = logs();
-    std::vector<Task*>* innerTasks = subTasks();
-    if (children && (innerTasks->size() > 0)) {
-        for (std::vector<Task*>::iterator iter = innerTasks->begin(); iter != innerTasks->end(); iter++) {
+    if (includeChildren && (childCount() > 0)) {
+        std::vector<Task*> innerTasks = children();
+        for (std::vector<Task*>::iterator iter = innerTasks.begin(); iter != innerTasks.end(); iter++) {
             Task* child = *iter;
             std::vector<TaskLog*>* childLogs = child->logs(true);
             taskLogs->insert(taskLogs->end(), childLogs->begin(), childLogs->end());
             delete childLogs;
         }
-        delete innerTasks;
     }
     return taskLogs;
 }
@@ -270,7 +263,6 @@ std::vector<TaskLog*>* Task::logs() const {
 Task::Task(Project* project, const std::string taskDef) {
     qDebug("Task::Task(Project* project, std::string* taskDef)");
     _project = project;
-    _subTasks = NULL;
     _totalTime = 0;
     _logs = new vector<TaskLog*>();
 
@@ -324,8 +316,8 @@ char* Task::toChar() {
     return res;
 }
 
-std::vector<Task*>* Task::subTasks() const {
-    return _project->subTasks(id());
+std::vector<Task*> Task::children() const {
+    return _childrenTasks;
 }
 
 void Task::addLog(TaskLog* log) {
@@ -333,9 +325,9 @@ void Task::addLog(TaskLog* log) {
 }
 
 string* Task::nextChildId() {
-    vector<Task*>* tasks =subTasks();
+    vector<Task*> tasks = children();
     int lastId = 0;
-    for (vector<Task*>::iterator iter = tasks->begin(); iter != tasks->end(); iter++) {
+    for (vector<Task*>::iterator iter = tasks.begin(); iter != tasks.end(); iter++) {
         Task* sub = *iter;
         const char* id = sub->id()->c_str();
         id = strrchr(id, '.') + 1;
@@ -348,7 +340,6 @@ string* Task::nextChildId() {
     lastId++;
     ss << *id() << "." << lastId;
 
-    delete(tasks);
     return new string(ss.str());
 }
 
@@ -409,14 +400,12 @@ DTime TaskLog::totalTime() const {
     return DTime(*end - *start);
 }
 
+void Task::setParent(Task* task) {
+    _parentTask = task;
+}
+
 Task* Task::parent() const {
-    string id = *_id;
-    if (countChar(id.c_str(), '.') > 0) {
-        id = id.substr(0, id.rfind('.'));
-        return _project->task(id);
-    } else {
-        return NULL;
-    }
+    return _parentTask;
 }
 
 bool Task::isClosed() const {
@@ -452,3 +441,18 @@ Task* lastTrackedTask(vector<Project*> projects) {
     return NULL;
 }
 
+void Task::addChild(Task *task) {
+    _childrenTasks.push_back(task);
+    task->setParent(this);
+}
+
+void Task::removeChild(Task* task) {
+    for (vector<Task*>::iterator iterChild = children().begin(); iterChild != children().end(); iterChild++) {
+        Task* child = *iterChild;
+        if (child == task) {
+            children().erase(iterChild);
+            break;
+        }
+    }
+    task->setParent(NULL);
+}

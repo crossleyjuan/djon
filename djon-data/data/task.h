@@ -38,7 +38,7 @@ public:
 
     char* toChar();
 
-    int childCount();
+    int childCount() const;
     void setTotalTime(DTime* _totalTime);
     DTime totalTime() const;
     DTime totalTimeCurrentWeek() const;
@@ -64,6 +64,7 @@ public:
     std::string* shortDescription() const;
     void setId(string* _id);
     string* id() const;
+    void setParent(Task* task);
     Task* parent() const;
     bool isClosed() const;
     void setClosed(bool);
@@ -72,10 +73,12 @@ public:
     void processTemplate();
 
     void addLog(TaskLog* log);
+    void addChild(Task* task);
+    void removeChild(Task* task);
     bool removeLog(TaskLog* log);
     std::vector<TaskLog*>* logs() const;
     std::vector<TaskLog*>* logs(bool children) const;
-    std::vector<Task*>* subTasks() const;
+    std::vector<Task*> children() const;
     std::string* nextChildId();
 
     bool operator==(const Task& task) const;
@@ -88,15 +91,16 @@ private:
     DateTime* _startDate;
     DateTime* _endDate;
     Project* _project;
-    std::vector<Job*> _jobs;
+
     std::string* _templateName;
     std::string* _status;
     DTime* _totalTime; // Time in secs
     QColor _taskColor;
+    Task* _parentTask;
 
     std::vector<TaskLog*>* _logs;
-    std::vector<Task*>* _subTasks;
-
+    std::vector<Job*> _jobs;
+    std::vector<Task*> _childrenTasks;
 };
 
 /*** Global Task Related functions **/

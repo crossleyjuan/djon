@@ -42,10 +42,10 @@ void TaskComboBox::insertTask(Task* task, int id, int& indent) {
     description.append(QString(task->longDescription()->c_str()));
     this->addItem(description, ++id);
     _pointers.insert(pair<int, ComboItem*>(id, new ComboItem(id, true, task)));
-    vector<Task*>* subTasks = task->subTasks();
-    if (subTasks->size() > 0) {
+    if (task->childCount() > 0) {
+        vector<Task*> subTasks = task->children();
         indent++;
-        for (std::vector<Task*>::iterator iterTask = subTasks->begin(); iterTask != subTasks->end(); iterTask++) {
+        for (std::vector<Task*>::iterator iterTask = subTasks.begin(); iterTask != subTasks.end(); iterTask++) {
             Task* task = *iterTask;
             insertTask(task, id, indent);
         }

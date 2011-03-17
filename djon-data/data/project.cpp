@@ -101,6 +101,19 @@ void Project::addTask(Task* task) {
     task->setProject(this);
     _tasks->push_back(task);
     _tasksMap->insert(pair<string, Task*>(*task->id(), task));
+
+    // Finds the parent task to be added to
+    Task* parentTask = NULL;
+    string id = *task->id();
+    if (countChar(id.c_str(), '.') > 0) {
+        id = id.substr(0, id.rfind('.'));
+        parentTask = this->task(id);
+    } else {
+        parentTask = NULL;
+    }
+    if (parentTask != NULL) {
+        parentTask->addChild(task);
+    }
 }
 
 Task* Project::task(string id) {
@@ -247,11 +260,14 @@ std::string* Project::nextChildId() {
 
 int Project::removeTask(Task* task) {
     qDebug("Removing task: %s", task->id()->c_str());
-    vector<Task*>* subTasks = task->subTasks();
-    for (vector<Task*>::iterator iterSub = subTasks->begin(); iterSub != subTasks->end(); iterSub++) {
+
+    vector<Task*> subTasks = task->children();
+    // Removes all the children tasks
+    for (vector<Task*>::iterator iterSub = subTasks.begin(); iterSub != subTasks.end(); iterSub++) {
         Task* tsk = *iterSub;
         removeTask(tsk);
     }
+    subTasks.clear();
 
     vector<Task*>* tasks = _tasks;
     for (vector<Task*>::iterator iter = tasks->begin(); iter != tasks->end(); iter++) {
@@ -262,12 +278,16 @@ int Project::removeTask(Task* task) {
         }
     }
 
+    Task* parentTask = task->parent();
+    if (parentTask != NULL) {
+        parentTask->removeChild(task);
+    }
+
     std::map<string, Task*>::iterator iter = _tasksMap->find(*task->id());
     if (iter != _tasksMap->end()) {
         _tasksMap->erase(iter);
     }
 
-    delete(subTasks);
     return 0;
 }
 

@@ -157,6 +157,9 @@ void TimeScene::drawTimeLog(const QModelIndex &index) {
         if (currentTime.totalSecs() != 0) {
             drawTime(*currentDay, currentTime, index, groupLevel);
         }
+        if (currentDay != NULL) {
+            delete(currentDay);
+        }
     }
     _currentY += sizeHint(index).height();
     if (!isCollapsed(index)) {
