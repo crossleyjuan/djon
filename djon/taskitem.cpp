@@ -104,10 +104,10 @@
          }
      case 2:
          if (_type == PROJECT) {
-             return QString(_project->totalTime().toChar());
+             return _project->totalTime().toQString();
          }
          if (_type == TASK) {
-             return QString(_task->totalTime().toChar());
+             return _task->totalTime().toQString();
          }
          if (_type == NONE) {
              return itemData.at(column);
@@ -118,14 +118,14 @@
                  Project *prj = *iter;
                  totalTime = totalTime + prj->totalTime();
              }
-             return QString(totalTime.toChar());
+             return totalTime.toQString();
          }
      case 3:
          if (_type == PROJECT) {
-             return QString(_project->totalTimeCurrentWeek().toChar());
+             return _project->totalTimeCurrentWeek().toQString();
          }
          if (_type == TASK) {
-             return QString(_task->totalTimeCurrentWeek().toChar());
+             return _task->totalTimeCurrentWeek().toQString();
          }
          if (_type == NONE) {
              return itemData.at(column);
@@ -136,14 +136,14 @@
                  Project* prj = *iter;
                  totalTime = totalTime + prj->totalTimeCurrentWeek();
              }
-             return QString(totalTime.toChar());
+             return totalTime.toQString();
          }
      case 4:
          if (_type == PROJECT) {
-             return QString(_project->totalTimeCurrentDay().toChar());
+             return _project->totalTimeCurrentDay().toQString();
          }
          if (_type == TASK) {
-             return QString(_task->totalTimeCurrentDay().toChar());
+             return _task->totalTimeCurrentDay().toQString();
          }
          if (_type == NONE) {
              return itemData.at(column);
@@ -154,7 +154,7 @@
                  Project* prj = *iter;
                  totalTime = totalTime + prj->totalTimeCurrentDay();
              }
-             return QString(totalTime.toChar());
+             return totalTime.toQString();
          }
      default:
          return QVariant();

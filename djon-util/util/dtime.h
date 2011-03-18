@@ -21,8 +21,9 @@ public:
     int minutes() const;
     int seconds() const;
 
-    QTime toQTime();
-    const char* toChar();
+    QTime toQTime() const;
+    char* toChar() const;
+    QString toQString() const;
 
     void add(long secs);
     void add(const DTime time);

@@ -112,7 +112,7 @@ void TimeScene::drawTime(DateTime currentDay, DTime time, QModelIndex index, int
     font.setBold((groupLevel <= 1));
     font.setItalic((groupLevel == 0));
 
-    QGraphicsSimpleTextItem* text = addSimpleText(QString(time.toChar()), font);
+    QGraphicsSimpleTextItem* text = addSimpleText(time.toQString(), font);
     text->setBrush(textBrush);
     text->setPos(x1 + 2, y1 + 1);
     text->setVisible(true);
@@ -150,6 +150,10 @@ void TimeScene::drawTimeLog(const QModelIndex &index) {
                 currentTime = currentTime + (*log->end - *log->start);
             } else {
                 drawTime(*currentDay, currentTime, index, groupLevel);
+                if (currentDay != NULL) {
+                    delete(currentDay);
+                    currentDay = NULL;
+                }
                 currentDay = new DateTime(logDate.toDouble());
                 currentTime = (*log->end - *log->start);
             }
@@ -159,6 +163,7 @@ void TimeScene::drawTimeLog(const QModelIndex &index) {
         }
         if (currentDay != NULL) {
             delete(currentDay);
+            currentDay = NULL;
         }
     }
     _currentY += sizeHint(index).height();

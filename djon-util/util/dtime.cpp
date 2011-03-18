@@ -80,7 +80,7 @@ int DTime::seconds() const {
     return secs;
 }
 
-QTime DTime::toQTime() {
+QTime DTime::toQTime() const {
     int secs = _secs;
 
     int hour = (secs / 3600);
@@ -100,10 +100,10 @@ void DTime::time(int& hour, int& min, int& sec) const {
     sec = tmpSecs;
 }
 
-const char* DTime::toChar() {
+char* DTime::toChar() const {
 
-    char* buffer = (char*)mmalloc(20);
-    memset(buffer, 0, 20);
+    char* buffer = (char*)malloc(10);
+    memset(buffer, 0, 10);
 
     int hour;
     int min;
@@ -111,7 +111,7 @@ const char* DTime::toChar() {
     time(hour, min, secs);
     sprintf(buffer, "%d:%02d:%02d", hour, min, secs);
 
-    return const_cast<const char*>(buffer);
+    return buffer;
 }
 
 void DTime::add(long secs) {
@@ -130,4 +130,11 @@ DTime DTime::operator +(const DTime& dtime) const {
 
 void DTime::operator ++(int secs) {
     _secs += secs;
+}
+
+QString DTime::toQString() const {
+    char* c = toChar();
+    QString result(c);
+    free(c);
+    return result;
 }

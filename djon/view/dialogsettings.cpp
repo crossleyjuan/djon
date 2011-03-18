@@ -25,8 +25,12 @@ DialogSettings::DialogSettings(QWidget *parent) :
     ui->cboUpdate->setCurrentIndex(ui->cboUpdate->findData(updateCheck));
     ui->transparency->setValue(getSettings()->transparency());
 
+    /**
     loadCalendars();
     loadTemplates();
+    **/
+    ui->tab->removeTab(2);
+    ui->tab->removeTab(1);
     ui->tab->setCurrentIndex(0);
 }
 

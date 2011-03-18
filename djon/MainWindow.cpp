@@ -83,7 +83,7 @@ MainWindow::MainWindow() {
     widget.taskView->setColumnWidth(3, 70);
     widget.taskView->setColumnWidth(4, 70);
     widget.taskView->setMinimumWidth(250);
-    widget.taskView->setMaximumWidth(490);
+    widget.taskView->setMaximumWidth(490 + widget.taskView->verticalScrollBar()->width() + 10);
     widget.taskView->setItemDelegate(new TaskEditorDelegate(this));
 
     _idleDetector = new IdleDetector();// 5*60
@@ -97,7 +97,6 @@ MainWindow::MainWindow() {
     connect(_timeTracker, SIGNAL(trackerStarted(Task*,TaskLog*)), this, SLOT(trackerStarted(Task*,TaskLog*)));
     connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()));
 
-
     _trackWindow = new TrackControlWindow(_timeTracker, NULL);
     _trackWindow->setModel(_taskModel);
     _trackWindow->show();
@@ -110,7 +109,6 @@ MainWindow::MainWindow() {
     restoreUserSessionState();
 
     _workingDetector->startDetection();
-
 }
 
 void MainWindow::createTaskLogWindow() {
@@ -947,7 +945,7 @@ void MainWindow::changeCurrentView(VIEW_TYPE type) {
     case Time_View:
         TimeView* timeView = new TimeView(this);
         connect(timeView->verticalScrollBar(), SIGNAL(valueChanged(int)), widget.taskView->verticalScrollBar(), SLOT(setValue(int)));
-        widget.taskView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        widget.taskView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
         _timeViewAction->setChecked(true);
         connect(timeView, SIGNAL(itemHoverEnter(QModelIndex)), _taskModel, SLOT(receiveItemHoverEnter(QModelIndex)));

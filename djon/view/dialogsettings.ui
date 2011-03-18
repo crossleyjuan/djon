@@ -96,7 +96,7 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="tab_3">
+       <widget class="QWidget" name="tabCalendars">
         <attribute name="title">
          <string>Calendars</string>
         </attribute>
@@ -163,7 +163,7 @@
          </property>
         </widget>
        </widget>
-       <widget class="QWidget" name="tab_4">
+       <widget class="QWidget" name="tabTemplates">
         <attribute name="title">
          <string>Templates</string>
         </attribute>
