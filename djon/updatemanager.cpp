@@ -11,6 +11,10 @@
 #include <QByteArray>
 #include <string>
 #include <sstream>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QImageReader>
 
 UpdateManager::UpdateManager(QObject *parent) :
         QObject(parent)
@@ -18,22 +22,24 @@ UpdateManager::UpdateManager(QObject *parent) :
     _timer = new QTimer(this);
     _updateDownloaded = false;
     _versionConfDownloaded = false;
-    _httpRequestAborted = false;
-    _http = new QHttp(this);
+    _manager = NULL;
     _file = NULL;
     _mins = getSettings()->checkUpdate();
     _downloading = false;
     _isLastVersion = false;
+    _manager = NULL;
+
     connect(_timer, SIGNAL(timeout()), this, SLOT(check()));
 
-    connect(_http, SIGNAL(requestFinished(int,bool)),
-            this, SLOT(httpRequestFinished(int,bool)));
-    connect(_http, SIGNAL(dataReadProgress(int,int)),
-            this, SLOT(updateDataReadProgress(int,int)));
-    connect(_http, SIGNAL(responseHeaderReceived(QHttpResponseHeader)),
-            this, SLOT(readResponseHeader(QHttpResponseHeader)));
-    //    connect(http, SIGNAL(authenticationRequired(QString,quint16,QAuthenticator*)),
-    //            this, SLOT(slotAuthenticationRequired(QString,quint16,QAuthenticator*)));
+    _manager = new QNetworkAccessManager(this);
+    connect(_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(requestFinished(QNetworkReply*)));
+}
+
+UpdateManager::~UpdateManager() {
+    if (_manager != NULL) {
+        delete(_manager);
+    }
+    _manager = NULL;
 }
 
 void UpdateManager::startCheck() {
@@ -50,76 +56,60 @@ void UpdateManager::downloadUpdater() {
     if (!_versionConfDownloaded) {
         fileName = string("version.conf");
         std::string currentVersion = getCurrentVersion();
-        address = "http://d-jon.com/downloads/version.php?version=" + currentVersion;// readConfValue("version-file", "");
+        string userId(readConfValue("user-id", ""));
+        address = "http://d-jon.com/downloads/version2.php?version=" + currentVersion;// readConfValue("version-file", "");
+        address = address.append("&userId=" + userId);
     }
     fileName = *getTempDir() + "/" + fileName;
     _file = new QFile(QString(fileName.c_str()));
 
+    if (_file->exists()) {
+        _file->remove();
+    }
     QUrl url(address.c_str());
-    QHttp::ConnectionMode mode = url.scheme().toLower() == "https" ? QHttp::ConnectionModeHttps : QHttp::ConnectionModeHttp;
-    _http->setHost(url.host(), mode, url.port() == -1 ? 0 : url.port());
-    _httpRequestAborted = false;
 
-    QByteArray path = QUrl::toPercentEncoding(url.path(), "!$&'()*+,;=:@/");
-    if (path.isEmpty())
-        path = "/";
+    _manager->get(QNetworkRequest(url));
 
-    _httpGetId = _http->get(path, _file);
     _downloading = true;
 }
 
-void UpdateManager::httpRequestFinished(int requestId, bool error)
+void UpdateManager::requestFinished(QNetworkReply *reply)
 {
-    if (requestId != _httpGetId)
-        return;
-    if (_httpRequestAborted) {
-        if (_file) {
-            _file->close();
-            _file->remove();
-            delete _file;
-            _file = 0;
+    // no error received?
+    bool error = false;
+    if (reply->error() == QNetworkReply::NoError)
+    {
+        QByteArray bytes = reply->readAll();  // bytes
+        _file->open(QFile::WriteOnly);
+        int res = _file->write(bytes);
+        if (res < 0) {
+            error = true;
         }
-
-        return;
+        _file->flush();
+        _file->close();
+    }
+    // Some http error received
+    else
+    {
+        // handle errors here
+        error = true;
     }
 
-    _file->close();
     _downloading = false;
+
     if (error) {
         _file->remove();
+        delete(_file);
     } else {
-        delete _file;
-        _file = 0;
         if (!_versionConfDownloaded) {
             _versionConfDownloaded = true;
             checkVersion();
         }
     }
 
-}
-
-void UpdateManager::readResponseHeader(const QHttpResponseHeader &responseHeader)
-{
-    switch (responseHeader.statusCode()) {
-    case 200:                   // Ok
-    case 301:                   // Moved Permanently
-    case 302:                   // Found
-    case 303:                   // See Other
-    case 307:                   // Temporary Redirect
-        // these are not error conditions
-        break;
-
-    default:
-        _httpRequestAborted = true;
-        _downloading = false;
-        _http->abort();
-    }
-}
-
-void UpdateManager::updateDataReadProgress(int bytesRead, int totalBytes)
-{
-    if (_httpRequestAborted)
-        return;
+    // We receive ownership of the reply object
+    // and therefore need to handle deletion.
+    reply->deleteLater();
 }
 
 void UpdateManager::check() {
@@ -178,6 +168,9 @@ void UpdateManager::checkVersion() {
         box.setText(message.c_str());
         box.exec();
     }
+    _file->remove();
+    delete(_file);
+    _file = NULL;
 }
 
 void UpdateManager::pause() {

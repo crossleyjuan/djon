@@ -465,6 +465,13 @@ void checkConfigFile() {
         }
         writeConfValue("last-project-dir", prjDir);
     }
+    string *user = new string(readConfValue("user-id", ""));
+    if (user->length() == 0) {
+        delete(user);
+        user = uuid();
+        writeConfValue("user-id", *user);
+        delete(user);
+    }
 }
 
 Version getCurrentVersion() {

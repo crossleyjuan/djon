@@ -4,8 +4,7 @@
 
 #include <QObject>
 #include <QTimer>
-#include <QHttp>
-#include <QHttpResponseHeader>
+#include <QNetworkAccessManager>
 #include <QFile>
 
 class UpdateManager : public QObject
@@ -13,6 +12,7 @@ class UpdateManager : public QObject
     Q_OBJECT
 public:
     explicit UpdateManager(QObject *parent = 0);
+    ~UpdateManager();
     void startCheck();
     void pause();
     void resume();
@@ -22,9 +22,7 @@ signals:
 
 public slots:
     void check();
-    void httpRequestFinished(int requestId, bool error);
-    void readResponseHeader(const QHttpResponseHeader &responseHeader);
-    void updateDataReadProgress(int bytesRead, int totalBytes);
+    void requestFinished(QNetworkReply* reply);
 
 private:
     void downloadUpdater();
@@ -33,9 +31,8 @@ private:
 
     QTimer* _timer;
     int _mins;
-    bool _httpRequestAborted;
+    QNetworkAccessManager* _manager;
     bool _downloading;
-    QHttp* _http;
     int _httpGetId;
     QFile* _file;
     bool _isLastVersion;
