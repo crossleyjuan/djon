@@ -25,6 +25,7 @@ std::vector<Project*>* loadProjects() {
 
     std::vector<Project*>* projects = new std::vector<Project*>();
 
+    std::vector<string> newOpenProjects;
     vector<string> prjs = getSettings()->openProjects();
 
     for (vector<string>::iterator it = prjs.begin(); it != prjs.end(); it++) {
@@ -33,6 +34,12 @@ std::vector<Project*>* loadProjects() {
         FILE* pFile;
 
         pFile = fopen(fileName.c_str(), "rb");
+        if (pFile == NULL) {
+            //backward compatibility with 1.1 (the projects were saved in the projects folder
+            std::string home = *getHomeDir() + "/.djon/Projects/";
+            fileName = home + fileName;
+            pFile = fopen(fileName.c_str(), "rb");
+        }
 
         if (pFile != NULL) {
             InputStream is(fileName, pFile);
@@ -41,6 +48,8 @@ std::vector<Project*>* loadProjects() {
             Project* project = reader.readProject();
 
             project->setProjectFileName(new string(fileName));
+            newOpenProjects.push_back(fileName);
+
             projects->push_back(project);
 
             if (errorOcurred()) {
@@ -50,6 +59,8 @@ std::vector<Project*>* loadProjects() {
         }
 
     }
+    getSettings()->setOpenProjects(newOpenProjects);
+    getSettings()->save();
     qDebug("out loadProjects()");
     return projects;
 }
