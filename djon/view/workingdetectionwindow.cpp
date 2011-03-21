@@ -30,6 +30,7 @@ WorkingDetectionWindow::WorkingDetectionWindow(std::vector<Project*>* projects, 
     m_ui->idleMessage->setText(text);
     setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
     m_ui->comboBox->setEnabled(false);
+    m_ui->comboBox->setMinimumWidth(350);
     _lastTrackedTask = lastTrackedTask(*projects);
     if (_lastTrackedTask != NULL) {
         std::stringstream ssLastActivity;

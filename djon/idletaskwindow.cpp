@@ -30,6 +30,7 @@ IdleTaskWindow::IdleTaskWindow(std::vector<Project*>* projects, TimeTracker* tim
     setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
     _timeTracker = timeTracker;
     m_ui->comboBox->setEnabled(false);
+    m_ui->comboBox->setMinimumWidth(350);
     connect(this, SIGNAL(accepted()), this, SLOT(on_accepted()));
     connect(m_ui->countToTask, SIGNAL(toggled(bool)), m_ui->comboBox, SLOT(setEnabled(bool)));
     adjustSize();
