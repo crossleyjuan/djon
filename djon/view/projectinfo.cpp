@@ -1,5 +1,6 @@
 #include "projectinfo.h"
 #include "ui_projectinfo.h"
+#include <QFileDialog>
 
 ProjectInfo::ProjectInfo(QWidget *parent) :
     QWizardPage(parent),
@@ -29,3 +30,4 @@ void ProjectInfo::initializePage() {
     registerField("projectName*", ui->projectName);
     registerField("projectDescription", ui->projectDescription, "plainText", SIGNAL(textChanged()));
 }
+

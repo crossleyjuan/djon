@@ -57,7 +57,7 @@ void UpdateManager::downloadUpdater() {
         fileName = string("version.conf");
         std::string currentVersion = getCurrentVersion();
         string userId(readConfValue("user-id", ""));
-        address = "http://d-jon.com/downloads/version2.php?version=" + currentVersion;// readConfValue("version-file", "");
+        address = "http://d-jon.com/downloads/version.php?version=" + currentVersion;// readConfValue("version-file", "");
         address = address.append("&userId=" + userId);
     }
     fileName = *getTempDir() + "/" + fileName;
