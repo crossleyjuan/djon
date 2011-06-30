@@ -100,6 +100,7 @@ MainWindow::MainWindow() {
     _trackWindow = new TrackControlWindow(_timeTracker, NULL);
     _trackWindow->setModel(_taskModel);
     _trackWindow->show();
+    _trackWindow->refreshSettings();
     connect(_timeTracker, SIGNAL(timeChanged(Task*,DTime&,DTime&)), _trackWindow, SLOT(updateCurrentTime()));
     connect(_timeTracker, SIGNAL(trackerStarted(Task*,TaskLog*)), _trackWindow, SLOT(trackerStateChanged(Task*)));
     connect(_timeTracker, SIGNAL(timeStopped(Task*,TaskLog*)), _trackWindow, SLOT(trackerStateChanged(Task*)));
@@ -324,6 +325,9 @@ void MainWindow::setActiveTask(Task* task) {
         QModelIndex index = _taskModel->index(_activeProject, _activeTask);
         if (index.isValid()) {
             widget.taskView->selectionModel()->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
+            if (_timeTracker->status() != RUNNING) {
+                _trackWindow->setCurrentTask(task);
+            }
         }
     }
 }
@@ -351,7 +355,7 @@ void MainWindow::createNewTask() {
     }
     string id;
     QString taskId;
-    if (_activeTask != NULL) {
+    if ((_activeTask != NULL) && (_activeProject->type() != Project::TODO)) {
         taskId = QString(_activeTask->nextChildId()->c_str());
     } else {
         taskId = QString(_activeProject->nextChildId()->c_str());
