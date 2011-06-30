@@ -290,6 +290,7 @@ Task::Task(Project* project, const std::string taskDef) {
     int green = randColor();
     int blue = randColor();
     _taskColor = QColor(red, green, blue);
+    _parentTask = NULL;
     delete(values);
     qDebug("out Task::Task(Project* project, std::string* taskDef)");
 }

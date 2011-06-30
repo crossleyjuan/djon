@@ -11,7 +11,9 @@ public:
     ~Version();
 
     bool operator>(const Version& version);
+    bool operator>=(const Version& version);
     bool operator<(const Version& version);
+    bool operator<=(const Version& version);
     bool operator==(const Version& version);
     operator std::string();
 private:

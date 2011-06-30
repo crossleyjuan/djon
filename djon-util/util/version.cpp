@@ -11,18 +11,13 @@ Version::Version(std::string version)
     _revision = 0;
     std::vector<string> values = split(version, ".");
     _mayor = atoi(values.at(0).c_str());
-    if (values.size() > 2) {
+    if (values.size() > 1) {
         _minor = atoi(values.at(1).c_str());
     } else {
         _minor = 0;
-        if (values.size() > 1) {
-            _revision = atoi(values.at(1).c_str());
-        } else {
-            _revision = 0;
-        }
     }
     if (values.size() > 2) {
-        _revision = atoi(values.at(1).c_str());
+        _revision = atoi(values.at(2).c_str());
     }
 }
 
@@ -48,6 +43,15 @@ bool Version::operator>(const Version& version) {
     }
 }
 
+bool Version::operator>=(const Version& version) {
+    Version* current = this;
+    if (*current == version) {
+        return true;
+    } else {
+        return *current > version;
+    }
+}
+
 bool Version::operator<(const Version& version) {
     Version* current = this;
     if (current->_mayor < version._mayor) {
@@ -58,6 +62,15 @@ bool Version::operator<(const Version& version) {
         return true;
     } else {
         return false;
+    }
+}
+
+bool Version::operator<=(const Version& version) {
+    Version* current = this;
+    if (*current == version) {
+        return true;
+    } else {
+        return *current < version;
     }
 }
 

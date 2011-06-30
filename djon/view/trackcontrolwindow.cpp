@@ -18,7 +18,6 @@ TrackControlWindow::TrackControlWindow(TimeTracker* timeTracker, QWidget *parent
     connect(ui->comboBox, SIGNAL(currentIndexChanged(QModelIndex)), this, SLOT(currentIndexChanged(QModelIndex)));
     installEventFilter(this);
     ui->comboBox->installEventFilter(this);
-    refreshSettings();
 }
 
 TrackControlWindow::~TrackControlWindow()

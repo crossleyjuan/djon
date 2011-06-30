@@ -102,8 +102,8 @@ void DTime::time(int& hour, int& min, int& sec) const {
 
 char* DTime::toChar() const {
 
-    char* buffer = (char*)malloc(10);
-    memset(buffer, 0, 10);
+    char* buffer = (char*)malloc(20);
+    memset(buffer, 0, 20);
 
     int hour;
     int min;
@@ -133,8 +133,8 @@ void DTime::operator ++(int secs) {
 }
 
 QString DTime::toQString() const {
-    char* c = toChar();
-    QString result(c);
-    free(c);
+    char* cTime = toChar();
+    QString result(cTime);
+    free(cTime);
     return result;
 }
