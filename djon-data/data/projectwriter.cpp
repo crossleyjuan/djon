@@ -16,6 +16,7 @@ void ProjectWriter::writeProject(const Project& project) {
     vector<Task*>* tasks = project.tasks();
     int taskCount = tasks->size();
     _outStream->writeInt(taskCount);
+    _outStream->writeInt(project.type());
     for (vector<Task*>::iterator iterTask = tasks->begin(); iterTask != tasks->end(); iterTask++) {
         Task* task = *iterTask;
         writeTask(*task);

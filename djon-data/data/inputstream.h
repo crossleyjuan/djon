@@ -22,6 +22,7 @@ public:
     char* readChars();
     char* readChars(int length);
     const char* readFull();
+    bool eof();
 
     std::string* readString();
     std::string fileName();

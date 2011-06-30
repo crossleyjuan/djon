@@ -324,3 +324,11 @@ std::vector<TaskLog*>* Project::logs() const {
     }
     return logs;
 }
+
+void Project::setType(PROJECTTYPE type) {
+    _type = type;
+}
+
+Project::PROJECTTYPE Project::type() const {
+    return _type;
+}

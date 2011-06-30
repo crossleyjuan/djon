@@ -22,6 +22,11 @@ class Calendar;
 
 class Project {
 public:
+    enum PROJECTTYPE {
+        NORMAL,
+        TODO
+    };
+
     Project();
     Project(string projDef);
     Project(const Project& orig);
@@ -35,6 +40,8 @@ public:
     void setDescription(string* description);
     string* projectFileName() const;
     void setProjectFileName(string* projectFileName);
+    void setType(PROJECTTYPE type);
+    PROJECTTYPE type() const;
 //    int getLastTaskId();
 
     std::vector<Task*>* tasks() const;
@@ -62,6 +69,7 @@ private:
     string* _name;
     string* _description;
     string* _projectFileName;
+    PROJECTTYPE _type;
     Calendar* _projectDefaultCalendar;
 //    int _lastTaskId;
 

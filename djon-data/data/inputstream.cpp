@@ -86,3 +86,8 @@ const char* InputStream::readFull() {
     std::string str = ss.str();
     return strdup(str.c_str());
 }
+
+bool InputStream::eof() {
+    return feof(_pFile);
+}
+
