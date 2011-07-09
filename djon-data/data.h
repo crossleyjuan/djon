@@ -11,6 +11,7 @@
 #include <vector>
 #include "data/project.h"
 #include "data/task.h"
+#include "data/workspace.h"
 #include "template.h"
 #include "data/djonpreferences.h"
 #include "data/settings.h"

@@ -40,13 +40,13 @@
 #include "ganttview.h"
 #include "timeview.h"
 
-std::vector<Project*>* _projects;
+//std::vector<Project*>* _projects;
 
 MainWindow::MainWindow() {
     qDebug("MainWindow::MainWindow()");
     widget.setupUi(this);
     _logWindow = NULL;
-    _projects = NULL;
+//    _projects = NULL;
     _idleDetector = NULL;
     _workingDetector = NULL;
     _timeTracker = NULL;
@@ -61,6 +61,7 @@ MainWindow::MainWindow() {
     _updateManager = NULL;
     _recordButton = NULL;
     _currentView = NULL;
+    _workspace = new Workspace();
 
     _userPreferencesController = new UserPreferencesController(_taskModel);
 
@@ -123,11 +124,13 @@ void MainWindow::createTaskLogWindow() {
 
 TaskDelegate* MainWindow::createTaskDelegate() {
     qDebug("MainWindow::createTaskDelegate()");
-    TaskDelegate* delegate = new TaskDelegate(_projects);
+    TaskDelegate* delegate = new TaskDelegate(_workspace->projects());
     return delegate;
 }
 
 MainWindow::~MainWindow() {
+    delete(_workspace);
+
     releaseCalendars();
 }
 
@@ -282,7 +285,7 @@ void MainWindow::idleTimeOut() {
     _workingDetector->stopDetection();
     _updateManager->pause();
     _timeTracker->startRecordLap(_idleDetector->idleSince());
-    IdleTaskWindow* w = new IdleTaskWindow(_projects, _timeTracker);
+    IdleTaskWindow* w = new IdleTaskWindow(_workspace->projects(), _timeTracker);
 //    connect(w, SIGNAL(currentTaskChanged(Task*)), _timeWindow, SLOT(setActiveTask(Task*)));
     w->exec();
     if (_timeTracker->status() == RUNNING) {
@@ -405,15 +408,16 @@ int MainWindow::createNewProject() {
             box.exec();
         } else {
             addProject(wizard->project()->projectFileName()->c_str());
-            _projects = loadProjects();
+            _workspace->addProject(wizard->project());
+
             if (errorOcurred()) {
                 showErrorMessage(lastErrorCode(), lastErrorDescription(), this);
                 return 1;
             }
-            if (_projects->size() == 1) {
-                _activeProject = _projects->at(0);
+            if (_workspace->projects()->size() == 1) {
+                _activeProject = _workspace->projects()->at(0);
             }
-            _taskModel = new TaskModel(WITH_TIMES, *_projects);
+            _taskModel = new TaskModel(WITH_TIMES, *_workspace->projects());
             widget.taskView->setModel(_taskModel);
             connect(widget.taskView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(selectTaskChanged(QModelIndex,QModelIndex)));
             connect(_taskModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), widget.taskView, SLOT(reset()));
@@ -426,8 +430,8 @@ int MainWindow::createNewProject() {
 
 void MainWindow::reloadProjects() {
     qDebug("MainWindow::reloadProjects()");
-    if (_projects->size() == 1) {
-        _activeProject = _projects->at(0);
+    if (_workspace->projects()->size() == 1) {
+        _activeProject = _workspace->projects()->at(0);
     }
     reloadTasks();
 }
@@ -436,10 +440,10 @@ void MainWindow::reloadTasks() {
     qDebug("MainWindow::reloadTasks()");
     widget.taskView->setAnimated(false);
     if (_taskModel != NULL) {
-        _taskModel->setProjects(*_projects);
+        _taskModel->setProjects(*_workspace->projects());
         ((LogView*)_currentView)->refresh();
     } else {
-        _taskModel = new TaskModel(WITH_TIMES, *_projects);
+        _taskModel = new TaskModel(WITH_TIMES, *_workspace->projects());
         widget.taskView->setModel(_taskModel);
         changeCurrentView(Log_View);
 
@@ -503,7 +507,7 @@ void MainWindow::completeTask() {
 
 void MainWindow::exportProjects() {
     qDebug("MainWindow::exportProjects()");
-    ExportDialog dialog(*_projects, this);
+    ExportDialog dialog(*_workspace->projects(), this);
     dialog.exec();
 }
 
@@ -595,7 +599,7 @@ void MainWindow::importProjects() {
         if (imported) {
             for (vector<Project*>::iterator iter = imported->begin(); iter != imported->end(); iter++) {
                 Project* proj = *iter;
-                _projects->push_back(proj);
+                _workspace->addProject(proj);
                 saveProject(proj);
             }
 
@@ -626,7 +630,7 @@ void MainWindow::showErrorMessage(const char* errorMessage, QWidget* parent) {
 
 void MainWindow::initialize() {
     qDebug("MainWindow::initialize()");
-    _projects = loadProjects();
+    loadProjects();
     if (errorOcurred()) {
         showErrorMessage(lastErrorDescription(), this);
         exit(EXIT_FAILURE);

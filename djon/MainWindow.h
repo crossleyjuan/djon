@@ -26,6 +26,7 @@ class UserPreferencesController;
 class SysTrayIcon;
 class TrackControlWindow;
 class AbstractViewer;
+class Workspace;
 
 enum VIEW_TYPE {
     Gantt_View,
@@ -68,6 +69,7 @@ private:
     TaskModel* _taskModel;
     UserPreferencesController* _userPreferencesController;
     QSignalMapper* _templateMapper;
+    Workspace* _workspace;
 
     // Actions
     QAction* _recordButton;
