@@ -49,6 +49,16 @@ FunctionEnd
 
 ;--------------------------------
 
+Function un.checkRunning
+    FindProcDLL::FindProc "djon.exe"
+    IntCmp $R0 1 0 notRunning
+         MessageBox MB_OK|MB_ICONEXCLAMATION "d-jon is running. Please close it first" /SD IDOK
+    Abort
+notRunning:
+FunctionEnd
+
+;--------------------------------
+
 ; The stuff to install
 Section "djon (required)"
 
@@ -62,7 +72,7 @@ Section "djon (required)"
   ; File "djon.nsi"
   File "djon-data.dll"
   File "djon-util.dll"
-  File "updater.exe"
+  ; File "updater.exe"
   File "libgcc_s_dw2-1.dll"
   File "mingwm10.dll"
   File "QtCore4.dll"
@@ -117,6 +127,8 @@ SectionEnd
 
 Section "Uninstall"
   
+  call un.checkRunning
+
   ; Remove registry keys
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\djon"
   DeleteRegKey HKLM SOFTWARE\djon
