@@ -9,7 +9,7 @@
 #include <string>
 #include <QMessageBox>
 
-IdleTaskWindow::IdleTaskWindow(std::vector<Project*>* projects, TimeTracker* timeTracker, QWidget *parent) :
+IdleTaskWindow::IdleTaskWindow(const std::vector<Project*>* projects, TimeTracker* timeTracker, QWidget *parent) :
     QDialog(parent),
     m_ui(new Ui::IdleTaskWindow)
 {

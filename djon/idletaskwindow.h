@@ -16,7 +16,7 @@ class IdleTaskWindow : public QDialog {
     Q_OBJECT
     Q_DISABLE_COPY(IdleTaskWindow)
 public:
-    explicit IdleTaskWindow(std::vector<Project*>* projects, TimeTracker* timeTracker, QWidget *parent = 0);
+    explicit IdleTaskWindow(const std::vector<Project*>* projects, TimeTracker* timeTracker, QWidget *parent = 0);
     virtual ~IdleTaskWindow();
 
 protected:
@@ -24,7 +24,7 @@ protected:
 
 private:
     Ui::IdleTaskWindow *m_ui;
-    std::vector<Project*>* _projects;
+    const std::vector<Project*>* _projects;
     TimeTracker* _timeTracker;
 
 public slots:

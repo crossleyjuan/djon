@@ -6,6 +6,8 @@
 #include "data/outputstream.h"
 #include "data/inputstream.h"
 #include "data/projectreader.h"
+#include "data/workspacereader.h"
+#include "data/workspacewriter.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string>
@@ -31,38 +33,42 @@ std::vector<Project*>* loadProjects() {
     for (vector<string>::iterator it = prjs.begin(); it != prjs.end(); it++) {
         string fileName = (*it);
 
-        FILE* pFile;
-
-        pFile = fopen(fileName.c_str(), "rb");
-        if (pFile == NULL) {
-            //backward compatibility with 1.1 (the projects were saved in the projects folder
-            std::string home = *getHomeDir() + "/.djon/Projects/";
-            fileName = home + fileName;
-            pFile = fopen(fileName.c_str(), "rb");
-        }
-
-        if (pFile != NULL) {
-            InputStream is(fileName, pFile);
-
-            ProjectReader reader(&is);
-            Project* project = reader.readProject();
-
-            project->setProjectFileName(new string(fileName));
-            newOpenProjects.push_back(fileName);
-
-            projects->push_back(project);
-
-            if (errorOcurred()) {
-                return NULL;
-            }
-            fclose(pFile);
-        }
-
+        Project* project = loadProject(fileName);
+        projects->push_back(project);
+        newOpenProjects.push_back(fileName);
     }
     getSettings()->setOpenProjects(newOpenProjects);
     getSettings()->save();
     qDebug("out loadProjects()");
     return projects;
+}
+
+Project* loadProject(std::string fileName) {
+    FILE* pFile;
+
+    pFile = fopen(fileName.c_str(), "rb");
+    if (pFile == NULL) {
+        //backward compatibility with 1.1 (the projects were saved in the projects folder
+        std::string home = *getHomeDir() + "/.djon/Projects/";
+        fileName = home + fileName;
+        pFile = fopen(fileName.c_str(), "rb");
+    }
+
+    Project* project = NULL;
+    if (pFile != NULL) {
+        InputStream is(fileName, pFile);
+
+        ProjectReader reader(&is);
+        project = reader.readProject();
+
+        project->setProjectFileName(new string(fileName));
+
+        if (errorOcurred()) {
+            return NULL;
+        }
+        fclose(pFile);
+    }
+    return project;
 }
 
 //std::vector<Project*>* loadProjects2() {
@@ -235,4 +241,40 @@ int saveProject(Project *project) {
     fclose(pFile);
 
     return 0;
+}
+
+Workspace* loadWorkspace(std::string fileName) {
+    FILE* pFile;
+
+    pFile = fopen(fileName.c_str(), "rb");
+    if (pFile == NULL) {
+        //backward compatibility with 1.1 (the projects were saved in the projects folder
+        std::string home = *getHomeDir() + "/.djon/Projects/";
+        fileName = home + fileName;
+        pFile = fopen(fileName.c_str(), "rb");
+    }
+    if (pFile == NULL) {
+        return NULL;
+    } else {
+        InputStream* stream = new InputStream(fileName, pFile);
+        WorkspaceReader reader(stream);
+        Workspace* workspace = reader.readWorkspace();
+
+        delete(stream);
+        return workspace;
+    }
+}
+
+void saveWorkspace(Workspace* workspace) {
+    FILE* pFile;
+
+    std::string fileName = workspace->fileName();
+    pFile = fopen(fileName.c_str(), "wb");
+    if (pFile != NULL) {
+        OutputStream* stream = new OutputStream(pFile);
+        WorkspaceWriter writer(stream);
+        writer.writeWorkspace(workspace);
+
+        delete(stream);
+    }
 }

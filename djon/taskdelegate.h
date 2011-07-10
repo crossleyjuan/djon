@@ -10,7 +10,7 @@ class Project;
 class TaskDelegate : public QItemDelegate
 {
 public:
-    TaskDelegate(vector<Project*>* projects);
+    TaskDelegate(const vector<Project*>* projects);
     void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
     QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 
@@ -20,7 +20,7 @@ private:
     void drawTaskBar(QPainter *p, DateTime* startDate, DateTime* endDate, int dayWidth, const QStyleOptionViewItem & option) const;
     void drawGroupBar(QPainter *p, DateTime* barStartDate, DateTime* barEndDate, int dayWidth, const QStyleOptionViewItem & option) const;
 
-    vector<Project*>* _projects;
+    const vector<Project*>* _projects;
     QDate* _startDate;
     QDate* _endDate;
     SCALE _scale;

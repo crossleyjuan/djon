@@ -18,6 +18,8 @@ public:
     void setLastReleaseNotes(std::string);
     std::vector<std::string> openProjects();
     void setOpenProjects(std::vector<std::string>);
+    std::string lastWorkspace();
+    void setLastWorkspace(std::string);
     long idleTimeOut();
     void setIdleTimeOut(long);
     int checkUpdate();
@@ -31,6 +33,7 @@ private:
     bool _closeToTray;
     bool _showSysTrayWarning;
     std::string _lastProjectDir;
+    std::string _lastWorkspace;
     std::string _lastReleaseNotes;
     std::vector<std::string> _openProjects;
     long _idleTimeOut;
@@ -40,6 +43,7 @@ private:
     bool _closeToTrayChanged;
     bool _showSysTrayWarningChanged;
     bool _lastProjectDirChanged;
+    bool _lastWorkspaceChanged;
     bool _lastReleaseNotesChanged;
     bool _openProjectsChanged;
     bool _idleTimeOutChanged;

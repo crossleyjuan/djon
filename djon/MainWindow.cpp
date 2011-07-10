@@ -61,7 +61,25 @@ MainWindow::MainWindow() {
     _updateManager = NULL;
     _recordButton = NULL;
     _currentView = NULL;
-    _workspace = new Workspace();
+    std::string lastWorkspace = getSettings()->lastWorkspace();
+    if (lastWorkspace.length() == 0) {
+        // if the last workspace does not exist then create a new default
+        // this will support backward compatibility
+        std::vector<string> openProjects = getSettings()->openProjects();
+        std::string* homeDir = getHomeDir();
+        std::string wkFileName = *homeDir + "/.djon/default.dwk";
+        _workspace = new Workspace(wkFileName);
+        for (std::vector<string>::iterator iterOP = openProjects.begin(); iterOP != openProjects.end(); iterOP++) {
+            std::string projectFileName = *iterOP;
+            _workspace->addProject(loadProject(projectFileName));
+        }
+        delete(homeDir);
+        getSettings()->setLastWorkspace(wkFileName);
+        getSettings()->save();
+        saveWorkspace(_workspace);
+    } else {
+        _workspace = loadWorkspace(lastWorkspace);
+    }
 
     _userPreferencesController = new UserPreferencesController(_taskModel);
 
@@ -409,7 +427,7 @@ int MainWindow::createNewProject() {
         } else {
             addProject(wizard->project()->projectFileName()->c_str());
             _workspace->addProject(wizard->project());
-
+            saveWorkspace(_workspace);
             if (errorOcurred()) {
                 showErrorMessage(lastErrorCode(), lastErrorDescription(), this);
                 return 1;
@@ -601,6 +619,7 @@ void MainWindow::importProjects() {
                 Project* proj = *iter;
                 _workspace->addProject(proj);
                 saveProject(proj);
+                saveWorkspace(_workspace);
             }
 
             reloadProjects();
@@ -636,7 +655,7 @@ void MainWindow::initialize() {
         exit(EXIT_FAILURE);
         return;
     }
-    if (_projects->size() == 0) {
+    if (_workspace->projects()->size() == 0) {
         ProjectWizard* wizard = new ProjectWizard();
         if (wizard->exec() == QWizard::Accepted) {
             int res = saveProject(wizard->project());
@@ -644,7 +663,13 @@ void MainWindow::initialize() {
                 exit(0);
             }
             addProject(wizard->project()->projectFileName()->c_str());
-            _projects = loadProjects();
+            std::vector<Project*>* projects = loadProjects();
+            _workspace->clear();
+            for (std::vector<Project*>::iterator iter = projects->begin(); iter != projects->end(); iter++) {
+                _workspace->addProject(*iter);
+            }
+            saveWorkspace(_workspace);
+            delete(projects);
             if (errorOcurred()) {
                 showErrorMessage(lastErrorDescription(), this);
             }
@@ -663,7 +688,8 @@ void MainWindow::openProject() {
         QFile file(selectedFileName);
         string fileName = file.fileName().toStdString();
         addProject(fileName.c_str());
-        _projects = loadProjects();
+        _workspace->addProject(loadProject(fileName));
+        saveWorkspace(_workspace);
         reloadProjects();
         widget.taskView->setAnimated(false);
         widget.taskView->expandAll();
@@ -677,7 +703,8 @@ void MainWindow::closeProject() {
     if (_activeProject != NULL) {
         string* projectFileName = _activeProject->projectFileName();
         removeProject(projectFileName->c_str());
-        _projects = loadProjects();
+        _workspace->removeProject(_activeProject);
+        saveWorkspace(_workspace);
         if (errorOcurred()) {
             showErrorMessage(lastErrorDescription(), this);
             return;
@@ -710,7 +737,7 @@ void MainWindow::refreshCollapsedState() {
         string* projName = elem->project();
         // Search for the project and leave it in lastProject variable
         if ((lastProject == NULL) || (lastProject->name()->compare(*projName) != 0)) {
-            lastProject = searchProject(*_projects, *projName);
+            lastProject = searchProject(*_workspace->projects(), *projName);
         }
         Task* collapsedTask = NULL;
         if (lastProject != NULL) {
@@ -729,7 +756,7 @@ void MainWindow::refreshCollapsedState() {
 
 void MainWindow::setLastSelectedTask() {
     widget.taskView->setAnimated(false);
-    Task* task = lastTrackedTask(*_projects);
+    Task* task = lastTrackedTask(*_workspace->projects());
     if (task != NULL) {
         QModelIndex index = _taskModel->index(task->project(), task);
         if (index.isValid()) {
@@ -864,7 +891,7 @@ void MainWindow::showReleaseNotes() {
 }
 
 void MainWindow::workingDetected(const DateTime since) {
-    WorkingDetectionWindow* w = new WorkingDetectionWindow(_projects, _workingDetector, _timeTracker, since, this);
+    WorkingDetectionWindow* w = new WorkingDetectionWindow(_workspace->projects(), _workingDetector, _timeTracker, since, this);
     connect(w, SIGNAL(currentTaskChanged(Task*)), this, SLOT(setActiveTask(Task*)));
     w->exec();
 }

@@ -17,6 +17,9 @@
 #include "data/settings.h"
 
 std::vector<Project*>* loadProjects();
+Project* loadProject(std::string fileName);
+Workspace* loadWorkspace(std::string fileName);
+void saveWorkspace(Workspace* workspace);
 Project* searchProject(vector<Project*> projects, string name);
 
 vector<Template*>* readTemplates();

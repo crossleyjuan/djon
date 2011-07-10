@@ -31,7 +31,9 @@ SOURCES += \
     data/outputstream.cpp \
     data/inputstream.cpp \
     data/projectreader.cpp \
-    data/workspace.cpp
+    data/workspace.cpp \
+    data/workspacereader.cpp \
+    data/workspacewriter.cpp
 
 HEADERS += \
     template.h \
@@ -45,4 +47,6 @@ HEADERS += \
     data/outputstream.h \
     data/inputstream.h \
     data/projectreader.h \
-    data/workspace.h
+    data/workspace.h \
+    data/workspacereader.h \
+    data/workspacewriter.h

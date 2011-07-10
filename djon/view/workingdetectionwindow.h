@@ -17,7 +17,7 @@ namespace Ui {
 class WorkingDetectionWindow : public QDialog {
     Q_OBJECT
 public:
-    explicit WorkingDetectionWindow(std::vector<Project*>* projects, WorkingDetector* workingDetector, TimeTracker* timeTracker, const DateTime since, QWidget *parent = 0);
+    explicit WorkingDetectionWindow(const std::vector<Project*>* projects, WorkingDetector* workingDetector, TimeTracker* timeTracker, const DateTime since, QWidget *parent = 0);
     ~WorkingDetectionWindow();
 
 protected:
@@ -28,7 +28,7 @@ public slots:
 
 private:
     Ui::WorkingDetectionWindow *m_ui;
-    std::vector<Project*>* _projects;
+    const std::vector<Project*>* _projects;
     DateTime* _since;
     TimeTracker* _timeTracker;
     WorkingDetector* _workingDetector;

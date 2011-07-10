@@ -1,10 +1,10 @@
 #include "workspace.h"
-
 #include "project.h"
 
-Workspace::Workspace()
+Workspace::Workspace(std::string fileName)
 {
     _projects = new std::vector<Project*>();
+    this->_fileName = fileName;
 }
 
 Workspace::~Workspace() {
@@ -13,6 +13,13 @@ Workspace::~Workspace() {
 
 Workspace::Workspace(const Workspace &workspace) {
     _projects = workspace._projects;
+}
+
+void Workspace::clear() {
+    for (std::vector<Project*>::iterator iter = _projects->begin(); iter != _projects->end(); iter++) {
+        delete(*iter);
+    }
+    _projects->clear();
 }
 
 void Workspace::addProject(Project *project) {
@@ -35,4 +42,8 @@ const std::vector<Project*>* Workspace::projects() const {
         result->push_back(*iter);
     }
     return result;
+}
+
+std::string Workspace::fileName() const {
+    return _fileName;
 }

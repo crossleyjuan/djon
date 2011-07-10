@@ -8,7 +8,7 @@
 #include <sstream>
 #include <string>
 
-WorkingDetectionWindow::WorkingDetectionWindow(std::vector<Project*>* projects, WorkingDetector* workingDetector, TimeTracker* timeTracker, const DateTime since, QWidget *parent) :
+WorkingDetectionWindow::WorkingDetectionWindow(const std::vector<Project*>* projects, WorkingDetector* workingDetector, TimeTracker* timeTracker, const DateTime since, QWidget *parent) :
     QDialog(parent),
     m_ui(new Ui::WorkingDetectionWindow)
 {

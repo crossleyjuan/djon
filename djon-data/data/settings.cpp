@@ -111,6 +111,7 @@ void Settings::load() {
 
     setCheckUpdate(atoi(readConfValue("check-update", "240")));
     setTransparency(atoi(readConfValue("track-transparency", "40")));
+    setLastWorkspace(readConfValue("last-workspace", ""));
 
     _closeToTrayChanged = false;
     _showSysTrayWarningChanged = false;
@@ -120,6 +121,7 @@ void Settings::load() {
     _idleTimeOutChanged = false;
     _checkUpdateChanged = false;
     _transparencyChanged = false;
+    _lastWorkspaceChanged = false;
 }
 
 void Settings::save() {
@@ -163,6 +165,11 @@ void Settings::save() {
         ssTrans << _transparency;
         writeConfValue("track-transparency", ssTrans.str());
     }
+    if (_lastWorkspaceChanged) {
+        std::stringstream ssWorkspace;
+        ssWorkspace << _lastWorkspace;
+        writeConfValue("last-workspace", ssWorkspace.str());
+    }
 
     _closeToTrayChanged = false;
     _showSysTrayWarningChanged = false;
@@ -172,4 +179,14 @@ void Settings::save() {
     _idleTimeOutChanged = false;
     _checkUpdateChanged = false;
     _transparencyChanged = false;
+    _lastWorkspaceChanged = false;
+}
+
+std::string Settings::lastWorkspace() {
+    return _lastWorkspace;
+}
+
+void Settings::setLastWorkspace(std::string lastWorkspace) {
+    _lastWorkspace = lastWorkspace;
+    _lastWorkspaceChanged = true;
 }

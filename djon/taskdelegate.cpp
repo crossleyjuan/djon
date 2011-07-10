@@ -2,7 +2,7 @@
 #include "TaskModel.h"
 #include "data.h"
 
-TaskDelegate::TaskDelegate(vector<Project*>* projects)
+TaskDelegate::TaskDelegate(const vector<Project*>* projects)
 {
     QDate* startDate = NULL;
     QDate* endDate = NULL;
@@ -10,7 +10,7 @@ TaskDelegate::TaskDelegate(vector<Project*>* projects)
     int totalDays = 0;
     _projects = projects;
 
-    for (std::vector<Project*>::iterator itProj = _projects->begin(); itProj != _projects->end(); itProj++) {
+    for (std::vector<Project*>::const_iterator itProj = _projects->begin(); itProj != _projects->end(); itProj++) {
         Project* proj = *itProj;
         std::vector<Task*>* tasks = proj->tasks();
         for (std::vector<Task*>::iterator itTask = tasks->begin(); itTask != tasks->end(); itTask++) {
