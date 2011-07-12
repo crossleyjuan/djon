@@ -277,4 +277,6 @@ void saveWorkspace(Workspace* workspace) {
 
         delete(stream);
     }
+
+    fclose(pFile);
 }
