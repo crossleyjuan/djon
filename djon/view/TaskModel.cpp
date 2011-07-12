@@ -97,7 +97,11 @@ Qt::ItemFlags TaskModel::flags(const QModelIndex &index) const
     if (item->type() == BLANK) {
         return Qt::ItemIsEnabled;
     }
-    Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable;// | Qt::ItemIsEditable;
+
+    Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    if (item->type() == TASK) {
+        flags = flags | Qt::ItemIsEditable;
+    }
     if (index.column() == 1) {
         flags = flags | Qt::ItemIsUserCheckable;
     }

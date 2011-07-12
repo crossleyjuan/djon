@@ -232,7 +232,8 @@ void MainWindow::setupActions() {
 
     //***********************************************************
     // Popup actions should be registered in showPopup function
-    _taskPopUpMenu->addAction(newTask);
+    QAction* newTaskInline = _taskPopUpMenu->addAction(QIcon(":/img/new-task.png"), tr("Create SubTask"));
+    connect(newTaskInline, SIGNAL(triggered()), this, SLOT(createNewInlineTask()));
     _taskPopUpMenu->addAction(editTask);
     _taskPopUpMenu->addAction(deleteTask);
     _taskPopUpMenu->addMenu(applyTemplate);
@@ -293,6 +294,7 @@ void MainWindow::setupActions() {
     connect(settings, SIGNAL(triggered()), this, SLOT(settings()));
 
     connect(widget.taskView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(taskContextMenuRequested(QPoint)));
+    widget.taskView->installEventFilter(this);
     widget.taskView->setContextMenuPolicy(Qt::CustomContextMenu);
 }
 
@@ -394,6 +396,25 @@ void MainWindow::createNewTask() {
 
         setActiveTask(createdTask);
     }
+}
+
+void MainWindow::createNewInlineTask() {
+    qDebug("MainWindow::createNewInlineTask()");
+    if (_activeProject == NULL) {
+        QMessageBox box;
+        box.setText("You don't have an active project, you should create a project first.");
+        box.setWindowTitle("d-Jon");
+        box.exec();
+        return;
+    }
+
+    if (_activeTask != NULL) {
+        qDebug("creating task as sibling of %s", _activeTask->shortDescription()->c_str());
+    }
+    Task* newtsk = _activeProject->createTask((_activeTask == NULL) ? NULL: _activeTask->parent());
+    saveProject(_activeProject);
+    _taskModel->addTask(newtsk);
+    setActiveTask(newtsk);
 }
 
 void MainWindow::editNewTask() {
@@ -1003,4 +1024,24 @@ void MainWindow::changeCurrentView(VIEW_TYPE type) {
 void MainWindow::onMenuChangeView(QAction* action) {
     int view = action->data().toInt();
     changeCurrentView((VIEW_TYPE)view);
+}
+
+bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
+    if (event->type()==QEvent::KeyPress) {
+        // key pressed
+
+        // transforms QEvent into QKeyEvent
+        QKeyEvent* pKeyEvent=static_cast<QKeyEvent*>(event);
+        switch(pKeyEvent->key()) {
+            case Qt::Key_Insert: {
+                    createNewInlineTask();
+                    break;
+            }
+        case Qt::Key_Delete: {
+                deleteTask();
+                break;
+        }
+        }
+    }
+    return QWidget::eventFilter(obj, event);
 }

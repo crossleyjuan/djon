@@ -50,6 +50,7 @@ public:
     std::vector<Task*>* subTasks(string* prefix) const; // prefix should be 1, 2.1, etc.
     std::vector<Task*>* subTasks() const; // return the direct sub tasks
     int removeTask(Task* task);
+    Task* createTask(Task* parentTask);
 
     DateTime* startDate();
     DateTime* endDate();

@@ -89,6 +89,7 @@ private:
 
 public:
     void closeEvent(QCloseEvent *event);
+    virtual bool eventFilter(QObject *, QEvent *);
 
 private slots:
     void onMenuChangeView(QAction* action);
@@ -102,6 +103,7 @@ public slots:
     void startRecord();
     void stopRecord();
     void createNewTask();
+    void createNewInlineTask();
     void editNewTask();
     void deleteTask();
     void completeTask();

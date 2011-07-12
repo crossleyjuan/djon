@@ -332,3 +332,26 @@ void Project::setType(PROJECTTYPE type) {
 Project::PROJECTTYPE Project::type() const {
     return _type;
 }
+
+Task* Project::createTask(Task *parentTask) {
+    string* id;
+    if (parentTask != NULL) {
+        id = parentTask->nextChildId();
+    } else {
+        id = this->nextChildId();
+    }
+    Task* newtsk = new Task(this);
+    newtsk->setId(id);
+    // default template
+    string* templateName = ((Template*)(*readTemplates()->begin()))->name();
+    newtsk->setTemplateName(templateName);
+    newtsk->setClosed(false);
+    newtsk->setDuration(Duration(0,0,0));
+    newtsk->setStartDate(new DateTime(DateTime::today(true)));
+    newtsk->setEndDate(new DateTime(DateTime::today(true)));
+    newtsk->setParent(parentTask);
+    newtsk->setProject(this);
+    newtsk->setShortDescription(new std::string(""));
+    addTask(newtsk);
+    return newtsk;
+}
