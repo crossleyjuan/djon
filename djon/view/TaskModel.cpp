@@ -302,6 +302,8 @@ bool TaskModel::setData(const QModelIndex &index, const QVariant &value, int rol
 
 void TaskModel::setTrackedTask(Task *task) {
     _trackedTask = task;
+    QModelIndex i = index(task->project(), task);
+    emit dataChanged(i, i);
 }
 
 Task* TaskModel::trackedTask() const {

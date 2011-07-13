@@ -114,6 +114,7 @@ MainWindow::MainWindow() {
 //    connect(_timeTracker, SIGNAL(timeChanged(Task*, DTime&, DTime&)), _timeWindow, SLOT(updateTime(Task*, DTime&, DTime&)));
     connect(_timeTracker, SIGNAL(timeStopped(Task*,TaskLog*)), this, SLOT(timeStopped(Task*, TaskLog*)));
     connect(_timeTracker, SIGNAL(trackerStarted(Task*,TaskLog*)), this, SLOT(trackerStarted(Task*,TaskLog*)));
+    connect(_timeTracker, SIGNAL(trackerStarted(Task*,TaskLog*)), _taskModel, SLOT(setTrackedTask(Task*)));
     connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()));
 
     _trackWindow = new TrackControlWindow(_timeTracker, NULL);
@@ -306,7 +307,7 @@ void MainWindow::idleTimeOut() {
     _updateManager->pause();
     _timeTracker->startRecordLap(_idleDetector->idleSince());
     IdleTaskWindow* w = new IdleTaskWindow(_workspace->projects(), _timeTracker);
-//    connect(w, SIGNAL(currentTaskChanged(Task*)), _timeWindow, SLOT(setActiveTask(Task*)));
+    connect(w, SIGNAL(currentTaskChanged(Task*)), _taskModel, SLOT(setTrackedTask(Task*)));
     w->exec();
     if (_timeTracker->status() == RUNNING) {
         _idleDetector->start();
@@ -914,6 +915,7 @@ void MainWindow::showReleaseNotes() {
 void MainWindow::workingDetected(const DateTime since) {
     WorkingDetectionWindow* w = new WorkingDetectionWindow(_workspace->projects(), _workingDetector, _timeTracker, since, this);
     connect(w, SIGNAL(currentTaskChanged(Task*)), this, SLOT(setActiveTask(Task*)));
+    connect(w, SIGNAL(currentTaskChanged(Task*)), _taskModel, SLOT(setTrackedTask(Task*)));
     w->exec();
 }
 

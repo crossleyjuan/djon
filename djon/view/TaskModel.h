@@ -43,8 +43,6 @@ public:
     Task* task(const QModelIndex &index) const;
     Project* project(const QModelIndex &index) const;
 
-    // This will set the currently tracked (time tracked) task
-    void setTrackedTask(Task* task);
     // This will retrieve the currently tracked (time tracked) task
     Task* trackedTask() const;
     void setProjects(const vector<Project*> projects);
@@ -58,6 +56,8 @@ public slots:
     void timeChanged(Task* task);
     void receiveItemHoverEnter(QModelIndex index);
     void receiveItemHoverLeave(QModelIndex index);
+    // This will set the currently tracked (time tracked) task
+    void setTrackedTask(Task* task);
 
 private:
     void setupModelData();
