@@ -140,37 +140,40 @@ void UpdateManager::processNextStep() {
 }
 
 void UpdateManager::checkVersion() {
-    std::string versioncont = std::string(readFile(const_cast<char*>(std::string(*getTempDir() + "/version.conf").c_str())));
+    std::string tempFileName = *getTempDir() + "/version.conf";
+    _isLastVersion = true;
+    if (existFile(tempFileName.c_str())) {
+        std::string versioncont = std::string(readFile(const_cast<char*>(tempFileName.c_str())));
 
-    if (versioncont.find("version:") == -1) {
-        versioncont = "version:" + versioncont + ";\nreleaseNotesURL:http://d-jon.com/downloads/releasenotes.php?version=" + VERSION + ";";
-    }
-    const char* cwebLastVersion = readValue(versioncont, "version");
+        if (versioncont.find("version:") == -1) {
+            versioncont = "version:" + versioncont + ";\nreleaseNotesURL:http://d-jon.com/downloads/releasenotes.php?version=" + VERSION + ";";
+        }
+        const char* cwebLastVersion = readValue(versioncont, "version");
+        if (strlen(cwebLastVersion) > 0) {
+            Version webVersion = getVersion(cwebLastVersion);
+            Version currentVersion = getCurrentVersion();
 
-    Version webVersion = getVersion(cwebLastVersion);
-    Version currentVersion = getCurrentVersion();
-
-    if (webVersion > currentVersion) {
-        _isLastVersion = false;
-    } else {
-        _isLastVersion = true;
+            if (webVersion > currentVersion) {
+                _isLastVersion = false;
+            }
+            if (!_isLastVersion) {
+                QMessageBox box;
+                box.setWindowTitle("d-jon update available");
+                box.setTextFormat(Qt::RichText);
+                std::stringstream ss;
+                ss << "A new version of d-jon is available at <a href=\"http://d-jon.com/downloads.html\">http://d-jon.com/downloads.html</a><br/>";
+                ss << "please take a look of the <a href=\"";
+                std::string releaseNotesURL = readValue(versioncont, "releaseNotesURL");
+                ss << releaseNotesURL << "\">release notes</a> to know what is new in this release.";
+                std::string message = ss.str();
+                box.setText(message.c_str());
+                box.exec();
+            }
+        }
+        _file->remove();
+        delete(_file);
+        _file = NULL;
     }
-    if (!_isLastVersion) {
-        QMessageBox box;
-        box.setWindowTitle("d-jon update available");
-        box.setTextFormat(Qt::RichText);
-        std::stringstream ss;
-        ss << "A new version of d-jon is available at <a href=\"http://d-jon.com/downloads.html\">http://d-jon.com/downloads.html</a><br/>";
-        ss << "please take a look of the <a href=\"";
-        std::string releaseNotesURL = readValue(versioncont, "releaseNotesURL");
-        ss << releaseNotesURL << "\">release notes</a> to know what is new in this release.";
-        std::string message = ss.str();
-        box.setText(message.c_str());
-        box.exec();
-    }
-    _file->remove();
-    delete(_file);
-    _file = NULL;
 }
 
 void UpdateManager::pause() {
