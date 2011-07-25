@@ -29,8 +29,9 @@ SOURCES += \
     data/djonpreferences.cpp \
     data/projectwriter.cpp \
     data/outputstream.cpp \
-    data/inputstream.cpp \
-    data/projectreader.cpp
+    data/projectreader.cpp \
+    data/debuginputstream.cpp \
+    data/fileinputstream.cpp
 
 HEADERS += \
     template.h \
@@ -43,4 +44,6 @@ HEADERS += \
     data/projectwriter.h \
     data/outputstream.h \
     data/inputstream.h \
-    data/projectreader.h
+    data/projectreader.h \
+    data/debuginputstream.h \
+    data/fileinputstream.h

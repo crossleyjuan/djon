@@ -8,27 +8,23 @@
 class InputStream
 {
 public:
-    InputStream(std::string fileName, FILE* pFile);
-    unsigned char readChar();
+    virtual unsigned char readChar() = 0;
     /* Reads 2 bytes in the input (little endian order) */
-    int readInt ();
+    virtual int readInt () = 0;
     /* Reads 4 bytes in the input (little endian order) */
-    long readLong ();
+    virtual long readLong () = 0;
     /* Reads a 4 byte float in the input */
-    float readFloatIEEE ();
+    virtual float readFloatIEEE () = 0;
     /* Reads a 8 byte double in the input */
-    double readDoubleIEEE ();
+    virtual double readDoubleIEEE () = 0;
     /* Read a chars */
-    char* readChars();
-    char* readChars(int length);
-    const char* readFull();
+    virtual char* readChars() = 0;
+    virtual char* readChars(int length) = 0;
+    virtual const char* readFull() = 0;
 
-    std::string* readString();
-    std::string fileName();
+    virtual std::string* readString() = 0;
+    virtual std::string fileName() = 0;
 
-private:
-    FILE* _pFile;
-    std::string _fileName;
 };
 
 #endif // INPUTSTREAM_H

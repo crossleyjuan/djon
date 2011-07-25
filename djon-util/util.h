@@ -15,6 +15,7 @@
 #include "util/errorHandle.h"
 #include "util/version.h"
 #include "util/calendar.h"
+#include "util/logger.h"
 
 #include <string>
 #include <QtCore/QDate>

@@ -5,6 +5,8 @@
 #include "data/projectwriter.h"
 #include "data/outputstream.h"
 #include "data/inputstream.h"
+#include "data/fileinputstream.h"
+#include "data/debuginputstream.h"
 #include "data/projectreader.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -42,8 +44,8 @@ std::vector<Project*>* loadProjects() {
         }
 
         if (pFile != NULL) {
-            InputStream is(fileName, pFile);
-
+            FileInputStream is(fileName, pFile);
+//            DebugInputStream debugStream((InputStream*)&is);
             ProjectReader reader(&is);
             Project* project = reader.readProject();
 
