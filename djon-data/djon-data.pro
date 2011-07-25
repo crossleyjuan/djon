@@ -29,9 +29,12 @@ SOURCES += \
     data/djonpreferences.cpp \
     data/projectwriter.cpp \
     data/outputstream.cpp \
+    data/projectreader.cpp \
     data/inputstream.cpp \
     data/projectreader.cpp \
     data/workspace.cpp \
+    data/debuginputstream.cpp \
+    data/fileinputstream.cpp
     data/workspacereader.cpp \
     data/workspacewriter.cpp
 
@@ -49,4 +52,6 @@ HEADERS += \
     data/projectreader.h \
     data/workspace.h \
     data/workspacereader.h \
+    data/debuginputstream.h \
+    data/fileinputstream.h
     data/workspacewriter.h

@@ -5,6 +5,8 @@
 #include "data/projectwriter.h"
 #include "data/outputstream.h"
 #include "data/inputstream.h"
+#include "data/fileinputstream.h"
+#include "data/debuginputstream.h"
 #include "data/projectreader.h"
 #include "data/workspacereader.h"
 #include "data/workspacewriter.h"
@@ -56,19 +58,27 @@ Project* loadProject(std::string fileName) {
 
     Project* project = NULL;
     if (pFile != NULL) {
-        InputStream is(fileName, pFile);
+            FileInputStream is(fileName, pFile);
+//            DebugInputStream debugStream((InputStream*)&is);
+            ProjectReader reader(&is);
+            Project* project = reader.readProject();
 
-        ProjectReader reader(&is);
-        project = reader.readProject();
+            project->setProjectFileName(new string(fileName));
+            newOpenProjects.push_back(fileName);
 
-        project->setProjectFileName(new string(fileName));
+            projects->push_back(project);
 
-        if (errorOcurred()) {
-            return NULL;
+            if (errorOcurred()) {
+                return NULL;
+            }
+            fclose(pFile);
         }
-        fclose(pFile);
+
     }
-    return project;
+    getSettings()->setOpenProjects(newOpenProjects);
+    getSettings()->save();
+    qDebug("out loadProjects()");
+    return projects;
 }
 
 //std::vector<Project*>* loadProjects2() {

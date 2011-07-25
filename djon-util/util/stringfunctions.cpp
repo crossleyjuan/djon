@@ -2,6 +2,9 @@
 #include "util.h"
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <stdarg.h>
+#include <sstream>
 
 char* strcpy(std::string str) {
     return strcpy(const_cast<char*>(str.c_str()), str.length());
@@ -38,4 +41,19 @@ std::vector<string*>* tokenizer(const std::string source, const char* tokens) {
     free(csource);
 
     return result;
+}
+
+std::string format(const char * fmt, ...) {
+  char* buffer = (char*)malloc(1000);
+  memset(buffer, 0, 1000);
+  va_list args;
+  va_start (args, fmt);
+  vsprintf (buffer,fmt, args);
+  va_end(args);
+  std::string result;
+  std::stringstream ss;
+  ss << buffer;
+  result = ss.str();
+  free(buffer);
+  return result;
 }
