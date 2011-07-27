@@ -61,25 +61,6 @@ MainWindow::MainWindow() {
     _updateManager = NULL;
     _recordButton = NULL;
     _currentView = NULL;
-    std::string lastWorkspace = getSettings()->lastWorkspace();
-    if (lastWorkspace.length() == 0) {
-        // if the last workspace does not exist then create a new default
-        // this will support backward compatibility
-        std::vector<string> openProjects = getSettings()->openProjects();
-        std::string* homeDir = getHomeDir();
-        std::string wkFileName = *homeDir + "/.djon/default.dwk";
-        _workspace = new Workspace(wkFileName);
-        for (std::vector<string>::iterator iterOP = openProjects.begin(); iterOP != openProjects.end(); iterOP++) {
-            std::string projectFileName = *iterOP;
-            _workspace->addProject(loadProject(projectFileName));
-        }
-        delete(homeDir);
-        getSettings()->setLastWorkspace(wkFileName);
-        getSettings()->save();
-        saveWorkspace(_workspace);
-    } else {
-        _workspace = loadWorkspace(lastWorkspace);
-    }
 
     _userPreferencesController = new UserPreferencesController(_taskModel);
 
@@ -671,11 +652,24 @@ void MainWindow::showErrorMessage(const char* errorMessage, QWidget* parent) {
 
 void MainWindow::initialize() {
     qDebug("MainWindow::initialize()");
-    loadProjects();
-    if (errorOcurred()) {
-        showErrorMessage(lastErrorDescription(), this);
-        exit(EXIT_FAILURE);
-        return;
+    std::string lastWorkspace = getSettings()->lastWorkspace();
+    if (lastWorkspace.length() == 0) {
+        // if the last workspace does not exist then create a new default
+        // this will support backward compatibility
+        std::vector<string> openProjects = getSettings()->openProjects();
+        std::string* homeDir = getHomeDir();
+        std::string wkFileName = *homeDir + "/.djon/default.dwk";
+        _workspace = new Workspace(wkFileName);
+        for (std::vector<string>::iterator iterOP = openProjects.begin(); iterOP != openProjects.end(); iterOP++) {
+            std::string projectFileName = *iterOP;
+            _workspace->addProject(loadProject(projectFileName));
+        }
+        delete(homeDir);
+        getSettings()->setLastWorkspace(wkFileName);
+        getSettings()->save();
+        saveWorkspace(_workspace);
+    } else {
+        _workspace = loadWorkspace(lastWorkspace);
     }
     if (_workspace->projects()->size() == 0) {
         ProjectWizard* wizard = new ProjectWizard();

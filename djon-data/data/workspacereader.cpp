@@ -1,7 +1,8 @@
 #include "workspacereader.h"
 
 #include "projectreader.h"
-#include "inputstream.h"
+#include "fileinputstream.h"
+#include "debuginputstream.h"
 #include "workspace.h"
 #include <string>
 
@@ -21,14 +22,20 @@ Workspace* WorkspaceReader::readWorkspace() {
 
         pFile = fopen(fileName->c_str(), "rb");
         if (pFile != NULL) {
-            InputStream* stream = new InputStream(*fileName, pFile);
-
+            InputStream* stream = new FileInputStream(*fileName, pFile);
+#ifndef QT_NO_DEBUG
+            FileInputStream* fileStream = (FileInputStream*)stream;
+            stream = new DebugInputStream(fileStream);
+#endif
             ProjectReader* prReader = new ProjectReader(stream);
             Project* project = prReader->readProject();
 
             workspace->addProject(project);
 
             delete(prReader);
+#ifndef QT_NO_DEBUG
+            delete(fileStream);
+#endif
             delete(stream);
         }
         delete(fileName);

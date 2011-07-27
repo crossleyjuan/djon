@@ -46,6 +46,7 @@ std::vector<Project*>* loadProjects() {
 }
 
 Project* loadProject(std::string fileName) {
+    qDebug("loadProject()");
     FILE* pFile;
 
     pFile = fopen(fileName.c_str(), "rb");
@@ -58,27 +59,20 @@ Project* loadProject(std::string fileName) {
 
     Project* project = NULL;
     if (pFile != NULL) {
-            FileInputStream is(fileName, pFile);
-//            DebugInputStream debugStream((InputStream*)&is);
-            ProjectReader reader(&is);
-            Project* project = reader.readProject();
+        FileInputStream is(fileName, pFile);
+        DebugInputStream debugStream((InputStream*)&is);
+        ProjectReader reader(&debugStream);
+        project = reader.readProject();
 
-            project->setProjectFileName(new string(fileName));
-            newOpenProjects.push_back(fileName);
+        project->setProjectFileName(new string(fileName));
 
-            projects->push_back(project);
-
-            if (errorOcurred()) {
-                return NULL;
-            }
-            fclose(pFile);
+        if (errorOcurred()) {
+            return NULL;
         }
-
+        fclose(pFile);
     }
-    getSettings()->setOpenProjects(newOpenProjects);
-    getSettings()->save();
-    qDebug("out loadProjects()");
-    return projects;
+    qDebug("out loadProject()");
+    return project;
 }
 
 //std::vector<Project*>* loadProjects2() {
@@ -266,7 +260,7 @@ Workspace* loadWorkspace(std::string fileName) {
     if (pFile == NULL) {
         return NULL;
     } else {
-        InputStream* stream = new InputStream(fileName, pFile);
+        FileInputStream* stream = new FileInputStream(fileName, pFile);
         WorkspaceReader reader(stream);
         Workspace* workspace = reader.readWorkspace();
 

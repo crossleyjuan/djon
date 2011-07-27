@@ -90,7 +90,7 @@ const char* FileInputStream::readFull() {
     return strdup(str.c_str());
 }
 
-bool InputStream::eof() {
+bool FileInputStream::eof() {
     return feof(_pFile);
 }
 

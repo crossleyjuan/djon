@@ -1,7 +1,7 @@
 #ifndef PROJECTREADER_H
 #define PROJECTREADER_H
 
-#include <inputstream.h>
+#include "inputstream.h"
 
 class Project;
 class Task;

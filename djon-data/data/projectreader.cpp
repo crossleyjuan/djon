@@ -129,7 +129,7 @@ Project* ProjectReader::readProject() {
     char* version = _inputStream->readChars(13);
     Version* fileVersion;
     Version format1 = Version("1.1.201011110");
-    Version format2 = Version("1.2.20110320");
+    Version format2 = Version("1.2.20110725");
     if (!isValidVersionNumber(version)) {
         fileVersion = new Version("1.1.201011110");
     } else {
@@ -152,7 +152,7 @@ Project* ProjectReader::readProject() {
         project->setDescription(_inputStream->readString());
         project->setProjectFileName(new string(_inputStream->fileName()));
         int taskCount = _inputStream->readInt();
-        if (*fileVersion > format2) {
+        if (*fileVersion >= format2) {
             int type = _inputStream->readInt();
             project->setType((Project::PROJECTTYPE)type);
         } else {

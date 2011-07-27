@@ -28,6 +28,7 @@ public:
 
     virtual std::string* readString();
     virtual std::string fileName();
+    virtual bool eof();
 
 private:
     FILE* _pFile;
