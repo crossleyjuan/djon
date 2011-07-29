@@ -11,6 +11,7 @@ INCLUDEPATH += . \
     data \
     view \
     ../djon-util \
+    ../djon-plugins \
     ../djon-data
 
 include(../qtsingleapplication-2.6_1-opensource/src/qtsingleapplication.pri)
@@ -19,6 +20,7 @@ QT += xml \
 LIBS += -L../libs
 LIBS += -ldjon-util
 LIBS += -ldjon-data
+LIBS += -ldjon-plugins
 CONFIG += static
 
 # LIBS += -lRpcrt4

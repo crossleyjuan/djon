@@ -34,6 +34,7 @@
 #include "systrayicon.h"
 #include "taskeditordelegate.h"
 #include "closedtaskfilter.h"
+#include "pluginmanager.h"
 
 // Views
 #include "logview.h"
@@ -68,10 +69,11 @@ MainWindow::MainWindow() {
 
     _updateManager = new UpdateManager(this);
 
+    initialize();
+
     setupActions();
 
     _timeTracker = new TimeTracker();
-    initialize();
     createTaskLogWindow();
 //    createCurrentTimeWindow();
 
@@ -254,7 +256,18 @@ void MainWindow::setupActions() {
     connect(group, SIGNAL(triggered(QAction*)), this, SLOT(onMenuChangeView(QAction*)));
     /*****************/
 
+    /***** Options menu ******/
     QAction* settings = optMenu->addAction(QIcon(":/img/settings.png"), tr("Settings"));
+    QMenu* pluginsMenu = optMenu->addMenu(tr("Plugins"));
+
+    std::vector<WindowPlugin*> plugins = PluginManager::plugins();
+    for (std::vector<WindowPlugin*>::iterator iterPlugins = plugins.begin(); iterPlugins != plugins.end(); iterPlugins++) {
+        WindowPlugin* plugin = *iterPlugins;
+        QIcon pluginIcon = plugin->pluginIcon();
+        QAction* pluginAction = pluginsMenu->addAction(pluginIcon, QString(plugin->pluginMenuText()));
+        pluginAction->connect(pluginAction, SIGNAL(triggered()), plugin, SLOT(showDefaultScreen()));
+    }
+    /*****************/
 
     connect(newProject, SIGNAL(triggered()), this, SLOT(createNewProject()));
     connect(openProject, SIGNAL(triggered()), this, SLOT(openProject()));
@@ -692,6 +705,9 @@ void MainWindow::initialize() {
         }
     }
     reloadProjects();
+
+    // Plugins
+    PluginManager::loadPlugins();
 }
 
 void MainWindow::openProject() {
