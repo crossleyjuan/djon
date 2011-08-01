@@ -1,4 +1,5 @@
 #include "coreplugin.h"
+#include "dialog.h"
 #include <QWidget>
 #include <QtPlugin>
 
@@ -28,6 +29,8 @@ QIcon Coreplugin::pluginIcon() const {
 }
 
 void Coreplugin::showDefaultScreen(QWidget* parent) {
+    Dialog* dialog = new Dialog(_workspace, parent);
+    dialog->show();
 }
 
 

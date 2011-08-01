@@ -10,8 +10,9 @@
 std::vector<WindowPlugin*> PluginManager::_plugins;
 
 void PluginManager::loadPlugins() {
-    std::string* homeDir = getHomeDir();
-    QString dir(((std::string)*homeDir + "/.djon/plugins").c_str());
+//    std::string* homeDir = getHomeDir();
+//    QString dir(((std::string)*homeDir + "/.djon/plugins").c_str());
+    QString dir("c:/workspace/personal/djon/libs");
     QCoreApplication::addLibraryPath(dir);
 
     QDir pluginsDir(dir);
@@ -26,7 +27,7 @@ void PluginManager::loadPlugins() {
         }
     }
 
-    delete(homeDir);
+//    delete(homeDir);
 }
 
 std::vector<WindowPlugin*> PluginManager::plugins() {

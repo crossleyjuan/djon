@@ -24,7 +24,12 @@ LIBS += -ldjon-util
 LIBS += -ldjon-data
 LIBS += -ldjon-plugins
 
-SOURCES += coreplugin.cpp
+SOURCES += coreplugin.cpp \
+    dialog.cpp
 
 HEADERS += coreplugin.h\
-        core-plugin_global.h
+        core-plugin_global.h \
+    dialog.h
+
+FORMS += \
+    dialog.ui

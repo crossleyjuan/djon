@@ -709,6 +709,12 @@ void MainWindow::initialize() {
     }
     reloadProjects();
 
+    // Initialize the plugins
+    std::vector<WindowPlugin*> plugins = PluginManager::plugins();
+    for (std::vector<WindowPlugin*>::iterator iterPlugins = plugins.begin(); iterPlugins != plugins.end(); iterPlugins++) {
+        WindowPlugin* plugin = *iterPlugins;
+        plugin->setWorkspace(_workspace);
+    }
 }
 
 void MainWindow::openProject() {
