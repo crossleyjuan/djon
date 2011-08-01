@@ -69,9 +69,12 @@ MainWindow::MainWindow() {
 
     _updateManager = new UpdateManager(this);
 
-    initialize();
+    // Plugins
+    PluginManager::loadPlugins();
 
     setupActions();
+
+    initialize();
 
     _timeTracker = new TimeTracker();
     createTaskLogWindow();
@@ -706,8 +709,6 @@ void MainWindow::initialize() {
     }
     reloadProjects();
 
-    // Plugins
-    PluginManager::loadPlugins();
 }
 
 void MainWindow::openProject() {

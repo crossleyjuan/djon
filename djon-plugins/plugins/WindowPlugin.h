@@ -1,13 +1,12 @@
 #ifndef WINDOWPLUGIN_H
 #define WINDOWPLUGIN_H
 
-#include "djon-plugins_global.h"
 #include <QObject>
 #include <QIcon>
 #include "data.h"
 
 // DJONPLUGINSSHARED_EXPORT
-class WindowPlugin {
+class WindowPlugin: public QObject {
 public:
     virtual ~WindowPlugin() {}
 
@@ -19,6 +18,7 @@ public:
 
 };
 
-Q_DECLARE_INTERFACE(WindowPlugin, "com.djon.Plugin.WindowPlugin/1.0")
+Q_DECLARE_INTERFACE(WindowPlugin,
+                    "com.djon.Plugin.WindowPlugin/1.0")
 
 #endif // WINDOWPLUGIN_H

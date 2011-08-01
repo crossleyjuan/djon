@@ -20,6 +20,7 @@ Project::Project() {
     _projectFileName = NULL;
     _id = NULL;
     _projectDefaultCalendar = defaultCalendar();
+    _type = NORMAL;
 }
 
 Project::Project(string projDef) {
@@ -53,6 +54,7 @@ Project::Project(const Project& orig) {
     this->_tasksMap = orig._tasksMap;
     this->_projectFileName = orig._projectFileName;
     this->_projectDefaultCalendar = orig._projectDefaultCalendar;
+    this->_type = orig._type;
 }
 
 Project::~Project() {

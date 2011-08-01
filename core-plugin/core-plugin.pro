@@ -9,7 +9,7 @@ QT       += gui
 # TARGET = core-plugin
 TARGET        = $$qtLibraryTarget(core-plugin)
 TEMPLATE = lib
-CONFIG       += plugin static
+CONFIG       += plugin
 
 DESTDIR = ../libs
 DEFINES += COREPLUGIN_LIBRARY

@@ -35,4 +35,4 @@ void Coreplugin::setWorkspace(const Workspace* workspace) {
     _workspace = workspace;
 }
 
-//Q_EXPORT_PLUGIN2(Coreplugin, Coreplugin)
+Q_EXPORT_PLUGIN2(Coreplugin, Coreplugin)
