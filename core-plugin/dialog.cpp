@@ -3,6 +3,10 @@
 
 #include "data.h"
 #include "util.h"
+#include "itemdelegator.h"
+#include "taskitemdelegator.h"
+#include "assert.h"
+#include <QVBoxLayout>
 
 Dialog::Dialog(const Workspace* workspace, QWidget *parent) :
     QDialog(parent),
@@ -10,7 +14,18 @@ Dialog::Dialog(const Workspace* workspace, QWidget *parent) :
 {
     ui->setupUi(this);
     this->_workspace = workspace;
+    _manager.connect();
+    ui->dateEdit->setDate(QDate::currentDate());
+    setupGrid();
     showTasks();
+    //Width
+    ui->taskGrid->setColumnWidth(0, 150);
+    ui->taskGrid->setColumnWidth(1, 50);
+    ui->taskGrid->setColumnWidth(2, 150);
+    ui->taskGrid->setColumnWidth(3, 150);
+    QVBoxLayout* vertLayout = ui->verticalLayout;
+    vertLayout->setAlignment(Qt::AlignTop);
+    ((QHBoxLayout*)ui->horizontalLayout_2)->setAlignment(Qt::AlignLeft);
 }
 
 Dialog::~Dialog()
@@ -18,33 +33,127 @@ Dialog::~Dialog()
     delete ui;
 }
 
+DTime calcTime(Task* task, QDate date) {
+    vector<TaskLog*>* logs = task->logs(false);
+    DTime result;
+    for (vector<TaskLog*>::iterator i = logs->begin(); i != logs->end(); i++) {
+        TaskLog* log = *i;
+        if (*log->start == DateTime(date)) {
+            result.add(log->totalTime());
+        }
+    }
+    delete(logs);
+    return result;
+}
+
 void Dialog::showTasks() {
     vector<Project*>* projects = const_cast< vector<Project*>* >(_workspace->projects());
     int row = 0;
-    ui->taskGrid->setColumnCount(2);
-    DateTime today = DateTime::today(false);
+    ui->taskGrid->setColumnCount(4);
+    ui->taskGrid->clear();
+    ui->taskGrid->setRowCount(0);
     for (std::vector<Project*>::iterator iterProject = projects->begin(); iterProject != projects->end(); iterProject++) {
         Project* project = *iterProject;
         vector<Task*>* tasks = project->tasks();
         for (vector<Task*>::iterator iterT = tasks->begin(); iterT != tasks->end(); iterT++) {
             Task* task = *iterT;
-            vector<TaskLog*>* logs = task->logs();
-            DTime taskTime;
-            for (vector<TaskLog*>::iterator iLog = logs->begin(); iLog != logs->end(); iLog++) {
-                TaskLog* log = *iLog;
-                if (*log->start == today) {
-                    taskTime = taskTime + log->totalTime();
-                }
-            }
-            if (taskTime.totalSecs() > 0) {
+            DTime taskTime = calcTime(task, ui->dateEdit->date());
+            if ((task->childCount() == 0) && ( taskTime.totalSecs() > 0)) {
                 ui->taskGrid->setRowCount(row+1);
-                ui->taskGrid->setItem(row, 0, new QTableWidgetItem(QString(task->shortDescription()->c_str())));
+                QTableWidgetItem* djonTask = new QTableWidgetItem();
+                djonTask->setData(Qt::DisplayRole, QString(task->shortDescription()->c_str()));
+                QString taskData;
+                taskData.append(QString(project->id()->c_str()));
+                taskData.append(" ");
+                taskData.append(QString(task->id()->c_str()));
+
+                djonTask->setData(Qt::UserRole, taskData);
+                ui->taskGrid->setItem(row, 0, djonTask);
+
                 ui->taskGrid->setItem(row, 1, new QTableWidgetItem(taskTime.toQString()));
+
+                Map map = _manager.map(task);
+                if (map.coreProject.id.length() > 0) {
+                    QTableWidgetItem* projectItem = new QTableWidgetItem();
+                    projectItem->setData(Qt::UserRole, map.coreProject.index);
+                    projectItem->setData(Qt::DisplayRole, map.coreProject.name);;
+                    ui->taskGrid->setItem(row, 2, projectItem);
+                }
+                if (map.coreTask.id.length() > 0) {
+                    QTableWidgetItem* taskItem = new QTableWidgetItem();
+                    taskItem->setData(Qt::UserRole, map.coreTask.index);
+                    taskItem->setData(Qt::DisplayRole, map.coreTask.name);
+                    ui->taskGrid->setItem(row, 3, taskItem);
+                }
                 row++;
             }
-            delete(logs);
         }
         delete(tasks);
     }
     delete(projects);
+}
+
+void Dialog::setupGrid() {
+    QList<CoreProject> projects = _manager.projects();
+    ui->taskGrid->setItemDelegateForColumn(2, new ItemDelegator(projects, ui->taskGrid));
+
+    QList<CoreTask> tasks = _manager.tasks();
+    ui->taskGrid->setItemDelegateForColumn(3, new TaskItemDelegator(tasks, ui->taskGrid));
+
+    ui->taskGrid->setHorizontalHeaderLabels(QStringList() << tr("Task")
+                                                        << tr("Time") << tr("TimeSheet Project")  << tr("TimeSheet Task"));
+}
+
+void Dialog::on_pushButton_2_clicked()
+{
+    qDebug("on_pushButton_2_clicked()");
+    QAbstractItemModel* model = ui->taskGrid->model();
+    int rows = model->rowCount(QModelIndex());
+    CoreProject project;
+    CoreTask task;
+    for (int x = 0; x < rows; x++) {
+        QModelIndex index = model->index(x, 2, QModelIndex());
+        if (index.isValid()) {
+            if (model->data(index, Qt::UserRole).isValid()) {
+                int projectIndex = model->data(index, Qt::UserRole).toInt();
+                project = _manager.projects().at(projectIndex);
+                qDebug("on_pushButton_2_clicked project set: %s", project.name.toStdString().c_str());
+            }
+        }
+        index = model->index(x, 3, QModelIndex());
+        if (index.isValid()) {
+            if (model->data(index, Qt::UserRole).isValid()) {
+                int taskIndex = model->data(index, Qt::UserRole).toInt();
+                task = _manager.tasks().at(taskIndex);
+                qDebug("on_pushButton_2_clicked task set: %s", task.name.toStdString().c_str());
+            }
+        }
+        if ((task.id.length() > 0) && (project.id.length() > 0)) {
+            Map map;
+            map.coreProject = project;
+            map.coreTask = task;
+            index = model->index(x, 0, QModelIndex());
+            if (model->data(index, Qt::UserRole).isValid()) {
+                QString taskData = model->data(index, Qt::UserRole).toString();
+                QStringList sData = taskData.split(" ");
+                map.task.projectId = sData.at(0);
+                map.task.taskId = sData.at(1);
+                qDebug("on_pushButton_2_clicked djontask set: %s", map.task.taskId.toStdString().c_str());
+            }
+
+            index = model->index(x, 1, QModelIndex());
+            DTime dtime;
+            if (model->data(index, Qt::DisplayRole).isValid()) {
+                QString time = model->data(index, Qt::DisplayRole).toString();
+                dtime = DTime(time.toStdString());
+            }
+            _manager.saveMap(map, dtime);
+        }
+    }
+    qDebug("out on_pushButton_2_clicked()");
+}
+
+void Dialog::on_dateEdit_dateChanged(QDate date)
+{
+    showTasks();
 }

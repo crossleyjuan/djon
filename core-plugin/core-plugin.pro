@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += gui
+QT       += gui sql
 
 # TARGET = core-plugin
 TARGET        = $$qtLibraryTarget(core-plugin)
@@ -25,11 +25,20 @@ LIBS += -ldjon-data
 LIBS += -ldjon-plugins
 
 SOURCES += coreplugin.cpp \
-    dialog.cpp
+    dialog.cpp \
+    itemdelegator.cpp \
+    datamanager.cpp \
+    taskitemdelegator.cpp \
+    fileutil.cpp
 
 HEADERS += coreplugin.h\
         core-plugin_global.h \
-    dialog.h
+    dialog.h \
+    itemdelegator.h \
+    datamanager.h \
+    taskitemdelegator.h \
+    fileutil.h \
+    core-defs.h
 
 FORMS += \
     dialog.ui

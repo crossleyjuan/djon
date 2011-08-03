@@ -2,6 +2,8 @@
 #define DIALOG_H
 
 #include <QDialog>
+#include <QComboBox>
+#include "datamanager.h"
 
 namespace Ui {
     class Dialog;
@@ -19,9 +21,16 @@ public:
 
 private:
     void showTasks();
+    void setupGrid();
 
     Ui::Dialog *ui;
     const Workspace* _workspace;
+    DataManager _manager;
+
+
+private slots:
+    void on_dateEdit_dateChanged(QDate date);
+    void on_pushButton_2_clicked();
 };
 
 #endif // DIALOG_H

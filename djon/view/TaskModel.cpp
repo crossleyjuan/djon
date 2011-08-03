@@ -187,6 +187,7 @@ QModelIndex TaskModel::addProject(Project *project) {
     }
 
     endInsertRows();
+    delete(tasks);
     return index(project);
 }
 

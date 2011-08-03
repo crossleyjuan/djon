@@ -71,6 +71,7 @@ void TaskHeaderView::refresh() {
                 endDate = tskEndDate;
             }
         }
+        delete(tasks);
     }
 //    if (startDate != NULL) {
 //        totalDays = startDate->daysTo(*endDate) + 1;

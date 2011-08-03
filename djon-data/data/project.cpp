@@ -91,7 +91,11 @@ string* Project::description() const {
 }
 
 std::vector<Task*>* Project::tasks() const {
-    return _tasks;
+    vector<Task*>* result = new vector<Task*>();
+    for (std::vector<Task*>::iterator i = _tasks->begin(); i != _tasks->end(); i++) {
+        result->push_back(*i);
+    }
+    return result;
 }
 
 void Project::addTask(Task* task) {
@@ -165,6 +169,7 @@ DateTime* Project::startDate() {
             startDate = sub->startDate();
         }
     }
+    delete(child);
     return startDate;
 }
 
@@ -179,6 +184,7 @@ DateTime* Project::endDate() {
             endDate = sub->endDate();
         }
     }
+    delete(child);
     return endDate;
 }
 
@@ -324,6 +330,7 @@ std::vector<TaskLog*>* Project::logs() const {
         }
         delete(taskLogs);
     }
+    delete(tsks);
     return logs;
 }
 

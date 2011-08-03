@@ -21,6 +21,7 @@ void ProjectWriter::writeProject(const Project& project) {
         Task* task = *iterTask;
         writeTask(*task);
     }
+    delete(tasks);
 }
 
 void ProjectWriter::writeTask(const Task &task) {

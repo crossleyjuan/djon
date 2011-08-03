@@ -28,6 +28,7 @@ TaskDelegate::TaskDelegate(const vector<Project*>* projects)
                 delete(tskEndDate);
             }
         }
+        delete(tasks);
     }
     if (startDate != NULL) {
         totalDays = startDate->daysTo(*endDate) + 1;

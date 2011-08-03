@@ -82,6 +82,7 @@ void ExportUtility::executeExport(std::string fileName, DateTime* logsFrom, Date
             if (includeTask) {
                 ssTasks << ssTask.str();
             }
+            delete(tasks);
         }
         ssTasks << "</tasks>\n";
         result << " logTime=\"" << totalProjectLogTime.toChar() << "\" >\n";

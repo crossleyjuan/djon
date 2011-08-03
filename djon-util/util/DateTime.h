@@ -23,6 +23,7 @@ public:
     DateTime();
     DateTime(int year, int month, int day, int hour = 0, int min = 0, int secs = 0);
     DateTime(const QDateTime& dateTime);
+    DateTime(const QDate& date);
     DateTime(string dateTime);
     DateTime(double value);
     DateTime(const DateTime& orig);
@@ -62,6 +63,7 @@ public:
 
 private:
     void initialize(const QDateTime& dateTime);
+    void initialize(const QDate& date);
 
     int _year;
     int _month;
