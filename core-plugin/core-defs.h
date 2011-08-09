@@ -2,6 +2,7 @@
 #define COREDEFS_H
 
 #include <QString>
+#include "util.h"
 
 class Task;
 
@@ -29,9 +30,12 @@ struct Map {
     CoreProject coreProject;
     CoreTask coreTask;
     DjonTask task;
+    DateTime date;
+    DTime time;
+    QString description;
 };
 
-struct PluginSettings {
+struct CorePluginSettings {
     QString dsn;
     QString userName;
     QString password;

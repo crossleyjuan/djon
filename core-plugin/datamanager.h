@@ -18,7 +18,7 @@ public:
     QList<CoreTask> tasks();
 
     Map map(Task* task);
-    bool saveMap(Map map, DTime time);
+    bool saveMap(Map map);
 
 private:
     QSqlDatabase* _dataBase;
@@ -26,7 +26,7 @@ private:
     QList<CoreTask> _tasks;
 
 private:
-    bool saveDatabaseTimeRecord(Map map, DTime time);
+    bool saveDatabaseTimeRecord(Map map);
 };
 
 #endif // DATAMANAGER_H

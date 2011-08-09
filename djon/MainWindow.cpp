@@ -65,9 +65,14 @@ MainWindow::MainWindow() {
 
     _userPreferencesController = new UserPreferencesController(_taskModel);
 
-    checkReleaseNotes();
-
+    // Objects creation
     _updateManager = new UpdateManager(this);
+    _timeTracker = new TimeTracker();
+    _idleDetector = new IdleDetector();// 5*60
+    _workingDetector = new WorkingDetector();
+    _trackWindow = new TrackControlWindow(_timeTracker, NULL);
+
+    checkReleaseNotes();
 
     // Plugins
     PluginManager::loadPlugins();
@@ -76,7 +81,6 @@ MainWindow::MainWindow() {
 
     initialize();
 
-    _timeTracker = new TimeTracker();
     createTaskLogWindow();
 //    createCurrentTimeWindow();
 
@@ -91,10 +95,8 @@ MainWindow::MainWindow() {
     widget.taskView->setMaximumWidth(490 + widget.taskView->verticalScrollBar()->width() + 10);
     widget.taskView->setItemDelegate(new TaskEditorDelegate(this));
 
-    _idleDetector = new IdleDetector();// 5*60
     connect(_idleDetector, SIGNAL(idleTimeOut()), this, SLOT(idleTimeOut()));
 
-    _workingDetector = new WorkingDetector();
     connect(_workingDetector, SIGNAL(workingDetected(DateTime)), this, SLOT(workingDetected(DateTime)));
 
 //    connect(_timeTracker, SIGNAL(timeChanged(Task*, DTime&, DTime&)), _timeWindow, SLOT(updateTime(Task*, DTime&, DTime&)));
@@ -103,7 +105,6 @@ MainWindow::MainWindow() {
     connect(_timeTracker, SIGNAL(trackerStarted(Task*,TaskLog*)), _taskModel, SLOT(setTrackedTask(Task*)));
     connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()));
 
-    _trackWindow = new TrackControlWindow(_timeTracker, NULL);
     _trackWindow->setModel(_taskModel);
     _trackWindow->show();
     _trackWindow->refreshSettings();

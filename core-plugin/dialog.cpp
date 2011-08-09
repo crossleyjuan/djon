@@ -6,7 +6,9 @@
 #include "itemdelegator.h"
 #include "taskitemdelegator.h"
 #include "assert.h"
+#include "pluginsettings.h"
 #include <QVBoxLayout>
+#include <QMessageBox>
 
 Dialog::Dialog(const Workspace* workspace, QWidget *parent) :
     QDialog(parent),
@@ -49,9 +51,11 @@ DTime calcTime(Task* task, QDate date) {
 void Dialog::showTasks() {
     vector<Project*>* projects = const_cast< vector<Project*>* >(_workspace->projects());
     int row = 0;
-    ui->taskGrid->setColumnCount(4);
+    ui->taskGrid->setColumnCount(5);
     ui->taskGrid->clear();
     ui->taskGrid->setRowCount(0);
+    ui->taskGrid->setHorizontalHeaderLabels(QStringList() << tr("Task")
+                                                        << tr("Time") << tr("TimeSheet Project")  << tr("TimeSheet Task") << tr("Description"));
     for (std::vector<Project*>::iterator iterProject = projects->begin(); iterProject != projects->end(); iterProject++) {
         Project* project = *iterProject;
         vector<Task*>* tasks = project->tasks();
@@ -85,6 +89,9 @@ void Dialog::showTasks() {
                     taskItem->setData(Qt::DisplayRole, map.coreTask.name);
                     ui->taskGrid->setItem(row, 3, taskItem);
                 }
+                QTableWidgetItem* descriptionItem = new QTableWidgetItem();
+                descriptionItem->setData(Qt::DisplayRole, QString(task->shortDescription()->c_str()));
+                ui->taskGrid->setItem(row, 4, descriptionItem);
                 row++;
             }
         }
@@ -99,9 +106,6 @@ void Dialog::setupGrid() {
 
     QList<CoreTask> tasks = _manager.tasks();
     ui->taskGrid->setItemDelegateForColumn(3, new TaskItemDelegator(tasks, ui->taskGrid));
-
-    ui->taskGrid->setHorizontalHeaderLabels(QStringList() << tr("Task")
-                                                        << tr("Time") << tr("TimeSheet Project")  << tr("TimeSheet Task"));
 }
 
 void Dialog::on_pushButton_2_clicked()
@@ -111,6 +115,7 @@ void Dialog::on_pushButton_2_clicked()
     int rows = model->rowCount(QModelIndex());
     CoreProject project;
     CoreTask task;
+    int recordsExported = 0;
     for (int x = 0; x < rows; x++) {
         QModelIndex index = model->index(x, 2, QModelIndex());
         if (index.isValid()) {
@@ -128,10 +133,16 @@ void Dialog::on_pushButton_2_clicked()
                 qDebug("on_pushButton_2_clicked task set: %s", task.name.toStdString().c_str());
             }
         }
-        if ((task.id.length() > 0) && (project.id.length() > 0)) {
+        QString description;
+        index = model->index(x, 4, QModelIndex());
+        if (index.isValid()) {
+            description = model->data(index, Qt::DisplayRole).toString();
+        }
+        if ((task.id.length() > 0) && (project.id.length() > 0) && (description.length() > 0)) {
             Map map;
             map.coreProject = project;
             map.coreTask = task;
+            map.description = description;
             index = model->index(x, 0, QModelIndex());
             if (model->data(index, Qt::UserRole).isValid()) {
                 QString taskData = model->data(index, Qt::UserRole).toString();
@@ -145,15 +156,25 @@ void Dialog::on_pushButton_2_clicked()
             DTime dtime;
             if (model->data(index, Qt::DisplayRole).isValid()) {
                 QString time = model->data(index, Qt::DisplayRole).toString();
-                dtime = DTime(time.toStdString());
+                map.time = DTime(time.toStdString());
             }
-            _manager.saveMap(map, dtime);
+            map.date = DateTime(ui->dateEdit->date());
+            if (_manager.saveMap(map)) {
+                recordsExported++;
+            }
         }
     }
+    QMessageBox::information(this, tr("Core Plugin"), QString(format("Exported: %d records", recordsExported).c_str()));
     qDebug("out on_pushButton_2_clicked()");
 }
 
 void Dialog::on_dateEdit_dateChanged(QDate date)
 {
     showTasks();
+}
+
+void Dialog::on_pushButton_clicked()
+{
+    PluginSettings* psettings = new PluginSettings(this);
+    psettings->exec();
 }

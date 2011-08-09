@@ -23,10 +23,9 @@ DataManager::~DataManager() {
 
 bool DataManager::connect() {
     QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
-    db.setHostName("localhost");
     db.setDatabaseName("DBCore");
-    db.setUserName("sa");
-    db.setPassword("BizAgi2010");
+    db.setUserName("djon");
+    db.setPassword("dj0n2011");
     bool ok = db.open();
     if (!ok) {
         QSqlError error = db.lastError();
@@ -76,19 +75,18 @@ Map DataManager::map(Task* task) {
     return result;
 }
 
-bool DataManager::saveMap(Map map, DTime time) {
+bool DataManager::saveMap(Map map) {
     FileUtil util;
     util.addMapping(map);
 
-    bool res = saveDatabaseTimeRecord(map, time);
+    bool res = saveDatabaseTimeRecord(map);
     return res;
 }
 
-int period(DTime time) {
-    QDateTime currentTime = QDateTime::currentDateTime();
+int period(QDateTime date) {
 
-    int week = currentTime.date().weekNumber();
-    int year = currentTime.date().year();
+    int week = date.date().weekNumber() + 1;
+    int year = date.date().year();
 
     std::string sql = format("select id from dbo.Period where YEAR = %d and WeekNumber = %d", year, week);
     QSqlQuery query(QString(sql.c_str()));
@@ -102,7 +100,7 @@ int period(DTime time) {
     return period;
 }
 
-bool DataManager::saveDatabaseTimeRecord(Map map, DTime time) {
+bool DataManager::saveDatabaseTimeRecord(Map map) {
     qDebug("DataManager::saveDatabaseTimeRecord");
     QString userName;
 
@@ -134,12 +132,27 @@ bool DataManager::saveDatabaseTimeRecord(Map map, DTime time) {
         return false;
     }
 
-    int periodId = period(time);
+    int periodId = period(map.date.toQDateTime());
     qDebug("DataManager::saveDatabaseTimeRecord period id: %d", periodId);
     if (periodId == -1) {
         return false;
     }
-    QDate today = QDate::currentDate();
+
+    int displayOrder = 1;
+    QSqlQuery displayOrderSql;
+    if (displayOrderSql.prepare("select Max(displayOrder) from dbo.TimeEntry where PeriodId = :Period and CoreUserId = :CoreUserId")) {
+        displayOrderSql.bindValue(":Period", periodId);
+        displayOrderSql.bindValue(":CoreUserId", userGuid);
+        if (displayOrderSql.exec() && displayOrderSql.next()) {
+            displayOrder = displayOrderSql.value(0).toInt() + 1;
+        } else {
+            displayOrder = 1;
+        }
+    } else {
+        qDebug("Error getting the displayOrder");
+        return false;
+    }
+    qDebug("DataManager::saveDatabaseTimeRecord displayOrder: %d", displayOrder);
     std::stringstream ssSql;
     ssSql << "INSERT INTO TimeEntry (PeriodId,ProjectId,TaskId,CoreUserId,Date,Hours,Description,UpdatedOn,DisplayOrder,Version)";
     ssSql << " VALUES (:PeriodId,:ProjectId,:TaskId,:CoreUserId,:Date,:Hours,:Description,:UpdatedOn,:DisplayOrder,:Version)";
@@ -149,13 +162,14 @@ bool DataManager::saveDatabaseTimeRecord(Map map, DTime time) {
     insert.bindValue(":ProjectId", map.coreProject.id);
     insert.bindValue(":TaskId", map.coreTask.id);
     insert.bindValue(":CoreUserId", userGuid);
-    insert.bindValue(":Date", QDateTime::currentDateTime());
-    double hours = (double)time.totalMinutes() / (double)60;
-    insert.bindValue(":Hours", hours);
-    insert.bindValue(":Description", "");
+    insert.bindValue(":Date", map.date.toQDateTime());
+    double minutes = ((double)((int)(map.time.totalMinutes() * 100))/(double)100);
+
+    insert.bindValue(":Hours", minutes);
+    insert.bindValue(":Description", map.description);
     insert.bindValue(":UpdatedOn", QDateTime::currentDateTime());
-    insert.bindValue(":DisplayOrder", 0);
-    insert.bindValue(":Version", 1);
+    insert.bindValue(":DisplayOrder", displayOrder);
+    insert.bindValue(":Version", 2);
     bool updated = insert.exec();
     if (!updated) {
         qDebug("An error has ocurred executing the insertion. Error: %s", insert.lastError().text().toStdString().c_str());

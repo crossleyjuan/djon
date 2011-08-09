@@ -19,6 +19,7 @@ INCLUDEPATH += . \
     ../djon-util \
     ../djon-data
 
+LIBS += -lodbc32
 LIBS += -L../libs
 LIBS += -ldjon-util
 LIBS += -ldjon-data
@@ -29,7 +30,8 @@ SOURCES += coreplugin.cpp \
     itemdelegator.cpp \
     datamanager.cpp \
     taskitemdelegator.cpp \
-    fileutil.cpp
+    fileutil.cpp \
+    pluginsettings.cpp
 
 HEADERS += coreplugin.h\
         core-plugin_global.h \
@@ -38,7 +40,9 @@ HEADERS += coreplugin.h\
     datamanager.h \
     taskitemdelegator.h \
     fileutil.h \
-    core-defs.h
+    core-defs.h \
+    pluginsettings.h
 
 FORMS += \
-    dialog.ui
+    dialog.ui \
+    pluginsettings.ui

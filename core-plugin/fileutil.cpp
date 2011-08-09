@@ -98,7 +98,10 @@ Map FileUtil::readMapping(Task* task, QList<CoreProject> projects, QList<CoreTas
     return result;
 }
 
-PluginSettings FileUtil::readSettings() {
+CorePluginSettings FileUtil::readSettings() {
     QFile file(QString("settings.dat"));
-    return PluginSettings();
+    if (file.open(QIODevice::ReadOnly)) {
+        file.close();
+    }
+    return CorePluginSettings();
 }
