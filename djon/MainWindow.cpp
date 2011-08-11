@@ -74,12 +74,13 @@ MainWindow::MainWindow() {
 
     checkReleaseNotes();
 
+
     // Plugins
     PluginManager::loadPlugins();
 
-    setupActions();
-
     initialize();
+
+    setupActions();
 
     createTaskLogWindow();
 //    createCurrentTimeWindow();
@@ -173,8 +174,20 @@ void MainWindow::setupTemplateMenu(QMenu* menu) {
     }
 }
 
-void MainWindow::setupWorkspacesMenu(QMenu *menu) {
-
+void MainWindow::setupWorkspacesMenu() {
+    _menuWorkspaces->clear();
+    _workspaceMapper = new QSignalMapper(this);
+    connect(_workspaceMapper, SIGNAL(mapped(QString)), this, SLOT(loadWorkspaceSlot(QString)));
+    std::vector<std::string> recent = getSettings()->recentWorkspaces();
+    std::string workspace;
+    foreach (workspace, recent) {
+        QAction* action = _menuWorkspaces->addAction(QString(workspace.c_str()));
+        _workspaceMapper->setMapping(action, QString(workspace.c_str()));
+        connect(action, SIGNAL(triggered()), _workspaceMapper, SLOT(map()));
+    }
+    _menuWorkspaces->addSeparator();
+    QAction* createAction = _menuWorkspaces->addAction(QString("Create Workspace"));
+    connect(createAction, SIGNAL(triggered()), this, SLOT(createWorkspace()));
 }
 
 void MainWindow::setupActions() {
@@ -223,8 +236,8 @@ void MainWindow::setupActions() {
     setupTemplateMenu(applyTemplate);
 
     prjMenu->addSeparator();
-    QMenu* mnuWorkspaces = prjMenu->addMenu("Workspaces");
-    setupWorkspacesMenu(mnuWorkspaces);
+    _menuWorkspaces = prjMenu->addMenu("Workspaces");
+    setupWorkspacesMenu();
     //***********************************************************
     // Popup actions should be registered in showPopup function
     QAction* newTaskInline = _taskPopUpMenu->addAction(QIcon(":/img/new-task.png"), tr("Create SubTask"));
@@ -695,6 +708,8 @@ void MainWindow::initialize() {
     } else {
         _workspace = loadWorkspace(lastWorkspace);
     }
+    getSettings()->addRecentWorkspace(_workspace->fileName());
+    getSettings()->save();
     if (_workspace->projects()->size() == 0) {
         ProjectWizard* wizard = new ProjectWizard();
         if (wizard->exec() == QWizard::Accepted) {
@@ -1071,4 +1086,30 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
         }
     }
     return QWidget::eventFilter(obj, event);
+}
+
+void MainWindow::createWorkspace() {
+    std::string* homeDir = getHomeDir();
+    QString dir(homeDir->c_str());
+    QString file = QFileDialog::getSaveFileName(this, "Create workspace");
+    if (file.size() > 0) {
+        if (!file.endsWith(".dwk")) {
+            file = file.append(".dwk");
+        }
+        _workspace = new Workspace(file.toStdString());
+        getSettings()->addRecentWorkspace(file.toStdString());
+        getSettings()->save();
+        reloadProjects();
+    }
+    setupWorkspacesMenu();
+    delete(homeDir);
+}
+
+void MainWindow::loadWorkspaceSlot(QString fileName) {
+    _workspace = loadWorkspace(fileName.toStdString());
+    getSettings()->addRecentWorkspace(_workspace->fileName());
+    getSettings()->setLastWorkspace(fileName.toStdString());
+    getSettings()->save();
+    reloadProjects();
+    setupWorkspacesMenu();
 }

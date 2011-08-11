@@ -20,6 +20,7 @@ public:
     void setOpenProjects(std::vector<std::string>);
     std::vector<std::string> recentWorkspaces();
     void setRecentWorkspaces(std::vector<std::string>);
+    void addRecentWorkspace(std::string workspace);
     std::string lastWorkspace();
     void setLastWorkspace(std::string);
     long idleTimeOut();

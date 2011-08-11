@@ -72,6 +72,20 @@ void Settings::setRecentWorkspaces(std::vector<std::string> recentWorkspaces) {
     _recentWorkspacesChanged = true;
 }
 
+void Settings::addRecentWorkspace(std::string workspace) {
+    bool found = false;
+    for (std::vector<std::string>::iterator i = _recentWorkspaces.begin(); i != _recentWorkspaces.end(); i++) {
+        std::string recent = *i;
+        if (recent.compare(workspace) == 0) {
+            found = true;
+            _recentWorkspaces.erase(i);
+            break;
+        }
+    }
+    _recentWorkspaces.insert(_recentWorkspaces.begin(), workspace);
+    _recentWorkspacesChanged = true;
+}
+
 long Settings::idleTimeOut() {
     return _idleTimeOut;
 }

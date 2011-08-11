@@ -46,7 +46,7 @@ private:
     void createTray();
     void setupActions();
     void setupTemplateMenu(QMenu* menu);
-    void setupWorkspacesMenu(QMenu* menu);
+    void setupWorkspacesMenu();
     void reloadProjects();
     void reloadTasks();
     void showErrorMessage(int errorCode, const char* errorMessage, QWidget* parent);
@@ -70,6 +70,7 @@ private:
     TaskModel* _taskModel;
     UserPreferencesController* _userPreferencesController;
     QSignalMapper* _templateMapper;
+    QSignalMapper* _workspaceMapper;
     Workspace* _workspace;
 
     // Actions
@@ -84,6 +85,7 @@ private:
 
     SysTrayIcon* _trayIcon;
     QMenu* _taskPopUpMenu;
+    QMenu* _menuWorkspaces;
     UpdateManager* _updateManager;
     AbstractViewer* _currentView;
     VIEW_TYPE _currentViewType;
@@ -94,6 +96,8 @@ public:
 
 private slots:
     void onMenuChangeView(QAction* action);
+    void createWorkspace();
+    void loadWorkspaceSlot(QString fileName);
 
 public slots:
     void initialize();
