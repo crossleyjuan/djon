@@ -63,6 +63,15 @@ void Settings::setOpenProjects(std::vector<std::string> openProjects) {
     _openProjectsChanged = true;
 }
 
+std::vector<std::string> Settings::recentWorkspaces() {
+    return _recentWorkspaces;
+}
+
+void Settings::setRecentWorkspaces(std::vector<std::string> recentWorkspaces) {
+    _recentWorkspaces = recentWorkspaces;
+    _recentWorkspacesChanged = true;
+}
+
 long Settings::idleTimeOut() {
     return _idleTimeOut;
 }
@@ -109,6 +118,15 @@ void Settings::load() {
     }
     setOpenProjects(openProjects);
 
+    const char* cWorkspaces = readConfValue("recent-workspaces", "");
+    std::vector<std::string> rWorkspaces = split(std::string(cWorkspaces), ",");
+    std::vector<std::string> recentWorkspaces;
+    for (std::vector<std::string>::iterator iterRW = rWorkspaces.begin(); iterRW != rWorkspaces.end(); iterRW++) {
+        string recentWorkspace = *iterRW;
+        recentWorkspaces.push_back(recentWorkspace);
+    }
+    setRecentWorkspaces(recentWorkspaces);
+
     setCheckUpdate(atoi(readConfValue("check-update", "240")));
     setTransparency(atoi(readConfValue("track-transparency", "40")));
     setLastWorkspace(readConfValue("last-workspace", ""));
@@ -118,6 +136,7 @@ void Settings::load() {
     _lastProjectDirChanged = false;
     _lastReleaseNotesChanged = false;
     _openProjectsChanged = false;
+    _recentWorkspacesChanged = false;
     _idleTimeOutChanged = false;
     _checkUpdateChanged = false;
     _transparencyChanged = false;
@@ -147,6 +166,17 @@ void Settings::save() {
             projects.append(prj);
         }
         writeConfValue("open-projects", projects);
+    }
+    if (_recentWorkspacesChanged) {
+        std::string sRecentWorkspaces;
+        for (std::vector<std::string>::iterator iterRW = _recentWorkspaces.begin(); iterRW != _recentWorkspaces.end(); iterRW++) {
+            std::string workspace = *iterRW;
+            if (workspace.length() > 0) {
+                sRecentWorkspaces = sRecentWorkspaces.append(",");
+            }
+            sRecentWorkspaces.append(workspace);
+        }
+        writeConfValue("recent-workspaces", sRecentWorkspaces);
     }
     if (_idleTimeOutChanged) {
         std::stringstream ssIdle;

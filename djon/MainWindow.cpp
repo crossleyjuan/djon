@@ -173,6 +173,10 @@ void MainWindow::setupTemplateMenu(QMenu* menu) {
     }
 }
 
+void MainWindow::setupWorkspacesMenu(QMenu *menu) {
+
+}
+
 void MainWindow::setupActions() {
     qDebug("MainWindow::setupActions()");
     QToolBar* bar = new QToolBar("Options");
@@ -218,6 +222,9 @@ void MainWindow::setupActions() {
     QMenu* applyTemplate = prjMenu->addMenu("Apply Template");
     setupTemplateMenu(applyTemplate);
 
+    prjMenu->addSeparator();
+    QMenu* mnuWorkspaces = prjMenu->addMenu("Workspaces");
+    setupWorkspacesMenu(mnuWorkspaces);
     //***********************************************************
     // Popup actions should be registered in showPopup function
     QAction* newTaskInline = _taskPopUpMenu->addAction(QIcon(":/img/new-task.png"), tr("Create SubTask"));

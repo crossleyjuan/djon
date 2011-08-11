@@ -18,6 +18,8 @@ public:
     void setLastReleaseNotes(std::string);
     std::vector<std::string> openProjects();
     void setOpenProjects(std::vector<std::string>);
+    std::vector<std::string> recentWorkspaces();
+    void setRecentWorkspaces(std::vector<std::string>);
     std::string lastWorkspace();
     void setLastWorkspace(std::string);
     long idleTimeOut();
@@ -36,6 +38,7 @@ private:
     std::string _lastWorkspace;
     std::string _lastReleaseNotes;
     std::vector<std::string> _openProjects;
+    std::vector<std::string> _recentWorkspaces;
     long _idleTimeOut;
     int _checkUpdate;
     int _transparency;// 0-100
@@ -46,6 +49,7 @@ private:
     bool _lastWorkspaceChanged;
     bool _lastReleaseNotesChanged;
     bool _openProjectsChanged;
+    bool _recentWorkspacesChanged;
     bool _idleTimeOutChanged;
     bool _checkUpdateChanged;
     bool _transparencyChanged;

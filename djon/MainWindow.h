@@ -46,6 +46,7 @@ private:
     void createTray();
     void setupActions();
     void setupTemplateMenu(QMenu* menu);
+    void setupWorkspacesMenu(QMenu* menu);
     void reloadProjects();
     void reloadTasks();
     void showErrorMessage(int errorCode, const char* errorMessage, QWidget* parent);
