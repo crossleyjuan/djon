@@ -78,9 +78,9 @@ MainWindow::MainWindow() {
     // Plugins
     PluginManager::loadPlugins();
 
-    initialize();
-
     setupActions();
+
+    initialize();
 
     reloadProjects();
 

@@ -71,6 +71,7 @@ Section "djon (required)"
   File "QtWebKitd4.dll"
   File "QtXmlPatternsd4.dll"
   File "phonond4.dll"
+  File "QtSqld4.dll"
 
   CreateDirectory $PROFILE\.djon
   CreateDirectory $PROFILE\.djon\templates
@@ -128,6 +129,7 @@ Section "Uninstall"
   Delete $INSTDIR\QtCored4.dll
   Delete $INSTDIR\QtGuid4.dll
   Delete $INSTDIR\QtXmld4.dll
+  Delete $INSTDIR\QtSqld4.dll
 
   ; Remove shortcuts, if any
   Delete "$SMPROGRAMS\djon\*.*"
