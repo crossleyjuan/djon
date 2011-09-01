@@ -23,6 +23,7 @@ public:
     void writeChars(const char* text, int len);
     void writeString(const std::string* text);
 
+    char* buffer();
 private:
     FILE* _pFile;
 };

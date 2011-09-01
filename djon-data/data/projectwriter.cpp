@@ -3,6 +3,7 @@
 #include "project.h"
 #include "task.h"
 #include "util.h"
+#include "boost/crc.hpp"
 
 ProjectWriter::ProjectWriter(OutputStream* output)
 {
@@ -10,6 +11,8 @@ ProjectWriter::ProjectWriter(OutputStream* output)
 }
 
 void ProjectWriter::writeProject(const Project& project) {
+    // Space to save the crc code
+    //_outStream->writeLong(0L);
     _outStream->writeChars(project.id()->c_str(), project.id()->length());
     _outStream->writeChars(project.name()->c_str(), project.name()->length());
     _outStream->writeChars(project.description()->c_str(), project.description()->length());
@@ -21,6 +24,7 @@ void ProjectWriter::writeProject(const Project& project) {
         Task* task = *iterTask;
         writeTask(*task);
     }
+    _outStream->buffer();
     delete(tasks);
 }
 

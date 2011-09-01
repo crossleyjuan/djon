@@ -54,3 +54,26 @@ void OutputStream::writeString(const std::string* text) {
         writeChars(c, l);
     }
 }
+
+char* OutputStream::buffer() {
+    fflush(_pFile);
+    fseek (_pFile, 0, SEEK_END);
+    long lSize = ftell(_pFile );
+    rewind(_pFile);
+
+    // allocate memory to contain the whole file:
+    char* buffer = (char*) malloc (sizeof(char)*lSize);
+    if (buffer == NULL) {
+        return NULL;
+    }
+
+    // copy the file into the buffer:
+    size_t result = fread(buffer,1,lSize,_pFile);
+    if (result != lSize) {
+        return NULL;
+    }
+
+    // Leave the file where it was
+    fseek (_pFile, 0, SEEK_END);
+    return buffer;
+}

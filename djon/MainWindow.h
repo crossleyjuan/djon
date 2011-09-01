@@ -98,6 +98,7 @@ private slots:
     void onMenuChangeView(QAction* action);
     void createWorkspace();
     void loadWorkspaceSlot(QString fileName);
+    void openWorkspace();
 
 public slots:
     void initialize();

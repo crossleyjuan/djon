@@ -231,7 +231,7 @@ int saveProject(Project *project) {
     fileName << lastDir << "/" << *project->name() << ".djon";
 
     FILE* pFile;
-    pFile = fopen(fileName.str().c_str(), "wb");
+    pFile = fopen(fileName.str().c_str(), "wb+");
 
     string sversion = getCurrentVersion();
     const char* version = sversion.c_str();
@@ -263,7 +263,6 @@ Workspace* loadWorkspace(std::string fileName) {
         FileInputStream* stream = new FileInputStream(fileName, pFile);
         WorkspaceReader reader(stream);
         Workspace* workspace = reader.readWorkspace();
-
         delete(stream);
         return workspace;
     }

@@ -82,6 +82,8 @@ MainWindow::MainWindow() {
 
     setupActions();
 
+    reloadProjects();
+
     createTaskLogWindow();
 //    createCurrentTimeWindow();
 
@@ -188,6 +190,8 @@ void MainWindow::setupWorkspacesMenu() {
     _menuWorkspaces->addSeparator();
     QAction* createAction = _menuWorkspaces->addAction(QString("Create Workspace"));
     connect(createAction, SIGNAL(triggered()), this, SLOT(createWorkspace()));
+    QAction* openAction = _menuWorkspaces->addAction(QString("Open Workspace"));
+    connect(openAction, SIGNAL(triggered()), this, SLOT(openWorkspace()));
 }
 
 void MainWindow::setupActions() {
@@ -730,7 +734,6 @@ void MainWindow::initialize() {
             }
         }
     }
-    reloadProjects();
 
     // Initialize the plugins
     std::vector<WindowPlugin*> plugins = PluginManager::plugins();
@@ -1091,7 +1094,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
 void MainWindow::createWorkspace() {
     std::string* homeDir = getHomeDir();
     QString dir(homeDir->c_str());
-    QString file = QFileDialog::getSaveFileName(this, "Create workspace");
+    QString file = QFileDialog::getSaveFileName(this, "Create workspace", dir);
     if (file.size() > 0) {
         if (!file.endsWith(".dwk")) {
             file = file.append(".dwk");
@@ -1107,9 +1110,21 @@ void MainWindow::createWorkspace() {
 
 void MainWindow::loadWorkspaceSlot(QString fileName) {
     _workspace = loadWorkspace(fileName.toStdString());
-    getSettings()->addRecentWorkspace(_workspace->fileName());
-    getSettings()->setLastWorkspace(fileName.toStdString());
-    getSettings()->save();
-    reloadProjects();
-    setupWorkspacesMenu();
+    if (_workspace) {
+        getSettings()->addRecentWorkspace(_workspace->fileName());
+        getSettings()->setLastWorkspace(fileName.toStdString());
+        getSettings()->save();
+        reloadProjects();
+        setupWorkspacesMenu();
+    }
+}
+
+void MainWindow::openWorkspace() {
+    std::string* homeDir = getHomeDir();
+    QString dir(homeDir->c_str());
+    QString file = QFileDialog::getOpenFileName(this, "Open workspace", dir);
+    if (file.size() > 0) {
+        loadWorkspace(file.toStdString());
+    }
+    delete(homeDir);
 }

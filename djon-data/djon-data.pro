@@ -17,7 +17,8 @@ LIBS += -ldjon-util
 
 INCLUDEPATH += . \
     data \
-    ../djon-util
+    ../djon-util \
+    C:\development\boost_1_47_0
 
 SOURCES += \
     template.cpp \

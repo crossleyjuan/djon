@@ -5,6 +5,7 @@
 #include <QDir>
 #include <string>
 #include <QCoreApplication>
+#include <QMessageBox>
 
 
 std::vector<WindowPlugin*> PluginManager::_plugins;
@@ -14,6 +15,7 @@ void PluginManager::loadPlugins() {
     QString dir(((std::string)*homeDir + "/.djon/plugins").c_str());
 //    QString dir("c:/workspace/personal/djon/libs");
     QCoreApplication::addLibraryPath(dir);
+    QCoreApplication::addLibraryPath(qApp->applicationDirPath());
 
     QDir pluginsDir(dir);
     foreach (QString fileName, pluginsDir.entryList(QDir::Files)) {
@@ -24,10 +26,14 @@ void PluginManager::loadPlugins() {
             if (wplugin) {
                 _plugins.push_back(wplugin);
             }
+        } else {
+            QMessageBox::information(NULL, QString("error"), pluginLoader.errorString());
+
+
         }
     }
 
-//    delete(homeDir);
+    delete(homeDir);
 }
 
 std::vector<WindowPlugin*> PluginManager::plugins() {

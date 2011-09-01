@@ -12,7 +12,8 @@ INCLUDEPATH += . \
     view \
     ../djon-util \
     ../djon-plugins \
-    ../djon-data
+    ../djon-data \
+    ../includes
 
 include(../qtsingleapplication-2.6_1-opensource/src/qtsingleapplication.pri)
 QT += xml \
