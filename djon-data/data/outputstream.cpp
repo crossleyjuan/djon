@@ -1,5 +1,6 @@
 #include "outputstream.h"
 #include <string.h>
+#include <cstdio>
 
 OutputStream::OutputStream(FILE *pFile)
 {
@@ -75,5 +76,7 @@ char* OutputStream::buffer() {
 
     // Leave the file where it was
     fseek (_pFile, 0, SEEK_END);
+
+    printf("%s", buffer);
     return buffer;
 }

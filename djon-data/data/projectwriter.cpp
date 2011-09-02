@@ -24,7 +24,13 @@ void ProjectWriter::writeProject(const Project& project) {
         Task* task = *iterTask;
         writeTask(*task);
     }
-    _outStream->buffer();
+    char* buffer = _outStream->buffer();
+
+    qDebug("buffer: %s", buffer);
+    boost::crc_32_type crc;
+    crc.process_bytes(buffer, strlen(buffer));
+    long valCrc = crc.checksum();
+    qDebug("crc: %d", valCrc);
     delete(tasks);
 }
 
