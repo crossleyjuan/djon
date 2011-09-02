@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
+#include <sstream>
 
 class OutputStream
 {
@@ -23,7 +24,10 @@ public:
     void writeChars(const char* text, int len);
     void writeString(const std::string* text);
 
-    char* buffer();
+    void seek(long);
+    long currentPos() const;
+
+    long crc32(int pos);
 private:
     FILE* _pFile;
 };

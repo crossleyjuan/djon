@@ -19,6 +19,7 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
+#include <boost/crc.hpp>
 
 
 using namespace std;
@@ -64,12 +65,11 @@ Project* loadProject(std::string fileName) {
         ProjectReader reader(&debugStream);
         project = reader.readProject();
 
-        project->setProjectFileName(new string(fileName));
-
+        fclose(pFile);
         if (errorOcurred()) {
             return NULL;
         }
-        fclose(pFile);
+        project->setProjectFileName(new string(fileName));
     }
     qDebug("out loadProject()");
     return project;
@@ -233,14 +233,25 @@ int saveProject(Project *project) {
     FILE* pFile;
     pFile = fopen(fileName.str().c_str(), "wb+");
 
-    string sversion = getCurrentVersion();
-    const char* version = sversion.c_str();
-    fwrite(version, 1, 13, pFile);
-
     OutputStream os(pFile);
     ProjectWriter writer(&os);
+
+    string sversion = getCurrentVersion();
+//    const char* version = sversion.c_str();
+    fwrite(sversion.c_str(), 1, 13, pFile);
+//    fwrite(version, 1, 13, pFile);
+
+    long crcPos = os.currentPos();
+    os.writeLong(0L);
+    long afterCrcPos = os.currentPos();
     writer.writeProject(*project);
+
     project->setProjectFileName(new string(fileName.str()));
+
+    long valCrc = os.crc32(afterCrcPos);
+
+    os.seek(crcPos);
+    os.writeLong(valCrc);
 
     fclose(pFile);
 

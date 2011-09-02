@@ -77,3 +77,17 @@ const char* DebugInputStream::readFull() {
     _logger->debug(format("%s", res));
     return res;
 }
+
+long DebugInputStream::currentPos() const {
+    long res = _inputStream->currentPos();
+    _logger->debug(format("%d", res));
+    return res;
+}
+
+void DebugInputStream::seek(long i) {
+    _inputStream->seek(i);
+}
+
+long DebugInputStream::crc32() {
+    return _inputStream->crc32();
+}

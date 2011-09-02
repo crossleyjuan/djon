@@ -4,6 +4,7 @@
 #include "task.h"
 #include "util.h"
 #include "settings.h"
+#include "boost/crc.hpp"
 #include <sstream>
 #include <iostream>
 #include <stdlib.h>
@@ -145,6 +146,18 @@ Project* ProjectReader::readProject() {
         loadTasks(project);
         loadTaskLogs(project);
     } else {
+        if (*fileVersion > format2) {
+            long currentPos = _inputStream->currentPos();
+            long crc = _inputStream->readLong();
+            currentPos = _inputStream->currentPos();
+            long crcCalculated = _inputStream->crc32();
+            if (crcCalculated != crc) {
+                setLastError(10, "The crc from the file does not match");
+                return NULL;
+            }
+            _inputStream->seek(currentPos);
+
+        }
         char* id = _inputStream->readChars();
         project = new Project();
         project->setId(new string(id));

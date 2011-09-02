@@ -25,6 +25,9 @@ public:
     virtual char* readChars();
     virtual char* readChars(int length);
     virtual const char* readFull();
+    virtual long currentPos() const;
+    virtual void seek(long i);
+    virtual long crc32();
 
     virtual std::string* readString();
     virtual std::string fileName();

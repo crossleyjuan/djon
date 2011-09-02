@@ -23,6 +23,9 @@ public:
     char* readChars();
     char* readChars(int length);
     const char* readFull();
+    virtual long currentPos() const;
+    virtual void seek(long i);
+    virtual long crc32();
 
     std::string* readString();
     std::string fileName();

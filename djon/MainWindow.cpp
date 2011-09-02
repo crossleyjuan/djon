@@ -753,13 +753,19 @@ void MainWindow::openProject() {
         QFile file(selectedFileName);
         string fileName = file.fileName().toStdString();
         addProject(fileName.c_str());
-        _workspace->addProject(loadProject(fileName));
-        saveWorkspace(_workspace);
-        reloadProjects();
-        widget.taskView->setAnimated(false);
-        widget.taskView->expandAll();
-        refreshCollapsedState();
-        widget.taskView->setAnimated(true);
+        Project* project = loadProject(fileName);
+        if (project != NULL) {
+            _workspace->addProject(project);
+            saveWorkspace(_workspace);
+            reloadProjects();
+            widget.taskView->setAnimated(false);
+            widget.taskView->expandAll();
+            refreshCollapsedState();
+            widget.taskView->setAnimated(true);
+        } else {
+            showErrorMessage(lastErrorCode(), lastErrorDescription(), this);
+            clearError();
+        }
     }
 }
 

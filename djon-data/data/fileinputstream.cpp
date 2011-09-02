@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <sstream>
+#include <boost/crc.hpp>
 
 FileInputStream::FileInputStream(std::string fileName, FILE *pFile)
 {
@@ -30,9 +31,7 @@ int FileInputStream::readInt () {
 
 /* Reads 4 bytes in the input (little endian order) */
 long FileInputStream::readLong () {
-    int v = readInt();
-    v = v << 16;
-    v = readInt() | v;
+    long v = readInt() | readInt() << 16;
 
     return v;
 }
@@ -94,3 +93,30 @@ bool FileInputStream::eof() {
     return feof(_pFile);
 }
 
+long FileInputStream::currentPos() const {
+    return ftell(_pFile);
+}
+
+void FileInputStream::seek(long i) {
+    fseek(_pFile, i, SEEK_SET);
+}
+
+long FileInputStream::crc32() {
+    long current = currentPos();
+    fseek (_pFile, 0, SEEK_END);
+    int filesize = ftell(_pFile);
+    filesize = filesize - current;
+    fseek(_pFile, current, SEEK_SET);
+
+    char* buffer = new char[filesize];
+    fread(buffer, 1, filesize, _pFile);
+
+    boost::crc_32_type crc;
+    crc.process_bytes(buffer, filesize);
+    long result = crc.checksum();
+
+    // back to the original position
+    seek(current);
+    delete[] buffer;
+    return result;
+}

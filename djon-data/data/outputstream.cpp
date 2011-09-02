@@ -1,6 +1,7 @@
 #include "outputstream.h"
 #include <string.h>
 #include <cstdio>
+#include <boost/crc.hpp>
 
 OutputStream::OutputStream(FILE *pFile)
 {
@@ -56,27 +57,53 @@ void OutputStream::writeString(const std::string* text) {
     }
 }
 
-char* OutputStream::buffer() {
+long OutputStream::crc32(int pos) {
     fflush(_pFile);
-    fseek (_pFile, 0, SEEK_END);
-    long lSize = ftell(_pFile );
-    rewind(_pFile);
+    long originalPos = currentPos();
+    fseek(_pFile, 0, SEEK_END);
+    int bufferSize = currentPos();
+    bufferSize -= pos;
+    fseek(_pFile, pos, SEEK_SET);
 
-    // allocate memory to contain the whole file:
-    char* buffer = (char*) malloc (sizeof(char)*lSize);
-    if (buffer == NULL) {
-        return NULL;
-    }
+    char* buffer = new char[bufferSize];
+    fread(buffer, 1, bufferSize, _pFile);
 
-    // copy the file into the buffer:
-    size_t result = fread(buffer,1,lSize,_pFile);
-    if (result != lSize) {
-        return NULL;
-    }
+    boost::crc_32_type crc;
+    crc.process_bytes(buffer, bufferSize);
+    long result = crc.checksum();
 
-    // Leave the file where it was
-    fseek (_pFile, 0, SEEK_END);
+    // back to the original position
+    seek(originalPos);
+    delete[] buffer;
+    return result;
 
-    printf("%s", buffer);
-    return buffer;
+//    std::stringstream ss;
+//    char buffer[1024];
+//    int readed = 0;
+//    while (!feof(_pFile)) {
+//        memset(buffer, 0, 1024);
+//        readed = fread(buffer, 1, 1023, _pFile);
+//        ss.write(buffer, readed);
+//    }
+
+//    fread()
+//    std::string str = ss.str();
+//    const char* test = str.c_str();
+//    int len = strlen(test);
+//    std::cout << "buffer size: " << len;
+
+//    return strdup(str.c_str());
+    /*
+    std::string s = _stream.str();
+    return strdup(s.c_str());
+    */
+}
+
+void OutputStream::seek(long i) {
+    fflush(_pFile);
+    fseek (_pFile, i, SEEK_SET);
+}
+
+long OutputStream::currentPos() const {
+    return ftell(_pFile);
 }

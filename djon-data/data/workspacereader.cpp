@@ -30,8 +30,9 @@ Workspace* WorkspaceReader::readWorkspace() {
             ProjectReader* prReader = new ProjectReader(stream);
             Project* project = prReader->readProject();
 
-            workspace->addProject(project);
-
+            if (project != NULL) {
+                workspace->addProject(project);
+            }
             delete(prReader);
 #ifndef QT_NO_DEBUG
             delete(fileStream);
