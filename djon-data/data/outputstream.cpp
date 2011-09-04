@@ -1,6 +1,7 @@
 #include "outputstream.h"
 #include <string.h>
 #include <cstdio>
+#include <iostream>
 #include <boost/crc.hpp>
 
 OutputStream::OutputStream(FILE *pFile)
@@ -63,40 +64,20 @@ long OutputStream::crc32(int pos) {
     fseek(_pFile, 0, SEEK_END);
     int bufferSize = currentPos();
     bufferSize -= pos;
-    fseek(_pFile, pos, SEEK_SET);
+    seek(pos);
 
-    char* buffer = new char[bufferSize];
+    char buffer[bufferSize];
+    memset(buffer, 0, bufferSize);
     fread(buffer, 1, bufferSize, _pFile);
 
     boost::crc_32_type crc;
     crc.process_bytes(buffer, bufferSize);
     long result = crc.checksum();
+    std::cout << "CRC: Output" << result << std::endl;
 
     // back to the original position
     seek(originalPos);
-    delete[] buffer;
     return result;
-
-//    std::stringstream ss;
-//    char buffer[1024];
-//    int readed = 0;
-//    while (!feof(_pFile)) {
-//        memset(buffer, 0, 1024);
-//        readed = fread(buffer, 1, 1023, _pFile);
-//        ss.write(buffer, readed);
-//    }
-
-//    fread()
-//    std::string str = ss.str();
-//    const char* test = str.c_str();
-//    int len = strlen(test);
-//    std::cout << "buffer size: " << len;
-
-//    return strdup(str.c_str());
-    /*
-    std::string s = _stream.str();
-    return strdup(s.c_str());
-    */
 }
 
 void OutputStream::seek(long i) {
