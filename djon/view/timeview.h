@@ -14,7 +14,6 @@ public:
     void setModel(TaskModel* taskModel);
     QScrollBar* horizontalScrollBar();
     QScrollBar* verticalScrollBar();
-    virtual void refresh();
 
 signals:
     void itemHoverEnter(QModelIndex index);
@@ -26,6 +25,7 @@ public slots:
     void scrollToday();
     void receiveItemHoverEnter(QModelIndex index);
     void receiveItemHoverLeave(QModelIndex index);
+    virtual void refresh();
 
 private:
     void createHeader();

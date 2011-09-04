@@ -14,11 +14,14 @@ public:
     virtual void setModel(TaskModel* taskModel) = 0;
     virtual QScrollBar* horizontalScrollBar() = 0;
     virtual QScrollBar* verticalScrollBar() = 0;
-    virtual void refresh() = 0;
 
     virtual void collapse(const QModelIndex& index) = 0;
     virtual void expand(const QModelIndex& index) = 0;
     virtual void scrollToday() = 0;
+
+public slots:
+    virtual void refresh() = 0;
+
 };
 
 #endif // ABSTRACTVIEWER_H

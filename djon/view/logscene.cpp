@@ -160,6 +160,9 @@ void LogScene::getTaskItem(const QModelIndex &index) {
                         (task->taskColor().green() < 100) ? 0: (task->taskColor().green() - 100),
                         (task->taskColor().blue() < 100) ? 0: (task->taskColor().blue() - 100));
         QPen pen(penColor);
+        if (log->activeLog) {
+            pen.setWidth(3);
+        }
 
         QGraphicsItem* item = this->addRect(x1, y1, (x2 - x1), (y2 - y1), pen, b);
         item->setZValue(1);

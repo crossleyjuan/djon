@@ -14,7 +14,6 @@ public:
     void setModel(TaskModel* taskModel);
     QScrollBar* horizontalScrollBar();
     QScrollBar* verticalScrollBar();
-    virtual void refresh();
 
 signals:
 
@@ -22,6 +21,7 @@ public slots:
     void collapse(const QModelIndex& index);
     void expand(const QModelIndex& index);
     void scrollToday();
+    virtual void refresh();
 
 private:
     void createHeader();

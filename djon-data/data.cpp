@@ -37,8 +37,12 @@ std::vector<Project*>* loadProjects() {
         string fileName = (*it);
 
         Project* project = loadProject(fileName);
-        projects->push_back(project);
-        newOpenProjects.push_back(fileName);
+        if (project != NULL) {
+            projects->push_back(project);
+            newOpenProjects.push_back(fileName);
+        } else {
+            return NULL;
+        }
     }
     getSettings()->setOpenProjects(newOpenProjects);
     getSettings()->save();
@@ -274,6 +278,10 @@ Workspace* loadWorkspace(std::string fileName) {
         FileInputStream* stream = new FileInputStream(fileName, pFile);
         WorkspaceReader reader(stream);
         Workspace* workspace = reader.readWorkspace();
+        // If an error ocurred save the new workspace to avoid future errors.
+        if (errorOcurred() && (workspace != NULL)) {
+            saveWorkspace(workspace);
+        }
         delete(stream);
         return workspace;
     }

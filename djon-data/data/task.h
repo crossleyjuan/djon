@@ -19,6 +19,15 @@ class Job;
 
 class TaskLog {
 public:
+    TaskLog() {
+        activeLog = false;
+        id = NULL;
+        start = NULL;
+        end = NULL;
+        lastLap = NULL;
+        logDescription = NULL;
+    }
+
     std::string* id;
     DateTime* start; //YYYYMMDD.HHMMSS
     DateTime* end; //YYYYMMDD.HHMMSS
@@ -26,6 +35,7 @@ public:
     std::string* logDescription;
 
     DTime totalTime() const;
+    bool activeLog;
 };
 
 class Task {

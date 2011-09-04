@@ -106,6 +106,7 @@ MainWindow::MainWindow() {
     connect(_timeTracker, SIGNAL(timeStopped(Task*,TaskLog*)), this, SLOT(timeStopped(Task*, TaskLog*)));
     connect(_timeTracker, SIGNAL(trackerStarted(Task*,TaskLog*)), this, SLOT(trackerStarted(Task*,TaskLog*)));
     connect(_timeTracker, SIGNAL(trackerStarted(Task*,TaskLog*)), _taskModel, SLOT(setTrackedTask(Task*)));
+
     connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()));
 
     _trackWindow->setModel(_taskModel);
@@ -483,6 +484,7 @@ int MainWindow::createNewProject() {
             widget.taskView->setModel(_taskModel);
             connect(widget.taskView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(selectTaskChanged(QModelIndex,QModelIndex)));
             connect(_taskModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), widget.taskView, SLOT(reset()));
+
             refreshCollapsedState();
         }
     }
@@ -503,7 +505,7 @@ void MainWindow::reloadTasks() {
     widget.taskView->setAnimated(false);
     if (_taskModel != NULL) {
         _taskModel->setProjects(*_workspace->projects());
-        ((LogView*)_currentView)->refresh();
+        ((AbstractViewer*)_currentView)->refresh();
     } else {
         _taskModel = new TaskModel(WITH_TIMES, *_workspace->projects());
         widget.taskView->setModel(_taskModel);
@@ -712,6 +714,10 @@ void MainWindow::initialize() {
     } else {
         _workspace = loadWorkspace(lastWorkspace);
     }
+    if (lastErrorCode() > 0) {
+        showErrorMessage(lastErrorCode(), lastErrorDescription(), this);
+        clearError();
+    }
     getSettings()->addRecentWorkspace(_workspace->fileName());
     getSettings()->save();
     if (_workspace->projects()->size() == 0) {
@@ -723,6 +729,11 @@ void MainWindow::initialize() {
             }
             addProject(wizard->project()->projectFileName()->c_str());
             std::vector<Project*>* projects = loadProjects();
+            if (lastErrorCode() > 0) {
+                showErrorMessage(lastErrorCode(), lastErrorDescription(), this);
+                clearError();
+                projects = new std::vector<Project*>();
+            }
             _workspace->clear();
             for (std::vector<Project*>::iterator iter = projects->begin(); iter != projects->end(); iter++) {
                 _workspace->addProject(*iter);
@@ -1067,6 +1078,7 @@ void MainWindow::changeCurrentView(VIEW_TYPE type) {
 
     connect(widget.taskView, SIGNAL(collapsed(QModelIndex)), ((LogView*)_currentView), SLOT(collapse(QModelIndex)));
     connect(widget.taskView, SIGNAL(expanded(QModelIndex)), ((LogView*)_currentView), SLOT(expand(QModelIndex)));
+    connect(_timeTracker, SIGNAL(trackerStarted(Task*,TaskLog*)), _currentView, SLOT(refresh()));
     _currentView->scrollToday();
     widget.taskView->resize(420, widget.taskView->size().height());
     refreshCollapsedState();

@@ -151,8 +151,8 @@ Project* ProjectReader::readProject() {
             long crc = _inputStream->readLong();
             currentPos = _inputStream->currentPos();
             long crcCalculated = _inputStream->crc32();
-            if (crcCalculated != crc) {
-                setLastError(10, "The crc from the file does not match");
+            if (false && crcCalculated != crc) {
+                setLastError(10, "The file %s has an invalid checksum. The file is corrupted and can not be loaded.", _inputStream->fileName().c_str());
                 return NULL;
             }
             _inputStream->seek(currentPos);

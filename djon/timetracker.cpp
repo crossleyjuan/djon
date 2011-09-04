@@ -40,6 +40,7 @@ void TimeTracker::startRecord(Task* task, TaskLog* taskLog, DateTime* startTime)
     _totalTaskTimeSecs = task->totalTime().totalSecs();
     _ticksToSaveLog = 0;
     _timer->start(1000);
+    _taskLog->activeLog = true;
     emit trackerStarted(_task, _taskLog);
 }
 
@@ -50,6 +51,7 @@ void TimeTracker::stopRecord() {
     if (currentStatus == RUNNING) {
         DateTime* stopTime = new DateTime();
         _taskLog->end = stopTime;
+        _taskLog->activeLog = false;
         saveProject(_task->project());
         emit timeStopped(_task, _taskLog);
     }
