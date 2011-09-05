@@ -27,6 +27,9 @@ public slots:
     void receiveItemHoverLeave(QModelIndex index);
     virtual void refresh();
 
+protected:
+    virtual void resizeEvent(QResizeEvent *);
+
 private:
     void createHeader();
     QSize headerSizeHint();

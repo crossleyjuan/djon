@@ -146,3 +146,9 @@ void LogView::scrollToday() {
         this->_logView.centerOn(currentPos);
     }
 }
+
+void LogView::resizeEvent(QResizeEvent *evt) {
+    if (_logScene) {
+        refresh();
+    }
+}
