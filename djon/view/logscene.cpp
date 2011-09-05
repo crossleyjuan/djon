@@ -133,7 +133,7 @@ void LogScene::getTaskItem(const QModelIndex &index) {
     std::vector<TaskLog*>* logs =task->logs();
     double startHour = 0;//calendar->startHour().hour();
     double endHour = 24;//calendar->endHour().hour() + 1;
-    double minuteSize = (double)24*100 / (double)((endHour - startHour) * 60);
+    double minuteSize = (double)24*BLOCKSIZE / (double)((endHour - startHour) * 60);
     int red = 0;
     for (std::vector<TaskLog*>::iterator iter = logs->begin(); iter != logs->end(); iter++) {
         TaskLog* log = *iter;
@@ -217,7 +217,7 @@ void LogScene::createBackground() {
     // Background color
     QList<QGraphicsView*> views = this->views();
     int maxWidth = 0;
-    double minuteSize = (double)100 / (double)60;
+    double minuteSize = (double)BLOCKSIZE / (double)60;
     int maxHeight = minuteSize * 25 * 60;
     for (QList<QGraphicsView*>::iterator iter = views.begin(); iter != views.end(); iter++) {
         QGraphicsView* view = *iter;
@@ -236,7 +236,7 @@ void LogScene::createBackground() {
     if (_viewSizeWidth > maxWidth) {
         maxWidth = _viewSizeWidth;
     }
-    _viewSizeHeight = 100*25;
+    _viewSizeHeight = BLOCKSIZE*25;
     _viewSizeWidth = maxWidth;
 
     this->addRect(0, 0, maxWidth, maxHeight, pen, brush);
