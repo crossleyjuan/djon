@@ -9,6 +9,8 @@
 class Task;
 class TaskModel;
 
+const int BLOCKSIZE = 70;
+
 class LogScene : public QGraphicsScene
 {
     Q_OBJECT

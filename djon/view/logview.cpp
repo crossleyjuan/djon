@@ -79,11 +79,11 @@ void LogView::createHeader() {
     _headerView.setMaximumHeight(headerSizeHint().height());
 
     for (int x = 0; x < 24; x++) {
-        _hourScene->addRect(0, x*100, 50, 100, pen, background)->setZValue(0);
+        _hourScene->addRect(0, x*BLOCKSIZE, 50, BLOCKSIZE, pen, background)->setZValue(0);
         std::stringstream ss;
         ss << x << ":00";
         QGraphicsSimpleTextItem* text = _hourScene->addSimpleText(ss.str().c_str());
-        text->setPos(10, (x * 100) + 10);
+        text->setPos(10, (x * BLOCKSIZE) + 10);
         text->setVisible(true);
 //        text->setPen(textPen);
         text->setZValue(1);
