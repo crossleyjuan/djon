@@ -23,6 +23,9 @@ public slots:
     void scrollToday();
     virtual void refresh();
 
+protected:
+    virtual void resizeEvent(QResizeEvent *);
+
 private:
     void createHeader();
     QSize headerSizeHint();

@@ -64,6 +64,11 @@ TaskDialog::TaskDialog(Project* project, Task* task, QWidget *parent) :
     m_ui->lblTemplate->setVisible(false);
     m_ui->shortDescription->setFocus();
 
+    if (task->childCount() > 0) {
+        m_ui->startDate->setReadOnly(true);
+        m_ui->endDate->setReadOnly(true);
+    }
+
     connect(m_ui->duration, SIGNAL(editingFinished()), this, SLOT(refreshEndDate()));
     connect(m_ui->startDate, SIGNAL(dateChanged(QDate)), this, SLOT(refreshEndDate()));
 }

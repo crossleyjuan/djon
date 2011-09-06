@@ -109,3 +109,9 @@ void GanttView::scrollToday() {
         this->_ganttView.centerOn(currentPos);
     }
 }
+
+void GanttView::resizeEvent(QResizeEvent *evt) {
+    if (_ganttScene) {
+        refresh();
+    }
+}

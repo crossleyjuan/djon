@@ -119,3 +119,9 @@ void TimeView::receiveItemHoverEnter(QModelIndex index) {
 void TimeView::receiveItemHoverLeave(QModelIndex index) {
     emit itemHoverLeave(index);
 }
+
+void TimeView::resizeEvent(QResizeEvent *evt) {
+    if (_timeScene) {
+        refresh();
+    }
+}

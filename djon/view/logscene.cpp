@@ -363,7 +363,12 @@ void LogScene::calcZoom() {
     if (_endDate < DateTime::today()) {
         _endDate = DateTime::today();
     }
-    _endDate = _endDate.addDays(3);
+    // Force to show at least 10 days, this will avoid the blank screen effect
+    if (DateTime::today().daysTo(_endDate) < 10) {
+        _endDate = DateTime::today().addDays(10);
+    } else {
+        _endDate = _endDate.addDays(3);
+    }
     _totalDays = _startDate.daysTo(_endDate);
     this->_viewSizeWidth = _totalDays * _dayWidth;
 }
