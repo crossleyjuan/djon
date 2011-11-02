@@ -1,8 +1,7 @@
 #include "workspacereader.h"
 
 #include "projectreader.h"
-#include "fileinputstream.h"
-#include "debuginputstream.h"
+#include "util.h"
 #include "workspace.h"
 #include <string>
 

@@ -3,13 +3,10 @@
 #include "config.h"
 #include "settings.h"
 #include "data/projectwriter.h"
-#include "data/outputstream.h"
-#include "data/inputstream.h"
-#include "data/fileinputstream.h"
-#include "data/debuginputstream.h"
 #include "data/projectreader.h"
 #include "data/workspacereader.h"
 #include "data/workspacewriter.h"
+#include "util.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string>

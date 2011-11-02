@@ -17,6 +17,13 @@
 #include "util/calendar.h"
 #include "util/logger.h"
 
+// Data information
+#include "util/debuginputstream.h"
+#include "util/fileinputstream.h"
+#include "util/inputstream.h"
+#include "util/outputstream.h"
+
+
 #include <string>
 #include <QtCore/QDate>
 #include <vector>

@@ -1,5 +1,6 @@
 ; The name of the installer
 Name "D-Jon"
+Var QtDir  ;Qt Dir
 
 ; The file to write
 OutFile "setup_djon.exe"
@@ -66,23 +67,26 @@ Section "djon (required)"
   
   ; Set output path to the installation directory.
   SetOutPath $INSTDIR
-  
+  StrCpy $QtDir "C:\Qt\2010.05\qt\bin"
+
   ; Put file there
   File "djon.exe"
   ; File "djon.nsi"
   File "djon-data.dll"
   File "djon-util.dll"
+  File "djon-plugins.dll"
   ; File "updater.exe"
-  File "libgcc_s_dw2-1.dll"
-  File "mingwm10.dll"
-  File "QtCore4.dll"
-  File "QtGui4.dll"
-  File "QtXml4.dll"
-  File "QtNetwork4.dll"
-  File "QtWebKit4.dll"
-  File "QtXmlPatterns4.dll"
-  File "phonon4.dll"
-  File "QtSql4.dll"
+  
+  File C:\Qt\2010.05\qt\bin\libgcc_s_dw2-1.dll
+  File C:\Qt\2010.05\qt\bin\mingwm10.dll
+  File C:\Qt\2010.05\qt\bin\QtCore4.dll
+  File C:\Qt\2010.05\qt\bin\QtGui4.dll
+  File C:\Qt\2010.05\qt\bin\QtXml4.dll
+  File C:\Qt\2010.05\qt\bin\QtNetwork4.dll
+  File C:\Qt\2010.05\qt\bin\QtWebKit4.dll
+  File C:\Qt\2010.05\qt\bin\QtXmlPatterns4.dll
+  File C:\Qt\2010.05\qt\bin\phonon4.dll
+  File C:\Qt\2010.05\qt\bin\QtSql4.dll
 
   CreateDirectory $PROFILE\.djon
   CreateDirectory $PROFILE\.djon\templates

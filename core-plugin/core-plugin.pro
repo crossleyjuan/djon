@@ -11,7 +11,7 @@ TARGET        = $$qtLibraryTarget(core-plugin)
 TEMPLATE = lib
 CONFIG       += plugin
 
-CONFIG += static
+# CONFIG += static
 
 DESTDIR = ../libs
 DEFINES += COREPLUGIN_LIBRARY

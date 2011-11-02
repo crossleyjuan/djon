@@ -1,7 +1,5 @@
 #include "fileinputstream.h"
 
-#include "project.h"
-#include "task.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -116,8 +114,6 @@ long FileInputStream::crc32() {
     boost::crc_32_type crc;
     crc.process_bytes(buffer, bufferSize);
     long result = crc.checksum();
-
-    cout << "CRC: Input" << result << std::endl;
 
     // back to the original position
     seek(pos);

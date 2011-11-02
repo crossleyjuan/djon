@@ -1,11 +1,10 @@
 #ifndef PROJECTREADER_H
 #define PROJECTREADER_H
 
-#include "inputstream.h"
-
 class Project;
 class Task;
 class TaskLog;
+class InputStream;
 
 class ProjectReader
 {

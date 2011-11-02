@@ -1,5 +1,5 @@
 #include "workspacewriter.h"
-#include "outputstream.h"
+#include "util.h"
 #include "workspace.h"
 
 #include <vector>

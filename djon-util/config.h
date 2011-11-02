@@ -12,7 +12,7 @@
 #endif
 
 
-#define VERSION "1.2.20110726"
+#define VERSION "1.2.20111102"
 
 // #define TESTING
 

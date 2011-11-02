@@ -130,7 +130,8 @@ Project* ProjectReader::readProject() {
     char* version = _inputStream->readChars(13);
     Version* fileVersion;
     Version format1 = Version("1.1.201011110");
-    Version format2 = Version("1.2.20110725");
+    Version format2 = Version("1.2.20110320");
+    Version format3 = Version("1.2.20110725");
     if (!isValidVersionNumber(version)) {
         fileVersion = new Version("1.1.201011110");
     } else {
@@ -146,7 +147,7 @@ Project* ProjectReader::readProject() {
         loadTasks(project);
         loadTaskLogs(project);
     } else {
-        if (*fileVersion > format2) {
+        if (*fileVersion > format3) {
             long currentPos = _inputStream->currentPos();
             long crc = _inputStream->readLong();
             currentPos = _inputStream->currentPos();

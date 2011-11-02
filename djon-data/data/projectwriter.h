@@ -1,7 +1,7 @@
 #ifndef PROJECTWRITER_H
 #define PROJECTWRITER_H
 
-#include "outputstream.h"
+#include "util.h"
 
 class Project;
 class Task;

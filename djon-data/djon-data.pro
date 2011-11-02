@@ -23,14 +23,11 @@ INCLUDEPATH += . \
 SOURCES += \
     template.cpp \
     data.cpp \
-    data/debuginputstream.cpp \
     data/djonpreferences.cpp \
     data/duration.cpp \
-    data/fileinputstream.cpp \
     data/project.cpp \
     data/settings.cpp \
     data/task.cpp \
-    data/outputstream.cpp \
     data/projectreader.cpp \
     data/projectwriter.cpp \
     data/workspace.cpp \
@@ -40,12 +37,8 @@ SOURCES += \
 HEADERS += \
     template.h \
     data.h \
-    data/debuginputstream.h \
     data/djonpreferences.h \
     data/duration.h \
-    data/fileinputstream.h \
-    data/inputstream.h \
-    data/outputstream.h \
     data/project.h \
     data/projectreader.h \
     data/projectwriter.h \

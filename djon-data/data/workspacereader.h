@@ -1,9 +1,8 @@
 #ifndef WORKSPACEREADER_H
 #define WORKSPACEREADER_H
 
-#include "inputstream.h"
-
 class Workspace;
+class InputStream;
 
 class WorkspaceReader
 {
