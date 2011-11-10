@@ -1,9 +1,9 @@
 // *********************************************************************************************************************
-// file:
+// file: excel.cpp
 // author: Juan Pablo Crossley (crossleyjuan@gmail.com)
-// created:
-// updated:
-// license:
+// created: Dec/23/2010
+// updated: Nov/7/2011
+// license: GPL 2
 // 
 // This file is part of the djon project, all the source code is licensed under the terms of the GPL license,
 // the application and libraries are provided as-is and free of use under the terms explained in the file COPYING.GPL

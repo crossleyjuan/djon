@@ -1,1 +1,6 @@
-i
+djon is licensed under GPL GNU GENERAL PUBLIC LICENSE, except some files distributed as LGPL, like the qtsingleapplication library
+provided by Nokia under this license.
+
+All the files included are licensed under GPL unless the file explicit express some other license.
+
+Please refer to COPYING.GPL and COPYING.LGPL to get a copy of the terms of these licenses.
