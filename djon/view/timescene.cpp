@@ -299,13 +299,15 @@ void TimeScene::calcZoom() {
 
         if ((proj != NULL) && pIndex.isValid()) {
             DateTime* pStart = proj->startDate();
-            if (pStart != NULL) {
+            if ((pStart != NULL) && (*pStart > DateTime(0, 0, 0))) {
                 DateTime* pEnd = proj->endDate();
                 if ((start == NULL) || (*pStart < *start)) {
                     start = pStart;
                 }
-                if ((end == NULL) || (*pEnd > *end)) {
-                    end = pEnd;
+                if (*pEnd > DateTime(0, 0, 0)) {
+                    if ((end == NULL) || (*pEnd > *end)) {
+                        end = pEnd;
+                    }
                 }
             }
         }

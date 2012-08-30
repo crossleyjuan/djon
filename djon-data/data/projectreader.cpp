@@ -185,7 +185,7 @@ Project* ProjectReader::readProject() {
         project->setDescription(_inputStream->readString());
         project->setProjectFileName(new string(_inputStream->fileName()));
         int taskCount = _inputStream->readInt();
-        if (*fileVersion >= format2) {
+        if (*fileVersion > format2) {
             int type = _inputStream->readInt();
             project->setType((Project::PROJECTTYPE)type);
         } else {

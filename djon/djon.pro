@@ -15,14 +15,18 @@ INCLUDEPATH += . \
     ../djon-data \
     ../includes
 
+CONFIG += static
+
 include(../qtsingleapplication-2.6_1-opensource/src/qtsingleapplication.pri)
 QT += xml \
     webkit
-LIBS += -L../libs
-LIBS += -ldjon-util
-LIBS += -ldjon-data
-LIBS += -ldjon-plugins
-CONFIG += static
+#LIBS += -L../libs
+LIBS += ../libs/libdjon-plugins.a
+LIBS += ../libs/libdjon-data.a
+LIBS += ../libs/libdjon-util.a
+
+linux-g++:LIBS += -lXss
+macx-g++:LIBS += -L/usr/X11R6/lib -lXss -lX11 -framework IOKit -framework Carbon
 
 # LIBS += -lRpcrt4
 # Input

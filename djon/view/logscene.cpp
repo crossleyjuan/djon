@@ -346,14 +346,18 @@ void LogScene::calcZoom() {
             // Now check against the project definition
             DateTime* pStart = proj->startDate();
             if (pStart != NULL) {
-                if ((start == NULL) || (*pStart < *start)) {
-                    start = pStart;
+                if (*pStart > DateTime(0, 0, 0)) {
+                    if ((start == NULL) || (*pStart < *start)) {
+                        start = pStart;
+                    }
                 }
             }
             DateTime* pEnd = proj->endDate();
             if (pEnd != NULL) {
-                if ((end == NULL) || (*pEnd > *end)) {
-                    end = pEnd;
+                if (*pEnd > DateTime(0, 0, 0)) {
+                    if ((end == NULL) || (*pEnd > *end)) {
+                        end = pEnd;
+                    }
                 }
             }
             delete(logs);

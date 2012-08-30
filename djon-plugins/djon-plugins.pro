@@ -17,6 +17,7 @@ LIBS += -L../libs
 LIBS += -ldjon-util
 LIBS += -ldjon-data
 # CONFIG += static
+CONFIG += staticlib
 
 INCLUDEPATH += . \
     ../djon-data \

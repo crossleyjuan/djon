@@ -6,6 +6,7 @@ QT += xml
 TARGET = djon-util
 TEMPLATE = lib
 
+CONFIG += staticlib
 linux-g++:LIBS += -lXss
 macx-g++:LIBS += -L/usr/X11R6/lib -lXss -lX11 -framework IOKit -framework Carbon
 

@@ -8,7 +8,7 @@ QT       = core gui
 
 TARGET = djon-data
 TEMPLATE = lib
-# CONFIG += staticlib
+CONFIG += staticlib
 
 DESTDIR = ../libs
 
